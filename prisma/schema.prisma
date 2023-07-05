@@ -1,0 +1,106 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgres"
+  url      = env("DATABASE_URL")
+}
+
+model Club {
+  id   Int    @id @default(autoincrement())
+  name String
+  User User[]
+}
+
+enum Gender {
+  MALE
+  FEMALE
+  OTHER
+}
+
+model User {
+  id              Int     @id @default(autoincrement())
+  email           String  @unique
+  passHash        String
+  name            String
+  club            Club    @relation(fields: [clubId], references: [id])
+  clubId          Int
+  gender          Gender
+  isClubOrganiser Boolean @default(false)
+
+  organiserFor Competition[]
+  competingIn  UserInCompetition[]
+}
+
+model UserInCompetition {
+  user   User @relation(fields: [userId], references: [id])
+  userId Int
+
+  competition   Competition @relation(fields: [competitionId], references: [id])
+  competitionId Int
+
+  registeredEvents Puzzle[]
+
+  @@id([userId, competitionId])
+}
+
+model Competition {
+  id              Int    @id @default(autoincrement())
+  name            String
+  venue           String
+  location        String
+  organisers      User[] // TODO: check relation?
+  description     String
+  contact         String
+  competitorLimit Int
+
+  competitors UserInCompetition[]
+
+  events   Puzzle[]
+  schedule ScheduleItem[]
+}
+
+enum Puzzle {
+  TWO
+  THREE
+  FOUR
+  FIVE
+  SIX
+  SEVEN
+
+  THREEBLD
+  FOURBLD
+  FIVEBLD
+  MULTIBLD
+
+  SQ1
+  PYRAMINX
+  MEGAMINX
+  SKEWB
+  CLOCK
+  THREEOH
+
+  LUNCH
+}
+
+enum Format {
+  BO3
+  BO1
+  MO3
+  AO5
+}
+
+model ScheduleItem {
+  id            Int          @id @default(autoincrement())
+  startDate     DateTime
+  endDate       DateTime
+  activity      Puzzle?
+  round         Int
+  format        Format
+  Competition   Competition? @relation(fields: [competitionId], references: [id])
+  competitionId Int?
+}
