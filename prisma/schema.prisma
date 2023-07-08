@@ -13,7 +13,7 @@ datasource db {
 model Club {
   id   Int    @id @default(autoincrement())
   name String
-  User User[]
+  competitions Competition[]
 }
 
 enum Gender {
@@ -22,13 +22,31 @@ enum Gender {
   OTHER
 }
 
+enum Region {
+  NORTHLAND
+  AUCKLAND
+  WAIKATO
+  BOP
+  GISBORNE
+  HAWKES_BAY
+  TARANAKI
+  MANGAWATU_WHANGANUI
+  WELLINGTON
+  TASMAN
+  NELSON
+  MALBOROUGH
+  WEST_COAST
+  CANTERBURY
+  OTAGO
+  SOUTHLAND
+}
+
 model User {
   id              Int     @id @default(autoincrement())
   email           String  @unique
   passHash        String
   name            String
-  club            Club    @relation(fields: [clubId], references: [id])
-  clubId          Int
+  region          Region
   gender          Gender
   isClubOrganiser Boolean @default(false)
 
@@ -59,6 +77,10 @@ model Competition {
   competitorLimit Int
 
   competitors UserInCompetition[]
+
+
+  club Club @relation(fields: [clubId], references: [id])
+  clubId Int
 
   events   Puzzle[]
   schedule ScheduleItem[]
