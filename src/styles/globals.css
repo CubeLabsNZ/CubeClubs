@@ -1,0 +1,26 @@
+:root {
+    --clg1: #D1D3D6;
+    --clg2: #AFB1B4;
+    --cg: #75787B;
+    --cdg1: #4A4F53;
+    --cdg2: #292E33;
+
+    --cw: #F7FAFC;
+    --cla1: #D4E7FA;
+    --cla2: #AAD0F6;
+    --cla3: #7FB9F2;
+
+    --ca: #0073E6;
+
+    --cda1: #004C99;
+    --cda2: #003366;
+    --cda3: #001F3F;
+    --cb: #000C19;
+
+
+
+    font-family: "IBMPlexSans";
+    font-weight: 500;
+
+    background-color: var(--cw);
+}
