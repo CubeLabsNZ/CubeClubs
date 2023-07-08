@@ -8,6 +8,7 @@ export const actions = {
         const email = data.get("email");
         const password = data.get("password");
         const confirmPassword = data.get("confirmPassword");
+        const region = data.get("region");
 
         console.log(email, password, confirmPassword);
 
