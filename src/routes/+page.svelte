@@ -1,3 +1,3 @@
-<h1>Welcome to SvelteKit</h1>
-<p>Visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to read the documentation</p>
+<!-- <h1> Welcome to CubeClubs NZ </h1> -->
 
+<!-- <h3> New Zealand's unofficial cubing clubs, all united, in one place. </h3> -->
