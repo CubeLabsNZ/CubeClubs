@@ -1,4 +1,6 @@
 :root {
+    --clg0: #FAFBFC;
+
     --clg1: #D1D3D6;
     --clg2: #AFB1B4;
     --cg: #75787B;
@@ -30,4 +32,9 @@
 p {
     margin: 0;
     padding: 0
+}
+
+::selection {
+    color: var(--ca);
+    background: var(--cla1);
 }

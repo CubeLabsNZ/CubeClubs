@@ -11,8 +11,8 @@ datasource db {
 }
 
 model Club {
-  id   Int    @id @default(autoincrement())
-  name String
+  id           Int           @id @default(autoincrement())
+  name         String
   competitions Competition[]
 }
 
@@ -78,8 +78,7 @@ model Competition {
 
   competitors UserInCompetition[]
 
-
-  club Club @relation(fields: [clubId], references: [id])
+  club   Club @relation(fields: [clubId], references: [id])
   clubId Int
 
   events   Puzzle[]

@@ -1,6 +1,15 @@
 <script lang="ts">
+    import type { ActionData } from "./$types";
     import regions from "$lib/data/regions"
+
+    import Form from "$lib/components/Form.svelte";
+
+    export let form: ActionData;
 </script>
+
+<!-- <Form formValues={ -->
+<!--     [{name: "email", type: "email"}, {name: "password", type: "password"}, {name: "confirm password", type: "password"}] -->
+<!-- }></Form> -->
 
 <form method="POST"> 
     <label>
@@ -27,6 +36,15 @@
             {/each}
         </select>
     </label>
+
+
+    {#if form}
+        {#if form.success}
+            <p> success </p>
+        {:else}
+            <p> errored... with message {form?.message} </p>
+        {/if}
+    {/if}
 
     <button> sign up </button>
 </form>

@@ -28,6 +28,8 @@
 	},
 	"type": "module",
 	"dependencies": {
-		"@prisma/client": "^4.16.2"
+		"@prisma/client": "^4.16.2",
+		"argon2": "^0.30.3",
+		"svelte-kit-cookie-session": "^3.4.1"
 	}
 }

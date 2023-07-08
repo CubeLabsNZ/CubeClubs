@@ -6,28 +6,25 @@
 
     import logo from "$lib/assets/logo-transparent.svg";
 
-    import Button, { ButtonType } from "$lib/components/Button.svelte";
+    import Button, { ButtonType, ButtonSize } from "$lib/components/Button.svelte";
 </script>
 
 <div id="navbar">
     <div id="left"> 
-        <img 
-            class="clickable" 
-            src={logo} 
-            alt="" height=30 
-            on:click={() => {goto("/")}} 
-            on:keypress={() => {goto("/")}}/>
+        <a class="image-link" href="/">
+            <img src={logo} alt="" height=30>
+        </a>
 
-        <a href="/clubs">Clubs</a>
-        <a href="/contests">Contest</a>
-        <a href="/records">Records</a>
-        <a href="/rankings">Rankings</a>
+        <a class="regular-link" href="/clubs">Clubs</a>
+        <a class="regular-link" href="/contests">Contest</a>
+        <a class="regular-link" href="/records">Records</a>
+        <a class="regular-link" href="/rankings">Rankings</a>
     </div>
 
     <div id="right"> 
-        <a href="/login"> Login </a>
+        <a class="regular-link" href="/login"> Login </a>
         
-        <Button type={ButtonType.Regular} href="/signup">
+        <Button type={ButtonType.Regular} size={ButtonSize.Small} href="/signup">
             <div>Sign Up</div>
         </Button>
     </div>
@@ -39,13 +36,13 @@
 
 
 <style> 
-    .clickable {
-        cursor: pointer;
-
+    .image-link {
         transition: filter 100ms ease-in-out;
+
+        height: 30px;
     }
 
-    .clickable:hover {
+    .image-link:hover {
         filter: brightness(80%);
     }
 
@@ -74,7 +71,7 @@
 
     }
 
-    #navbar a {
+    #navbar .regular-link {
         color: var(--cw);
         text-decoration: none;
         font-size: 14px;
@@ -82,19 +79,12 @@
         transition: color 100ms ease-in-out;
     }
 
-    #navbar a:hover {
+    #navbar .regular-link:hover {
         color: var(--clg1);
     }
 
 
-    #left {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        gap: 24px;
-    }
-
-    #right {
+    #left, #right {
         display: flex;
         flex-direction: row;
         align-items: center;

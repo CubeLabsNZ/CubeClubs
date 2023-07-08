@@ -1,8 +1,8 @@
 <script lang="ts"> 
-    export let type: ButtonType, href: string;
+    export let type: ButtonType, size: ButtonSize, href: string;
 
     const onClick = () => {
-        if (href === "") {
+        if (href !== "") {
             window.open(href, "_self");
         }
     }
@@ -11,39 +11,29 @@
 
 <script context="module" lang="ts">
     export enum ButtonType {
-        Bordered,
-        Regular,
-        Coloured
+        Bordered="bordered",
+        Regular="regular",
+        Coloured="coloured"
+    }
+
+    export enum ButtonSize {
+        Small,
+        Regular
     }
 </script>
 
 
-{#if type === ButtonType.Bordered}
-    <button class="button" id="b-button" on:click={ onClick }>
-        <div class="inner">
-            <slot></slot>
-        </div>
-    </button>
-{:else if type === ButtonType.Regular}
-    <button class="button" id="r-button" on:click={ onClick }>
-        <div class="inner">
-            <slot></slot>
-        </div>
-    </button>
-{:else}
-    <button class="button" id="c-button" on:click={ onClick }>
-        <div class="inner">
-            <slot></slot>
-        </div>
-    </button>
-{/if}
 
+<button class={"button button-"+type} on:click={ onClick } style:height={size == ButtonSize.Small ? "30px" : "34px"}>
+    <div class="inner" style:font-size={size == ButtonSize.Small ? "14px" : "16px"}>
+        <slot></slot>
+    </div>
+</button>
 
 <style> 
     .button {
         margin: 0;
         padding: 0;
-        height: 30px;
         background-color: var(--cw);
         border: 0;
         border-radius: 6px;
@@ -62,11 +52,10 @@
     }
 
     .inner {
-        font-size: 14px;
         font-weight: 600;
     }
 
-    #c-button {
+    .button-coloured {
         background-color: var(--cla2);
         color: var(--ca);
         box-shadow: 0px 2px 6px 0px #0073E61F;
