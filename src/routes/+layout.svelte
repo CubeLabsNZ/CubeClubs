@@ -2,6 +2,8 @@
     import "../styles/globals.css";
     import "../styles/fonts.css";
 
+    import { goto } from "$app/navigation";
+
     import logo from "$lib/assets/logo-transparent.svg";
 
     import Button, { ButtonType } from "$lib/components/Button.svelte";
@@ -9,7 +11,12 @@
 
 <div id="navbar">
     <div id="left"> 
-        <img class="clickable" src={logo} alt="" height=30px/>
+        <img 
+            class="clickable" 
+            src={logo} 
+            alt="" height=30px 
+            on:click={() => {goto("/")}} 
+            on:keypress={() => {goto("/")}}/>
 
         <a href="/clubs"> Clubs </a>
         <a href="/contests"> Contest </a>
@@ -20,8 +27,8 @@
     <div id="right"> 
         <a href="/login"> Login </a>
         
-        <Button type={ButtonType.Regular} href="/register">
-            <div> Register </div>
+        <Button type={ButtonType.Regular} href="/signup">
+            <div>Sign Up</div>
         </Button>
     </div>
 </div>
