@@ -1,6 +1,6 @@
 <script lang="ts"> 
-    import "../styles/globals.css";
-    import "../styles/fonts.css";
+    import "../../styles/globals.css";
+    import "../../styles/fonts.css";
 
     import { goto } from "$app/navigation";
 
@@ -14,14 +14,14 @@
         <img 
             class="clickable" 
             src={logo} 
-            alt="" height=30px 
+            alt="" height=30 
             on:click={() => {goto("/")}} 
             on:keypress={() => {goto("/")}}/>
 
-        <a href="/clubs"> Clubs </a>
-        <a href="/contests"> Contest </a>
-        <a href="/records"> Records </a>
-        <a href="/rankings"> Rankings </a>
+        <a href="/clubs">Clubs</a>
+        <a href="/contests">Contest</a>
+        <a href="/records">Records</a>
+        <a href="/rankings">Rankings</a>
     </div>
 
     <div id="right"> 
