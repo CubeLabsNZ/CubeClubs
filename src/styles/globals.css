@@ -22,6 +22,12 @@
 
     font-family: "IBMPlexSans";
     font-weight: 500;
+    color: var(--cdg2);
 
     background-color: var(--cw);
+}
+
+p {
+    margin: 0;
+    padding: 0
 }
