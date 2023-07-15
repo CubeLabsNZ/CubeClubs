@@ -25,7 +25,11 @@
 
         <div>
             <label class="form-label"> 
-                Password
+                <div class="pass-flex">
+                    <div> Password </div>
+                    <a href="recover-account">Forgot your password?</a>
+                </div>
+
                 <input name="password" type="password" data-error={form?.error === "pass"}>
             </label>
 
@@ -49,5 +53,13 @@
     a {
         text-decoration: none;
         color: var(--ca);
+        font-weight: 500;
+    }
+
+    .pass-flex {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        width: 100%;
     }
 </style>

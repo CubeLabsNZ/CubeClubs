@@ -49,7 +49,7 @@
         <label class="form-label">
             Region
             <select required name="region" value={form?.region}>
-                <option disabled selected value></option>
+                <option disabled selected value>Select a Region</option>
                 {#each Object.entries(regions) as [value, {name, maori_name}] }
                     <option value={value}>{name} ({maori_name})</option>
                 {/each}

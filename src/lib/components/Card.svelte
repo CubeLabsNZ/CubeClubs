@@ -5,7 +5,10 @@
 
 
 <div id="wrapper">
-    <img src={iconText} alt="" height=36/>
+    <a href="/"> 
+        <img src={iconText} alt="" height=36/>
+    </a>
+
     <p id="title" class="fsize-title2">{title}</p>
     <p id="subtitle" class="fsize-body">{subtitle}</p>
 
