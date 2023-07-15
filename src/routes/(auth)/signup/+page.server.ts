@@ -14,7 +14,7 @@ export const actions = {
         const confirmPassword = data.get("confirmPassword");
         const region = data.get("region");
 
-        if (password !== confirmPassword) { return { success: false, message: "password incorrect" }; }
+        if (password !== confirmPassword) { return { success: false, message: "the two passwords entered do not match, please try again." }; }
 
         const userExists = await prisma.user.count({
             where: {

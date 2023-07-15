@@ -26,7 +26,13 @@
     font-weight: 500;
     color: var(--cdg2);
 
-    background-color: var(--cw);
+    background-color: var(--clg0);
+}
+
+body {
+    min-height: 100dvh;
+    padding: 0;
+    margin: 0;
 }
 
 p {
@@ -37,4 +43,28 @@ p {
 ::selection {
     color: var(--ca);
     background: var(--cla1);
+}
+
+
+
+
+/* fonts */
+.fsize-title1 {
+
+}
+
+.fsize-title2 {
+    font-size: 20px;
+}
+
+.fsize-body {
+    font-size: 16px;
+}
+
+.fsize-subhead {
+    font-size: 14px;
+}
+
+.fsize-footnote {
+    font-size: 12px;
 }

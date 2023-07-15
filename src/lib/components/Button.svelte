@@ -24,10 +24,8 @@
 
 
 
-<button class={"button button-"+type} on:click={ onClick } style:height={size == ButtonSize.Small ? "30px" : "34px"}>
-    <div class="inner" style:font-size={size == ButtonSize.Small ? "14px" : "16px"}>
-        <slot></slot>
-    </div>
+<button class={"button button-"+type + `${size == ButtonSize.Small ? " fsize-subhead" : " fsize-body"}`} on:click={ onClick } style:height={size == ButtonSize.Small ? "30px" : "34px"}>
+    <slot></slot>
 </button>
 
 <style> 
@@ -41,23 +39,30 @@
         padding-left: 12px;
         padding-right: 12px;
         
-        transition: background-color 100ms ease-in-out;
+        transition: background-color 100ms ease-in-out,
+                    box-shadow 150ms ease-in-out;
 
         color: var(--cdg2);
+
+        font-weight: 600;
     }
 
     .button:hover {
         cursor: pointer;
-        background-color: var(--clg1);
     }
 
-    .inner {
-        font-weight: 600;
+    .button-regular:hover,
+    .button-bordered:hover {
+        background-color: var(--clg1);
     }
 
     .button-coloured {
         background-color: var(--cla2);
         color: var(--ca);
-        box-shadow: 0px 2px 6px 0px #0073E61F;
+        box-shadow: 0px 2px 6px 0px #0073E61F; /* ca, 12% */
+    }
+
+    .button-coloured:hover {
+        box-shadow: 0px 3px 8px 0px #0073E629; /* ca, 16% */
     }
 </style>

@@ -3,48 +3,62 @@
     import regions from "$lib/data/regions"
 
     import Form from "$lib/components/Form.svelte";
+    import Card from "$lib/components/Card.svelte";
 
     export let form: ActionData;
 </script>
 
-<!-- <Form formValues={ -->
-<!--     [{name: "email", type: "email"}, {name: "password", type: "password"}, {name: "confirm password", type: "password"}] -->
-<!-- }></Form> -->
+<Card title="Sign up to CubeClubs NZ" subtitle="Create your CubeClubs account to register for meetups and be notified of upcoming events."> 
+    <form method="POST"> 
+        <label>
+            email
+            <input name="email" type="email">
+        </label>
 
-<form method="POST"> 
-    <label>
-        email
-        <input name="email" type="email">
-    </label>
+        <label> 
+            password
+            <input name="password" type="password">
+        </label>
 
-    <label> 
-        password
-        <input name="password" type="password">
-    </label>
+        <label>
+            confirm password
+            <input name="confirmPassword" type="password">
+        </label>
 
-    <label>
-        confirm password
-        <input name="confirmPassword" type="password">
-    </label>
-
-    <label>
-        region
-        <select name="region">
-            <option disabled selected value></option>
-            {#each Object.entries(regions) as [value, {name, maori_name}] }
-                <option value={value}>{name} ({maori_name})</option>
-            {/each}
-        </select>
-    </label>
+        <label>
+            region
+            <select name="region">
+                <option disabled selected value></option>
+                {#each Object.entries(regions) as [value, {name, maori_name}] }
+                    <option value={value}>{name} ({maori_name})</option>
+                {/each}
+            </select>
+        </label>
 
 
-    {#if form}
-        {#if form.success}
-            <p> success </p>
-        {:else}
-            <p> errored... with message {form?.message} </p>
+        {#if form}
+            {#if form.success}
+                <p> success </p>
+            {:else}
+                <p> errored... with message {form?.message} </p>
+            {/if}
         {/if}
-    {/if}
 
-    <button> sign up </button>
-</form>
+        <button> sign up </button>
+    </form>
+
+
+    <p class="fsize-subhead" style:margin-top=8px> Already have an account? <a href=" /login "> Login </a> </p>
+</Card>
+
+
+<style>
+    p {
+        color: var(--cg);
+    }
+
+    a {
+        text-decoration: none;
+        color: var(--ca);
+    }
+</style>

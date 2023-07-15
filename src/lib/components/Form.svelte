@@ -44,9 +44,13 @@
         font-weight: 600;
     }
 
+    label:last-of-type {
+        margin-bottom: 16px;
+    }
+
     input {
-        height: 36px;
-        border: var(--clg1) 2px solid;
+        height: 32px;
+        border: var(--clg1) 1.5px solid;
         outline: 0;
         border-radius: 6px;
         background-color: var(--clg0);
@@ -65,10 +69,14 @@
     }
 
     input:focus, input:active {
-        border: var(--clg1) 2px solid;
+        border: var(--clg1) 1.5px solid;
         outline: 0;
 
         color: var(--cdg2);
         background-color: white;
+    }
+
+    #padding {
+        margin-top: 12px;
     }
 </style>
