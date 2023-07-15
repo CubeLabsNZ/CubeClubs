@@ -7,8 +7,8 @@
 <form method="POST"> 
     <slot/>
 
-    <Button type={ButtonType.Coloured} size={ButtonSize.Regular} href="">
-        <p>{name}</p>
+    <Button type={ButtonType.Coloured} size={ButtonSize.Regular}>
+        <p style:font-weight=500>{name}</p>
     </Button>
 </form>
 

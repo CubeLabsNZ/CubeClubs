@@ -33,14 +33,13 @@
     }
 
     #title {
-        font-weight: 600;
+        font-weight: 500;
 
         margin-top: 16px;
         margin-bottom: 8px;
     }
 
     #subtitle {
-        font-weight: 500;
         color: var(--cg);
 
         margin-bottom: 32px;

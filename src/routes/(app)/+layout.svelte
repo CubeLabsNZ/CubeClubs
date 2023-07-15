@@ -5,6 +5,8 @@
 
     import logo from "$lib/assets/logo-transparent.svg";
 
+    import { goto } from "$app/navigation";
+
     import Button, { ButtonType, ButtonSize } from "$lib/components/Button.svelte";
 </script>
 
@@ -23,8 +25,8 @@
     <div id="right"> 
         <a class="regular-link" href="/login"> Login </a>
         
-        <Button type={ButtonType.Regular} size={ButtonSize.Small} href="/signup">
-            <div>Sign Up</div>
+        <Button type={ButtonType.Regular} size={ButtonSize.Small} perform={() => { goto("/signup") }}>
+            <div style:font-weight=500>Sign Up</div>
         </Button>
     </div>
 </div>
@@ -36,7 +38,7 @@
 
 <style> 
     .image-link {
-        transition: filter 100ms ease-in-out;
+        transition: filter 150ms ease-in-out;
 
         height: 30px;
     }
@@ -68,6 +70,8 @@
         margin: 0 auto;
         left: 0; right: 0;
 
+        font-weight: 500;
+
     }
 
     #navbar .regular-link {
@@ -91,6 +95,6 @@
     }
 
     #main-content {
-        padding-top: 12vh;
+        padding-top: 78px; /* 16*2 + 46 */
     }
 </style>

@@ -1,11 +1,6 @@
 <script lang="ts"> 
-    export let type: ButtonType, size: ButtonSize, href: string;
-
-    const onClick = () => {
-        if (href !== "") {
-            window.open(href, "_self");
-        }
-    }
+    export let type: ButtonType, size: ButtonSize;
+    export let perform: () => void = () => {};
 </script>
 
 
@@ -24,7 +19,7 @@
 
 
 
-<button class={"button button-"+type + `${size == ButtonSize.Small ? " fsize-subhead" : " fsize-body"}`} on:click={ onClick } style:height={size == ButtonSize.Small ? "30px" : "34px"}>
+<button class={"button button-"+type + `${size == ButtonSize.Small ? " fsize-subhead" : " fsize-body"}`} on:click={ () => { perform() } } style:height={size == ButtonSize.Small ? "30px" : "34px"}>
     <slot></slot>
 </button>
 
@@ -39,30 +34,43 @@
         padding-left: 12px;
         padding-right: 12px;
         
-        transition: background-color 100ms ease-in-out,
-                    box-shadow 150ms ease-in-out;
+        transition: background-color 150ms ease-in-out,
+                    box-shadow 150ms ease-in-out,
+                    color 150ms ease-in-out;
 
         color: var(--cdg2);
-
-        font-weight: 600;
     }
 
     .button:hover {
         cursor: pointer;
     }
 
-    .button-regular:hover,
-    .button-bordered:hover {
-        background-color: var(--clg1);
+    
+    /* INFO: bordered button */
+    .button-bordered {
+        border: var(--clg1) 1.5px solid;
+        box-shadow: 0px 1.5px 4px 0px #10151B1F; /* cdg3, 12% */
     }
 
+    /* INFO: coloured button */
     .button-coloured {
         background-color: var(--cla2);
         color: var(--ca);
-        box-shadow: 0px 2px 6px 0px #0073E61F; /* ca, 12% */
+        box-shadow: 0px 1.5px 4px 0px #0073E61F; /* ca, 12% */
+    }
+
+
+    /* INFO: hover states */
+    .button-regular:hover {
+        background-color: var(--clg1);
+    }
+
+    .button-bordered:hover {
+        color: black;
+        box-shadow: 0px 1.5px 6px 0px #10151B29; /* cdg3, 16% */
     }
 
     .button-coloured:hover {
-        box-shadow: 0px 3px 8px 0px #0073E629; /* ca, 16% */
+        box-shadow: 0px 1.5px 6px 0px #0073E629; /* ca, 16% */
     }
 </style>
