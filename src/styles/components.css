@@ -1,0 +1,45 @@
+/* INFO: INPUT */
+input {
+    height: 32px;
+    border: var(--clg1) 1.5px solid;
+    outline: 0;
+    border-radius: 6px;
+    background-color: var(--clg0);
+
+    color: var(--cdg1);
+
+    font-size: 16px;
+    font-size: 500;
+
+    caret-color: var(--ca);
+
+    padding-left: 6px;
+    padding-right: 6px;
+
+    transition: background-color 100ms ease-in-out, color 100ms ease-in-out;
+}
+
+input:focus, input:active {
+    border: var(--clg1) 1.5px solid;
+    outline: 0;
+
+    color: var(--cdg2);
+    background-color: white;
+}
+
+input[data-error=true] {
+    border: var(--cred) 1.5px solid;
+    outline: 0;
+}
+
+
+
+/* INFO: FORM LABELS */
+.form-label {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+
+    font-size: 14px;
+    font-weight: 600;
+}

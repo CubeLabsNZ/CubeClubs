@@ -1,4 +1,5 @@
 import type { Actions } from "./$types";
+import { fail } from "@sveltejs/kit";
 
 import prisma from "$lib/prisma";
 
@@ -18,14 +19,19 @@ export const actions = {
             }
         });
 
-        if (!user) { return { success: false, message: "this email doesn't exist. please try again" }; }
+        if (!user) { 
+            return fail(400, { email, error: "email" });
+        }
         
 
         const passIsCorrect = await argon2.verify(user.passHash, password as string);
 
-        if (!passIsCorrect) { return { success: false, message: "password is incorrect. please try again"}}
+        if (!passIsCorrect) { 
+            return fail(401, { email, error: "pass"})
+        }
 
         throw redirect(303, "/");
     }
 } satisfies Actions
 
+export const _EMAIL_MESSAGE = "this email doesn't exist. please try again";

@@ -1,7 +1,8 @@
 <script lang="ts"> 
-    import "../../styles/globals.css";
-    import "../../styles/fonts.css";
-    
+    import "$styles/fonts.css";
+    import "$styles/globals.css";
+    import "$styles/components.css";
+
 </script>
 
 

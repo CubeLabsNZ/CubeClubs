@@ -1,8 +1,7 @@
 <script lang="ts"> 
-    import "../../styles/globals.css";
-    import "../../styles/fonts.css";
-
-    import { goto } from "$app/navigation";
+    import "$styles/fonts.css";
+    import "$styles/globals.css";
+    import "$styles/components.css";
 
     import logo from "$lib/assets/logo-transparent.svg";
 
