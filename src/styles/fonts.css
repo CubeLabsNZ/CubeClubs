@@ -39,3 +39,11 @@
 	src: url("../fonts/IBMPlexSans-Thin.ttf") format("truetype");
 	font-weight: 100;
 }
+
+
+
+/* TW CEN MT */
+@font-face {
+	font-family: "TwCenMt";
+	src: url("../fonts/TwCenMTStd-SemiMedium.otf");
+}

@@ -17,7 +17,7 @@
         </a>
 
         <a class="regular-link" href="/clubs">Clubs</a>
-        <a class="regular-link" href="/contests">Contest</a>
+        <a class="regular-link" href="/meetups">Meetups</a>
         <a class="regular-link" href="/records">Records</a>
         <a class="regular-link" href="/rankings">Rankings</a>
     </div>
@@ -95,6 +95,6 @@
     }
 
     #main-content {
-        padding-top: 78px; /* 16*2 + 46 */
+        /* padding-top: 78px; /* 16*2 + 46 */
     }
 </style>
