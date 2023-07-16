@@ -6,6 +6,9 @@
     import logo from "$lib/assets/logo-transparent.svg";
 
     import { goto } from "$app/navigation";
+    import { page } from "$app/stores";
+
+
 
     import Button, { ButtonType, ButtonSize } from "$lib/components/Button.svelte";
 </script>
@@ -75,7 +78,7 @@
     }
 
     #navbar .regular-link {
-        color: var(--cw);
+        color: var(--clg0);
         text-decoration: none;
         font-size: 14px;
         
@@ -92,9 +95,5 @@
         flex-direction: row;
         align-items: center;
         gap: 24px;
-    }
-
-    #main-content {
-        /* padding-top: 78px; /* 16*2 + 46 */
     }
 </style>

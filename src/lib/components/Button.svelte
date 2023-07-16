@@ -27,7 +27,7 @@
     .button {
         margin: 0;
         padding: 0;
-        background-color: var(--cw);
+        background-color: white;
         border: 0;
         border-radius: 6px;
 

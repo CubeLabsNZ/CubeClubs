@@ -11,6 +11,7 @@ export const actions = {
     default: async ({ request }) =>  {
         const data = await request.formData();
 
+
         const email = data.get("email");
         const password = data.get("password");
         const confirmPassword = data.get("confirmPassword");
@@ -25,13 +26,17 @@ export const actions = {
         });
 
         if (userExists > 0) {
-            return fail(409, { email, region, error: "EMAIL" });
+            return fail(409, { email, region, fullName, error: "EMAIL" });
         }
 
 
         if (password !== confirmPassword) { 
-            return fail(400, { email, region, error: "PASS_MISMATCH" });
+            return fail(400, { email, region, fullName, error: "PASS_MISMATCH" });
         }
+
+        data.forEach(v => {
+            console.log(v);
+        })
 
 
         const hash = await argon2.hash(password as string);
