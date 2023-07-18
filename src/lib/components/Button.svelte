@@ -48,7 +48,7 @@
     
     /* INFO: bordered button */
     .button-bordered {
-        border: var(--clg1) 1.5px solid;
+        border: var(--clg1) 1px solid;
         box-shadow: 0px 1.5px 4px 0px #10151B1F; /* cdg3, 12% */
     }
 

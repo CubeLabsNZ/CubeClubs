@@ -3,6 +3,10 @@
 }
 
 :root {
+    font-family: "IBMPlexSans";
+
+
+    /* INFO: COLOURS */
     --clg0: #FAFBFC;
 
     --clg1: #D1D3D6;
@@ -27,10 +31,14 @@
     --cred: #F27F7F;
 
 
-    font-family: "IBMPlexSans";
     color: var(--cdg2);
-
     background-color: var(--clg0);
+
+
+
+    /* INFO: CONSTANTS */
+    --srad: 6px;
+    --srad-l: 4px;
 }
 
 body {
@@ -54,7 +62,7 @@ p {
 
 /* fonts */
 .fsize-title1 {
-
+    font-size: 32px;
 }
 
 .fsize-title2 {
@@ -71,4 +79,25 @@ p {
 
 .fsize-footnote {
     font-size: 12px;
+}
+
+
+/* set fonts */
+.fstyle-heading {
+    font-size: 32px;
+    font-family: "TwCenMt";
+
+    font-weight: 600;
+}
+
+.fstyle-subheading {
+    font-size: 16px;
+    color: var(--cdg1);
+}
+
+
+h1, h2, h3, h4, h5, h6, p {
+    padding: 0;
+    margin: 0;
+    font-weight: 400;
 }

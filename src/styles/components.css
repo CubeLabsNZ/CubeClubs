@@ -1,7 +1,7 @@
 /* INFO: INPUT */
 input {
     height: 34px;
-    border: var(--clg1) 1.5px solid;
+    border: var(--clg1) 1px solid;
     outline: 0;
     border-radius: 6px;
     background-color: var(--clg0);
@@ -20,7 +20,7 @@ input {
 }
 
 input:focus, input:active {
-    border: var(--clg1) 1.5px solid;
+    border: var(--clg1) 1px solid;
     outline: 0;
 
     color: var(--cdg2);
@@ -28,7 +28,7 @@ input:focus, input:active {
 }
 
 input[data-error=true] {
-    border: var(--cred) 1.5px solid;
+    border: var(--cred) 1px solid;
     outline: 0;
 }
 
