@@ -60,6 +60,16 @@
         { ranking: 2, name: "Joe Bloggs", result: 1.78, region: Region.OTAGO, meetupName: "Christchurch Meetups", data: "1.54, 1.64, 1.45, 1.90, 1.24" },
         { ranking: 2, name: "Joe Bloggs", result: 1.78, region: Region.OTAGO, meetupName: "Christchurch Meetups", data: "1.54, 1.64, 1.45, 1.90, 1.24" },
         { ranking: 2, name: "Joe Bloggs", result: 1.78, region: Region.OTAGO, meetupName: "Christchurch Meetups", data: "1.54, 1.64, 1.45, 1.90, 1.24" },
+        { ranking: 1, name: "John Doe", result: 1.67, region: Region.AUCKLAND, meetupName: "ASC Meetup April 2023", data: "1.54, 1.64, 1.45, 1.90, 1.24" },
+        { ranking: 2, name: "Joe Bloggs", result: 1.78, region: Region.OTAGO, meetupName: "Christchurch Meetups", data: "1.54, 1.64, 1.45, 1.90, 1.24" },
+        { ranking: 1, name: "John Doe", result: 1.67, region: Region.AUCKLAND, meetupName: "ASC Meetup April 2023", data: "1.54, 1.64, 1.45, 1.90, 1.24" },
+        { ranking: 1, name: "John Doe", result: 1.67, region: Region.AUCKLAND, meetupName: "ASC Meetup April 2023", data: "1.54, 1.64, 1.45, 1.90, 1.24" },
+        { ranking: 1, name: "John Doe", result: 1.67, region: Region.AUCKLAND, meetupName: "ASC Meetup April 2023", data: "1.54, 1.64, 1.45, 1.90, 1.24" },
+        { ranking: 1, name: "John Doe", result: 1.67, region: Region.AUCKLAND, meetupName: "ASC Meetup April 2023", data: "1.54, 1.64, 1.45, 1.90, 1.24" },
+        { ranking: 2, name: "Joe Bloggs", result: 1.78, region: Region.OTAGO, meetupName: "Christchurch Meetups", data: "1.54, 1.64, 1.45, 1.90, 1.24" },
+        { ranking: 2, name: "Joe Bloggs", result: 1.78, region: Region.OTAGO, meetupName: "Christchurch Meetups", data: "1.54, 1.64, 1.45, 1.90, 1.24" },
+        { ranking: 2, name: "Joe Bloggs", result: 1.78, region: Region.OTAGO, meetupName: "Christchurch Meetups", data: "1.54, 1.64, 1.45, 1.90, 1.24" },
+        { ranking: 2, name: "Joe Bloggs", result: 1.78, region: Region.OTAGO, meetupName: "Christchurch Meetups", data: "1.54, 1.64, 1.45, 1.90, 1.24" },
     ];
 
 
@@ -243,6 +253,10 @@
         font-weight: 500;
 
         border-bottom: 1px var(--clg1) solid;
+
+        /* TODO: add sticky header, tried but cannot think of a good method with the floating tab bar - maybe hide tab bar? do not have it always in top position? */
+        /* position: sticky; */
+        /* top: 126px; */
     }
 
     td:not(:first-child):not(:last-child), th:not(:first-child):not(:last-child) {
