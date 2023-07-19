@@ -34,6 +34,26 @@ input[data-error=true] {
 
 
 
+/* INFO: SELECT */
+select {
+    height: 34px;
+    border: 1px var(--clg1) solid;
+    background-color: white;
+    box-shadow: 0px 1px 4px 0px #10151B1F;
+
+    border-radius: 6px;
+
+    cursor: pointer;
+
+    font-size: 16px;
+    color: var(--cdg2);
+
+    padding-left: 6px;
+}
+
+
+
+
 /* INFO: FORM LABELS */
 .form-label {
     display: flex;

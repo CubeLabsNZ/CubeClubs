@@ -3,7 +3,7 @@
     import { ERR_LOGIN_EMAIL, ERR_LOGIN_PASS } from "$lib/globals";
 
     import Card from "$lib/components/Card.svelte";
-    import Form from "$lib/components/Form/Form.svelte";
+    import Form from "$lib/components/Form.svelte";
 
     export let form: ActionData;
 </script>

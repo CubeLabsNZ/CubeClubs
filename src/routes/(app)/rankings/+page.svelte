@@ -5,10 +5,14 @@
 
     import { browser } from "$app/environment";
 
+    import regions from "$lib/data/regions"
 
     import { Region } from "@prisma/client";
 
-    import SegmentedControl, { LabelType } from "$lib/components/SegmentedControl/SegmentedControl.svelte";
+    import SegmentedControl, { LabelType } from "$lib/components/SegmentedControl.svelte";
+
+
+    import * as Icons from "$lib/assets/cube-icons/icons";
 
     import Button, { ButtonType, ButtonSize } from "$lib/components/Button.svelte";
 
@@ -21,8 +25,28 @@
         data: any;
     }
 
-    let formatIndex: number;  // single=0; average=1
 
+    /* INFO:
+        format: 0 = single, 1 - average
+
+        event:
+            0 = 3x3
+            1-5 = 2x2, 4x4-7x7
+            6 = squan
+            7 = skewb
+            8 = pyra
+            9 = mega
+            10 = oh
+            11 = clock
+            12 = fmc
+            13 = 3bld
+            14 = mbld
+            15 = 4bld
+            16 = 5bld
+    */
+
+    let formatIndex: number, eventIndex: number;
+    let regionSelected: string;
 
 
     let results: Result[] = [
@@ -39,17 +63,29 @@
     ];
 
 
-    $: {
-        showType(formatIndex);
-    }
+    $: updateQuery(formatIndex, eventIndex, regionSelected);
 
-    function showType(formatIndex: number) {
+    function updateQuery(formatIndex: number, eventIndex: number, selectedRegion: string) {
         if (!browser) { return }
 
         let query = new URLSearchParams($page.url.searchParams.toString());
+
         query.set("format", formatIndex ? "average" : "single");
+
+        query.set("event", String(eventIndex));
+
+        console.log($page.url.searchParams);
+
+        if (selectedRegion == "") {
+            query.delete("region")
+        } else {
+            query.set("region", selectedRegion);
+        }
+
         goto(`?${query.toString()}`);
     }
+
+    console.log(Icons.Icon2);
 </script>
 
 <div class="content"> 
@@ -65,6 +101,48 @@
                 {type: LabelType.Text, data: "Single"},
                 {type: LabelType.Text, data: "Average"}
             ]} /> 
+        </div>
+
+
+        <div class="label-group">
+            <p class="label">Region</p>
+            
+            <select name="region" bind:value={regionSelected}>
+                <option selected value>All Regions</option>
+                {#each Object.entries(regions) as [value, {name, maori_name}] }
+                    <option value={value}>{name} {maori_name !== undefined ? `(${maori_name})` : ""}</option>
+                {/each}
+            </select>
+        </div>
+
+
+    </div>
+
+    <div class="filter-bar">
+        <div class="label-group">
+            <p class="label">Event</p>
+
+            <SegmentedControl bind:selectedIndex={eventIndex} labels={[
+                {type: LabelType.Image, data: Icons.Icon3},
+                {type: LabelType.Image, data: Icons.Icon2},
+                {type: LabelType.Image, data: Icons.Icon4},
+                {type: LabelType.Image, data: Icons.Icon5},
+                {type: LabelType.Image, data: Icons.Icon6},
+                {type: LabelType.Image, data: Icons.Icon7},
+
+                {type: LabelType.Image, data: Icons.IconSq1},
+                {type: LabelType.Image, data: Icons.IconSkewb},
+                {type: LabelType.Image, data: Icons.IconPyra},
+                {type: LabelType.Image, data: Icons.IconMega},
+                {type: LabelType.Image, data: Icons.IconOH},
+                {type: LabelType.Image, data: Icons.IconClock},
+
+                {type: LabelType.Image, data: Icons.IconFMC},
+                {type: LabelType.Image, data: Icons.Icon3bld},
+                {type: LabelType.Image, data: Icons.IconMbld},
+                {type: LabelType.Image, data: Icons.Icon4bld},
+                {type: LabelType.Image, data: Icons.Icon5bld},
+            ]}>  </SegmentedControl>
         </div>
     </div>
 
@@ -232,7 +310,11 @@
         flex-direction: row;
 
         column-gap: 32px;
-        
-        margin-bottom: 16px;
+
+        padding-bottom: 8px;
+    }
+
+    .filter-bar:last-of-type {
+        padding-bottom: 16px;
     }
 </style>

@@ -63,6 +63,7 @@
     h1 {
         font-size: 72px;
         font-family: "TwCenMt";
+        font-weight: 600;
     }
 
     h2 {

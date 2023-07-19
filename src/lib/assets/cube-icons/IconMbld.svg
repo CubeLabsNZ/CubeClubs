@@ -1,0 +1,25 @@
+<svg id="mbld" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+  <path d="M20.06,12c.21-3.22,3.11-8-2.47-8-4.67,0-4.99,4.04-4.99,8,0,3.57,.17,7.85,4.48,8,6.01,.21,3.21-4.41,2.98-8Z"/>
+  <g>
+    <rect x="3.18" y="7.03" width="1.6" height="1.6" rx=".4" ry=".4" transform="translate(-4.37 5.11) rotate(-45)"/>
+    <rect x="4.5" y="5.72" width="1.6" height="1.6" rx=".4" ry=".4" transform="translate(-3.06 5.65) rotate(-45)"/>
+    <rect x="5.81" y="4.4" width="1.6" height="1.6" rx=".4" ry=".4" transform="translate(-1.74 6.2) rotate(-45)"/>
+    <rect x="4.5" y="8.35" width="1.6" height="1.6" rx=".4" ry=".4" transform="translate(-4.91 6.43) rotate(-45)"/>
+    <rect x="5.82" y="7.03" width="1.6" height="1.6" rx=".4" ry=".4" transform="translate(-3.6 6.98) rotate(-45)"/>
+    <rect x="7.14" y="5.71" width="1.6" height="1.6" rx=".4" ry=".4" transform="translate(-2.28 7.52) rotate(-45)"/>
+    <rect x="5.83" y="9.67" width="1.6" height="1.6" rx=".4" ry=".4" transform="translate(-5.46 7.75) rotate(-45)"/>
+    <rect x="7.14" y="8.35" width="1.6" height="1.6" rx=".4" ry=".4" transform="translate(-4.14 8.3) rotate(-45)"/>
+    <rect x="8.46" y="7.03" width="1.6" height="1.6" rx=".4" ry=".4" transform="translate(-2.83 8.84) rotate(-45)"/>
+  </g>
+  <g>
+    <rect x="3.17" y="15.38" width="1.6" height="1.6" rx=".4" ry=".4" transform="translate(-10.28 7.54) rotate(-45)"/>
+    <rect x="4.48" y="14.06" width="1.6" height="1.6" rx=".4" ry=".4" transform="translate(-8.96 8.09) rotate(-45)"/>
+    <rect x="5.8" y="12.74" width="1.6" height="1.6" rx=".4" ry=".4" transform="translate(-7.64 8.63) rotate(-45)"/>
+    <rect x="4.49" y="16.69" width="1.6" height="1.6" rx=".4" ry=".4" transform="translate(-10.82 8.86) rotate(-45)"/>
+    <rect x="5.81" y="15.37" width="1.6" height="1.6" rx=".4" ry=".4" transform="translate(-9.5 9.41) rotate(-45)"/>
+    <rect x="7.12" y="14.06" width="1.6" height="1.6" rx=".4" ry=".4" transform="translate(-8.19 9.95) rotate(-45)"/>
+    <rect x="5.81" y="18.01" width="1.6" height="1.6" rx=".4" ry=".4" transform="translate(-11.36 10.18) rotate(-45)"/>
+    <rect x="7.13" y="16.69" width="1.6" height="1.6" rx=".4" ry=".4" transform="translate(-10.05 10.73) rotate(-45)"/>
+    <rect x="8.45" y="15.38" width="1.6" height="1.6" rx=".4" ry=".4" transform="translate(-8.73 11.28) rotate(-45)"/>
+  </g>
+</svg>

@@ -3,7 +3,7 @@
     import regions from "$lib/data/regions"
 
     import Card from "$lib/components/Card.svelte";
-    import Form from "$lib/components/Form/Form.svelte";
+    import Form from "$lib/components/Form.svelte";
 
     export let form: ActionData;
 </script>
@@ -51,11 +51,10 @@
             <select required name="region" value={form?.region}>
                 <option disabled selected value>Select a Region</option>
                 {#each Object.entries(regions) as [value, {name, maori_name}] }
-                    <option value={value}>{name} ({maori_name})</option>
+                    <option value={value}>{name} {maori_name !== undefined ? `(${maori_name})` : ""}</option>
                 {/each}
             </select>
         </label>
-
     </Form>
 
     <p class="fsize-subhead" style:margin-top=8px> Already have an account? <a href=" /login "> Login </a> </p>
