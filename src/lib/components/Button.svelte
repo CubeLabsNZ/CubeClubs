@@ -1,5 +1,5 @@
 <script lang="ts"> 
-    export let type: ButtonType, size: ButtonSize;
+    export let type: ButtonType = ButtonType.Regular, size: ButtonSize = ButtonSize.Regular;
     export let perform: () => void = () => {};
 </script>
 
@@ -49,14 +49,14 @@
     /* INFO: bordered button */
     .button-bordered {
         border: var(--clg1) 1px solid;
-        box-shadow: 0px 1.5px 4px 0px #10151B1F; /* cdg3, 12% */
+        box-shadow: 0px 1px 4px 0px #10151B1F; /* cdg3, 12% */
     }
 
     /* INFO: coloured button */
     .button-coloured {
         background-color: var(--cla2);
         color: var(--ca);
-        box-shadow: 0px 1.5px 4px 0px #0073E61F; /* ca, 12% */
+        box-shadow: 0px 1px 4px 0px #0073E61F; /* ca, 12% */
     }
 
 
@@ -67,10 +67,10 @@
 
     .button-bordered:hover {
         color: black;
-        box-shadow: 0px 1.5px 6px 0px #10151B29; /* cdg3, 16% */
+        box-shadow: 0px 1px 6px 0px #10151B29; /* cdg3, 16% */
     }
 
     .button-coloured:hover {
-        box-shadow: 0px 1.5px 6px 0px #0073E629; /* ca, 16% */
+        box-shadow: 0px 1px 6px 0px #0073E629; /* ca, 16% */
     }
 </style>

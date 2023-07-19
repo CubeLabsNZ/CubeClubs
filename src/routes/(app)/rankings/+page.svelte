@@ -1,5 +1,16 @@
 <script lang="ts">
+    import { goto } from "$app/navigation";
+    import { onMount } from "svelte";
+    import { page } from "$app/stores";
+
+    import { browser } from "$app/environment";
+
+
     import { Region } from "@prisma/client";
+
+    import SegmentedControl, { LabelType } from "$lib/components/SegmentedControl/SegmentedControl.svelte";
+
+    import Button, { ButtonType, ButtonSize } from "$lib/components/Button.svelte";
 
     interface Result {
         ranking: number;
@@ -9,6 +20,10 @@
         meetupName: string;
         data: any;
     }
+
+    let formatIndex: number;  // single=0; average=1
+
+
 
     let results: Result[] = [
         { ranking: 1, name: "John Doe", result: 1.67, region: Region.AUCKLAND, meetupName: "ASC Meetup April 2023", data: "1.54, 1.64, 1.45, 1.90, 1.24" },
@@ -22,12 +37,36 @@
         { ranking: 2, name: "Joe Bloggs", result: 1.78, region: Region.OTAGO, meetupName: "Christchurch Meetups", data: "1.54, 1.64, 1.45, 1.90, 1.24" },
         { ranking: 2, name: "Joe Bloggs", result: 1.78, region: Region.OTAGO, meetupName: "Christchurch Meetups", data: "1.54, 1.64, 1.45, 1.90, 1.24" },
     ];
+
+
+    $: {
+        showType(formatIndex);
+    }
+
+    function showType(formatIndex: number) {
+        if (!browser) { return }
+
+        let query = new URLSearchParams($page.url.searchParams.toString());
+        query.set("format", formatIndex ? "average" : "single");
+        goto(`?${query.toString()}`);
+    }
 </script>
 
 <div class="content"> 
     <h1 class="fstyle-heading" style:padding-bottom=8px>Rankings</h1>
 
     <h3 class="fstyle-subheading" style:padding-bottom=32px>Rankings shown are for all solves done at meetups and are not grouped by age or gender.</h3>
+
+    <div class="filter-bar">
+        <div class="label-group">
+            <p class="label">Format</p>
+
+            <SegmentedControl bind:selectedIndex={formatIndex} labels={[
+                {type: LabelType.Text, data: "Single"},
+                {type: LabelType.Text, data: "Average"}
+            ]} /> 
+        </div>
+    </div>
 
 
     <table>
@@ -184,5 +223,16 @@
 
     .tc-result, .tc-region, .tc-meetup, .tc-solves {
         width: fit-content;
+    }
+
+
+
+    .filter-bar {
+        display: flex;
+        flex-direction: row;
+
+        column-gap: 32px;
+        
+        margin-bottom: 16px;
     }
 </style>

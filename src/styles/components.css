@@ -41,5 +41,16 @@ input[data-error=true] {
     gap: 2px;
 
     font-size: 14px;
-    font-weight: 600;
+    font-weight: 500;
+}
+
+.label {
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.label-group {
+    display: flex;
+    flex-direction: column;
+    row-gap: 2px;
 }
