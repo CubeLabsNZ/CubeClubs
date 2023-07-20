@@ -1,5 +1,7 @@
 <script lang="ts"> 
     export let type: ButtonType = ButtonType.Regular, size: ButtonSize = ButtonSize.Regular;
+    export let padding = 12;
+
     export let perform: () => void = () => {};
 </script>
 
@@ -19,7 +21,7 @@
 
 
 
-<button class={"button button-"+type + `${size == ButtonSize.Small ? " fsize-subhead" : " fsize-body"}`} on:click={ () => { perform() } } style:height={size == ButtonSize.Small ? "30px" : "34px"}>
+<button class={"button button-"+type + `${size == ButtonSize.Small ? " fsize-subhead" : " fsize-body"}`} on:click={ () => { perform() } } style:height={size == ButtonSize.Small ? "30px" : "34px"} style:--p={padding}px>
     <slot></slot>
 </button>
 
@@ -31,14 +33,17 @@
         border: 0;
         border-radius: 6px;
 
-        padding-left: 12px;
-        padding-right: 12px;
+        padding-left: var(--p);
+        padding-right: var(--p);
         
         transition: background-color 150ms ease-in-out,
                     box-shadow 150ms ease-in-out,
                     color 150ms ease-in-out;
 
         color: var(--cdg2);
+
+        display: grid;
+        align-items: center;
     }
 
     .button:hover {
