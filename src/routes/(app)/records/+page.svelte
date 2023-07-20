@@ -54,6 +54,11 @@
 </script>
 
 
+<svelte:head>
+    <title>Records</title>
+</svelte:head>
+
+
 <DetailPage
     heading="Records"
     subheading="Records shown are for all records broken at meetups and are not grouped by age or gender.">

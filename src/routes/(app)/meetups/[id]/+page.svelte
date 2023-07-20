@@ -3,7 +3,7 @@
 </script>
 
 <svelte:head>
-    <title>User's name</title>
+    <title>meetuip name</title>
 </svelte:head>
 
 <h1>{data.id}</h1>

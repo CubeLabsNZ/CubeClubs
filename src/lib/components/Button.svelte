@@ -44,9 +44,7 @@
 
         display: grid;
         align-items: center;
-    }
 
-    .button:hover {
         cursor: pointer;
     }
 

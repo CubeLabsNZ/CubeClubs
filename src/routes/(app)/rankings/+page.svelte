@@ -99,6 +99,11 @@
 </script>
 
 
+<svelte:head>
+    <title>Rankings</title>
+</svelte:head>
+
+
 <DetailPage 
     heading="Rankings"
     subheading="Rankings shown are for all solves done at meetups and are not grouped by age or gender.">  

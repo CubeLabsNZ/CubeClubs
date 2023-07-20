@@ -4,6 +4,10 @@
     import { goto } from "$app/navigation";
 </script>
 
+<svelte:head>
+    <title>CubeClubs NZ</title>
+</svelte:head>
+
 <div id="landing-main">
     <div id="landing-bg">
         <img id="landing-b-1" src="/landing/blob-blue.webp" alt="">

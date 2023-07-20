@@ -55,7 +55,7 @@
                     <div class="dashboard-link">
                         <p> Admin Dashboard </p>
 
-                        <span class="material-symbols-outlined arrow">arrow_right_alt</span>
+                        <span class="material-symbols-outlined arrow" style:transform=translateY(1px)>arrow_right_alt</span>
                     </div>
                 </a>
             </div>
@@ -196,7 +196,7 @@
     }
 
     .arrow {
-        transform: scale(0.8);
+        scale: 0.8;
 
         font-variation-settings: 
             'wght' 300;
