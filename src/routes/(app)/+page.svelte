@@ -22,7 +22,7 @@
         </div>
 
         <div id="landing-subtitle">
-            <h4 class="fsize-title2">We’re Aoteroa’s non-profit speedcubing clubs, comprised of six clubs throughout the country.</h4>
+            <h4 class="fsize-title2">We’re Aotearoa’s non-profit speedcubing clubs, comprised of six clubs throughout the country.</h4>
             <h4 class="fsize-title2">Our clubs host regular meetups for all ages and all skill levels, come join us at one of our meetups!</h4>
         </div>
 

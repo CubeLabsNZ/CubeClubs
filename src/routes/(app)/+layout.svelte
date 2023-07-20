@@ -11,7 +11,10 @@
 
     import logo from "$lib/assets/logo-transparent.svg";
 
-    let loggedIn = true, showDropdown = false;
+    // TODO: bind to actual user values & session
+    let loggedIn = true, isAdmin = true;
+
+    let showDropdown = false;
 
     import Button, { ButtonType, ButtonSize } from "$lib/components/Button.svelte";
 </script>
@@ -48,17 +51,19 @@
                 <a class="dropdown-link" href="/user/edit">Edit Account</a>
             </div>
 
-            <hr>
+            {#if isAdmin}
+                <hr>
 
-            <div class="dropdown-inner">
-                <a class="dropdown-link" href="/dashboard">
-                    <div class="dashboard-link">
-                        <p> Admin Dashboard </p>
+                <div class="dropdown-inner">
+                    <a class="dropdown-link" href="/dashboard">
+                        <div class="dashboard-link">
+                            <p> Admin Dashboard </p>
 
-                        <span class="material-symbols-outlined arrow" style:transform=translateY(1px)>arrow_right_alt</span>
-                    </div>
-                </a>
-            </div>
+                            <span class="material-symbols-outlined arrow" style:transform=translateY(1px)>arrow_right_alt</span>
+                        </div>
+                    </a>
+                </div>
+            {/if}
 
             <hr>
 
