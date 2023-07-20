@@ -86,26 +86,25 @@ model Competition {
 }
 
 enum Puzzle {
-  TWO
   THREE
+  TWO
   FOUR
   FIVE
   SIX
   SEVEN
 
+  SQ1
+  SKEWB
+  PYRA
+  MEGA
+  OH
+  CLOCK
+
+  FMC
   THREEBLD
+  MULTIBLD
   FOURBLD
   FIVEBLD
-  MULTIBLD
-
-  SQ1
-  PYRAMINX
-  MEGAMINX
-  SKEWB
-  CLOCK
-  THREEOH
-
-  LUNCH
 }
 
 enum Format {

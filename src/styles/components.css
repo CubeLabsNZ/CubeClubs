@@ -64,6 +64,8 @@ select {
     font-weight: 500;
 }
 
+
+/* INFO: GENERAL LABELS */
 .label {
     font-size: 14px;
     font-weight: 500;
@@ -73,4 +75,78 @@ select {
     display: flex;
     flex-direction: column;
     row-gap: 2px;
+}
+
+
+
+
+/* INFO: table */
+table {
+    width: 1000px;
+    border-radius: var(--srad);
+    border: 1px var(--clg1) solid;
+    background-color: white;
+
+    border-spacing: 0;
+}
+
+table * {
+    font-size: 14px;
+}
+
+tr {
+    height: 30px;
+}
+
+tr:nth-child(odd):not(:first-child):not(:last-child) td:not(:first-child):not(:last-child) {
+    background-color: #D1D3D640;
+}
+
+th {
+    color: var(--cdg1);
+    font-weight: 500;
+
+    border-bottom: 1px var(--clg1) solid;
+
+    /* TODO: add sticky header, tried but cannot think of a good method with the floating tab bar - maybe hide tab bar? do not have it always in top position? */
+    /* position: sticky; */
+    /* top: 126px; */
+}
+
+td:not(:first-child):not(:last-child), th:not(:first-child):not(:last-child) {
+    /* = 24px gap total between columns */
+    padding-left: 6px;
+    padding-right: 6px;
+}
+
+
+td:nth-last-child(2) {
+    border-top-right-radius: var(--srad-l);
+    border-bottom-right-radius: var(--srad-l);
+}
+
+td:nth-child(2) {
+    border-top-left-radius: var(--srad-l);
+    border-bottom-left-radius: var(--srad-l);
+}
+
+
+.td-dummy {
+    height: 8px;
+    background-color: white;
+}
+
+.tc-dummy {
+    width: 8px;
+    background-color: white;
+}
+
+
+
+/* INFO: FILTER BAR */
+.filter-bar {
+    display: flex;
+    flex-direction: row;
+
+    column-gap: 32px;
 }

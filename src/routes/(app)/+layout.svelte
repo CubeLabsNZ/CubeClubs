@@ -1,13 +1,11 @@
 <script lang="ts"> 
+    import { goto } from "$app/navigation";
+
     import "$styles/fonts.css";
     import "$styles/globals.css";
     import "$styles/components.css";
 
     import logo from "$lib/assets/logo-transparent.svg";
-
-    import { goto } from "$app/navigation";
-    import { page } from "$app/stores";
-
 
 
     import Button, { ButtonType, ButtonSize } from "$lib/components/Button.svelte";

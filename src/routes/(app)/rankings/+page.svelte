@@ -1,20 +1,20 @@
 <script lang="ts">
-    import { goto } from "$app/navigation";
-    import { onMount } from "svelte";
-    import { page } from "$app/stores";
-
     import { browser } from "$app/environment";
+    import { page } from "$app/stores";
+    import { goto } from "$app/navigation";
 
-    import regions from "$lib/data/regions"
+    import regions from "$lib/data/regions";
 
     import { Region } from "@prisma/client";
 
     import SegmentedControl, { LabelType } from "$lib/components/SegmentedControl.svelte";
 
 
+    import DetailPage from "$lib/components/DetailPage.svelte";
+
+
     import * as Icons from "$lib/assets/cube-icons/icons";
 
-    import Button, { ButtonType, ButtonSize } from "$lib/components/Button.svelte";
 
     interface Result {
         ranking: number;
@@ -98,10 +98,10 @@
     console.log(Icons.Icon2);
 </script>
 
-<div class="content"> 
-    <h1 class="fstyle-heading" style:padding-bottom=8px>Rankings</h1>
 
-    <h3 class="fstyle-subheading" style:padding-bottom=32px>Rankings shown are for all solves done at meetups and are not grouped by age or gender.</h3>
+<DetailPage 
+    heading="Rankings"
+    subheading="Rankings shown are for all solves done at meetups and are not grouped by age or gender.">  
 
     <div class="filter-bar">
         <div class="label-group">
@@ -124,8 +124,6 @@
                 {/each}
             </select>
         </div>
-
-
     </div>
 
     <div class="filter-bar">
@@ -212,77 +210,12 @@
             <td></td>
         </tr>
     </table>
-</div>
-
+    
+</DetailPage>
 
 
 
 <style>
-    .content {
-        width: 1000px;
-        margin-left: auto;
-        margin-right: auto;
-
-        margin-top: 126px; /* tab bar + 32px either side */
-    }
-
-
-    table {
-        width: 1000px;
-        border-radius: var(--srad);
-        border: 1px var(--clg1) solid;
-        background-color: white;
-
-        border-spacing: 0;
-    }
-
-    table * {
-        font-size: 14px;
-    }
-
-    tr {
-        height: 30px;
-    }
-
-    tr:nth-child(odd):not(:first-child):not(:last-child) td:not(:first-child):not(:last-child) {
-        background-color: #D1D3D640;
-    }
-
-    th {
-        color: var(--cdg1);
-        font-weight: 500;
-
-        border-bottom: 1px var(--clg1) solid;
-
-        /* TODO: add sticky header, tried but cannot think of a good method with the floating tab bar - maybe hide tab bar? do not have it always in top position? */
-        /* position: sticky; */
-        /* top: 126px; */
-    }
-
-    td:not(:first-child):not(:last-child), th:not(:first-child):not(:last-child) {
-        /* = 24px gap total between columns */
-        padding-left: 6px;
-        padding-right: 6px;
-    }
-
-    .td-dummy {
-        height: 8px;
-        background-color: white;
-    }
-
-
-    td:nth-last-child(2) {
-        border-top-right-radius: var(--srad-l);
-        border-bottom-right-radius: var(--srad-l);
-    }
-
-    td:nth-child(2) {
-        border-top-left-radius: var(--srad-l);
-        border-bottom-left-radius: var(--srad-l);
-
-    }
-
-
     .tc-name, .tc-region, .tc-meetup, .tc-solves {
         text-align: left;
     }
@@ -300,11 +233,6 @@
         color: var(--ca);
     }
 
-    .tc-dummy {
-        width: 8px;
-        background-color: white;
-    }
-
     .tc-result, .tc-ranking {
         text-align: right;
     }
@@ -313,18 +241,7 @@
         color: var(--cdg1);
     }
 
-    .tc-result, .tc-region, .tc-meetup, .tc-solves {
-        width: fit-content;
-    }
-
-
-
     .filter-bar {
-        display: flex;
-        flex-direction: row;
-
-        column-gap: 32px;
-
         padding-bottom: 8px;
     }
 
