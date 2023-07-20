@@ -170,7 +170,7 @@
         column-gap: 8px;
 
         margin-bottom: 4px;
-        margin-top: 24px;
+        margin-top: 48px;
     }
 
     .group-label-0 {
@@ -209,6 +209,6 @@
     }
 
     .filter-bar {
-        padding-bottom: 16px;
+        padding-bottom: 32px;
     }
 </style>
