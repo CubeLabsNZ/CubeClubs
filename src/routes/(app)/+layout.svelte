@@ -38,8 +38,12 @@
                 <div style:font-weight=500>Sign Up</div>
             </Button>
         {:else}
-            <Button type={ButtonType.Regular} size={ButtonSize.Small} padding=3 perform={() => { showDropdown = !showDropdown }}>
-                <span class="material-symbols-outlined">account_circle</span>
+            <Button type={ButtonType.Regular} size={ButtonSize.Small} padding=8 perform={() => { showDropdown = !showDropdown }}>
+                <div style:display=flex style:align-items=center style:column-gap=8px>
+                    <span class="material-symbols-outlined" style:font-size=20px>account_circle</span>
+
+                    <p style:font-weight=500 style:padding-right=6px style:height=20px>Tim</p>
+                </div>
             </Button>
         {/if}
     </div>
@@ -59,7 +63,7 @@
                         <div class="dashboard-link">
                             <p> Admin Dashboard </p>
 
-                            <span class="material-symbols-outlined arrow" style:transform=translateY(1px)>arrow_right_alt</span>
+                            <span class="material-symbols-outlined arrow">arrow_right_alt</span>
                         </div>
                     </a>
                 </div>
@@ -201,7 +205,7 @@
     }
 
     .arrow {
-        scale: 0.8;
+        font-size: 20px;
 
         font-variation-settings: 
             'wght' 300;
