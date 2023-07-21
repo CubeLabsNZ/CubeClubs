@@ -99,7 +99,7 @@ tr {
 }
 
 tr:nth-child(odd):not(:first-child):not(:last-child) td:not(:first-child):not(:last-child) {
-    background-color: #D1D3D640;
+    background-color: var(--clgh);
 }
 
 th {
