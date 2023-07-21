@@ -94,8 +94,6 @@
 
         goto(`?${query.toString()}`);
     }
-
-    console.log(Icons.Icon2);
 </script>
 
 

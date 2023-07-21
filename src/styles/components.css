@@ -150,3 +150,18 @@ td:nth-child(2) {
 
     column-gap: 32px;
 }
+
+
+
+/* INFO: LISTS */
+ul {
+    padding: 0;
+    padding-left: 20px;
+    margin: 0;
+    list-style-type: '-   ';
+}
+
+li::marker {
+    color: var(--cdg1);
+    font-weight: 500;
+}

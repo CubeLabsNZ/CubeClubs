@@ -1,7 +1,7 @@
 <script lang="ts">
     export let selectedIndex = 0;
 
-    export let labels: Label[]
+    export let labels: Label[];
 </script>
 
 <script context="module" lang="ts">
@@ -14,7 +14,6 @@
         Text,
         Image
     }
-
 </script>
 
 
