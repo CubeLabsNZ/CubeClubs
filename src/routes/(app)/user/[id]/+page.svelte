@@ -2,6 +2,13 @@
     import Bar from '$lib/components/Bar.svelte';
     import Badge, { BadgeSize } from "$lib/components/Badge.svelte";
 
+    import TabBar from '$lib/components/TabBar.svelte';
+    import SegmentedControl, { LabelType } from '$lib/components/SegmentedControl.svelte';
+
+    import * as Icons from "$lib/assets/cube-icons/icons";
+
+    let resultsEventIndex: number;
+
     export let data;
 </script>
 
@@ -44,66 +51,243 @@
 
                     <hr>
 
-                    <!-- INFO: gold -->
-                    <div class="data-row">
-                        <div class="medal-container">
-                            <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" height=16 stroke-width=1.5 fill=#F9D953 stroke=#EFCC3A>
-                                <circle cx="8" cy="8" r="6.75" />
-                            </svg>
+                    <div class="section-column">
+                        <!-- INFO: gold -->
+                        <div class="data-row">
+                            <div class="medal-container">
+                                <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" height=16 stroke-width=1.5 fill=#F9D953 stroke=#EFCC3A>
+                                    <circle cx="8" cy="8" r="6.75" />
+                                </svg>
 
-                            <p class="medal-text">1</p>
+                                <p class="medal-text">1</p>
+                            </div>
+
+                            <p style:font-weight=500> XXX </p>
+                            <p> Gold Medals </p>
                         </div>
 
-                        <p style:font-weight=500> XXX </p>
-                        <p> Gold Medals </p>
-                    </div>
+                        <!-- INFO: silver -->
+                        <div class="data-row">
+                            <div class="medal-container">
+                                <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" height=16 stroke-width=1.5 fill=#D3D3D3 stroke=#C4C4C4>
+                                    <circle cx="8" cy="8" r="6.75" />
+                                </svg>
 
-                    <!-- INFO: silver -->
-                    <div class="data-row">
-                        <div class="medal-container">
-                            <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" height=16 stroke-width=1.5 fill=#D3D3D3 stroke=#C4C4C4>
-                                <circle cx="8" cy="8" r="6.75" />
-                            </svg>
+                                <p class="medal-text">2</p>
+                            </div>
 
-                            <p class="medal-text">2</p>
+                            <p style:font-weight=500> XXX </p>
+                            <p> Silver Medals </p>
                         </div>
 
-                        <p style:font-weight=500> XXX </p>
-                        <p> Silver Medals </p>
-                    </div>
+                        <!-- INFO: bronze -->
+                        <div class="data-row">
+                            <div class="medal-container">
+                                <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" height=16 stroke-width=1.5 fill=#F89656 stroke=#E47D43>
+                                    <circle cx="8" cy="8" r="6.75" />
+                                </svg>
 
-                    <!-- INFO: bronze -->
-                    <div class="data-row">
-                        <div class="medal-container">
-                            <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" height=16 stroke-width=1.5 fill=#F89656 stroke=#E47D43>
-                                <circle cx="8" cy="8" r="6.75" />
-                            </svg>
+                                <p class="medal-text">3</p>
+                            </div>
 
-                            <p class="medal-text">3</p>
+                            <p style:font-weight=500> XXX </p>
+                            <p> Bronze Medals </p>
                         </div>
-
-                        <p style:font-weight=500> XXX </p>
-                        <p> Bronze Medals </p>
                     </div>
 
                     <hr>
 
-                    <!-- INFO: RR -->
-                    <div class="data-row">
-                        <Badge size={BadgeSize.Small}>  </Badge>
+                    <div class="section-column">
+                        <!-- INFO: RR -->
+                        <div class="data-row">
+                            <Badge size={BadgeSize.Small} bg=var(--clgreen) fg=var(--cgreen) label=RR/>
 
-                        <p style:font-weight=500> XXX </p>
-                        <p> Bronze Medals </p>
+                            <p style:font-weight=500> XXX </p>
+                            <p> Regional Records </p>
+                        </div>
+
+                        <!-- INFO: IR -->
+                        <div class="data-row">
+                            <Badge size={BadgeSize.Small} bg=var(--clred) fg=var(--cred) label=IR/>
+
+                            <p style:font-weight=500> XXX </p>
+                            <p> Island Records </p>
+                        </div>
+
+
+                        <!-- INFO: IcR -->
+                        <div class="data-row">
+                            <Badge size={BadgeSize.Small} bg=var(--clpurple) fg=var(--cpurple) label=IcR/>
+
+                            <p style:font-weight=500> XXX </p>
+                            <p> Interclub Records </p>
+                        </div>
                     </div>
-
-
                 </div>
             </div>
         </Bar>
     </div>
 
     <div class="content">
-        <p> hi </p>
+        <div class="pr-section">
+            <h3 class="fsize-body" style:font-weight=500>Personal Records</h3>
+
+            <table style:width=100%>
+                <tr>
+                    <th class="tc-dummy"></th>
+
+                    <th class="tc-event">Event</th>
+                    <th class="tc-rr">RR</th>
+                    <th class="tc-ir">IR</th>
+                    <th class="tc-icr">IcR</th>
+                    <th class="tc-result">Single</th>
+
+                    <th class="tc-result">Average</th>
+                    <th class="tc-icr">IcR</th>
+                    <th class="tc-ir">IR</th>
+                    <th class="tc-rr">RR</th>
+
+                    <th class="tc-dummy"></th>
+                </tr>
+
+                <!-- NOTE: td-dummy is entirely invisible to provide padding to the top and bottom of the table -->
+                <tr class="td-dummy">
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+
+
+                <tr>
+                    <td class="tc-dummy"></td>
+
+                    <td class="tc-event">3x3 Multiple Blindfolded</td>
+                    <td class="tc-rr">14</td>
+                    <td class="tc-ir">17</td>
+                    <td class="tc-icr">22</td>
+                    <td class="tc-result">8.17</td>
+
+                    <td class="tc-result">9.78</td>
+                    <td class="tc-icr">23</td>
+                    <td class="tc-ir">17</td>
+                    <td class="tc-rr">14</td>
+
+                    <td class="tc-dummy"></td>
+                </tr>
+
+
+                <tr class="td-dummy">
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="history-section">
+            <TabBar labels={["Results History", "Records History"]} />
+
+            <SegmentedControl bind:selectedIndex={resultsEventIndex} padding={4} labels={[
+                {type: LabelType.Image, data: Icons.Icon3},
+                {type: LabelType.Image, data: Icons.Icon2},
+                {type: LabelType.Image, data: Icons.Icon4},
+                {type: LabelType.Image, data: Icons.Icon5},
+                {type: LabelType.Image, data: Icons.Icon6},
+                {type: LabelType.Image, data: Icons.Icon7},
+
+                {type: LabelType.Image, data: Icons.IconSq1},
+                {type: LabelType.Image, data: Icons.IconSkewb},
+                {type: LabelType.Image, data: Icons.IconPyra},
+                {type: LabelType.Image, data: Icons.IconMega},
+                {type: LabelType.Image, data: Icons.IconOH},
+                {type: LabelType.Image, data: Icons.IconClock},
+
+                {type: LabelType.Image, data: Icons.IconFMC},
+                {type: LabelType.Image, data: Icons.Icon3bld},
+                {type: LabelType.Image, data: Icons.IconMbld},
+                {type: LabelType.Image, data: Icons.Icon4bld},
+                {type: LabelType.Image, data: Icons.Icon5bld},
+                ]} />
+
+
+            <div class="results-history">
+                <div class="results-history-header">
+                    <img src={Icons.Icon3} alt="" height=28/>
+                    <p class="fsize-body">3x3 Results (index = {resultsEventIndex})</p>
+                </div>
+
+                <table style:width=100%>
+                    <tr>
+                        <th class="tc-dummy"></th>
+
+                        <th class="tc-comp">Competition</th>
+                        <th class="tc-round">Round</th>
+                        <th class="tc-place">Place</th>
+                        <th class="tc-single">Single</th>
+                        <th class="tc-average">Average</th>
+                        <th class="tc-solves">Solves</th>
+
+
+                        <th class="tc-dummy"></th>
+                    </tr>
+
+                    <!-- NOTE: td-dummy is entirely invisible to provide padding to the top and bottom of the table -->
+                    <tr class="td-dummy">
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+
+
+                    <tr>
+                        <td class="tc-dummy"></td>
+
+                        <td class="tc-comp">Competition</td>
+                        <td class="tc-round">Round</td>
+                        <td class="tc-place">Place</td>
+                        <td class="tc-single">Single</td>
+                        <td class="tc-average">Average</td>
+                        <td class="tc-solves">Solves</td>
+
+                        <td class="tc-dummy"></td>
+                    </tr>
+
+
+                    <tr class="td-dummy">
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </table>
+
+            </div>
+        </div>
     </div>
 </div>
 
@@ -125,6 +309,7 @@
 
     .data-row {
         flex-direction: row;
+        align-items: center;
         column-gap: 12px;
     }
 
@@ -172,7 +357,73 @@
 
     .content {
         grid-column: 2;
+
+        display: flex;
+        flex-direction: column;
+        row-gap: 48px;
     }
 
 
+
+    /* INFO: personal records table */
+    td, th {
+        text-align: right;
+    }
+
+    .tc-event {
+        text-align: left;
+        min-width: 100px;
+    }
+
+    td.tc-result {
+        font-weight: 500;
+    }
+
+    td.tc-event {
+        font-weight: 500;
+    }
+
+    td.tc-rr {
+        color: var(--cg);
+    }
+
+    td.tc-ir {
+        color: var(--cdg1);
+    }
+
+    td.tc-icr {
+        color: var(--cdg2);
+    }
+
+
+
+
+    /* INFO: history section */
+    .history-section {
+        display: flex;
+        flex-direction: column;
+        row-gap: 16px;
+    }
+
+    .tc-comp, .tc-round, .tc-place, .tc-solves {
+        text-align: left;
+    }
+
+    .tc-comp, .tc-single, .tc-average {
+        font-weight: 500;
+    }
+
+    .results-history-header {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        column-gap: 4px;
+
+        margin-top: 16px;
+        margin-bottom: 4px;
+    }
+
+    .results-history-header * {
+        font-weight: 500;
+    }
 </style>

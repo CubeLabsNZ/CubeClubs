@@ -153,7 +153,7 @@
                 {type: LabelType.Image, data: Icons.IconMbld},
                 {type: LabelType.Image, data: Icons.Icon4bld},
                 {type: LabelType.Image, data: Icons.Icon5bld},
-            ]}>  </SegmentedControl>
+            ]} />
         </div>
     </div>
 

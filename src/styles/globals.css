@@ -31,6 +31,14 @@
     --cb: #000C19;
 
     --cred: #F64F4F;
+    --clred: #FAD7D7;
+
+    --cgreen: #3BCE4A;
+    --clgreen: #C4F5C9;
+
+    --cpurple: #7927FF;
+    --clpurple: #E3D4FA;
+
 
 
     color: var(--cdg2);

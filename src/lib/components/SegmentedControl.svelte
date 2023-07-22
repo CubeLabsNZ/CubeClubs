@@ -1,6 +1,8 @@
 <script lang="ts">
     export let selectedIndex = 0;
 
+    export let padding: number = 12;
+
     export let labels: Label[];
 </script>
 
@@ -17,7 +19,7 @@
 </script>
 
 
-<div class="container">
+<div class="container" style:--p={padding}px>
     {#each labels as { type, data, }, i}
         <button on:click|preventDefault = { () => { 
             selectedIndex = i
@@ -43,8 +45,8 @@
         background-color: white;
         box-shadow: 0px 1px 4px 0px #10151B1F; /* cdg3, 12% */
         width: fit-content;
-        padding-left: 12px;
-        padding-right: 12px;
+        padding-left: var(--p);
+        padding-right: var(--p);
         border-radius: 6px;
 
         display: flex;
