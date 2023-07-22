@@ -1,17 +1,17 @@
 /* INFO: INPUT */
 input {
     height: 34px;
-    border: var(--clg1) 1px solid;
+    border: var(--c-lg1) 1px solid;
     outline: 0;
     border-radius: 6px;
-    background-color: var(--clg0);
+    background-color: var(--c-lg0);
 
-    color: var(--cdg1);
+    color: var(--c-dg1);
 
     font-size: 16px;
     font-size: 500;
 
-    caret-color: var(--ca);
+    caret-color: var(--c-a);
 
     padding-left: 6px;
     padding-right: 6px;
@@ -20,15 +20,15 @@ input {
 }
 
 input:focus, input:active {
-    border: var(--clg1) 1px solid;
+    border: var(--c-lg1) 1px solid;
     outline: 0;
 
-    color: var(--cdg2);
+    color: var(--c-dg2);
     background-color: white;
 }
 
 input[data-error=true] {
-    border: var(--cred) 1px solid;
+    border: var(--c-red) 1px solid;
     outline: 0;
 }
 
@@ -37,7 +37,7 @@ input[data-error=true] {
 /* INFO: SELECT */
 select {
     height: 34px;
-    border: 1px var(--clg1) solid;
+    border: 1px var(--c-lg1) solid;
     background-color: white;
     box-shadow: 0px 1px 4px 0px #10151B1F;
 
@@ -46,7 +46,7 @@ select {
     cursor: pointer;
 
     font-size: 16px;
-    color: var(--cdg2);
+    color: var(--c-dg2);
 
     padding-left: 6px;
 }
@@ -83,8 +83,8 @@ select {
 /* INFO: table */
 table {
     width: 1000px;
-    border-radius: var(--srad);
-    border: 1px var(--clg1) solid;
+    border-radius: var(--v-border-radius);
+    border: 1px var(--c-lg1) solid;
     background-color: white;
 
     border-spacing: 0;
@@ -99,14 +99,14 @@ tr {
 }
 
 tr:nth-child(odd):not(:first-child):not(:last-child) td:not(:first-child):not(:last-child) {
-    background-color: var(--clgh);
+    background-color: var(--c-lgh);
 }
 
 th {
-    color: var(--cdg1);
+    color: var(--c-dg1);
     font-weight: 500;
 
-    border-bottom: 1px var(--clg1) solid;
+    border-bottom: 1px var(--c-lg1) solid;
 
     /* TODO: add sticky header, tried but cannot think of a good method with the floating tab bar - maybe hide tab bar? do not have it always in top position? */
     /* position: sticky; */
@@ -121,13 +121,13 @@ td:not(:first-child):not(:last-child), th:not(:first-child):not(:last-child) {
 
 
 td:nth-last-child(2) {
-    border-top-right-radius: var(--srad-l);
-    border-bottom-right-radius: var(--srad-l);
+    border-top-right-radius: var(--v-border-radius-small);
+    border-bottom-right-radius: var(--v-border-radius-small);
 }
 
 td:nth-child(2) {
-    border-top-left-radius: var(--srad-l);
-    border-bottom-left-radius: var(--srad-l);
+    border-top-left-radius: var(--v-border-radius-small);
+    border-bottom-left-radius: var(--v-border-radius-small);
 }
 
 
@@ -162,6 +162,6 @@ ul {
 }
 
 li::marker {
-    color: var(--cdg1);
+    color: var(--c-dg1);
     font-weight: 500;
 }

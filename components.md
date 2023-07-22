@@ -10,7 +10,7 @@ regular:
 - border radius:        6px
 
 
-transition: 150ms, ease in out
+transition: var(--v-animation-delay), ease in out
 
 
 

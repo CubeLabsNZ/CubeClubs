@@ -18,7 +18,7 @@
     <div id="landing-content">
         <div id="landing-title">
             <h2>Welcome to</h2>
-            <h1><span style:color=var(--ca)>CubeClubs</span> NZ</h1>
+            <h1><span style:color=var(--c-a)>CubeClubs</span> NZ</h1>
         </div>
 
         <div id="landing-subtitle">
@@ -54,7 +54,7 @@
     }
 
     #landing-button {
-        fill: var(--ca);
+        fill: var(--c-a);
 
         padding-right: 6px;
         padding-left: 6px;
@@ -100,7 +100,7 @@
     h4 {
         font-weight: 400;
         width: min(550px, 40vw);
-        color: var(--cdg1);
+        color: var(--c-dg1);
     }
 
     #landing-content {

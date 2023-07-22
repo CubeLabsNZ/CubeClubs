@@ -77,7 +77,7 @@
 
                                 <div class="schedule-item-title">
                                     <p style:font-weight=600> SCHEDULE EVENT TITLE </p>
-                                    <p style:font-weight=500 style:color=var(--cdg1)> SCHEDULE EVENT TIME </p>
+                                    <p style:font-weight=500 style:color=var(--c-dg1)> SCHEDULE EVENT TIME </p>
                                 </div>
                             </div>
 
@@ -236,7 +236,7 @@
     }
 
     tr:not(:first-child) .tc-name {
-        color: var(--ca);
+        color: var(--c-a);
     }
 
 

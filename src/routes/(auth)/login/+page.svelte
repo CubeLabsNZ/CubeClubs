@@ -18,7 +18,7 @@
             </label>
 
             {#if form?.error === "email"}
-                <p class="fsize-subhead" style:color=var(--cred)>{ERR_LOGIN_EMAIL}</p>
+                <p class="fsize-subhead" style:color=var(--c-red)>{ERR_LOGIN_EMAIL}</p>
             {/if}
         </div>
 
@@ -34,7 +34,7 @@
             </label>
 
             {#if form?.error === "pass"}
-                <p class="fsize-subhead" style:color=var(--cred)>{ERR_LOGIN_PASS}</p>
+                <p class="fsize-subhead" style:color=var(--c-red)>{ERR_LOGIN_PASS}</p>
             {/if}
         </div>
 
@@ -47,12 +47,12 @@
 
 <style>
     p {
-        color: var(--cg);
+        color: var(--c-g);
     }
 
     a {
         text-decoration: none;
-        color: var(--ca);
+        color: var(--c-a);
         font-weight: 400;
     }
 

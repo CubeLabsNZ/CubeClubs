@@ -17,7 +17,7 @@
             </label>
 
             {#if form?.error === "EMAIL"}
-                <p class="fsize-subhead" style:color=var(--cred)>whoops, an account with this email already exists.</p>
+                <p class="fsize-subhead" style:color=var(--c-red)>whoops, an account with this email already exists.</p>
             {/if}
         </div>
 
@@ -42,7 +42,7 @@
             </label>
 
             {#if form?.error === "PASS_MISMATCH"}
-                <p class="fsize-subhead" style:color=var(--cred)>the two passwords you've entered don't match.</p>
+                <p class="fsize-subhead" style:color=var(--c-red)>the two passwords you've entered don't match.</p>
             {/if}
         </div>
 
@@ -63,11 +63,11 @@
 
 <style>
     p {
-        color: var(--cg);
+        color: var(--c-g);
     }
 
     a {
         text-decoration: none;
-        color: var(--ca);
+        color: var(--c-a);
     }
 </style>

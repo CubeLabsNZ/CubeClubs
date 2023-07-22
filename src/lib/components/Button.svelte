@@ -36,11 +36,11 @@
         padding-left: var(--p);
         padding-right: var(--p);
         
-        transition: background-color 150ms ease-in-out,
-                    box-shadow 150ms ease-in-out,
-                    color 150ms ease-in-out;
+        transition: background-color var(--v-animation-delay) ease-in-out,
+                    box-shadow var(--v-animation-delay) ease-in-out,
+                    color var(--v-animation-delay) ease-in-out;
 
-        color: var(--cdg2);
+        color: var(--c-dg2);
 
         display: grid;
         align-items: center;
@@ -51,21 +51,21 @@
     
     /* INFO: bordered button */
     .button-bordered {
-        border: var(--clg1) 1px solid;
+        border: var(--c-lg1) 1px solid;
         box-shadow: 0px 1px 4px 0px #10151B1F; /* cdg3, 12% */
     }
 
     /* INFO: coloured button */
     .button-coloured {
-        background-color: var(--cla2);
-        color: var(--ca);
+        background-color: var(--c-la2);
+        color: var(--c-a);
         box-shadow: 0px 1px 4px 0px #0073E61F; /* ca, 12% */
     }
 
 
     /* INFO: hover states */
     .button-regular:hover {
-        background-color: var(--clg1);
+        background-color: var(--c-lg1);
     }
 
     .button-bordered:hover {

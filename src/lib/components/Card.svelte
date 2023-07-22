@@ -40,7 +40,7 @@
     }
 
     #subtitle {
-        color: var(--cg);
+        color: var(--c-g);
 
         margin-bottom: 32px;
     }

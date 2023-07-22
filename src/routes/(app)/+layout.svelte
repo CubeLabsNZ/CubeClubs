@@ -59,7 +59,7 @@
                 <hr>
 
                 <div class="dropdown-inner">
-                    <a class="dropdown-link" href="/dashboard">
+                    <a class="dropdown-link" href="/dashboard/meetups">
                         <div class="dashboard-link">
                             <p> Admin Dashboard </p>
 
@@ -85,7 +85,7 @@
 
 <style> 
     .image-link {
-        transition: filter 150ms ease-in-out;
+        transition: filter var(--v-animation-delay) ease-in-out;
 
         height: 30px;
     }
@@ -96,7 +96,7 @@
 
     #navbar {
         height: 46px;
-        background-color: var(--cdg2);
+        background-color: var(--c-dg2);
         border-radius: 12px;
         /* use color-mix when supported/ */
         box-shadow: 0px 4px 16px 0px #292E333D;
@@ -124,7 +124,7 @@
     }
 
     #navbar .regular-link {
-        color: var(--clg0);
+        color: var(--c-lg0);
         text-decoration: none;
         font-size: 14px;
         
@@ -132,7 +132,7 @@
     }
 
     #navbar .regular-link:hover {
-        color: var(--clg1);
+        color: var(--c-lg1);
     }
 
 
@@ -152,7 +152,7 @@
         border-radius: 6px;
         box-shadow: 0px 1px 6px 0px #10151B29; /* cdg3, 16% */
 
-        border: 1px var(--clg1) solid;
+        border: 1px var(--c-lg1) solid;
 
         width: fit-content;
 
@@ -175,12 +175,12 @@
 
 
     .dropdown-link {
-        color: var(--cdg2);
+        color: var(--c-dg2);
         text-decoration: none;
         font-size: 14px;
         font-weight: 400;
 
-        transition: color 150ms ease-in-out;
+        transition: color var(--v-animation-delay) ease-in-out;
     }
 
     .dropdown-link:hover {
@@ -199,7 +199,7 @@
         padding-right: 0;
 
         border: none;
-        border-top: 1px solid var(--clg1);
+        border-top: 1px solid var(--c-lg1);
 
         height: 1px;
     }

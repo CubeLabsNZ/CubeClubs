@@ -126,12 +126,12 @@
     }
 
     .date[data-current=true] {
-        color: var(--ca)
+        color: var(--c-a)
     }
 
     .date {
         grid-area: date;
-        color: var(--cdg2);
+        color: var(--c-dg2);
 
         display: flex;
         flex-direction: column;
@@ -148,7 +148,7 @@
         grid-area: line;
 
         border: none;
-        border-right: 1.5px solid var(--clg1);
+        border-right: 1.5px solid var(--c-lg1);
         width: 1.5px;
 
         height: 100%;
@@ -166,12 +166,12 @@
 
     .title p:first-child {
         font-weight: 600;
-        color: var(--cdg2);
+        color: var(--c-dg2);
     }
 
     .title p:last-child {
         font-weight: 500;
-        color: var(--cdg1);
+        color: var(--c-dg1);
     }
 
 
@@ -199,6 +199,6 @@
         justify-self: end;
         padding-right: 8px;
 
-        color: var(--cdg2);
+        color: var(--c-dg2);
     }
 </style>

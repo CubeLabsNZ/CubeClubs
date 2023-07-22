@@ -25,14 +25,14 @@
 
                     <Badge 
                         size={BadgeSize.Regular} 
-                        fg=var(--cg)
-                        bg=var(--clgh)
+                        fg=var(--c-g)
+                        bg=var(--c-lgh)
                         label="User's Region"/>
 
                     <Badge 
                         size={BadgeSize.Regular} 
-                        fg=var(--ca)
-                        bg=var(--cla1)
+                        fg=var(--c-a)
+                        bg=var(--c-la1)
                         label="ASC Club Organiser"/>
                 </div>
 
@@ -100,7 +100,7 @@
                     <div class="section-column">
                         <!-- INFO: RR -->
                         <div class="data-row">
-                            <Badge size={BadgeSize.Small} bg=var(--clgreen) fg=var(--cgreen) label=RR/>
+                            <Badge size={BadgeSize.Small} bg=var(--c-lgreen) fg=var(--c-green) label=RR/>
 
                             <p style:font-weight=500> XXX </p>
                             <p> Regional Records </p>
@@ -108,7 +108,7 @@
 
                         <!-- INFO: IR -->
                         <div class="data-row">
-                            <Badge size={BadgeSize.Small} bg=var(--clred) fg=var(--cred) label=IR/>
+                            <Badge size={BadgeSize.Small} bg=var(--c-lred) fg=var(--c-red) label=IR/>
 
                             <p style:font-weight=500> XXX </p>
                             <p> Island Records </p>
@@ -117,7 +117,7 @@
 
                         <!-- INFO: IcR -->
                         <div class="data-row">
-                            <Badge size={BadgeSize.Small} bg=var(--clpurple) fg=var(--cpurple) label=IcR/>
+                            <Badge size={BadgeSize.Small} bg=var(--c-lpurple) fg=var(--c-purple) label=IcR/>
 
                             <p style:font-weight=500> XXX </p>
                             <p> Interclub Records </p>
@@ -331,7 +331,7 @@
 
     hr {
         border: none;
-        border-bottom: 1.5px solid var(--clg1);
+        border-bottom: 1.5px solid var(--c-lg1);
         height: 1.5px;
 
         width: 100%;
@@ -384,15 +384,15 @@
     }
 
     td.tc-rr {
-        color: var(--cg);
+        color: var(--c-g);
     }
 
     td.tc-ir {
-        color: var(--cdg1);
+        color: var(--c-dg1);
     }
 
     td.tc-icr {
-        color: var(--cdg2);
+        color: var(--c-dg2);
     }
 
 

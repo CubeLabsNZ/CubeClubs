@@ -18,8 +18,8 @@
         border: 0;
         border-radius: 6px;
 
-        border: var(--clg1) 1px solid;
-        transition: box-shadow 150ms ease-in-out;
+        border: var(--c-lg1) 1px solid;
+        transition: box-shadow var(--v-animation-delay) ease-in-out;
 
         display: grid;
         align-items: center;

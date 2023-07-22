@@ -41,7 +41,7 @@
     /* TODO: add large/medium */
     .container {
         height: 34px;
-        border: 1px var(--clg1) solid;
+        border: 1px var(--c-lg1) solid;
         background-color: white;
         box-shadow: 0px 1px 4px 0px #10151B1F; /* cdg3, 12% */
         width: fit-content;
@@ -62,13 +62,13 @@
     }
 
     button * {
-        transition: color 150ms ease-in-out,
-                    filter 150ms ease-in-out;
+        transition: color var(--v-animation-delay) ease-in-out,
+                    filter var(--v-animation-delay) ease-in-out;
     }
 
     button[data-current=true] * {
         font-weight: 500;
-        color: var(--ca);
+        color: var(--c-a);
     }
 
     button[data-current=true] img {
@@ -89,8 +89,8 @@
         background: none;
         border: none;
 
-        color: var(--cdg1);
-        fill: var(--cdg1);
+        color: var(--c-dg1);
+        fill: var(--c-dg1);
     }
 
     button img {
@@ -98,7 +98,7 @@
     }
 
     button:hover {
-        color: var(--cdg2);
+        color: var(--c-dg2);
     }
 
     button:hover img {

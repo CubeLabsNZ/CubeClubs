@@ -202,7 +202,7 @@
 
     tr:not(:first-child) .tc-name,
     tr:not(:first-child) .tc-meetup {
-        color: var(--ca);
+        color: var(--c-a);
     }
 
     .tc-result {
@@ -210,7 +210,7 @@
     }
 
     .tc-type {
-        color: var(--cdg1);
+        color: var(--c-dg1);
     }
 
     .filter-bar {
