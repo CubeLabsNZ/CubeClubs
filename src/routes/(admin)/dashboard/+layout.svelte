@@ -14,9 +14,12 @@
 
     let currentPage: string;
 
-    $: {
-        currentPage = $page.route.id.slice(19);
-    }
+    /* NOTE: IMPORTANT: this is REALLY BAD code but cannot be bothered writing a store
+     * the value 19 is based off of "/(admin)/dashboard/"
+     * AND WILL BREAK if the route is modified.
+     */
+
+    $: currentPage = $page.route.id.slice(19);
 </script>
 
 <svelte:head>
