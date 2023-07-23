@@ -48,9 +48,10 @@
 <style>
     .container {
         display: grid;
-        grid-template-columns: 300px 1fr;
+        grid-template-columns: 364px 1fr;
         height: 100dvh;
         overflow-y: hidden;
+
 
     }
 
@@ -73,6 +74,9 @@
         padding-right: 32px;
         padding-top: 48px;
         padding-bottom: 48px;
+
+        width: 300px;
+
     }
 
     .content {

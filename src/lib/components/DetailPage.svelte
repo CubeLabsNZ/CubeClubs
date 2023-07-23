@@ -1,12 +1,15 @@
 <script lang="ts">
-    export let heading: string, subheading: string;
+    export let heading: string, subheading = "";
+    export let top = 126; /* tab bar + 32px either side */
 </script>
 
 
-<div class="content"> 
+<div class="content" style:margin-top={top}px> 
     <h1 class="fstyle-heading" style:padding-bottom=8px>{heading}</h1>
 
-    <h3 class="fstyle-subheading" style:padding-bottom=32px>{subheading}</h3>
+    {#if subheading != ""}
+        <h3 class="fstyle-subheading" style:padding-bottom=32px>{subheading}</h3>
+    {/if}
 
     <slot/>
 </div>
@@ -14,11 +17,10 @@
 
 <style>
     .content {
-        width: 1000px;
         margin-left: auto;
         margin-right: auto;
 
-        margin-top: 126px; /* tab bar + 32px either side */
+        width: 1000px;
     }
 
     h1 {
