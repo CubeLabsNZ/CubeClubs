@@ -23,9 +23,20 @@ model User {
   gender          Gender
   isClubOrganiser Boolean @default(false)
 
+  sessions Session[]
+
   organiserFor Meetup[]
   competingIn  UserInMeetup[]
   results Result[]
+}
+
+// INFO: using session authentication instead of token
+model Session {
+  id                Bytes @id
+  ip    String
+
+  user User @relation(fields: [userId], references: [id])
+  userId Int
 }
 
 model UserInMeetup {

@@ -2,7 +2,6 @@
     import "$styles/fonts.css";
     import "$styles/globals.css";
     import "$styles/components.css";
-
 </script>
 
 

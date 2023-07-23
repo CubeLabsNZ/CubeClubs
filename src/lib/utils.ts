@@ -16,8 +16,9 @@ export function clickOutside(node: HTMLElement) {
     }
 }
 
-export function partition<Elem>(array: Elem[], filter: (e: Elem, idx: number, arr: Elem[]) => Boolean) {
-    let pass: Elem[] = [], fail: Elem[] = [];
-    array.forEach((e: Elem, idx: number, arr: Elem[]) => (filter(e, idx, arr) ? pass : fail).push(e));
+export function partition<T>(array: T[], filter: (e: T, idx: number, arr: T[]) => boolean): T[][] {
+    const pass: T[] = [], fail: T[] = [];
+
+    array.forEach((e: T, idx: number, arr: T[]) => (filter(e, idx, arr) ? pass : fail).push(e));
     return [pass, fail];
 }

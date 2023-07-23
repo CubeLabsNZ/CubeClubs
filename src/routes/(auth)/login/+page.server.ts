@@ -1,13 +1,15 @@
 import type { Actions } from "./$types";
 import { fail } from "@sveltejs/kit";
 
+import { randomBytes } from "crypto";
+
 import prisma from "$lib/prisma";
 
 import argon2 from "argon2";
 import { redirect } from "@sveltejs/kit";
 
 export const actions = {
-    default: async ({ request }) =>  {
+    default: async ({ request, getClientAddress, cookies }) =>  {
         const data = await request.formData();
 
         const email = data.get("email");
@@ -30,8 +32,27 @@ export const actions = {
             return fail(401, { email, error: "pass"})
         }
 
+
+        const session = await prisma.session.create({
+            data: {
+                id: randomBytes(32),
+                ip: getClientAddress(),
+                user: {
+                    connect: {
+                        id: user.id
+                    }
+                }
+            }
+        })
+
+        // TODO: set secure?
+        cookies.set("sessionId", session.id.toString("base64url"), {
+            path: "/",
+            httpOnly: false,
+            maxAge: 60 * 60 * 24 * 7 * 4,
+            secure: process.env.NODE_ENV === "production"
+        });
+
         throw redirect(303, "/");
     }
 } satisfies Actions
-
-export const _EMAIL_MESSAGE = "this email doesn't exist. please try again";

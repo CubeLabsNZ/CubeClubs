@@ -1,22 +1,23 @@
 <script lang="ts"> 
-    import { goto } from "$app/navigation";
-
-    import { fade } from "svelte/transition";
-
-    import { clickOutside } from "$lib/utils";
+    import type { LayoutData } from "./$types";
 
     import "$styles/fonts.css";
     import "$styles/globals.css";
     import "$styles/components.css";
 
+    import { goto } from "$app/navigation";
+    import { fade } from "svelte/transition";
+    import { clickOutside } from "$lib/utils";
+
+
     import logo from "$lib/assets/logo-transparent.svg";
 
     // TODO: bind to actual user values & session
-    let loggedIn = true, isAdmin = true;
-
     let showDropdown = false;
 
     import Button, { ButtonType, ButtonSize } from "$lib/components/Button.svelte";
+
+    export let data: LayoutData;
 </script>
 
 <div id="navbar">
@@ -31,18 +32,18 @@
     </div>
 
     <div id="navbar-right" use:clickOutside on:click_outside={() => { showDropdown = false }}> 
-        {#if !loggedIn}
+        {#if !data.user}
             <a class="regular-link" href="/login"> Login </a>
             
             <Button type={ButtonType.Regular} size={ButtonSize.Small} perform={() => { goto("/signup") }}>
                 <div style:font-weight=500>Sign Up</div>
             </Button>
         {:else}
-            <Button type={ButtonType.Regular} size={ButtonSize.Small} padding=8 perform={() => { showDropdown = !showDropdown }}>
+            <Button type={ButtonType.Regular} size={ButtonSize.Small} padding={8} perform={() => { showDropdown = !showDropdown }}>
                 <div style:display=flex style:align-items=center style:column-gap=8px>
                     <span class="material-symbols-outlined" style:font-size=20px>account_circle</span>
 
-                    <p style:font-weight=500 style:padding-right=6px style:height=20px>Tim</p>
+                    <p style:font-weight=500 style:padding-right=6px style:height=20px>{data.user.name.split(" ")[0]}</p>
                 </div>
             </Button>
         {/if}
@@ -55,7 +56,7 @@
                 <a class="dropdown-link" href="/user/edit">Edit Account</a>
             </div>
 
-            {#if isAdmin}
+            {#if data.user?.isClubOrganiser}
                 <hr>
 
                 <div class="dropdown-inner">
@@ -72,7 +73,7 @@
             <hr>
 
             <div class="dropdown-inner">
-                <a class="dropdown-link" href="/">Log out</a>
+                <a on:mousedown={() => { showDropdown = false }} data-sveltekit-preload-data="tap" class="dropdown-link" href="/logout">Log out</a>
             </div>
         </div>
     {/if}

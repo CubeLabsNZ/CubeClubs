@@ -1,7 +1,7 @@
 import type { Actions } from "./$types";
 import type { Region, Gender } from "@prisma/client";
 
-import { fail } from "@sveltejs/kit";
+import { fail, redirect } from "@sveltejs/kit";
 
 import prisma from "$lib/prisma";
 
@@ -50,6 +50,8 @@ export const actions = {
                 gender: "MALE"
             }
         });
+
+        throw redirect(303, "/login");
 
         return { success: true, message: "success" }
     }
