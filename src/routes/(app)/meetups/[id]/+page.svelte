@@ -3,47 +3,54 @@
     import { page } from "$app/stores";
     import { goto } from "$app/navigation";
 
-
     import DetailPage from "$lib/components/DetailPage.svelte";
     import TabBar from "$lib/components/TabBar.svelte";
-    import Button, { ButtonSize, ButtonType } from "$lib/components/Button.svelte";
+    import Button, {
+        ButtonSize,
+        ButtonType,
+    } from "$lib/components/Button.svelte";
 
     import Bar from "$lib/components/Bar.svelte";
+    import type { PageData } from "./$types";
+    import regions from "$lib/data/regions";
 
     let tabs = new Map();
     tabs.set("info", 0);
     tabs.set("competitors", 1);
     tabs.set("schedule", 2);
 
-
     let tab = $page.url.searchParams.get("tab");
-    let tabIndex: number = (tab == null) ? 0 : tabs.get(tab);
+    let tabIndex: number = tab == null ? 0 : tabs.get(tab);
 
-    export let data;  // the slug
+    export let data: PageData; // the slug
 
     $: {
         updateQuery(tabIndex);
         tab = $page.url.searchParams.get("tab");
     }
 
-
     function updateQuery(tabIndex: number) {
-        if (!browser) { return }
+        if (!browser) {
+            return;
+        }
 
         let query = new URLSearchParams($page.url.searchParams.toString());
 
-        query.set("tab", (() => {
-            switch (tabIndex) {
-                case 0: 
-                    return "info";
-                case 1: 
-                    return "competitors";
-                case 2: 
-                    return "schedule";
-                default:
-                    return ""
-            }
-        })());
+        query.set(
+            "tab",
+            (() => {
+                switch (tabIndex) {
+                    case 0:
+                        return "info";
+                    case 1:
+                        return "competitors";
+                    case 2:
+                        return "schedule";
+                    default:
+                        return "";
+                }
+            })()
+        );
 
         goto(`?${query.toString()}`);
     }
@@ -53,18 +60,31 @@
     <title>meetuip name</title>
 </svelte:head>
 
-
-<DetailPage heading="meetup name" subheading="club name">
-    <TabBar labels={["Meetup Info", "Competitors", "Schedule & Results"]} bind:selectedIndex={tabIndex}>
-        <Button size={ButtonSize.Small} type={ButtonType.Bordered} perform={() => { goto(`/meetups/${data.id}/register`) }}>
-            <div style:display=flex style:column-gap=8px style:align-items=center>
-                <span class="material-symbols-outlined" style:font-size=16px>login</span>
-                <p> Register </p>
-                
+<DetailPage heading={data.meetup.name} subheading={data.meetup.club.name}>
+    <TabBar
+        labels={["Meetup Info", "Competitors", "Schedule & Results"]}
+        bind:selectedIndex={tabIndex}
+    >
+        <Button
+            size={ButtonSize.Small}
+            type={ButtonType.Bordered}
+            perform={() => {
+                goto(`/meetups/${data.meetup.id}/register`);
+            }}
+        >
+            <div
+                style:display="flex"
+                style:column-gap="8px"
+                style:align-items="center"
+            >
+                <span class="material-symbols-outlined" style:font-size="16px"
+                    >login</span
+                >
+                <p>Register</p>
             </div>
         </Button>
     </TabBar>
-    
+
     <div class="content">
         {#if tab === "schedule"}
             <div class="schedule-grid">
@@ -73,18 +93,22 @@
                     <button>
                         <Bar height={60}>
                             <div class="schedule-item">
-                                <p> IMG </p>
+                                <p>IMG</p>
 
                                 <div class="schedule-item-title">
-                                    <p style:font-weight=600> SCHEDULE EVENT TITLE </p>
-                                    <p style:font-weight=500 style:color=var(--c-dg1)> SCHEDULE EVENT TIME </p>
+                                    <p style:font-weight="600">
+                                        SCHEDULE EVENT TITLE
+                                    </p>
+                                    <p
+                                        style:font-weight="500"
+                                        style:color="var(--c-dg1)"
+                                    >
+                                        SCHEDULE EVENT TIME
+                                    </p>
                                 </div>
                             </div>
-
                         </Bar>
-
                     </button>
-                    
                 {/each}
             </div>
         {:else if tab === "competitors"}
@@ -92,38 +116,40 @@
                 <!-- TODO: for each event in the meetup, show new column AND show ticks for registered */
                 <!-- NOTE: tc-dummy is entirely invisible to provide padding to either side of the table -->
                 <tr>
-                    <th class="tc-dummy"></th>
+                    <th class="tc-dummy" />
 
                     <th class="tc-name">Name</th>
                     <th class="tc-region">Region</th>
 
-                    <th class="tc-dummy"></th>
+                    <th class="tc-dummy" />
                 </tr>
 
                 <!-- NOTE: td-dummy is entirely invisible to provide padding to the top and bottom of the table -->
                 <tr class="td-dummy">
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
+                    <td />
+                    <td />
+                    <td />
+                    <td />
                 </tr>
 
+                <!-- TODO: should these be clickable -->
+                {#each data.meetup.competitors as { user }}
+                    {@const {name, maori_name} = regions[user.region]}
+                    <tr>
+                        <td class="tc-dummy" />
 
-                <tr>
-                    <td class="tc-dummy"></td>
+                        <td class="tc-name">{user.name}</td>
+                        <td class="tc-region">{maori_name} ({name})</td>
 
-                    <td class="tc-name">NAME</td>
-                    <td class="tc-region">REGION</td>
-
-                    <td class="tc-dummy"></td>
-                </tr>
-
+                        <td class="tc-dummy" />
+                    </tr>
+                {/each}
 
                 <tr class="td-dummy">
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
+                    <td />
+                    <td />
+                    <td />
+                    <td />
                 </tr>
             </table>
         {:else}
@@ -131,61 +157,65 @@
                 <div class="info-left">
                     <div class="label-group">
                         <p class="label">Date</p>
-                        <p> DATE </p>
+                        <p>
+                            {data.meetup.date.toLocaleDateString("en-NZ", {
+                                weekday: "long",
+                                year: "numeric",
+                                month: "long",
+                                day: "numeric",
+                            })}
+                        </p>
                     </div>
-
 
                     <div class="label-group">
                         <p class="label">Venue</p>
-                        <p> VENUE </p>
+                        <p>{data.meetup.venue}</p>
                     </div>
-
 
                     <div class="label-group">
                         <p class="label">Location</p>
-                        <p> LOCATION </p>
+                        <p>{data.meetup.location}</p>
                     </div>
-
 
                     <div class="label-group">
                         <p class="label">Organisers</p>
                         <ul>
-                            <li>organiser 1</li>
-                            <li>organiser 2</li>
-                            <li>organiser 3</li>
+                            {#each data.meetup.organisers as { name }}
+                                <li>{name}</li>
+                            {/each}
                         </ul>
                     </div>
 
-
                     <div class="label-group">
                         <p class="label">Competitor Limit</p>
-                        <p> COMPETITOR LIMIT </p>
+                        <p>{data.meetup.competitorLimit}</p>
                     </div>
                 </div>
-
 
                 <div class="info-right">
                     <div class="label-group">
                         <p class="label">Meetup Description</p>
-                        <p> DESCRIPTION </p>
+                        <p>{data.meetup.description}</p>
                     </div>
                 </div>
-
 
                 <div class="info-both">
                     <div class="label-group">
                         <p class="label">Registration Information</p>
                         <!-- TODO: if stripe active, use this message, otherwise display external registration link -->
-                        <p> Registration is done through Stripe via the Register button above. The registration fee for this meetup is $20. We don’t profit off these meetups! All of the registration fees go towards hiring the venue and equipment. </p>
+                        <p>
+                            Registration is done through Stripe via the Register
+                            button above. The registration fee for this meetup
+                            is $20. We don’t profit off these meetups! All of
+                            the registration fees go towards hiring the venue
+                            and equipment.
+                        </p>
                     </div>
                 </div>
             </div>
         {/if}
     </div>
-    
 </DetailPage>
-
-
 
 <style>
     .content {
@@ -209,7 +239,8 @@
         grid-column: 2;
     }
 
-    .info-left, .info-right {
+    .info-left,
+    .info-right {
         display: flex;
         flex-direction: column;
         row-gap: 24px;
@@ -220,10 +251,9 @@
         grid-column: 1/3;
     }
 
-
-
     /* INFO: competitors tab */
-    .tc-name, .tc-region {
+    .tc-name,
+    .tc-region {
         text-align: left;
     }
 
@@ -238,8 +268,6 @@
     tr:not(:first-child) .tc-name {
         color: var(--c-a);
     }
-
-
 
     /* INFO: schedule/results tab */
     .schedule-grid {

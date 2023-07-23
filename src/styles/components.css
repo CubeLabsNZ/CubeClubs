@@ -1,6 +1,9 @@
 /* INFO: INPUT */
 input {
     height: 34px;
+}
+
+input, textarea {
     border: var(--c-lg1) 1px solid;
     outline: 0;
     border-radius: 6px;
@@ -19,7 +22,7 @@ input {
     transition: background-color 100ms ease-in-out, color 100ms ease-in-out;
 }
 
-input:focus, input:active {
+input:focus, input:active, textarea:focus, textarea:active {
     border: var(--c-lg1) 1px solid;
     outline: 0;
 
@@ -27,7 +30,7 @@ input:focus, input:active {
     background-color: white;
 }
 
-input[data-error=true] {
+input[data-error=true], textarea[data-error=true] {
     border: var(--c-red) 1px solid;
     outline: 0;
 }
@@ -35,7 +38,7 @@ input[data-error=true] {
 
 
 /* INFO: SELECT */
-select {
+select, input[type="date"] {
     height: 34px;
     border: 1px var(--c-lg1) solid;
     background-color: white;

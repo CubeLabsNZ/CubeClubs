@@ -6,13 +6,13 @@ generator client {
 }
 
 datasource db {
-  provider = "postgres"
-  url      = env("DATABASE_URL")
+  provider ="postgres"
+  url      =env("DATABASE_URL")
 }
 
 model Club {
-  id           Int           @id @default(autoincrement())
-  name         String
+  id        Int           @id @default(autoincrement())
+  name      String
   competitions Competition[]
 }
 
@@ -75,6 +75,10 @@ model Competition {
   description     String
   contact         String
   competitorLimit Int
+
+  date            DateTime @db.Date
+
+  isPublished     Boolean @default(false)
 
   competitors UserInCompetition[]
 
