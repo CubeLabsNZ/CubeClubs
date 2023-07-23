@@ -8,7 +8,7 @@ export const load = (async ({ params }) => {
     if (isNaN(id)) {
         throw error(404, 'not found');
     }
-    const meetup = await prisma.competition.findUnique({
+    const meetup = await prisma.meetup.findUnique({
         where: { id: Number(params.id) },
         include: {
             club: true,
@@ -17,7 +17,7 @@ export const load = (async ({ params }) => {
                     name: true,
                 }
             },
-            competitors: {
+            users: {
                 select: {
                     user: {
                         select: {
@@ -33,6 +33,11 @@ export const load = (async ({ params }) => {
 
     if (!meetup) {
         throw error(404, 'not found');
+    }
+
+    // TODO: check admin, and then add button "view public page" in dashboard
+    if (!meetup.isPublished) {
+        throw error(404, "not found")
     }
 
     return {
