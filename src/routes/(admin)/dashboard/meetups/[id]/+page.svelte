@@ -60,12 +60,12 @@
     <hr>
 
 
-    <Button type={ButtonType.Bordered}>
+    <Button type={ButtonType.Bordered} perform={() => {goto($page.url + "/edit-details")}}>
         Edit Details
     </Button>
 
 
-    <Button type={ButtonType.Bordered}>
+    <Button type={ButtonType.Bordered} perform={() => {goto($page.url + "/edit-schedule")}}>
         Edit Schedule
     </Button>
 
