@@ -1,15 +1,14 @@
 <script lang="ts"> 
-    export let type: ButtonType = ButtonType.Regular, size: ButtonSize = ButtonSize.Regular;
+    export let type: ButtonType = ButtonType.Bordered, size: ButtonSize = ButtonSize.Regular;
+    export let fillWidth = false;
     export let padding = 12;
-
-    export let perform: () => void = () => {};
 </script>
 
 
 <script context="module" lang="ts">
     export enum ButtonType {
         Bordered="bordered",
-        Regular="regular",
+        Simple="simple",
         Coloured="coloured"
     }
 
@@ -20,22 +19,23 @@
 </script>
 
 
+<div 
+    class={"button button-"+type + `${size == ButtonSize.Small ? " fsize-subhead" : " fsize-body"}`}
+    style:height={size == ButtonSize.Small ? "30px" : "34px"} 
+    style:--p={padding}px
+    style:width={fillWidth ? "100%" : "fit-content"}>
+    <slot/>
+</div>
 
-<button class={"button button-"+type + `${size == ButtonSize.Small ? " fsize-subhead" : " fsize-body"}`} on:click={ () => { perform() } } style:height={size == ButtonSize.Small ? "30px" : "34px"} style:--p={padding}px>
-    <slot></slot>
-</button>
 
 <style> 
     .button {
-        margin: 0;
-        padding: 0;
         background-color: white;
-        border: 0;
         border-radius: 6px;
 
         padding-left: var(--p);
         padding-right: var(--p);
-        
+
         transition: background-color var(--v-animation-delay) ease-in-out,
                     box-shadow var(--v-animation-delay) ease-in-out,
                     color var(--v-animation-delay) ease-in-out;
@@ -44,6 +44,7 @@
 
         display: grid;
         align-items: center;
+        justify-content: center;
 
         cursor: pointer;
     }
@@ -74,6 +75,6 @@
     }
 
     .button-coloured:hover {
-        box-shadow: 0px 1px 6px 0px #0073E629; /* ca, 16% */
+        box-shadow: 0px 1px 7px 0px #0073E633; /* ca, 20% */
     }
 </style>

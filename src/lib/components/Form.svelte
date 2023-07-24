@@ -1,5 +1,6 @@
 <script lang="ts"> 
     export let name: string;
+    export let fillWidth = true;
 
     import Button, { ButtonType, ButtonSize } from "$lib/components/Button.svelte";
 </script>
@@ -7,9 +8,11 @@
 <form method="POST"> 
     <slot/>
 
-    <Button type={ButtonType.Coloured} size={ButtonSize.Regular}>
-        <p style:font-weight=500>{name}</p>
-    </Button>
+    <button style:margin-top=16px>
+        <Button type={ButtonType.Coloured} size={ButtonSize.Regular} {fillWidth}>
+            <p style:font-weight=500>{name}</p>
+        </Button>
+    </button>
 </form>
 
 

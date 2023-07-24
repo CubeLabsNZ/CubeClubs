@@ -168,3 +168,18 @@ li::marker {
     color: var(--c-dg1);
     font-weight: 500;
 }
+
+
+
+
+/* INFO: BUTTON AND ANCHOR OVERRIDES */
+button {
+    padding: 0;
+    margin: 0;
+    background: none;
+    border: none
+}
+
+a {
+    text-decoration: none;
+}

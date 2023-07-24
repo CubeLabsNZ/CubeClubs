@@ -35,17 +35,22 @@
         {#if !data.user}
             <a class="regular-link" href="/login"> Login </a>
             
-            <Button type={ButtonType.Regular} size={ButtonSize.Small} perform={() => { goto("/signup") }}>
-                <div style:font-weight=500>Sign Up</div>
-            </Button>
+            <a href="/signup">
+                <Button type={ButtonType.Simple} size={ButtonSize.Small}>
+                    <div style:font-weight=500>Sign Up</div>
+                </Button>
+            </a>
+            
         {:else}
-            <Button type={ButtonType.Regular} size={ButtonSize.Small} padding={8} perform={() => { showDropdown = !showDropdown }}>
-                <div style:display=flex style:align-items=center style:column-gap=8px>
-                    <span class="material-symbols-outlined" style:font-size=20px>account_circle</span>
+            <button on:click={() => { showDropdown = !showDropdown }}>
+                <Button type={ButtonType.Simple} size={ButtonSize.Small} padding={8}>
+                    <div style:display=flex style:align-items=center style:column-gap=8px>
+                        <span class="material-symbols-outlined" style:font-size=20px>account_circle</span>
 
-                    <p style:font-weight=500 style:padding-right=6px style:height=20px>{data.user.name.split(" ")[0]}</p>
-                </div>
-            </Button>
+                        <p style:font-weight=500 style:padding-right=6px style:height=20px>{data.user.name.split(" ")[0]}</p>
+                    </div>
+                </Button>
+            </button>
         {/if}
     </div>
 

@@ -44,34 +44,46 @@
 <div class="button-bar">
     <!-- <span class="material-symbols-outlined">done</span> -->
     {#if isPublished}
-        <Button type={ButtonType.Bordered} perform={() => {isPublished = false}}>
-            Revert to Draft
-        </Button>
+        <button on:click={() => {isPublished = false}}>
+            <Button>
+                Revert to Draft
+            </Button>
+        </button>
+        
 
-        <Button type={ButtonType.Bordered} perform={() => {goto($page.url + "/data-entry")}}>
-            Enter Results
-        </Button>
+        <a href={$page.url + "/data-entry"}>
+            <Button>
+                Enter Results
+            </Button>
+        </a>
+        
     {:else}
-        <Button type={ButtonType.Bordered} perform={() => {isPublished = true}}>
-            Publish Meetup
-        </Button>
+        <button on:click={() => {isPublished = true}}>
+            <Button>
+                Publish Meetup
+            </Button>
+        </button>
     {/if}
 
     <hr>
 
+    <a href={$page.url + "/edit-details"}>
+        <Button>
+            Edit Details
+        </Button>
+    </a>
+    
 
-    <Button type={ButtonType.Bordered} perform={() => {goto($page.url + "/edit-details")}}>
-        Edit Details
-    </Button>
-
-
-    <Button type={ButtonType.Bordered} perform={() => {goto($page.url + "/edit-schedule")}}>
-        Edit Schedule
-    </Button>
+    <a href={$page.url + "/edit-schedule"}>
+        <Button>
+            Edit Schedule
+        </Button>
+    </a>
+    
 
     <hr>
 
-    <Button type={ButtonType.Bordered}>
+    <Button>
         Delete Meetup
     </Button>
 </div>

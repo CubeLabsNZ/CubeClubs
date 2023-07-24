@@ -1,10 +1,7 @@
 <script lang="ts">
     import DetailPage from "$lib/components/DetailPage.svelte";
     import MeetupCard from "$lib/components/MeetupCard.svelte";
-    import Button, { ButtonType } from "$lib/components/Button.svelte";
-
-    import { goto } from "$app/navigation";
-
+    import Button from "$lib/components/Button.svelte";
 
     import type { PageData } from './$types';
 
@@ -13,12 +10,15 @@
 
 <div style:height=16px></div>
 
-<Button type={ButtonType.Bordered} perform={() => {goto("/dashboard/meetups/new")}}>
-    <div style:display=flex style:align-items=center>
-        <span class="material-symbols-outlined" style:color=var(--c-dg2)>add</span>
-        <p> New Meetup </p>
-    </div>
-</Button>
+<a href="/dashboard/meetups/new">
+    <Button>
+        <div style:display=flex style:align-items=center>
+            <span class="material-symbols-outlined" style:color=var(--c-dg2)>add</span>
+            <p> New Meetup </p>
+        </div>
+    </Button>
+</a>
+
 
 
 {#if data.draftCompetitions.length > 0}

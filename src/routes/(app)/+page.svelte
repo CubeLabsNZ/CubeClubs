@@ -26,15 +26,15 @@
             <h4 class="fsize-title2">Our clubs host regular meetups for all ages and all skill levels, come join us at one of our meetups!</h4>
         </div>
 
-        <Button size={ButtonSize.Regular} type={ButtonType.Coloured} perform={() => { goto("/meetups") }}>
-            <div id="landing-button">
-                <p>Explore our meetups</p>
-
-                <svg width="7" height="11" viewBox="0 0 7 11" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M4.025 5.5L0 1.475L1.225 0.25L6.475 5.5L1.225 10.75L0 9.525L4.025 5.5Z" fill="#0073E6"/>
-                </svg>
-            </div>
-        </Button>
+        <a href="/meetups">
+            <Button type={ButtonType.Coloured} size={ButtonSize.Regular}>
+                <div id="landing-button">
+                    <p>Explore our meetups</p>
+    
+                    <span class="material-symbols-outlined" style:font-size=20px>chevron_right</span>
+                </div>
+            </Button>
+        </a>
     </div>
 
     <img id="landing-clubs" src="/landing/clubs.webp" alt="">
