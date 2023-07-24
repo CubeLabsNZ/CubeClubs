@@ -1,7 +1,5 @@
 <script>
     import Button, { ButtonSize, ButtonType } from "$lib/components/global/Button.svelte";
-
-    import { goto } from "$app/navigation";
 </script>
 
 <svelte:head>
