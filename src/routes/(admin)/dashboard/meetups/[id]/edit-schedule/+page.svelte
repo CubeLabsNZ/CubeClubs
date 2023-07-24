@@ -5,6 +5,8 @@
 
     import Breadcrumb from "$lib/components/global/Breadcrumb.svelte";
 
+    import Card from "$lib/components/global/card/Card.svelte";
+
     let events = [{
         "title": "new event",
         "start": "2023-07-23T18:30:00.000Z",
@@ -15,6 +17,9 @@
 
     let options;
     let evcal;
+
+
+    let addEventCard;
 
     $: {
         options = {
@@ -35,11 +40,21 @@
                     start: info.start,
                     end: info.end
                 })
+
+                addEventCard.style.display = "block";
+
+                console.log(info.jsEvent);
+                addEventCard.style.top = `${info.jsEvent.clientY}px`;
+                addEventCard.style.left = `${info.jsEvent.clientX}px`;
+            },
+            unselect: () => {
+                addEventCard.style.display = "none";
             },
             selectable: true,
         }
     }
 </script>
+
 
 <Breadcrumb paths={[
     {name: "Meetups", href: "/dashboard/meetups"},
@@ -48,3 +63,25 @@
 ]} />
 
 <Calendar bind:this={evcal} {plugins} {options} />
+
+<div bind:this={addEventCard} class="add-event-card">
+    <Card clickable={false}> 
+        <div>
+            <p class="fsize-body" style:font-weight=500> Add Event </p>
+
+            <div class="label-group">
+                <p class="label">Event</p>
+            </div>
+        </div>
+    </Card>
+</div>
+
+
+
+<style>
+    .add-event-card {
+        position: fixed;
+        display: none;
+        z-index: 999;
+    }
+</style>

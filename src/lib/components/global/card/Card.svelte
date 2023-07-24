@@ -1,6 +1,6 @@
 <script lang="ts">
     export let height: number | null = null, width: number | null = null;
-    export let clickable: bool = true;
+    export let clickable = true;
 </script>
 
 <div class="container" 
