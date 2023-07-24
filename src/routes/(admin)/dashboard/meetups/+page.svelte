@@ -1,7 +1,7 @@
 <script lang="ts">
-    import DetailPage from "$lib/components/DetailPage.svelte";
-    import MeetupCard from "$lib/components/MeetupCard.svelte";
-    import Button from "$lib/components/Button.svelte";
+    import PageContent from "$lib/components/global/PageContent.svelte";
+    import MeetupBar from "$lib/components/global/card/MeetupBar.svelte";
+    import Button from "$lib/components/global/Button.svelte";
 
     import type { PageData } from './$types';
 
@@ -26,7 +26,7 @@
 
     <div class="meetup-list">
         {#each data.draftMeetups as meetup}
-            <MeetupCard meetup={meetup} href={`/dashboard/meetups/${meetup.id}`}/>
+            <MeetupBar meetup={meetup} href={`/dashboard/meetups/${meetup.id}`}/>
         {/each}
     </div>
 {/if}
@@ -36,7 +36,7 @@
 
 <div class="meetup-list">
     {#each data.publishedMeetups as meetup}
-        <MeetupCard meetup={meetup} href={`/dashboard/meetups/${meetup.id}`}/>
+        <MeetupBar meetup={meetup} href={`/dashboard/meetups/${meetup.id}`}/>
     {/each}
 </div>
 

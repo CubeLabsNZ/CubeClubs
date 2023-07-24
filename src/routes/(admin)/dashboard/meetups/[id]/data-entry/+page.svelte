@@ -1,5 +1,5 @@
 <script>
-    import Form from "$lib/components/Form.svelte";
+    import Form from "$lib/components/global/Form.svelte";
 </script>
 
 <div class="parent-container">

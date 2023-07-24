@@ -1,6 +1,6 @@
 <script lang="ts">
-    import DetailPage from "$lib/components/DetailPage.svelte";
-    import MeetupCard from "$lib/components/MeetupCard.svelte";
+    import PageContent from "$lib/components/global/PageContent.svelte";
+    import MeetupBar from "$lib/components/global/card/MeetupBar.svelte";
 
 
     import type { PageData } from './$types';
@@ -14,7 +14,7 @@
 </svelte:head>
 
 
-<DetailPage
+<PageContent
     heading="Meetups"
     subheading="We welcome cubers of all skill levels! Most of our meetups are casual get-togethers, but will be in the format of WCA competitions.">
 
@@ -24,7 +24,7 @@
 
             <div class="meetup-list">
                 {#each data.ongoingMeetups as meetup}
-                    <MeetupCard meetup={meetup} current href={`/meetups/${meetup.id}`}/>
+                    <MeetupBar meetup={meetup} current href={`/meetups/${meetup.id}`}/>
                 {/each}
             </div>
         {/if}
@@ -33,7 +33,7 @@
         {#if data.upcomingMeetups.length > 0}
             <div class="meetup-list">
                 {#each data.upcomingMeetups as meetup}
-                    <MeetupCard meetup={meetup} href={`/meetups/${meetup.id}`}/>
+                    <MeetupBar meetup={meetup} href={`/meetups/${meetup.id}`}/>
                 {/each}
             </div>
         {:else}
@@ -43,11 +43,11 @@
         <h3 class="fsize-title2">Past Meetups</h3>
         <div class="meetup-list">
             {#each data.pastMeetups as meetup}
-                <MeetupCard meetup={meetup} href={`/meetups/${meetup.id}`}/>
+                <MeetupBar meetup={meetup} href={`/meetups/${meetup.id}`}/>
             {/each}
         </div>
     </div>
-</DetailPage>
+</PageContent>
 
 
 <style>

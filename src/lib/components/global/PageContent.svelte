@@ -22,8 +22,4 @@
 
         width: 1000px;
     }
-
-    h1 {
-        transform: translateX(-2px);
-    }
 </style>

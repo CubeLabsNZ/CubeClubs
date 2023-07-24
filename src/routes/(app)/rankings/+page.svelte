@@ -7,10 +7,10 @@
 
     import { Region } from "@prisma/client";
 
-    import SegmentedControl, { LabelType } from "$lib/components/SegmentedControl.svelte";
+    import MultiButton, { LabelType } from "$lib/components/global/MultiButton.svelte";
 
 
-    import DetailPage from "$lib/components/DetailPage.svelte";
+    import PageContent from "$lib/components/global/PageContent.svelte";
 
 
     import * as Icons from "$lib/assets/cube-icons/icons";
@@ -102,7 +102,7 @@
 </svelte:head>
 
 
-<DetailPage 
+<PageContent 
     heading="Rankings"
     subheading="Rankings shown are for all solves done at meetups and are not grouped by age or gender.">  
 
@@ -110,7 +110,7 @@
         <div class="label-group">
             <p class="label">Format</p>
 
-            <SegmentedControl bind:selectedIndex={formatIndex} labels={[
+            <MultiButton bind:selectedIndex={formatIndex} labels={[
                 {type: LabelType.Text, data: "Single"},
                 {type: LabelType.Text, data: "Average"}
             ]} /> 
@@ -133,7 +133,7 @@
         <div class="label-group">
             <p class="label">Event</p>
 
-            <SegmentedControl bind:selectedIndex={eventIndex} padding={4} labels={[
+            <MultiButton bind:selectedIndex={eventIndex} padding={4} labels={[
                 {type: LabelType.Image, data: Icons.Icon3},
                 {type: LabelType.Image, data: Icons.Icon2},
                 {type: LabelType.Image, data: Icons.Icon4},
@@ -214,7 +214,7 @@
         </tr>
     </table>
     
-</DetailPage>
+</PageContent>
 
 
 

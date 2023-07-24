@@ -15,7 +15,7 @@
     // TODO: bind to actual user values & session
     let showDropdown = false;
 
-    import Button, { ButtonType, ButtonSize } from "$lib/components/Button.svelte";
+    import Button, { ButtonType, ButtonSize } from "$lib/components/global/Button.svelte";
 
     export let data: LayoutData;
 </script>

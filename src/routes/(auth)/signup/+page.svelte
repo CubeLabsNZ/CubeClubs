@@ -2,13 +2,13 @@
     import type { ActionData } from "./$types";
     import regions from "$lib/data/regions"
 
-    import Card from "$lib/components/Card.svelte";
-    import Form from "$lib/components/Form.svelte";
+    import AuthCard from "$lib/components/auth/AuthCard.svelte";
+    import Form from "$lib/components/global/Form.svelte";
 
     export let form: ActionData;
 </script>
 
-<Card title="Sign up to CubeClubs NZ" subtitle="Create your CubeClubs account to register for meetups and be notified of upcoming events."> 
+<AuthCard title="Sign up to CubeClubs NZ" subtitle="Create your CubeClubs account to register for meetups and be notified of upcoming events."> 
     <Form name="Sign up">
         <div>
             <label class="form-label"> 
@@ -58,7 +58,7 @@
     </Form>
 
     <p class="fsize-subhead" style:margin-top=8px> Already have an account? <a href=" /login "> Login </a> </p>
-</Card>
+</AuthCard>
 
 
 <style>

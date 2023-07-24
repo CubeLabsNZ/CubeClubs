@@ -1,7 +1,7 @@
 <script lang="ts">
-    import DetailPage from "$lib/components/DetailPage.svelte";
+    import PageContent from "$lib/components/global/PageContent.svelte";
 </script>
 
-<DetailPage heading="Manage Meetups" top={64}>
+<PageContent heading="Manage Meetups" top={64}>
     <slot/>
-</DetailPage>
+</PageContent>

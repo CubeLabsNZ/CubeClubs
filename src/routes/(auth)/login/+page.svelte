@@ -1,14 +1,14 @@
 <script lang="ts"> 
     import type { ActionData } from "./$types";
 
-    import Card from "$lib/components/Card.svelte";
-    import Form from "$lib/components/Form.svelte";
+    import AuthCard from "$lib/components/auth/AuthCard.svelte";
+    import Form from "$lib/components/global/Form.svelte";
 
     export let form: ActionData;
 </script>
 
 
-<Card title="Login to CubeClubsNZ" subtitle="Login to your CubeClubs account to register for meetups."> 
+<AuthCard title="Login to CubeClubsNZ" subtitle="Login to your CubeClubs account to register for meetups."> 
     <Form name="Log in">
         <div>
             <label class="form-label"> 
@@ -41,7 +41,7 @@
     </Form>
 
     <p class="fsize-subhead" style:margin-top=8px> Need an account? <a href=" /signup "> Sign up </a> </p>
-</Card>
+</AuthCard>
 
 
 <style>

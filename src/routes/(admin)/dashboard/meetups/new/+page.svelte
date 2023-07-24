@@ -1,10 +1,10 @@
 <script lang="ts">
-    import DetailPage from "$lib/components/DetailPage.svelte";
-    import Form from "$lib/components/Form.svelte";
+    import PageContent from "$lib/components/global/PageContent.svelte";
+    import Form from "$lib/components/global/Form.svelte";
     import Button, {
         ButtonSize,
         ButtonType,
-    } from "$lib/components/Button.svelte";
+    } from "$lib/components/global/Button.svelte";
 
     import type { PageData } from './$types';
 
@@ -12,7 +12,7 @@
 </script>
 
 
-<DetailPage heading="New Meetup" top={64}>
+<PageContent heading="New Meetup" top={64}>
     <div style:height="16px" />
 
     <Form name="Create meetup">
@@ -76,7 +76,7 @@
             </label>
         </div>
     </Form>
-</DetailPage>
+</PageContent>
 
 <style>
     .form-inner {

@@ -1,5 +1,5 @@
 <script lang="ts">
-    import Bar from "$lib/components/Bar.svelte";
+    import Card from "$lib/components/global/card/Card.svelte";
     import type { Meetup } from "@prisma/client";
 
     export let href: string;
@@ -9,7 +9,7 @@
 </script>
 
 <a {href}>
-    <Bar height={60}>
+    <Card height={60}>
         <div class="meetup-detail">
             <div class="date" data-current="{current}">
                 <p class="fsize-footnote" style:margin-bottom="-1px">
@@ -38,7 +38,7 @@
                 <span class="material-symbols-outlined">chevron_right</span>
             </div>
         </div>
-    </Bar>
+    </Card>
 </a>
 
 <style>

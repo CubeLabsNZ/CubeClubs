@@ -2,7 +2,7 @@
     export let name: string;
     export let fillWidth = true;
 
-    import Button, { ButtonType, ButtonSize } from "$lib/components/Button.svelte";
+    import Button, { ButtonType, ButtonSize } from "$lib/components/global/Button.svelte";
 </script>
 
 <form method="POST"> 

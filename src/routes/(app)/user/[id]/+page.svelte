@@ -1,9 +1,9 @@
 <script lang="ts">
-    import Bar from '$lib/components/Bar.svelte';
-    import Badge, { BadgeSize } from "$lib/components/Badge.svelte";
+    import Card from '$lib/components/global/card/Card.svelte';
+    import Badge, { BadgeSize } from "$lib/components/global/Badge.svelte";
 
-    import TabBar from '$lib/components/TabBar.svelte';
-    import SegmentedControl, { LabelType } from '$lib/components/SegmentedControl.svelte';
+    import TabBar from '$lib/components/global/TabBar.svelte';
+    import MultiButton, { LabelType } from '$lib/components/global/MultiButton.svelte';
 
     import * as Icons from "$lib/assets/cube-icons/icons";
 
@@ -20,7 +20,7 @@
 
 <div class="container-grid">
     <div class="user-container">
-        <Bar width={300} clickable={false}>
+        <Card width={300} clickable={false}>
             <div style:padding=16px>
                 <div class="section-column">
                     <h3 style:font-weight=500 class="fsize-title2">User's name</h3>
@@ -127,7 +127,7 @@
                     </div>
                 </div>
             </div>
-        </Bar>
+        </Card>
     </div>
 
     <div class="content">
@@ -207,7 +207,7 @@
             <TabBar labels={["Results History", "Records History"]} bind:selectedIndex={historyIndex} />
 
             {#if historyIndex == 0}
-                <SegmentedControl bind:selectedIndex={resultsEventIndex} padding={4} labels={[
+                <MultiButton bind:selectedIndex={resultsEventIndex} padding={4} labels={[
                     {type: LabelType.Image, data: Icons.Icon3},
                     {type: LabelType.Image, data: Icons.Icon2},
                     {type: LabelType.Image, data: Icons.Icon4},

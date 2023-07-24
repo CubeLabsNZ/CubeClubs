@@ -3,14 +3,14 @@
     import { page } from "$app/stores";
     import { goto } from "$app/navigation";
 
-    import DetailPage from "$lib/components/DetailPage.svelte";
-    import TabBar from "$lib/components/TabBar.svelte";
+    import PageContent from "$lib/components/global/PageContent.svelte";
+    import TabBar from "$lib/components/global/TabBar.svelte";
     import Button, {
         ButtonSize,
         ButtonType,
-    } from "$lib/components/Button.svelte";
+    } from "$lib/components/global/Button.svelte";
 
-    import Bar from "$lib/components/Bar.svelte";
+    import Card from "$lib/components/global/card/Card.svelte";
     import type { PageData } from "./$types";
     import regions from "$lib/data/regions";
 
@@ -60,7 +60,7 @@
     <title>meetuip name</title>
 </svelte:head>
 
-<DetailPage heading={data.meetup.name} subheading={data.meetup.club.name}>
+<PageContent heading={data.meetup.name} subheading={data.meetup.club.name}>
     <TabBar
         labels={["Meetup Info", "Competitors", "Schedule & Results"]}
         bind:selectedIndex={tabIndex}>
@@ -82,7 +82,7 @@
             <div class="schedule-grid">
                 <!-- TODO: for each scheduled event -->
                 {#each Array(5) as _, i}
-                    <Bar height={60}>
+                    <Card height={60}>
                         <div class="schedule-item">
                             <p>IMG</p>
 
@@ -98,7 +98,7 @@
                                 </p>
                             </div>
                         </div>
-                    </Bar>
+                    </Card>
                 {/each}
             </div>
         {:else if tab === "competitors"}
@@ -205,7 +205,7 @@
             </div>
         {/if}
     </div>
-</DetailPage>
+</PageContent>
 
 <style>
     .content {

@@ -8,9 +8,9 @@
 
     import { Region } from "@prisma/client";
 
-    import DetailPage from "$lib/components/DetailPage.svelte";
+    import PageContent from "$lib/components/global/PageContent.svelte";
 
-    import SegmentedControl, { LabelType } from "$lib/components/SegmentedControl.svelte";
+    import MultiButton, { LabelType } from "$lib/components/global/MultiButton.svelte";
 
 
     let regionSelected: string, displayType: number;
@@ -59,7 +59,7 @@
 </svelte:head>
 
 
-<DetailPage
+<PageContent
     heading="Records"
     subheading="Records shown are for all records broken at meetups and are not grouped by age or gender.">
 
@@ -78,7 +78,7 @@
         <div class="label-group">
             <p class="label">Show</p>
 
-            <SegmentedControl bind:selectedIndex={displayType} labels={[
+            <MultiButton bind:selectedIndex={displayType} labels={[
                 {type: LabelType.Text, data: "Current"},
                 {type: LabelType.Text, data: "History"}
             ]} /> 
@@ -236,7 +236,7 @@
 
     {/if}
 
-</DetailPage>
+</PageContent>
 
 
 <style>

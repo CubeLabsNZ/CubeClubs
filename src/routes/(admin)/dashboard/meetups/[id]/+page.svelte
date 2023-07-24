@@ -1,5 +1,5 @@
 <script lang="ts">
-    import Button, { ButtonSize, ButtonType } from "$lib/components/Button.svelte";
+    import Button, { ButtonSize, ButtonType } from "$lib/components/global/Button.svelte";
 
     import { goto } from "$app/navigation";
     import { page } from "$app/stores";

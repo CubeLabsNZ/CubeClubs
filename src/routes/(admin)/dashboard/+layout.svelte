@@ -8,7 +8,7 @@
 
     import logo from "$lib/assets/logo-text-dark.svg";
 
-    import SidebarTab from "$lib/components/SidebarTab.svelte";
+    import SidebarTab from "$lib/components/dashboard/SidebarTab.svelte";
     import { page } from "$app/stores";
 
 
