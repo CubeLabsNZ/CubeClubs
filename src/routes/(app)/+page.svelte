@@ -36,7 +36,31 @@
     </div>
 
     <img id="landing-clubs" src="/landing/clubs.webp" alt="">
+
+
+    <div class="footer">
+        <!-- TODO: link github when public -->
+        <a href="https://www.github.com" style:height=18px>
+            <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 28 28" style="enable-background:new 0 0 28 28;" xml:space="preserve" height=18px style:height=18px>
+                <style type="text/css">
+                    .st0{fill-rule:evenodd;clip-rule:evenodd;fill:var(--c-lg1);}
+                </style>
+                <path class="st0" d="M14,0.2C6.3,0.2,0,6.5,0,14.3c0,6.2,4,11.5,9.6,13.4c0.7,0.1,1-0.3,1-0.7c0-0.3,0-1.4,0-2.6
+                    c-3.9,0.8-4.7-1.7-4.7-1.7c-0.6-1.6-1.6-2.1-1.6-2.1c-1.3-0.9,0.1-0.9,0.1-0.9c1.4,0.1,2.2,1.4,2.2,1.4c1.3,2.1,3.3,1.5,4.1,1.2
+                    c0.1-0.9,0.5-1.5,0.9-1.9c-3.1-0.3-6.4-1.5-6.4-7c0-1.5,0.6-2.8,1.4-3.8C6.4,9.5,5.9,8,6.7,6.1c0,0,1.2-0.4,3.9,1.4
+                    c1.1-0.3,2.3-0.5,3.5-0.5c1.2,0,2.4,0.2,3.5,0.5c2.7-1.8,3.9-1.4,3.9-1.4c0.8,1.9,0.3,3.4,0.1,3.7c0.9,1,1.4,2.2,1.4,3.8
+                    c0,5.4-3.3,6.6-6.4,7c0.5,0.4,1,1.3,1,2.6c0,1.9,0,3.4,0,3.9c0,0.4,0.3,0.8,1,0.7C24,25.9,28,20.6,28,14.3C28,6.5,21.7,0.2,14,0.2z"
+                />
+            </svg>
+        </a>
+
+        <hr>
+
+        <p> © 2023 Tim Xie, CubeClubs NZ. All rights reserved.  </p>
+    </div>
 </div>
+
+
 
 
 <style>
@@ -149,7 +173,36 @@
     #landing-main {
         display: grid;
 
+        grid-template-rows: 1fr 128px;
+
         height: 100dvh;
         overflow: hidden;
+    }
+
+    .footer {
+        display: flex;
+        align-items: center;
+
+        height: 24px;
+        
+        z-index: 10;
+        margin-left: min(125px, 10vw);
+    }
+
+    .footer * {
+        font-size: 14px;
+        color: var(--c-lg1);
+    }
+
+    hr {
+        margin: 0;
+        padding: 0;
+
+        height: 16px;
+        margin-left: 12px;
+        margin-right: 12px;
+
+        border: none;
+        border-right: 1px var(--c-lg1) solid;
     }
 </style>
