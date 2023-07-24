@@ -1,6 +1,5 @@
 <script lang="ts"> 
     import type { ActionData } from "./$types";
-    import { ERR_LOGIN_EMAIL, ERR_LOGIN_PASS } from "$lib/globals";
 
     import Card from "$lib/components/Card.svelte";
     import Form from "$lib/components/Form.svelte";
@@ -18,7 +17,7 @@
             </label>
 
             {#if form?.error === "email"}
-                <p class="fsize-subhead" style:color=var(--c-red)>{ERR_LOGIN_EMAIL}</p>
+                <p class="fsize-subhead" style:color=var(--c-red)>this email doesn't exist. please try again</p>
             {/if}
         </div>
 
@@ -34,7 +33,7 @@
             </label>
 
             {#if form?.error === "pass"}
-                <p class="fsize-subhead" style:color=var(--c-red)>{ERR_LOGIN_PASS}</p>
+                <p class="fsize-subhead" style:color=var(--c-red)>password is incorrect. please try again</p>
             {/if}
         </div>
 
