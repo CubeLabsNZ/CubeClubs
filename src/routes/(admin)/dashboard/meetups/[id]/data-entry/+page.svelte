@@ -1,6 +1,20 @@
 <script>
+    import Breadcrumb from "$lib/components/global/Breadcrumb.svelte";
     import Form from "$lib/components/global/Form.svelte";
+
+    const data = {
+        meetup: {
+            name: "ASC Drury Autumn 2023",
+            id: 4
+        }
+    }
 </script>
+
+<Breadcrumb paths={[
+    {name: "Meetups", href: "/dashboard/meetups"},
+    {name: data.meetup.name, href: `/dashboard/meetups/${data.meetup.id}`},
+    {name: "Data Entry", href: `/dashboard/meetups/${data.meetup.id}/data-entry`}
+]} />
 
 <div class="parent-container">
     <div class="entry-container">

@@ -1,8 +1,9 @@
 <script lang="ts">
-    import Button, { ButtonSize, ButtonType } from "$lib/components/global/Button.svelte";
+    import Button from "$lib/components/global/Button.svelte";
 
-    import { goto } from "$app/navigation";
     import { page } from "$app/stores";
+
+    import Breadcrumb from "$lib/components/global/Breadcrumb.svelte";
 
     let isPublished = false;
 
@@ -18,7 +19,7 @@
         },
         "meetup": {
             "id": 3,
-            "name": "sdfsdf",
+            "name": "ASC Drury Autumn 2023",
             "venue": "sdfsdfsdfdf",
             "location": "sdfsdfdfdf",
             "description": "sdfsdfsdf",
@@ -40,6 +41,11 @@
         }
     }
 </script>
+
+<Breadcrumb paths={[
+    {name: "Meetups", href: "/dashboard/meetups"},
+    {name: data.meetup.name, href: `/dashboard/meetups/${data.meetup.id}`}
+]} />
 
 <div class="button-bar">
     <!-- <span class="material-symbols-outlined">done</span> -->
@@ -162,6 +168,8 @@
         display: flex;
         flex-direction: row;
         column-gap: 16px;
+
+        margin-top: 8px;
     }
 
 
