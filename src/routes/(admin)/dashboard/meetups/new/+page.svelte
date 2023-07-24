@@ -1,5 +1,6 @@
 <script lang="ts">
     import DetailPage from "$lib/components/DetailPage.svelte";
+    import Form from "$lib/components/Form.svelte";
     import Button, {
         ButtonSize,
         ButtonType,
@@ -14,7 +15,7 @@
 <DetailPage heading="New Meetup" top={64}>
     <div style:height="16px" />
 
-    <form method="post">
+    <Form name="Create meetup">
         <div class="form-inner">
             <label class="form-label">
                 Meetup Name
@@ -74,13 +75,7 @@
                 />
             </label>
         </div>
-        <!-- TODO: find a way to not use a container -->
-        <div class="button-container">
-            <Button type={ButtonType.Coloured} size={ButtonSize.Regular}>
-                <div style:font-weight="500">Create meetup</div>
-            </Button>
-        </div>
-    </form>
+    </Form>
 </DetailPage>
 
 <style>
@@ -92,10 +87,5 @@
 
     .wide {
         grid-column: 1 / span 2;
-    }
-
-    .button-container {
-        float: right;
-        margin-top: 32px;
     }
 </style>
