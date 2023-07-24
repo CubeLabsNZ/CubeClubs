@@ -8,6 +8,16 @@ import prisma from "$lib/prisma";
 import argon2 from "argon2";
 import { redirect } from "@sveltejs/kit";
 
+import type { PageServerLoad } from './$types';
+import { getUserSession } from '$lib/utilsServer';
+
+export const load = (async ({ cookies }) => {
+    const user = await getUserSession(cookies);
+    if (user) {
+        throw redirect(303, "/");
+    }
+}) satisfies PageServerLoad;
+
 export const actions = {
     default: async ({ request, getClientAddress, cookies }) =>  {
         const data = await request.formData();
