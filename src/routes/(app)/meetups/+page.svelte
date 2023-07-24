@@ -24,7 +24,7 @@
 
             <div class="meetup-list">
                 {#each data.ongoingMeetups as meetup}
-                    <MeetupCard meetup={meetup} current/>
+                    <MeetupCard meetup={meetup} current href={`/meetups/${meetup.id}`}/>
                 {/each}
             </div>
         {/if}
@@ -33,7 +33,7 @@
         {#if data.upcomingMeetups.length > 0}
             <div class="meetup-list">
                 {#each data.upcomingMeetups as meetup}
-                    <MeetupCard meetup={meetup}/>
+                    <MeetupCard meetup={meetup} href={`/meetups/${meetup.id}`}/>
                 {/each}
             </div>
         {:else}
@@ -43,7 +43,7 @@
         <h3 class="fsize-title2">Past Meetups</h3>
         <div class="meetup-list">
             {#each data.pastMeetups as meetup}
-                <MeetupCard meetup={meetup}/>
+                <MeetupCard meetup={meetup} href={`/meetups/${meetup.id}`}/>
             {/each}
         </div>
     </div>

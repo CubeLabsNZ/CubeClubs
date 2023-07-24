@@ -63,23 +63,18 @@
 <DetailPage heading={data.meetup.name} subheading={data.meetup.club.name}>
     <TabBar
         labels={["Meetup Info", "Competitors", "Schedule & Results"]}
-        bind:selectedIndex={tabIndex}
-    >
+        bind:selectedIndex={tabIndex}>
         <Button
             size={ButtonSize.Small}
             type={ButtonType.Bordered}
             perform={() => {
                 goto(`/meetups/${data.meetup.id}/register`);
-            }}
-        >
+            }}>
             <div
                 style:display="flex"
                 style:column-gap="8px"
-                style:align-items="center"
-            >
-                <span class="material-symbols-outlined" style:font-size="16px"
-                    >login</span
-                >
+                style:align-items="center">
+                <span class="material-symbols-outlined" style:font-size="16px">login</span>
                 <p>Register</p>
             </div>
         </Button>

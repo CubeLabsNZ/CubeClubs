@@ -3,18 +3,18 @@
     import Bar from "$lib/components/Bar.svelte";
     import type { Competition } from "@prisma/client";
 
+    export let href: string;
+
     export let meetup: Competition
     export let current: boolean | undefined = undefined;
 </script>
 
-<a
-    href={`/meetups/${meetup.id}`}
->
+<a {href}>
     <Bar height={60}>
         <div class="meetup-detail">
             <div class="date" data-current="{current}">
                 <p class="fsize-footnote" style:margin-bottom="-1px">
-                    {meetup.date.toLocaleString('en-us',{month:'short'})}
+                    {meetup.date.toLocaleString('en-us',{month:'short'}).toUpperCase()}
                 </p>
                 <p class="fsize-title2" style:margin-top="-2px">
                     {meetup.date.getDate()}
@@ -43,12 +43,9 @@
 </a>
 
 <style>
-
     a {
         text-decoration: none;
     }
-
-
 
     .meetup-detail {
         display: grid;
