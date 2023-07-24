@@ -239,7 +239,7 @@
                         <tr>
                             <th class="tc-dummy"></th>
 
-                            <th class="tc-comp">Competition</th>
+                            <th class="tc-meetup">Meetup</th>
                             <th class="tc-round">Round</th>
                             <th class="tc-place">Place</th>
                             <th class="tc-single">Single</th>
@@ -266,7 +266,7 @@
                         <tr>
                             <td class="tc-dummy"></td>
 
-                            <td class="tc-comp">Competition</td>
+                            <td class="tc-meetup">Meetup</td>
                             <td class="tc-round">Round</td>
                             <td class="tc-place">Place</td>
                             <td class="tc-single">Single</td>
@@ -299,7 +299,7 @@
 
                             <th class="tc-single">Single</th>
                             <th class="tc-average">Average</th>
-                            <th class="tc-comp">Meetup</th>
+                            <th class="tc-meetup">Meetup</th>
                             <th class="tc-round">Round</th>
                             <th class="tc-solves">Solves</th>
 
@@ -323,7 +323,7 @@
 
                             <td class="tc-single">Single</td>
                             <td class="tc-average">Average</td>
-                            <td class="tc-comp">Meetup</td>
+                            <td class="tc-meetup">Meetup</td>
                             <td class="tc-round">Round</td>
                             <td class="tc-solves">Solves</td>
 
@@ -464,11 +464,11 @@
         row-gap: 16px;
     }
 
-    .tc-comp, .tc-round, .tc-place, .tc-solves {
+    .tc-meetup, .tc-round, .tc-place, .tc-solves {
         text-align: left;
     }
 
-    .tc-comp, .tc-single, .tc-average {
+    .tc-meetup, .tc-single, .tc-average {
         font-weight: 500;
     }
 

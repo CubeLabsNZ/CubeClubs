@@ -21,11 +21,11 @@
 
 
 
-{#if data.draftCompetitions.length > 0}
+{#if data.draftMeetups.length > 0}
     <h3 class="fsize-title2" style:font-weight=500 style:margin-bottom=4px style:margin-top=48px>Draft Meetups</h3>
 
     <div class="meetup-list">
-        {#each data.draftCompetitions as meetup}
+        {#each data.draftMeetups as meetup}
             <MeetupCard meetup={meetup} href={`/dashboard/meetups/${meetup.id}`}/>
         {/each}
     </div>
@@ -35,7 +35,7 @@
 <h3 class="fsize-title2" style:font-weight=500 style:margin-bottom=4px style:margin-top=48px>Published Meetups</h3>
 
 <div class="meetup-list">
-    {#each data.publishedCompetitions as meetup}
+    {#each data.publishedMeetups as meetup}
         <MeetupCard meetup={meetup} href={`/dashboard/meetups/${meetup.id}`}/>
     {/each}
 </div>

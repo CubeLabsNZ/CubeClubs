@@ -82,25 +82,23 @@
             <div class="schedule-grid">
                 <!-- TODO: for each scheduled event -->
                 {#each Array(5) as _, i}
-                    <button>
-                        <Bar height={60}>
-                            <div class="schedule-item">
-                                <p>IMG</p>
+                    <Bar height={60}>
+                        <div class="schedule-item">
+                            <p>IMG</p>
 
-                                <div class="schedule-item-title">
-                                    <p style:font-weight="600">
-                                        SCHEDULE EVENT TITLE
-                                    </p>
-                                    <p
-                                        style:font-weight="500"
-                                        style:color="var(--c-dg1)"
-                                    >
-                                        SCHEDULE EVENT TIME
-                                    </p>
-                                </div>
+                            <div class="schedule-item-title">
+                                <p style:font-weight="600">
+                                    SCHEDULE EVENT TITLE
+                                </p>
+                                <p
+                                    style:font-weight="500"
+                                    style:color="var(--c-dg1)"
+                                >
+                                    SCHEDULE EVENT TIME
+                                </p>
                             </div>
-                        </Bar>
-                    </button>
+                        </div>
+                    </Bar>
                 {/each}
             </div>
         {:else if tab === "competitors"}
@@ -125,7 +123,7 @@
                 </tr>
 
                 <!-- TODO: should these be clickable -->
-                {#each data.meetup.competitors as { user }}
+                {#each data.meetup.users as { user }}
                     {@const {name, maori_name} = regions[user.region]}
                     <tr>
                         <td class="tc-dummy" />
@@ -268,17 +266,10 @@
         gap: 16px;
     }
 
-    button {
-        padding: 0;
-        margin: 0;
-        background-color: transparent;
-        border: none;
-    }
-
     .schedule-item {
         display: flex;
         align-items: center;
-        padding: 11px;
+        padding-left: 12px;
 
         column-gap: 8px;
     }

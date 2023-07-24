@@ -53,11 +53,6 @@
     }
 
     button {
-        margin: 0;
-        padding: 0;
-        border: none;
-        background: none;
-
         width: 100%;
     }
 </style>

@@ -49,13 +49,7 @@
 
         text-align: center;
 
-        padding: 0;
-        margin: 0;
-
         cursor: pointer;
-
-        background: none;
-        border: none;
 
         color: var(--c-dg1);
         fill: var(--c-dg1);

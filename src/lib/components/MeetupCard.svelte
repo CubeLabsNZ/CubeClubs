@@ -1,11 +1,10 @@
 <script lang="ts">
-    import { goto } from "$app/navigation";
     import Bar from "$lib/components/Bar.svelte";
-    import type { Competition } from "@prisma/client";
+    import type { Meetup } from "@prisma/client";
 
     export let href: string;
 
-    export let meetup: Competition
+    export let meetup: Meetup
     export let current: boolean | undefined = undefined;
 </script>
 
