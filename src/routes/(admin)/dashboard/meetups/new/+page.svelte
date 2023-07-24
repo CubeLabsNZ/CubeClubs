@@ -10,7 +10,7 @@
 	export let data: PageData;
 </script>
 
-<!-- TODO: move this to layout somehow? -->
+
 <DetailPage heading="New Meetup" top={64}>
 	<div style:height="16px" />
 

@@ -1,7 +1,7 @@
 <script lang="ts">
     export let selectedIndex = 0;
 
-    export let padding: number = 12;
+    export let padding = 12;
 
     export let labels: Label[];
 </script>

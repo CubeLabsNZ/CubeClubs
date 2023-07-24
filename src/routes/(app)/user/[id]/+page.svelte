@@ -9,6 +9,8 @@
 
     let resultsEventIndex: number;
 
+    let historyIndex: number;
+
     export let data;
 </script>
 
@@ -200,93 +202,150 @@
             </table>
         </div>
 
+
         <div class="history-section">
-            <TabBar labels={["Results History", "Records History"]} />
+            <TabBar labels={["Results History", "Records History"]} bind:selectedIndex={historyIndex} />
 
-            <SegmentedControl bind:selectedIndex={resultsEventIndex} padding={4} labels={[
-                {type: LabelType.Image, data: Icons.Icon3},
-                {type: LabelType.Image, data: Icons.Icon2},
-                {type: LabelType.Image, data: Icons.Icon4},
-                {type: LabelType.Image, data: Icons.Icon5},
-                {type: LabelType.Image, data: Icons.Icon6},
-                {type: LabelType.Image, data: Icons.Icon7},
+            {#if historyIndex == 0}
+                <SegmentedControl bind:selectedIndex={resultsEventIndex} padding={4} labels={[
+                    {type: LabelType.Image, data: Icons.Icon3},
+                    {type: LabelType.Image, data: Icons.Icon2},
+                    {type: LabelType.Image, data: Icons.Icon4},
+                    {type: LabelType.Image, data: Icons.Icon5},
+                    {type: LabelType.Image, data: Icons.Icon6},
+                    {type: LabelType.Image, data: Icons.Icon7},
 
-                {type: LabelType.Image, data: Icons.IconSq1},
-                {type: LabelType.Image, data: Icons.IconSkewb},
-                {type: LabelType.Image, data: Icons.IconPyra},
-                {type: LabelType.Image, data: Icons.IconMega},
-                {type: LabelType.Image, data: Icons.IconOH},
-                {type: LabelType.Image, data: Icons.IconClock},
+                    {type: LabelType.Image, data: Icons.IconSq1},
+                    {type: LabelType.Image, data: Icons.IconSkewb},
+                    {type: LabelType.Image, data: Icons.IconPyra},
+                    {type: LabelType.Image, data: Icons.IconMega},
+                    {type: LabelType.Image, data: Icons.IconOH},
+                    {type: LabelType.Image, data: Icons.IconClock},
 
-                {type: LabelType.Image, data: Icons.IconFMC},
-                {type: LabelType.Image, data: Icons.Icon3bld},
-                {type: LabelType.Image, data: Icons.IconMbld},
-                {type: LabelType.Image, data: Icons.Icon4bld},
-                {type: LabelType.Image, data: Icons.Icon5bld},
-                ]} />
+                    {type: LabelType.Image, data: Icons.IconFMC},
+                    {type: LabelType.Image, data: Icons.Icon3bld},
+                    {type: LabelType.Image, data: Icons.IconMbld},
+                    {type: LabelType.Image, data: Icons.Icon4bld},
+                    {type: LabelType.Image, data: Icons.Icon5bld},
+                    ]} />
+
+                <div class="results-history">
+                    <div class="results-history-header">
+                        <img src={Icons.Icon3} alt="" height=28/>
+                        <p class="fsize-body">3x3 Results (index = {resultsEventIndex})</p>
+                    </div>
+
+                    <table style:width=100%>
+                        <tr>
+                            <th class="tc-dummy"></th>
+
+                            <th class="tc-comp">Competition</th>
+                            <th class="tc-round">Round</th>
+                            <th class="tc-place">Place</th>
+                            <th class="tc-single">Single</th>
+                            <th class="tc-average">Average</th>
+                            <th class="tc-solves">Solves</th>
 
 
-            <div class="results-history">
-                <div class="results-history-header">
-                    <img src={Icons.Icon3} alt="" height=28/>
-                    <p class="fsize-body">3x3 Results (index = {resultsEventIndex})</p>
+                            <th class="tc-dummy"></th>
+                        </tr>
+
+                        <!-- NOTE: td-dummy is entirely invisible to provide padding to the top and bottom of the table -->
+                        <tr class="td-dummy">
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+
+
+                        <tr>
+                            <td class="tc-dummy"></td>
+
+                            <td class="tc-comp">Competition</td>
+                            <td class="tc-round">Round</td>
+                            <td class="tc-place">Place</td>
+                            <td class="tc-single">Single</td>
+                            <td class="tc-average">Average</td>
+                            <td class="tc-solves">Solves</td>
+
+                            <td class="tc-dummy"></td>
+                        </tr>
+
+
+                        <tr class="td-dummy">
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    </table>
                 </div>
+            {:else}
+                <div class="records-history">
+                    <!-- INFO: for each event that HAS a record, either single or average -->
 
-                <table style:width=100%>
-                    <tr>
-                        <th class="tc-dummy"></th>
+                    <table style:width=100%>
+                        <tr>
+                            <th class="tc-dummy"></th>
 
-                        <th class="tc-comp">Competition</th>
-                        <th class="tc-round">Round</th>
-                        <th class="tc-place">Place</th>
-                        <th class="tc-single">Single</th>
-                        <th class="tc-average">Average</th>
-                        <th class="tc-solves">Solves</th>
+                            <th class="tc-single">Single</th>
+                            <th class="tc-average">Average</th>
+                            <th class="tc-comp">Meetup</th>
+                            <th class="tc-round">Round</th>
+                            <th class="tc-solves">Solves</th>
 
+                            <th class="tc-dummy"></th>
+                        </tr>
 
-                        <th class="tc-dummy"></th>
-                    </tr>
-
-                    <!-- NOTE: td-dummy is entirely invisible to provide padding to the top and bottom of the table -->
-                    <tr class="td-dummy">
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-
-
-                    <tr>
-                        <td class="tc-dummy"></td>
-
-                        <td class="tc-comp">Competition</td>
-                        <td class="tc-round">Round</td>
-                        <td class="tc-place">Place</td>
-                        <td class="tc-single">Single</td>
-                        <td class="tc-average">Average</td>
-                        <td class="tc-solves">Solves</td>
-
-                        <td class="tc-dummy"></td>
-                    </tr>
+                        <!-- NOTE: td-dummy is entirely invisible to provide padding to the top and bottom of the table -->
+                        <tr class="td-dummy">
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
 
 
-                    <tr class="td-dummy">
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                </table>
+                        <tr>
+                            <td class="tc-dummy"></td>
 
-            </div>
+                            <td class="tc-single">Single</td>
+                            <td class="tc-average">Average</td>
+                            <td class="tc-comp">Meetup</td>
+                            <td class="tc-round">Round</td>
+                            <td class="tc-solves">Solves</td>
+
+                            <td class="tc-dummy"></td>
+                        </tr>
+
+
+                        <tr class="td-dummy">
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    </table>
+                </div>
+            {/if}
+
+
+
         </div>
     </div>
 </div>

@@ -42,6 +42,7 @@
 
 
     color: var(--c-dg2);
+    /* background: linear-gradient(-45deg, var(--c-lg0), white); */
     background-color: var(--c-lg0);
 
 

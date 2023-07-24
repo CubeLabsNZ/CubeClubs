@@ -1,6 +1,6 @@
-
 import type { PageServerLoad } from './$types';
 import prisma from '$lib/prisma';
+import { generateData } from "$lib/dev";
 import { partition } from '$lib/utils';
 
 export const load = (async () => {
@@ -19,7 +19,9 @@ export const load = (async () => {
         delete meetup.schedule;
     }
 
-	const [publishedCompetitions, draftCompetitions] = partition(meetups, meetup => meetup.isPublished)
+    // generateData();
+
+    const [publishedCompetitions, draftCompetitions] = partition(meetups, meetup => meetup.isPublished)
 
     return {
         publishedCompetitions,

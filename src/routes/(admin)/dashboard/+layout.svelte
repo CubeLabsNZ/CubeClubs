@@ -19,7 +19,7 @@
      * AND WILL BREAK if the route is modified.
      */
 
-    $: currentPage = $page.route.id.slice(19);
+    $: currentPage = $page.route.id.slice(19, 20);
 </script>
 
 <svelte:head>
@@ -31,8 +31,8 @@
     <div class="sidebar">
         <img src={logo} alt="" style:height=36px style:margin-bottom=48px />
 
-        <SidebarTab iconName=deployed_code label=Meetups isActive={currentPage === "meetups"} perform={() => { goto("/dashboard/meetups") }} />
-        <SidebarTab iconName=group label=Users isActive={currentPage === "users"} perform={() => { goto("/dashboard/users") }} />
+        <SidebarTab iconName=deployed_code label=Meetups isActive={currentPage === "m"} perform={() => { goto("/dashboard/meetups") }} />
+        <SidebarTab iconName=group label=Users isActive={currentPage === "u"} perform={() => { goto("/dashboard/users") }} />
 
         <div class="sidebar-dummy" style:flex-grow=10></div>
 

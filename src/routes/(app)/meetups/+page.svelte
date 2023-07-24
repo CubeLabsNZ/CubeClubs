@@ -18,31 +18,48 @@
     heading="Meetups"
     subheading="We welcome cubers of all skill levels! Most of our meetups are casual get-togethers, but will be in the format of WCA competitions.">
 
-    <h3 class="fsize-title2" style:font-weight=500 style:margin-bottom=4px>Ongoing Meetups</h3>
+    <div class="container">
+        {#if data.ongoingMeetups.length > 0}
+            <h3 class="fsize-title2">Ongoing Meetups</h3>
 
-    <div class="meetup-list">
-        {#each data.ongoingMeetups as meetup}
-            <MeetupCard meetup={meetup} current/>
-        {/each}
-    </div>
+            <div class="meetup-list">
+                {#each data.ongoingMeetups as meetup}
+                    <MeetupCard meetup={meetup} current/>
+                {/each}
+            </div>
+        {/if}
 
-    <h3 class="fsize-title2" style:font-weight=500 style:margin-bottom=4px style:margin-top=48px>Upcoming Meetups</h3>
-    <div class="meetup-list">
-        {#each data.upcomingMeetups as meetup}
-            <MeetupCard meetup={meetup}/>
-        {/each}
-    </div>
+        <h3 class="fsize-title2">Upcoming Meetups</h3>
+        {#if data.upcomingMeetups.length > 0}
+            <div class="meetup-list">
+                {#each data.upcomingMeetups as meetup}
+                    <MeetupCard meetup={meetup}/>
+                {/each}
+            </div>
+        {:else}
+            <p class="fsize-body" style:color=var(--c-g)> We have no upcoming meetups planned. Check back later! </p>
+        {/if}
 
-    <h3 class="fsize-title2" style:font-weight=500 style:margin-bottom=4px style:margin-top=48px>Past Meetups</h3>
-    <div class="meetup-list">
-        {#each data.pastMeetups as meetup}
-            <MeetupCard meetup={meetup}/>
-        {/each}
+        <h3 class="fsize-title2">Past Meetups</h3>
+        <div class="meetup-list">
+            {#each data.pastMeetups as meetup}
+                <MeetupCard meetup={meetup}/>
+            {/each}
+        </div>
     </div>
 </DetailPage>
 
 
 <style>
+    .container h3 {
+        margin-bottom: 4px;
+        font-weight: 500;
+    }
+
+    .container h3:not(:first-child) {
+        padding-top: 48px;
+    }
+
     .meetup-list {
         display: flex;
         flex-direction: column;
