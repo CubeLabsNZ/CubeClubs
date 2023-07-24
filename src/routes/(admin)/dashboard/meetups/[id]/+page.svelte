@@ -7,7 +7,7 @@
 
     let isPublished = false;
 
-    let data = {
+    const data = {
         "user": {
             "id": 1,
             "email": "pdt.xie@gmail.com",
@@ -44,7 +44,8 @@
 
 <Breadcrumb paths={[
     {name: "Meetups", href: "/dashboard/meetups"},
-    {name: data.meetup.name, href: `/dashboard/meetups/${data.meetup.id}`}
+    // {name: data.meetup.name, href: `/dashboard/meetups/${data.meetup.id}`}
+    {name: "Meetup Name", href: `/dashboard/meetups/4`}
 ]} />
 
 <div class="button-bar">

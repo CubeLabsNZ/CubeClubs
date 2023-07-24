@@ -51,9 +51,8 @@
         grid-template-columns: 364px 1fr;
         height: 100dvh;
         overflow-y: hidden;
-
-
     }
+
 
     .sidebar {
         grid-column: 1;
@@ -81,5 +80,6 @@
 
     .content {
         grid-column: 2;
+        overflow-y: scroll;
     }
 </style>
