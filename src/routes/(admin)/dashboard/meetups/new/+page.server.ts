@@ -1,6 +1,7 @@
 import prisma from '$lib/prisma';
 import type { Prisma } from '@prisma/client'
 import type { Actions, PageServerLoad } from './$types';
+import { redirect } from '@sveltejs/kit';
 
 export const actions = {
     default: async ({request}) => {
@@ -25,9 +26,11 @@ export const actions = {
 
         // TODO: validate that every organizer really is an organizer
         // should be fine cause only trusted people can access this endpoint
-        await prisma.meetup.create({
+        const createdMeetup = await prisma.meetup.create({
             data: meetup
         })
+
+        throw redirect(303, `/dashboard/meetups/${createdMeetup.id}`)
 
     }
 } satisfies Actions;
