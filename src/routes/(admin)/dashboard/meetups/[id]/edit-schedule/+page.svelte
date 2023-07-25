@@ -6,20 +6,17 @@
     import Breadcrumb from "$lib/components/global/Breadcrumb.svelte";
 
     import Card from "$lib/components/global/card/Card.svelte";
+    import puzzles from "$lib/data/puzzles";
 
-    let events = [{
-        "title": "new event",
-        "start": "2023-07-23T18:30:00.000Z",
-        "end": "2023-07-24T05:00:00.000Z"
-    }];
+    let events = [];
 
     let plugins = [TimeGrid, Interaction];
 
     let options;
     let evcal;
 
-
-    let addEventCard;
+    let addEventCard: HTMLDivElement;
+    let selectingEventId: string | undefined;
 
     $: {
         options = {
@@ -27,56 +24,72 @@
             view: "timeGridDay",
             allDaySlot: false,
             slotDuration: {
-                seconds: 900
+                seconds: 900,
             },
             headerToolbar: {
                 start: "",
                 center: "",
-                end: ""
+                end: "",
             },
             select: (info) => {
+                selectingEventId = crypto.randomUUID();
                 evcal.addEvent({
-                    title: "new event",
+                    id: selectingEventId,
+                    title: "",
                     start: info.start,
-                    end: info.end
-                })
+                    end: info.end,
+                });
 
                 addEventCard.style.display = "block";
 
-                console.log(info.jsEvent);
                 addEventCard.style.top = `${info.jsEvent.clientY}px`;
                 addEventCard.style.left = `${info.jsEvent.clientX}px`;
             },
-            unselect: () => {
+            unselect: (event) => {
+                const selectedPuzzle = event.jsEvent.target.dataset.puzzleType
+                if (selectedPuzzle) {
+                    evcal.updateEvent({
+                        ...evcal.getEventById(selectingEventId),
+                        id: selectingEventId,
+                        extendedProps: {
+                            puzzle: selectedPuzzle
+                        },
+                        title: `${puzzles[selectedPuzzle].name} - Round X`
+                    })
+                } else {
+                    evcal.removeEventById(selectingEventId)
+                }
                 addEventCard.style.display = "none";
             },
             selectable: true,
-        }
+        };
     }
+    // TODO: ROUND
 </script>
 
-
-<Breadcrumb paths={[
-    {name: "Meetups", href: "/dashboard/meetups"},
-    {name: "Meetup Name", href: `/dashboard/meetups/4/`},
-    {name: "Edit Schedule", href: `/dashboard/meetups/4/edit-schedule`}
-]} />
+<Breadcrumb
+    paths={[
+        { name: "Meetups", href: "/dashboard/meetups" },
+        { name: "Meetup Name", href: `/dashboard/meetups/4/` },
+        { name: "Edit Schedule", href: `/dashboard/meetups/4/edit-schedule` },
+    ]}
+/>
 
 <Calendar bind:this={evcal} {plugins} {options} />
 
 <div bind:this={addEventCard} class="add-event-card">
-    <Card clickable={false}> 
+    <Card clickable={false}>
         <div>
-            <p class="fsize-body" style:font-weight=500> Add Event </p>
+            <p class="fsize-body" style:font-weight="500">Add Event</p>
 
-            <div class="label-group">
-                <p class="label">Event</p>
-            </div>
+            {#each Object.entries(puzzles) as [enumval, puzzle]}
+                <div class="label-group">
+                    <p class="label" data-puzzle-type={enumval}>{puzzle.name}</p>
+                </div>
+            {/each}
         </div>
     </Card>
 </div>
-
-
 
 <style>
     .add-event-card {
