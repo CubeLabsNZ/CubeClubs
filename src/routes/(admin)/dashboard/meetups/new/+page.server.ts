@@ -1,4 +1,5 @@
 import prisma from '$lib/prisma';
+import { redirect } from "@sveltejs/kit"
 import type { Prisma } from '@prisma/client'
 import type { Actions, PageServerLoad } from './$types';
 
@@ -25,9 +26,13 @@ export const actions = {
 
         // TODO: validate that every organizer really is an organizer
         // should be fine cause only trusted people can access this endpoint
-        await prisma.meetup.create({
+        const createdMeetup = await prisma.meetup.create({
             data: meetup
         })
+
+        // TODO: figure out how to display a success message like GH - it's in the form actions docs.
+        // Cannot figure out without wifi :(
+        throw redirect(303, `/dashboard/meetups/${createdMeetup.id}`)
 
     }
 } satisfies Actions;
