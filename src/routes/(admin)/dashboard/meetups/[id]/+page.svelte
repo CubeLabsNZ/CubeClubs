@@ -74,14 +74,14 @@
 
     <hr>
 
-    <a href={$page.url + "/edit-details"}>
+    <a href={$page.url + "/edit"}>
         <Button>
             Edit Details
         </Button>
     </a>
     
 
-    <a href={$page.url + "/edit-schedule"}>
+    <a href={$page.url + "/edit/schedule"}>
         <Button>
             Edit Schedule
         </Button>
