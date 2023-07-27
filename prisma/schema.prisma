@@ -79,7 +79,6 @@ model Round {
   startDate     DateTime
   endDate       DateTime
   puzzle        Puzzle
-  roundNumber         Int
   format        Format
   results       Result[]
 
