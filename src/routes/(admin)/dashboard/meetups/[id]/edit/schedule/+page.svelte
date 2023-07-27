@@ -5,6 +5,8 @@
 
     import Breadcrumb from "$lib/components/global/Breadcrumb.svelte";
 
+    import Button, { ButtonType, ButtonSize } from "$lib/components/global/Button.svelte";
+
     import Card from "$lib/components/global/card/Card.svelte";
 
     import puzzles from "$lib/data/puzzles";
@@ -36,6 +38,21 @@
     }
 
     let hasUnsavedChanges = false
+    let saveFetch: Promise<Response>
+
+    function saveChanges() {
+        // TODO cancel promise and stuff
+        saveFetch = fetch("./schedule/save", {
+            method: "POST",
+            body: JSON.stringify(evcal.getEvents()),
+            headers: {
+                "Content-Type": "application/json"
+            }
+        }) 
+        saveFetch.then((res) => {
+            if (res.ok) { hasUnsavedChanges = false }
+        })
+    }
 
     $: {
         // TODO: need to handle resize top when/if it becomes possible
@@ -117,9 +134,38 @@
     </Card>
 </div>
 
+{#if hasUnsavedChanges}
+    <!-- TODO: prevent from leaving page - cant look it up :( -->
+    <div class="snackbar">
+        <p>Unsaved Changes!</p>
+        <button on:click={saveChanges}>
+            <Button type={ButtonType.Coloured} size={ButtonSize.Regular}>
+                Save
+            </Button>
+        </button>
+    </div>
+{/if}
+
 
 
 <style>
+    .snackbar {
+        position: fixed;
+        bottom: 32px;
+        right: 64px;
+        padding: 12px 32px 12px 32px;
+        border-radius: 12px;
+
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 16px;
+
+        /* TODO: TIM: Style this */
+        background-color: white;
+        box-shadow: 0px 4px 16px 0px #292E333D;
+    }
+
     .add-event-card {
         position: fixed;
         display: none;

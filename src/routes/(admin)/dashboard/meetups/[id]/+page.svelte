@@ -1,75 +1,61 @@
 <script lang="ts">
     import Button from "$lib/components/global/Button.svelte";
+    import type { PageData } from "./$types"
 
     import { page } from "$app/stores";
 
     import Breadcrumb from "$lib/components/global/Breadcrumb.svelte";
 
-    let isPublished = false;
+    export let data: PageData;
 
-    const data = {
-        "user": {
-            "id": 1,
-            "email": "pdt.xie@gmail.com",
-            "passHash": "$argon2id$v=19$m=65536,t=3,p=4$KKtLwIkehTd40KLt1R1fQQ$HxbWVSubuzung7rywa44qLY+jFHnkskZGs4CaH9xe54",
-            "name": "Tim Xie",
-            "region": "OTAGO",
-            "gender": "MALE",
-            "isClubOrganiser": true
-        },
-        "meetup": {
-            "id": 3,
-            "name": "ASC Drury Autumn 2023",
-            "venue": "sdfsdfsdfdf",
-            "location": "sdfsdfdfdf",
-            "description": "sdfsdfsdf",
-            "contact": "sdfsdf",
-            "competitorLimit": 234,
-            "date": new Date("2023-07-27T00:00:00.000Z"),
-            "isPublished": true,
-            "clubId": 1,
-            "club": {
-                "id": 1,
-                "name": "Auckland Speedcubing Club"
-            },
-            "organisers": [
-                {
-                    "name": "Tim Xie"
-                }
-            ],
-            "users": []
-        }
+    let isPublished = data.meetup.isPublished
+    let meetupFetch: Promise<Response> | undefined
+
+    function togglePublish() {
+        // TODO: check relative path if it's ok later on/in prod
+        const action = isPublished? "unpublish" : "publish";
+        meetupFetch = fetch(`./${data.meetup.id}/edit/${action}`, {
+            method: "POST"
+        });
+        meetupFetch.then(res => {
+            if (res.ok) {
+                console.log("HERE")
+                isPublished = !isPublished
+            }
+        })
     }
+
 </script>
 
 <Breadcrumb paths={[
     {name: "Meetups", href: "/dashboard/meetups"},
-    // {name: data.meetup.name, href: `/dashboard/meetups/${data.meetup.id}`}
-    {name: "Meetup Name", href: `/dashboard/meetups/4`}
+    {name: data.meetup.name, href: `/dashboard/meetups/${data.meetup.id}`}
 ]} />
 
 <div class="button-bar">
     <!-- <span class="material-symbols-outlined">done</span> -->
-    {#if isPublished}
-        <button on:click={() => {isPublished = false}}>
-            <Button>
-                Revert to Draft
-            </Button>
-        </button>
+    <!-- TODO: disable when loading -->
+    <button on:click={togglePublish}>
+        <Button>
+            {#await meetupFetch}
+                Loading...
+            {:then response}
+                {#if response == undefined || response.ok}
+                    {isPublished ? "Revert to Draft" : "Publish Meetup"}
+                {:else}
+                    Error :( <!-- TODO: figure out how to move make it throw when not ok -->
+                {/if}
+            {/await}
+        </Button>
+    </button>
         
 
+    {#if isPublished}
         <a href={$page.url + "/data-entry"}>
             <Button>
                 Enter Results
             </Button>
         </a>
-        
-    {:else}
-        <button on:click={() => {isPublished = true}}>
-            <Button>
-                Publish Meetup
-            </Button>
-        </button>
     {/if}
 
     <hr>
