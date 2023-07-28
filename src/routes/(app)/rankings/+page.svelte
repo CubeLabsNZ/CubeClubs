@@ -8,6 +8,7 @@
     import { Region } from "@prisma/client";
 
     import MultiButton, { LabelType } from "$lib/components/global/MultiButton.svelte";
+    import Select from "$lib/components/global/Select.svelte";
 
 
     import PageContent from "$lib/components/global/PageContent.svelte";
@@ -120,12 +121,12 @@
         <div class="label-group">
             <p class="label">Region</p>
             
-            <select name="region" bind:value={regionSelected}>
+            <Select name="region" bind:value={regionSelected}>
                 <option selected value>All Regions</option>
                 {#each Object.entries(regions) as [value, {name, maori_name}] }
                     <option value={value}>{name} {maori_name !== undefined ? `(${maori_name})` : ""}</option>
                 {/each}
-            </select>
+            </Select>
         </div>
     </div>
 

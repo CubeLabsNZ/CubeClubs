@@ -1,6 +1,7 @@
 <script lang="ts">
     import Form from "$lib/components/global/Form.svelte";
 
+    import Select from "$lib/components/global/Select.svelte";
     import Breadcrumb from "$lib/components/global/Breadcrumb.svelte";
 
     import type { PageData } from './$types';
@@ -25,13 +26,14 @@
 
         <label class="form-label">
             Host Club
-            <select required name="clubId">
+
+            <Select name="clubId">
                 <option disabled selected value>Select a Club</option>
                 <!-- TODO: figure out ts complaining? -->
                 {#each data.clubs as {id, name} }
                     <option value={id}>{name}</option>
                 {/each}
-            </select>
+            </Select>
         </label>
 
         <label class="form-label">

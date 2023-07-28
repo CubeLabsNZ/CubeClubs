@@ -1,4 +1,6 @@
 <script lang="ts">
+    import { dev } from "$app/environment";
+
     import { goto } from "$app/navigation";
 
     import "$styles/fonts.css";
@@ -25,7 +27,6 @@
 <svelte:head>
     <title>CubeClubs NZ Dashboard</title>
 </svelte:head>
-
 
 <div class="container">
     <div class="sidebar">
