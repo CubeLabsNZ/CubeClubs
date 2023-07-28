@@ -6,7 +6,7 @@ import { error } from "@sveltejs/kit"
 // CANT LOOK UP TYPES TODO: HELP FIX
 
 export const POST = (async ({params, cookies}) => {
-    getUserSessionOrThrow(cookies, true)
+    await getUserSessionOrThrow(cookies, true)
 
     const id = Number(params.id)
     if (isNaN(id)) {

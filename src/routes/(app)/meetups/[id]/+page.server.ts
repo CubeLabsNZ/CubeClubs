@@ -1,6 +1,7 @@
 import prisma from '$lib/prisma';
 import { error } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
+import { populateRounds } from '$lib/utilsServer';
 
 export const load = (async ({ params }) => {
 
@@ -45,15 +46,7 @@ export const load = (async ({ params }) => {
         throw error(404, "not found")
     }
 
-    const roundForPuzzle = {}
-    for (const round of meetup.rounds) {
-        // TODO: find better way
-        if (!roundForPuzzle[round.puzzle]) {
-            roundForPuzzle[round.puzzle] = 1
-        }
-        round.number = roundForPuzzle[round.puzzle]
-        roundForPuzzle[round.puzzle]++
-    }
+    populateRounds(meetup.rounds)
 
     return {
         meetup

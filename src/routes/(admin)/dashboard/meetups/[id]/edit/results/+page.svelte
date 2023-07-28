@@ -1,20 +1,19 @@
-<script>
+<script lang="ts">
     import Breadcrumb from "$lib/components/global/Breadcrumb.svelte";
     import Form from "$lib/components/global/Form.svelte";
     import Select from "$lib/components/global/Select.svelte";
 
-    const data = {
-        meetup: {
-            name: "ASC Drury Autumn 2023",
-            id: 4
-        }
-    }
+    import puzzles from "$lib/data/puzzles"
+
+    import type { PageData } from "./$types";
+
+    export let data: PageData
 </script>
 
 <Breadcrumb paths={[
     {name: "Meetups", href: "/dashboard/meetups"},
     {name: data.meetup.name, href: `/dashboard/meetups/${data.meetup.id}`},
-    {name: "Data Entry", href: `/dashboard/meetups/${data.meetup.id}/data-entry`}
+    {name: "Data Entry", href: `/dashboard/meetups/${data.meetup.id}/edit/results`}
 ]} />
 
 <div class="parent-container">
@@ -26,15 +25,21 @@
 
                 <Select name="event">
                     <option disabled selected value>Select an event</option>
-                    {#each Array(10) as _, i }
-                        <option value={i}>{i}</option>
+                    {#each data.meetup.rounds as round}
+                        {@const puzzle = puzzles[round.puzzle]}
+                        <option value={round.id}>{puzzle.name} - Round {round.number}</option>
                     {/each}
                 </Select>
             </label>
 
             <label class="form-label">
                 Competitor Name
-                <input required name="competitorName" />
+                <Select name="competitor">
+                    <option disabled selected value>Select a competitor</option>
+                    {#each data.meetup.users as {user}}
+                        <option value={user.id}>{user.name}</option>
+                    {/each}
+                </Select>
             </label>
 
 

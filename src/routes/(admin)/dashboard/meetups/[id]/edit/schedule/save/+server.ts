@@ -7,7 +7,7 @@ import { success, error } from "@sveltejs/kit"
 // CANT LOOK UP TYPES TODO: HELP FIX
 
 export const POST = (async ({request, params, cookies}) => {
-    getUserSessionOrThrow(cookies, true)
+    await getUserSessionOrThrow(cookies, true)
 
     // do we have a json reader? TODO: check and 404 if invalid params.id
     const events = JSON.parse((await request.body.getReader().read()).value.toString())
