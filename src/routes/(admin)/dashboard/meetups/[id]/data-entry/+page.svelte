@@ -1,6 +1,7 @@
 <script>
     import Breadcrumb from "$lib/components/global/Breadcrumb.svelte";
     import Form from "$lib/components/global/Form.svelte";
+    import Select from "$lib/components/global/Select.svelte";
 
     const data = {
         meetup: {
@@ -22,13 +23,13 @@
         <Form name="Add Solve">
             <label class="form-label">
                 Event
-                <select required name="event">
+
+                <Select name="event">
                     <option disabled selected value>Select an event</option>
-                    <!-- TODO: figure out ts complaining? -->
                     {#each Array(10) as _, i }
                         <option value={i}>{i}</option>
                     {/each}
-                </select>
+                </Select>
             </label>
 
             <label class="form-label">
