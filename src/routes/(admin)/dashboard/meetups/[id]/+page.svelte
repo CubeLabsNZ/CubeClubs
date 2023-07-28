@@ -51,7 +51,7 @@
         
 
     {#if isPublished}
-        <a href={$page.url + "/data-entry"}>
+        <a href={$page.url + "/edit/results"}>
             <Button>
                 Enter Results
             </Button>

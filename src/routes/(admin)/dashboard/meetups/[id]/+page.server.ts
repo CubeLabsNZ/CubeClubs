@@ -1,8 +1,10 @@
 import prisma from '$lib/prisma';
 import { error } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
+import { getUserSessionOrThrow } from '$lib/utilsServer';
 
-export const load = (async ({ params }) => {
+export const load = (async ({ cookies, params }) => {
+    await getUserSessionOrThrow(cookies, true)
 
     const id = Number(params.id)
     if (isNaN(id)) {

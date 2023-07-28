@@ -96,6 +96,8 @@ model Result {
   user      User @relation(fields: [userId], references: [id])
   userId Int
   solves    Solve[]
+
+  average   Float
 }
 
 

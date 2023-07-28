@@ -5,17 +5,26 @@
     import TabBar from '$lib/components/global/TabBar.svelte';
     import MultiButton, { LabelType } from '$lib/components/global/MultiButton.svelte';
 
+    import RecordRow from '$lib/components/user/RecordRow.svelte'
+
+    import regions from '$lib/data/regions'
+
+    import type { PageData } from './$types'
+
     import * as Icons from "$lib/assets/cube-icons/icons";
+
+    import puzzles from "$lib/data/puzzles"
 
     let resultsEventIndex: number;
 
     let historyIndex: number;
 
-    export let data;
+    export let data: PageData;
+    const regionInfo = regions[data.user.region]
 </script>
 
 <svelte:head>
-    <title>User's name</title>
+    <title>{data.user.name}</title>
 </svelte:head>
 
 <div class="container-grid">
@@ -23,13 +32,13 @@
         <Card width={300} clickable={false}>
             <div style:padding=16px>
                 <div class="section-column">
-                    <h3 style:font-weight=500 class="fsize-title2">User's name</h3>
+                    <h3 style:font-weight=500 class="fsize-title2">{data.user.name}</h3>
 
                     <Badge 
                         size={BadgeSize.Regular} 
                         fg=var(--c-g)
                         bg=var(--c-lgh)
-                        label="User's Region"/>
+                        label={`${regionInfo.name} (${regionInfo.maori_name})`}/>
 
                     <Badge 
                         size={BadgeSize.Regular} 
@@ -41,12 +50,12 @@
                 <div class="card-column" style:margin-top=32px>
                     <div class="section-column">
                         <div class="data-row">
-                            <p style:font-weight=500> XXX </p>
+                            <p style:font-weight=500>{data.meetupsAttended}</p>
                             <p> Meetups Attended </p>
                         </div>
 
                         <div class="data-row">
-                            <p style:font-weight=500> XXX </p>
+                            <p style:font-weight=500>{data.completedSolves}</p>
                             <p> Completed Solves </p>
                         </div>
                     </div>
@@ -64,7 +73,7 @@
                                 <p class="medal-text">1</p>
                             </div>
 
-                            <p style:font-weight=500> XXX </p>
+                            <p style:font-weight=500>{data.medals[0]}</p>
                             <p> Gold Medals </p>
                         </div>
 
@@ -78,7 +87,7 @@
                                 <p class="medal-text">2</p>
                             </div>
 
-                            <p style:font-weight=500> XXX </p>
+                            <p style:font-weight=500>{data.medals[1]}</p>
                             <p> Silver Medals </p>
                         </div>
 
@@ -92,7 +101,7 @@
                                 <p class="medal-text">3</p>
                             </div>
 
-                            <p style:font-weight=500> XXX </p>
+                            <p style:font-weight=500>{data.medals[2]}</p>
                             <p> Bronze Medals </p>
                         </div>
                     </div>
@@ -100,29 +109,26 @@
                     <hr>
 
                     <div class="section-column">
-                        <!-- INFO: RR -->
                         <div class="data-row">
-                            <Badge size={BadgeSize.Small} bg=var(--c-lgreen) fg=var(--c-green) label=RR/>
-
-                            <p style:font-weight=500> XXX </p>
-                            <p> Regional Records </p>
+                            <RecordRow
+                                record={data.records.regional}
+                                name="Regional Records" shortname=RR
+                                bg=var(--c-lgreen) fg=var(--c-green)/>
                         </div>
 
-                        <!-- INFO: IR -->
                         <div class="data-row">
-                            <Badge size={BadgeSize.Small} bg=var(--c-lred) fg=var(--c-red) label=IR/>
-
-                            <p style:font-weight=500> XXX </p>
-                            <p> Island Records </p>
+                            <RecordRow
+                                record={data.records.island}
+                                name="Island Records" shortname=IR
+                                bg=var(--c-lred) fg=var(--c-red)/>
                         </div>
 
 
-                        <!-- INFO: IcR -->
                         <div class="data-row">
-                            <Badge size={BadgeSize.Small} bg=var(--c-lpurple) fg=var(--c-purple) label=IcR/>
-
-                            <p style:font-weight=500> XXX </p>
-                            <p> Interclub Records </p>
+                            <RecordRow
+                                record={{single: "?", average: "?"}}
+                                name="Interclub Records" shortname=IcR
+                                bg=var(--c-lpurple) fg=var(--c-purple)/>
                         </div>
                     </div>
                 </div>
@@ -168,22 +174,25 @@
                 </tr>
 
 
+                {#each Object.entries(data.PRs) as [puzzleType, {single, average}]}
+                {@const puzzle = puzzles[puzzleType]}
                 <tr>
                     <td class="tc-dummy"></td>
 
-                    <td class="tc-event">3x3 Multiple Blindfolded</td>
-                    <td class="tc-rr">14</td>
-                    <td class="tc-ir">17</td>
-                    <td class="tc-icr">22</td>
-                    <td class="tc-result">8.17</td>
+                    <td class="tc-event">{puzzle.name}</td>
+                    <td class="tc-rr">{single.RR}</td>
+                    <td class="tc-ir">{single.IR}</td>
+                    <td class="tc-icr">IcR</td>
+                    <td class="tc-result">{single.time}</td>
 
-                    <td class="tc-result">9.78</td>
-                    <td class="tc-icr">23</td>
-                    <td class="tc-ir">17</td>
-                    <td class="tc-rr">14</td>
+                    <td class="tc-result">{average.time}</td>
+                    <td class="tc-icr">IcR</td>
+                    <td class="tc-ir">{average.IR}</td>
+                    <td class="tc-rr">{average.RR}</td>
 
                     <td class="tc-dummy"></td>
                 </tr>
+                {/each}
 
 
                 <tr class="td-dummy">

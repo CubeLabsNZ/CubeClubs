@@ -19,4 +19,15 @@ const regions: {[key in Region]: {name: string, maori_name?: string}} = {
 	SOUTHLAND: { name: "Southland", maori_name: "Murihiku" },
 }
 
+const regionKeys = Object.keys(regions)
+
+export const northIslandRegions = regionKeys.slice(0,9);
+export const southIslandRegions = regionKeys.slice(9);
+
+// TODO: typescript change string type
+export function islandRegions(region: string) {
+	if (northIslandRegions.indexOf(region) != -1) return northIslandRegions
+	if (southIslandRegions.indexOf(region) != -1) return southIslandRegions
+}
+
 export default regions

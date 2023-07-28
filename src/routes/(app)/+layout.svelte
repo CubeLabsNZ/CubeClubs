@@ -57,7 +57,7 @@
     {#if showDropdown}
         <div id="navbar-dropdown" transition:fade={{ duration: 150 }}>
             <div class="dropdown-inner">
-                <a class="dropdown-link" href="/user/0">My Profile</a>
+                <a class="dropdown-link" href={`/user/${data.user.id}`}>My Profile</a>
                 <a class="dropdown-link" href="/user/edit">Edit Account</a>
             </div>
 
