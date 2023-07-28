@@ -116,12 +116,18 @@ th {
     /* top: 126px; */
 }
 
+/* INFO: add border radius to the inner table */ 
+tr th:first-child { border-top-left-radius: 8px; }
+tr th:last-child { border-top-right-radius: 8px; }
+table tr:last-child td:first-child { border-bottom-left-radius: 8px; }
+table tr:last-child td:last-child { border-bottom-right-radius: 8px; }
+
+
 td:not(:first-child):not(:last-child), th:not(:first-child):not(:last-child) {
     /* = 24px gap total between columns */
     padding-left: 6px;
     padding-right: 6px;
 }
-
 
 td:nth-last-child(2) {
     border-top-right-radius: var(--v-border-radius-small);

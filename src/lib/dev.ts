@@ -1,6 +1,6 @@
 import prisma from "$lib/prisma";
 
-export async function generateData() {
+export async function generateClubs() {
     await prisma.club.createMany({
         data: [
             { name: "Auckland Speedcubing Club" },
