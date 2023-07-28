@@ -3,6 +3,8 @@
     import { page } from "$app/stores";
     import { goto } from "$app/navigation";
 
+    import puzzles from "$lib/data/puzzles";
+
     import PageContent from "$lib/components/global/PageContent.svelte";
     import TabBar from "$lib/components/global/TabBar.svelte";
     import Button, {
@@ -22,7 +24,7 @@
     let tab = $page.url.searchParams.get("tab");
     let tabIndex: number = tab == null ? 0 : tabs.get(tab);
 
-    export let data: PageData; // the slug
+    export let data: PageData;
 
     $: {
         updateQuery(tabIndex);
@@ -81,20 +83,21 @@
         {#if tab === "schedule"}
             <div class="schedule-grid">
                 <!-- TODO: for each scheduled event -->
-                {#each Array(5) as _, i}
+                {#each data.meetup.rounds as round}
+                    {@const puzzle = puzzles[round.puzzle]}
                     <Card height={60}>
                         <div class="schedule-item">
                             <p>IMG</p>
 
                             <div class="schedule-item-title">
                                 <p style:font-weight="600">
-                                    SCHEDULE EVENT TITLE
+                                    {puzzle.name} - Round {round.number}
                                 </p>
                                 <p
                                     style:font-weight="500"
                                     style:color="var(--c-dg1)"
                                 >
-                                    SCHEDULE EVENT TIME
+                                    {round.startDate} - {round.endDate}
                                 </p>
                             </div>
                         </div>

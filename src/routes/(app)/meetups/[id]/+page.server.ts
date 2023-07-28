@@ -27,6 +27,11 @@ export const load = (async ({ params }) => {
                         }
                     }
                 }
+            },
+            rounds: {
+                orderBy: {
+                    startDate: "asc"
+                }
             }
         }
     })
@@ -38,6 +43,16 @@ export const load = (async ({ params }) => {
     // TODO: check admin, and then add button "view public page" in dashboard
     if (!meetup.isPublished) {
         throw error(404, "not found")
+    }
+
+    const roundForPuzzle = {}
+    for (const round of meetup.rounds) {
+        // TODO: find better way
+        if (!roundForPuzzle[round.puzzle]) {
+            roundForPuzzle[round.puzzle] = 1
+        }
+        round.number = roundForPuzzle[round.puzzle]
+        roundForPuzzle[round.puzzle]++
     }
 
     return {
