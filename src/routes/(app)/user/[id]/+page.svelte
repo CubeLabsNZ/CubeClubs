@@ -29,7 +29,7 @@
 
 <div class="container-grid">
     <div class="user-container">
-        <Card width={300} clickable={false}>
+        <Card width={240} clickable={false}>
             <div style:padding=16px>
                 <div class="section-column">
                     <h3 style:font-weight=500 class="fsize-title2">{data.user.name}</h3>
@@ -413,7 +413,7 @@
         margin-right: auto;
 
         margin-top: 126px; /* tab bar + 32px either side */
-        grid-template-columns: 300px 1fr;
+        grid-template-columns: 240px 1fr;
 
         column-gap: 16px;
     }

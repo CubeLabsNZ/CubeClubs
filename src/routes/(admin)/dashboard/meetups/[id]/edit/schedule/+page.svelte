@@ -1,4 +1,10 @@
 <script lang="ts">
+    import { fly, fade } from "svelte/transition";
+
+    import Select from "$lib/components/global/Select.svelte";
+
+    export let data;
+
     import Calendar from "@event-calendar/core";
     import Interaction from "@event-calendar/interaction";
     import TimeGrid from "@event-calendar/time-grid";
@@ -9,27 +15,28 @@
 
     import Card from "$lib/components/global/card/Card.svelte";
 
+    import formats from "$lib/data/formats";
     import puzzles from "$lib/data/puzzles";
     import type { Puzzle } from '@prisma/client'
+    import { onMount } from "svelte";
 
     let events = [];
 
     let plugins = [TimeGrid, Interaction];
 
     let options;
-    let evcal;
-
+    let eventCalendar;
 
 
     let addEventCard;
 
     let displayingUUID: string | null = null
-    
+
     // TODO: figureout figure out key in puzle
     function updateRoundFor(puzzleType: string) {
         let roundNum = 1;
-        for (const event of evcal.getEvents().sort((a,z) => a.start - z.start).filter(x => x.extendedProps.puzzleType == puzzleType)) {
-            evcal.updateEvent({
+        for (const event of eventCalendar.getEvents().sort((a,z) => a.start - z.start).filter(x => x.extendedProps.puzzleType == puzzleType)) {
+            eventCalendar.updateEvent({
                 ...event,
                 title: `${puzzles[event.extendedProps.puzzleType].name} - Round ${roundNum}`,
             })
@@ -44,13 +51,14 @@
         // TODO cancel promise and stuff
         saveFetch = fetch("./schedule/save", {
             method: "POST",
-            body: JSON.stringify(evcal.getEvents()),
+            body: JSON.stringify(eventCalendar.getEvents()),
             headers: {
                 "Content-Type": "application/json"
             }
         }) 
         saveFetch.then((res) => {
-            if (res.ok) { hasUnsavedChanges = false }
+            // if (res.ok) { hasUnsavedChanges = false }
+            hasUnsavedChanges = false;
         })
     }
 
@@ -59,6 +67,7 @@
         options = {
             events: events,
             view: "timeGridDay",
+            date: data.meetup.date,
             allDaySlot: false,
             slotDuration: {
                 seconds: 900
@@ -68,9 +77,11 @@
                 center: "",
                 end: ""
             },
+            titleFormat: {day: 'numeric', month: 'short'},
+            eventClassNames: "testclass",
             select: (info) => {
                 displayingUUID = crypto.randomUUID()
-                evcal.addEvent({
+                eventCalendar.addEvent({
                     id: displayingUUID,
                     start: info.start,
                     end: info.end,
@@ -87,8 +98,8 @@
             unselect: (info) => {
                 const puzzleType = info.jsEvent.target.dataset.puzzleType
                 if (puzzleType) {
-                    const event = evcal.getEventById(displayingUUID)
-                    evcal.updateEvent({
+                    const event = eventCalendar.getEventById(displayingUUID)
+                    eventCalendar.updateEvent({
                         ...event,
                         extendedProps: {
                             puzzleType
@@ -97,7 +108,7 @@
                     updateRoundFor(puzzleType)
                     hasUnsavedChanges = true
                 } else {
-                    evcal.removeEventById(displayingUUID)
+                    eventCalendar.removeEventById(displayingUUID)
                 }
                 addEventCard.style.display = "none";
             },
@@ -111,6 +122,13 @@
     }
 </script>
 
+<svelte:window 
+    on:beforeunload={(e) => {
+        if (hasUnsavedChanges) {
+            e.preventDefault()
+        }
+    }}
+></svelte:window>
 
 <Breadcrumb paths={[
     {name: "Meetups", href: "/dashboard/meetups"},
@@ -118,28 +136,67 @@
     {name: "Edit Schedule", href: `/dashboard/meetups/4/edit-schedule`}
 ]} />
 
-<Calendar bind:this={evcal} {plugins} {options} />
+<Calendar bind:this={eventCalendar} {plugins} {options} />
 
 <div bind:this={addEventCard} class="add-event-card">
-    <Card clickable={false}> 
-        <div>
-            <p class="fsize-body" style:font-weight=500> Add Event </p>
+    <Card width={300} clickable={false}> 
+        <div style:padding=12px>
+            <p class="fsize-title2" style:font-weight=500 style:margin-bottom=32px> Add Event </p>
 
-            {#each Object.entries(puzzles) as [type, {name, icon}]}
             <div class="label-group">
-                <p class="label" data-puzzle-type={type}>{name}</p>
+                <p class="label">Event</p>
+
+                <Select name="event">
+                    <option disabled selected value>Select an event</option>
+
+                    {#each Object.entries(puzzles) as [type, { name }]}
+                        <option value={type}>{name}</option>
+                    {/each}
+                </Select>
             </div>
-            {/each}
+
+
+
+            <div class="label-group" style:padding-top=16px>
+                <p class="label">Format</p>
+
+                <Select name="format">
+                    <option disabled selected value>Select a round format</option>
+
+                    {#each Object.entries(formats) as [type, { name }]}
+                        <option value={type}>{name}</option>
+                    {/each}
+                </Select>
+            </div>
+
+            <div class="label-group" style:padding-top=16px style:padding-bottom=32px>
+                <p class="label"> Number to Proceed </p>
+
+                <input required name="numberProceed" />
+            </div>
+
+            <div style:float=right>
+                <Button>
+                    <div style:display=flex style:align-items=center style:gap=4px>
+                        <span class="material-symbols-outlined" style:margin-left=-4px style:font-size=24px>done</span>
+
+                        <p> Add Event </p>
+                    </div>
+                </Button>
+            </div>
         </div>
     </Card>
 </div>
 
 {#if hasUnsavedChanges}
     <!-- TODO: prevent from leaving page - cant look it up :( -->
-    <div class="snackbar">
+    <div 
+        class="snackbar" 
+        in:fly={{ delay: 50, duration: 250, x: 400}}
+        out:fade={{ duration: 150 }}>
         <p>Unsaved Changes!</p>
         <button on:click={saveChanges}>
-            <Button type={ButtonType.Coloured} size={ButtonSize.Regular}>
+            <Button type={ButtonType.TextOnly} size={ButtonSize.Regular}>
                 Save
             </Button>
         </button>
@@ -151,24 +208,31 @@
 <style>
     .snackbar {
         position: fixed;
-        bottom: 32px;
-        right: 64px;
-        padding: 12px 32px 12px 32px;
-        border-radius: 12px;
+
+        top: 16px;
+        right: 16px;
+        padding-top: 4px;
+        padding-bottom: 4px;
+        padding-left: 12px;
+
+        border-radius: 6px;
 
         display: flex;
         flex-direction: row;
         align-items: center;
         gap: 16px;
 
-        /* TODO: TIM: Style this */
         background-color: white;
-        box-shadow: 0px 4px 16px 0px #292E333D;
+        box-shadow: 0px 1px 6px 0px #10151B29; /* cdg3, 16% */
     }
 
     .add-event-card {
         position: fixed;
         display: none;
         z-index: 999;
+    }
+
+    .testclass {
+        color: green;
     }
 </style>

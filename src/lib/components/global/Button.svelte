@@ -9,7 +9,8 @@
     export enum ButtonType {
         Bordered="bordered",
         Simple="simple",
-        Coloured="coloured"
+        Coloured="coloured",
+        TextOnly="textonly"
     }
 
     export enum ButtonSize {
@@ -61,6 +62,13 @@
         background-color: var(--c-la2);
         color: var(--c-a);
         box-shadow: 0px 1px 4px 0px #0073E61F; /* ca, 12% */
+    }
+
+    /* INFO: no background */
+    .button-textonly {
+        color: var(--c-a);
+        background: none;
+        box-shadow: none;
     }
 
 
