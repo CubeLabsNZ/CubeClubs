@@ -1,12 +1,48 @@
 <script>
     import Button, { ButtonSize, ButtonType } from "$lib/components/global/Button.svelte";
+
+    import ClubCard from "$lib/components/landing/ClubCard.svelte";
+
+    import iconASC from "$lib/assets/club-icons/ICON-ASC.png";
+    import iconCHCH from "$lib/assets/club-icons/ICON-CHCH.png";
+    import iconDUN from "$lib/assets/club-icons/ICON-DUN.png";
+    import iconKAP from "$lib/assets/club-icons/ICON-KAP.png";
+    import iconMAN from "$lib/assets/club-icons/ICON-MAN.png";
+    import iconTAR from "$lib/assets/club-icons/ICON-TAR.png";
+
+
+
+
+    let constrain = 250;
+
+    let perspectiveContainer;
+
+    function perspectiveTransform(x, y, div) {
+        let box = div.getBoundingClientRect();
+        let calcX = -(y - box.y - (box.height / 2)) / constrain;
+        let calcY = (x - box.x - (box.width / 2)) / constrain;
+
+        return `perspective(300px) rotateX(${calcX}deg) rotateY(${calcY}deg)`;
+    }
+
+    let transforms = [];
+    let innerDivs = [];
+
+    let animate = (e) => {
+        window.requestAnimationFrame(() => { 
+            for (let i = 0; i < 6; i++) {
+                let position = [e.clientX, e.clientY].concat([innerDivs[i]]);
+                transforms[i] = perspectiveTransform.apply(null, position);
+            }
+        })
+    }
 </script>
 
 <svelte:head>
     <title>CubeClubs NZ</title>
 </svelte:head>
 
-<div id="landing-main">
+<div id="landing-main" bind:this={perspectiveContainer} on:mousemove={animate} aria-hidden>
     <div id="landing-bg">
         <img id="landing-b-1" src="/landing/blob-blue.webp" alt="">
         <img id="landing-b-2" src="/landing/blob-green.webp" alt="">
@@ -35,7 +71,60 @@
         </a>
     </div>
 
-    <img id="landing-clubs" src="/landing/clubs.webp" alt="">
+    <div id="landing-clubs">
+        <div id="landing-clubs-grid">
+            <ClubCard
+                clubName="Dunedin Speedcubers"
+                clubLocation="Dunedin, Otago"
+                clubLogo={iconDUN}
+                transform={transforms[0]}
+                bind:clubInnerDiv={innerDivs[0]} />
+
+
+            <ClubCard
+                clubName="Manawatū Cubers"
+                clubLocation="Palmerston North, Manawatū"
+                clubLogo={iconMAN}
+                transform={transforms[1]}
+                bind:clubInnerDiv={innerDivs[1]} />
+
+
+            <ClubCard
+                clubName="Auckland Speedcubing Club"
+                clubLocation="Auckland"
+                clubLogo={iconASC}
+                transform={transforms[2]}
+                bind:clubInnerDiv={innerDivs[2]} />
+
+
+            <ClubCard
+                clubName="Taranaki Cubers"
+                clubLocation="New Plymouth, Taranaki"
+                clubLogo={iconTAR}
+                transform={transforms[3]}
+                bind:clubInnerDiv={innerDivs[3]} />
+
+
+            <ClubCard
+                clubName="Christchurch Speedcubers"
+                clubLocation="Christchurch, Canterbury"
+                clubLogo={iconCHCH}
+                transform={transforms[4]}
+                bind:clubInnerDiv={innerDivs[4]} />
+
+
+
+            <ClubCard
+                clubName="Kāpiti Cubers"
+                clubLocation="Kāpiti Coast, Wellington"
+                clubLogo={iconKAP}
+                transform={transforms[5]}
+                bind:clubInnerDiv={innerDivs[5]} />
+
+        </div>
+    </div>
+
+    <!-- <img id="landing-clubs" src="/landing/clubs.webp" alt=""> -->
 
 
     <div class="footer">
@@ -64,6 +153,8 @@
 
 
 <style>
+    /* INFO: old */
+    /*
     #landing-clubs {
         z-index: -1;
         position: fixed;
@@ -73,6 +164,24 @@
         bottom: calc(-0.1 * var(--_clubs-width));
         right: calc(-0.1 * var(--_clubs-width));
         width: var(--_clubs-width);
+    }
+    */
+
+
+    #landing-clubs-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: 1fr 1fr 1fr;
+
+        gap: 48px;
+    }
+
+    #landing-clubs {
+        /* transform: rotateX(31deg) rotateY(-10deg) rotateZ(23deg); */
+        z-index: 2;
+        position: fixed;
+        top: 100px;
+        right: 100px;
     }
 
     #landing-button {
@@ -129,7 +238,11 @@
         margin-left: min(125px, 10vw);
         margin-top: min(250px, 25vh);
 
+        width: fit-content;
+
         z-index: 2;
+
+        grid-area: 1/1;
     }
 
 
@@ -141,6 +254,8 @@
 
         position: fixed;
         z-index: -2;
+
+        grid-area: 1/1;
     }
 
     #landing-b-1,
