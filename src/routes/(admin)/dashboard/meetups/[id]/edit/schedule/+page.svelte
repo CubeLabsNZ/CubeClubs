@@ -3,7 +3,9 @@
 
     import Select from "$lib/components/global/Select.svelte";
 
-    export let data;
+    
+
+    export let data: PageData;
 
     import Calendar from "@event-calendar/core";
     import Interaction from "@event-calendar/interaction";
@@ -65,7 +67,7 @@
     $: {
         // TODO: need to handle resize top when/if it becomes possible
         options = {
-            events: events,
+            events: data.events,
             view: "timeGridDay",
             date: data.meetup.date,
             allDaySlot: false,
