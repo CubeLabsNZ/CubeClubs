@@ -14,13 +14,23 @@ export const load = (async ({ cookies, params }) => {
         where: { id: Number(params.id) },
         select: {
             date: true,
-            rounds: true,
+            rounds: {
+                select: {
+                    endDate: true,
+                    startDate: true,
+                    puzzle: true,
+                    _count: true
+                }
+            }
+        ,
         }
     })
 
     if (!meetup) {
         throw error(404, 'not found')
     }
+
+    console.log(meetup.rounds)
 
     populateRounds(meetup.rounds)
 
@@ -30,8 +40,10 @@ export const load = (async ({ cookies, params }) => {
         end: round.endDate,
         // TODO: deduplicate this - it's in the client too
         title: `${puzzles[round.puzzle].name} - Round ${round.number}`,
+        enditable: round._count.results == 0, // Only editable if no results
         extendedProps: {
-            puzzleType: round.puzzle
+            puzzleType: round.puzzle,
+            server: true,
         }
     }))
 
