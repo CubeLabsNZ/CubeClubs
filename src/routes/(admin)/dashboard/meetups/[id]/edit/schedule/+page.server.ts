@@ -14,6 +14,8 @@ export const load = (async ({ cookies, params }) => {
         where: { id: Number(params.id) },
         select: {
             date: true,
+            name: true,
+            id: true,
             rounds: {
                 select: {
                     endDate: true,
@@ -29,8 +31,6 @@ export const load = (async ({ cookies, params }) => {
     if (!meetup) {
         throw error(404, 'not found')
     }
-
-    console.log(meetup.rounds)
 
     populateRounds(meetup.rounds)
 

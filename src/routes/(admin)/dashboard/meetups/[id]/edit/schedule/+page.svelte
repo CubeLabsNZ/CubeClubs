@@ -97,22 +97,16 @@
                 addEventCard.style.top = `${info.jsEvent.clientY}px`;
                 addEventCard.style.left = `${info.jsEvent.clientX}px`;
             },
+            unselectAuto: false,
             unselect: (info) => {
-                const puzzleType = info.jsEvent.target.dataset.puzzleType
-                if (puzzleType) {
-                    const event = eventCalendar.getEventById(displayingUUID)
-                    eventCalendar.updateEvent({
-                        ...event,
-                        extendedProps: {
-                            puzzleType
-                        }
-                    })
-                    updateRoundFor(puzzleType)
-                    hasUnsavedChanges = true
+                console.log("unseleect")
+                if (addEventCard.contains(info.jsEvent.target)) {
+                    return false // Keep editing
                 } else {
+                    // Cancel
                     eventCalendar.removeEventById(displayingUUID)
+                    addEventCard.style.display = "none";
                 }
-                addEventCard.style.display = "none";
             },
             eventDrop: (info) => {
                 // Update all round numbers
@@ -134,8 +128,8 @@
 
 <Breadcrumb paths={[
     {name: "Meetups", href: "/dashboard/meetups"},
-    {name: "Meetup Name", href: `/dashboard/meetups/4/`},
-    {name: "Edit Schedule", href: `/dashboard/meetups/4/edit-schedule`}
+    {name: data.meetup.name, href: `/dashboard/meetups/${data.meetup.id}/`},
+    {name: "Edit Schedule", href: `/dashboard/meetups/${data.meetup.id}/edit/schedule`}
 ]} />
 
 <Calendar bind:this={eventCalendar} {plugins} {options} />
@@ -177,7 +171,15 @@
                 <input required name="numberProceed" />
             </div>
 
-            <div style:float=right>
+                <!-- TODO: justify-items ? ? -->
+            <div style:display=flex style:gap=8px justify-items=end>
+                <Button>
+                    <div style:display=flex style:align-items=center style:gap=4px>
+                        <span class="material-symbols-outlined" style:margin-left=-4px style:font-size=24px>cancel</span>
+
+                        <p>Cancel</p>
+                    </div>
+                </Button>
                 <Button>
                     <div style:display=flex style:align-items=center style:gap=4px>
                         <span class="material-symbols-outlined" style:margin-left=-4px style:font-size=24px>done</span>
@@ -191,7 +193,6 @@
 </div>
 
 {#if hasUnsavedChanges}
-    <!-- TODO: prevent from leaving page - cant look it up :( -->
     <div 
         class="snackbar" 
         in:fly={{ delay: 50, duration: 250, x: 400}}
