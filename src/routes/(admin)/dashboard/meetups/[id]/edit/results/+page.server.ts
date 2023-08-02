@@ -53,7 +53,7 @@ export const actions = {
         const solves = [0,1,2,3,4].map((x) => Number(data.get(`solve-${x}`)))
 
         if (isNaN(eventId) || isNaN(competitorId) || solves.includes(NaN)) {
-            throw fail(400)
+            return fail(400)
         }
 
         const meetup = await prisma.round.update({
