@@ -171,8 +171,7 @@
                 <input required name="numberProceed" />
             </div>
 
-                <!-- TODO: justify-items ? ? -->
-            <div style:display=flex style:gap=8px justify-items=end>
+            <div style:display=flex style:gap=8px style:justify-content=flex-end>
                 <Button>
                     <div style:display=flex style:align-items=center style:gap=4px>
                         <span class="material-symbols-outlined" style:margin-left=-4px style:font-size=24px>cancel</span>
@@ -180,6 +179,7 @@
                         <p>Cancel</p>
                     </div>
                 </Button>
+
                 <Button>
                     <div style:display=flex style:align-items=center style:gap=4px>
                         <span class="material-symbols-outlined" style:margin-left=-4px style:font-size=24px>done</span>
@@ -233,9 +233,5 @@
         position: fixed;
         display: none;
         z-index: 999;
-    }
-
-    .testclass {
-        color: green;
     }
 </style>
