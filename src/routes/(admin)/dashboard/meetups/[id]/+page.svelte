@@ -77,6 +77,13 @@
             Edit Schedule
         </Button>
     </a>
+
+
+    <a href={$page.url + "/edit/users"}>
+        <Button>
+            Edit Competitors
+        </Button>
+    </a>
     
 
     <hr>
