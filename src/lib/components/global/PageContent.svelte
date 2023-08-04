@@ -22,4 +22,12 @@
 
         width: 1000px;
     }
+
+    @media(max-width: 1040px) {
+        .content {
+            margin-left: 20px;
+            margin-right: 20px;
+            width: calc(100% - 40px);
+        }
+    }
 </style>

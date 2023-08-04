@@ -94,76 +94,77 @@
                 <h3 class="fsize-title2">{name}</h3>
             </div>
 
+            <div style:overflow-x=auto>
+                <table>
+                    <!-- NOTE: tc-dummy is entirely invisible to provide padding to either side of the table -->
+                    <tr>
+                        <th class="tc-dummy"></th>
 
-            <table>
-                <!-- NOTE: tc-dummy is entirely invisible to provide padding to either side of the table -->
-                <tr>
-                    <th class="tc-dummy"></th>
+                        <th class="tc-type">Format</th>
+                        <th class="tc-name">Name</th>
+                        <th class="tc-result">Average</th>
+                        <th class="tc-region">Region</th>
+                        <th class="tc-meetup">Meetup</th>
+                        <th class="tc-solves">Solves</th>
 
-                    <th class="tc-type">Format</th>
-                    <th class="tc-name">Name</th>
-                    <th class="tc-result">Average</th>
-                    <th class="tc-region">Region</th>
-                    <th class="tc-meetup">Meetup</th>
-                    <th class="tc-solves">Solves</th>
+                        <th class="tc-dummy"></th>
+                    </tr>
 
-                    <th class="tc-dummy"></th>
-                </tr>
+                    <!-- NOTE: td-dummy is entirely invisible to provide padding to the top and bottom of the table -->
+                    <tr class="td-dummy">
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
 
-                <!-- NOTE: td-dummy is entirely invisible to provide padding to the top and bottom of the table -->
-                <tr class="td-dummy">
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                </tr>
+                    <!-- INFO: single -->
+                    <tr>
+                        <td class="tc-dummy"></td>
 
-                <!-- INFO: single -->
-                <tr>
-                    <td class="tc-dummy"></td>
+                        <td class="tc-type">Single</td>
+                        <td class="tc-name">{results[0].name}</td>
+                        <td class="tc-result">{results[0].result}</td>
+                        <td class="tc-region">{results[0].region}</td>
+                        <td class="tc-meetup">{results[0].meetupName}</td>
+                        <td class="tc-solves">{results[0].data}</td>
 
-                    <td class="tc-type">Single</td>
-                    <td class="tc-name">{results[0].name}</td>
-                    <td class="tc-result">{results[0].result}</td>
-                    <td class="tc-region">{results[0].region}</td>
-                    <td class="tc-meetup">{results[0].meetupName}</td>
-                    <td class="tc-solves">{results[0].data}</td>
-
-                    <td class="tc-dummy"></td>
-                </tr>
-
-
-                <!-- INFO: average-->
-                <tr>
-                    <td class="tc-dummy"></td>
-
-                    <td class="tc-type">Average</td>
-                    <td class="tc-name">{results[1].name}</td>
-                    <td class="tc-result">{results[1].result}</td>
-                    <td class="tc-region">{results[1].region}</td>
-                    <td class="tc-meetup">{results[1].meetupName}</td>
-                    <td class="tc-solves">{results[1].data}</td>
-
-                    <td class="tc-dummy"></td>
-                </tr>
+                        <td class="tc-dummy"></td>
+                    </tr>
 
 
+                    <!-- INFO: average-->
+                    <tr>
+                        <td class="tc-dummy"></td>
 
-                <tr class="td-dummy">
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                </tr>
-            </table>
+                        <td class="tc-type">Average</td>
+                        <td class="tc-name">{results[1].name}</td>
+                        <td class="tc-result">{results[1].result}</td>
+                        <td class="tc-region">{results[1].region}</td>
+                        <td class="tc-meetup">{results[1].meetupName}</td>
+                        <td class="tc-solves">{results[1].data}</td>
+
+                        <td class="tc-dummy"></td>
+                    </tr>
+
+
+
+                    <tr class="td-dummy">
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </table>
+            </div>
         {/each}
     {:else}
         {#each Object.entries(puzzles) as [puzzle, { name, icon }], i}
@@ -266,7 +267,7 @@
     }
 
     .tc-name {
-        min-width: 200px;
+        min-width: 150px;
     }
 
     .tc-result, .tc-name {

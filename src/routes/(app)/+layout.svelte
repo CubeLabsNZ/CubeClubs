@@ -113,6 +113,8 @@
 
 
 <style> 
+    /* TODO: organise these styles */
+
     .image-link {
         transition: filter var(--v-animation-delay) ease-in-out;
 
@@ -199,9 +201,9 @@
 
     @media(max-width: 550px) {
         #navbar {
-            width: calc(100% - 32px);
-            margin-left: 16px;
-            margin-right: 16px;
+            width: calc(100% - 40px);
+            margin-left: 20px;
+            margin-right: 20px;
             gap: 64px;
         }
 
@@ -278,7 +280,7 @@
         border-radius: 12px;
 
         box-shadow: 0px 4px 16px 0px #292E333D;
-        width: calc(100% - 32px);
+        width: calc(100% - 40px);
 
         display: flex;
         flex-direction: column;
@@ -291,7 +293,7 @@
 
         position: fixed;
         top: 70px;
-        left: 16px;
+        left: 20px;
 
         z-index: 20;
 

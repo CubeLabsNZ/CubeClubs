@@ -95,6 +95,12 @@ table * {
     font-size: 14px;
 }
 
+@media(max-width: 1040px) {
+    table {
+        width: 100%;
+    }
+}
+
 tr {
     height: 30px;
 }
@@ -112,6 +118,11 @@ th {
     /* TODO: add sticky header, tried but cannot think of a good method with the floating tab bar - maybe hide tab bar? do not have it always in top position? */
     /* position: sticky; */
     /* top: 126px; */
+}
+
+td {
+    white-space: nowrap;
+    min-width: max-content;
 }
 
 /* INFO: add border radius to the inner table */ 
@@ -144,7 +155,7 @@ td:nth-child(2) {
 }
 
 .tc-dummy {
-    width: 8px;
+    min-width: 6px;
     background-color: white;
 }
 
