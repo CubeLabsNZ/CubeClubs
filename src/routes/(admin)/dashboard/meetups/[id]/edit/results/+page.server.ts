@@ -34,7 +34,6 @@ export const load = (async ({ params, cookies }) => {
 
     populateRounds(meetup.rounds)
 
-    console.log(meetup);
     // TODO: live resuts needs round
     return {
         meetup

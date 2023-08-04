@@ -7,6 +7,8 @@
     import type { PageData } from './$types';
 
     export let data: PageData;
+
+    let externalRegistration = false;
 </script>
 
 
@@ -19,12 +21,12 @@
 
 <Form name="Create meetup">
     <div class="form-inner">
-        <label class="form-label">
+        <label class="form-label regular">
             Meetup Name
             <input required name="name" />
         </label>
 
-        <label class="form-label">
+        <label class="form-label regular">
             Host Club
 
             <Select name="clubId">
@@ -37,12 +39,17 @@
         </label>
 
         <label class="form-label">
+            Date
+            <input required name="date" type="date" />
+        </label>
+
+        <label class="form-label">
             Venue Name
             <input required name="venue" />
         </label>
 
         <!-- TODO: autocomplete here would be cool -->
-        <label class="form-label">
+        <label class="form-label regular">
             Location
             <input required name="location" />
         </label>
@@ -53,20 +60,37 @@
             <input required name="organisers" />
         </label>
 
-        <label class="form-label">
+        <label class="form-label regular">
             Contact Details
             <input required name="contact" />
         </label>
 
-        <label class="form-label">
+        <label class="form-label regular">
             Competitor Limit
             <input required name="competitorLimit" type="number"/>
         </label>
 
+
         <label class="form-label">
-            Date
-            <input required name="date" type="date" />
+            Registration Handling
+
+            <Select name="usingExternalRegistration" bind:value={externalRegistration}>
+                <option selected value={false}>Internal Registration</option>
+                <option value={true}>External Registration</option>
+            </Select>
         </label>
+
+        {#if externalRegistration}
+            <label class="form-label semiwide">
+                External Registration Link
+
+                <input required name="externalRegistrationLink" />
+            </label>
+
+
+            <p class="wide" style:color=var(--c-red)> Warning: you must provide your own registration link AND you are responsible for manually entering all competitors into a meetup including their events. </p>
+        {/if}
+
 
         <label class="form-label wide">
             Description
@@ -83,11 +107,19 @@
 <style>
     .form-inner {
         display: grid;
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: 1fr 1fr 1fr 1fr;
         gap: 16px 32px;
     }
 
+    .regular {
+        grid-column: span 2;
+    }
+
     .wide {
-        grid-column: 1 / span 2;
+        grid-column: 1 / span 4;
+    }
+
+    .semiwide {
+        grid-column: span 3;
     }
 </style>

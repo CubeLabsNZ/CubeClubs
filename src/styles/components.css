@@ -157,11 +157,13 @@ td:nth-child(2) {
 }
 
 
+
 .td-dummy {
     height: 8px;
     background-color: white;
 }
 
+/* TODO: table widths can't be set? max-width doesn't work either....  */
 .tc-dummy {
     min-width: 6px;
     background-color: white;

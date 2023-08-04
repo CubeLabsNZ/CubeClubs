@@ -1,4 +1,6 @@
-import prisma from '$lib/prisma';
+// WARN: currently disabled as register feature not anticipated...
+
+/* import prisma from '$lib/prisma';
 import { error } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 import { getUserSessionOrThrow } from '$lib/utilsServer';
@@ -35,4 +37,4 @@ export const load = (async ({ params, cookies }) => {
     return {
         
     }
-}) satisfies PageServerLoad
+}) satisfies PageServerLoad */

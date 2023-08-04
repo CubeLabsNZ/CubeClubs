@@ -60,6 +60,8 @@ model Meetup {
   contact         String
   competitorLimit Int
 
+  externalRegistrationLink String?
+
   date DateTime @db.Date
 
   isPublished Boolean @default(false)

@@ -21,8 +21,12 @@ export const actions = {
             contact: data.get("contact") as string,
             competitorLimit: Number(data.get("competitorLimit")),
             description: data.get("description") as string,
-            date: new Date(data.get("date") as string)
+            date: new Date(data.get("date") as string),
+
+            externalRegistrationLink: data.get("usingExternalRegistration") ? data.get("externalRegistrationLink") : null
         }
+
+        console.log(meetup);
 
         // TODO: validate that every organizer really is an organizer
         // should be fine cause only trusted people can access this endpoint
@@ -33,7 +37,6 @@ export const actions = {
         // TODO: figure out how to display a success message like GH - it's in the form actions docs.
         // Cannot figure out without wifi :(
         throw redirect(303, `/dashboard/meetups/${createdMeetup.id}`)
-
     }
 } satisfies Actions;
 
