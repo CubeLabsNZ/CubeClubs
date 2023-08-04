@@ -3,7 +3,7 @@
     import { page } from "$app/stores";
     import { goto } from "$app/navigation";
 
-    import regions from "$lib/data/regions";
+    import regions, { regionToString } from "$lib/data/regions";
     import puzzles from "$lib/data/puzzles";
 
     import { Region } from "@prisma/client";
@@ -12,6 +12,9 @@
     import PageContent from "$lib/components/global/PageContent.svelte";
 
     import MultiButton, { LabelType } from "$lib/components/global/MultiButton.svelte";
+
+
+    import type { PageData } from "./$types"
 
 
     let regionSelected: string, displayType: number;
@@ -47,11 +50,7 @@
         data: any;
     }
 
-    let results: Result[] = [
-        { name: "John Doe", result: 1.67, region: Region.AUCKLAND, meetupName: "ASC Meetup April 2023", data: "" },
-        { name: "Joe Bloggs", result: 1.78, region: Region.OTAGO, meetupName: "Christchurch Meetups", data: "1.54, 1.64, 1.45, 1.90, 1.24" }
-    ];
-
+    export let data: PageData
 </script>
 
 
@@ -70,8 +69,8 @@
 
             <Select name="region" bind:value={regionSelected}>
                 <option selected value>All Regions</option>
-                {#each Object.entries(regions) as [value, {name, maori_name}] }
-                    <option value={value}>{name} {maori_name !== undefined ? `(${maori_name})` : ""}</option>
+                {#each Object.keys(regions) as value }
+                    <option value={value}>{regionToString(value)}</option>
                 {/each}
             </Select>
         </div>
@@ -88,6 +87,8 @@
 
     {#if displayType == 0} <!-- current -->
         {#each Object.entries(puzzles) as [puzzle, { name, icon }], i}
+            {@const single = data.records[puzzle]?.single}
+            {@const average = data.records[puzzle]?.average}
             <div class={"group-label group-label-" + i}>
                 <img src={icon} alt="">
 
@@ -121,35 +122,40 @@
                     <td></td>
                     <td></td>
                 </tr>
+                {@debug data}
 
                 <!-- INFO: single -->
-                <tr>
-                    <td class="tc-dummy"></td>
+                {#if single}
+                    <tr>
+                        <td class="tc-dummy"></td>
 
-                    <td class="tc-type">Single</td>
-                    <td class="tc-name">{results[0].name}</td>
-                    <td class="tc-result">{results[0].result}</td>
-                    <td class="tc-region">{results[0].region}</td>
-                    <td class="tc-meetup">{results[0].meetupName}</td>
-                    <td class="tc-solves">{results[0].data}</td>
+                        <td class="tc-type">Single</td>
+                        <td class="tc-name"><a href={`/user/${single.result.user.id}`}>{single.result.user.name}</a></td>
+                        <td class="tc-result">{single.time}</td>
+                        <td class="tc-region">{regionToString(single.result.user.region)}</td>
+                        <td class="tc-meetup"><a href={`/meetups/${single.result.round.meetup.id}`}>{single.result.round.meetup.name}</a></td>
+                        <td class="tc-solves"></td>
 
-                    <td class="tc-dummy"></td>
-                </tr>
+                        <td class="tc-dummy"></td>
+                    </tr>
+                {/if}
 
 
                 <!-- INFO: average-->
+                {#if average}
                 <tr>
                     <td class="tc-dummy"></td>
 
                     <td class="tc-type">Average</td>
-                    <td class="tc-name">{results[1].name}</td>
-                    <td class="tc-result">{results[1].result}</td>
-                    <td class="tc-region">{results[1].region}</td>
-                    <td class="tc-meetup">{results[1].meetupName}</td>
-                    <td class="tc-solves">{results[1].data}</td>
+                    <td class="tc-name"><a href={`/user/${average.user.id}`}>{average.user.name}</a></td>
+                    <td class="tc-result">{average.average}</td>
+                    <td class="tc-region">{regionToString(average.user.region)}</td>
+                    <td class="tc-meetup"><a href={`/meetups/${average.round.meetup.id}`}>{average.round.meetup.name}</a></td>
+                    <td class="tc-solves">{average.solves.map(s => s.time).join(', ')}</td>
 
                     <td class="tc-dummy"></td>
                 </tr>
+                {/if}
 
 
 
@@ -273,8 +279,8 @@
         font-weight: 500;
     }
 
-    tr:not(:first-child) .tc-name,
-    tr:not(:first-child) .tc-meetup {
+    tr:not(:first-child) .tc-name > a,
+    tr:not(:first-child) .tc-meetup > a {
         color: var(--c-a);
     }
 
