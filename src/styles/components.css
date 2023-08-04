@@ -89,6 +89,8 @@ table {
     background-color: white;
 
     border-spacing: 0;
+
+    overflow-x: scroll;
 }
 
 table * {
@@ -98,6 +100,12 @@ table * {
 @media(max-width: 1040px) {
     table {
         width: 100%;
+    }
+}
+
+@media(max-width: 550px) {
+    table {
+        display: block;
     }
 }
 

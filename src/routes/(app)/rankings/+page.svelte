@@ -134,7 +134,7 @@
         <div class="label-group">
             <p class="label">Event</p>
 
-            <MultiButton bind:selectedIndex={eventIndex} padding={4} labels={[
+            <MultiButton bind:selectedIndex={eventIndex} padding={4} fixedHeight={false} labels={[
                 {type: LabelType.Image, data: Icons.Icon3},
                 {type: LabelType.Image, data: Icons.Icon2},
                 {type: LabelType.Image, data: Icons.Icon4},
@@ -214,6 +214,7 @@
             <td></td>
         </tr>
     </table>
+
     
 </PageContent>
 
