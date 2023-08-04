@@ -14,7 +14,7 @@
 
     import Card from "$lib/components/global/card/Card.svelte";
     import type { PageData } from "./$types";
-    import regions from "$lib/data/regions";
+    import {regionToString} from "$lib/data/regions";
 
     let tabs = new Map();
     tabs.set("info", 0);
@@ -59,7 +59,7 @@
 </script>
 
 <svelte:head>
-    <title>meetuip name</title>
+    <title>{data.meetup.name}</title>
 </svelte:head>
 
 <PageContent heading={data.meetup.name} subheading={data.meetup.club.name}>
@@ -138,15 +138,12 @@
 
 
                 {#each data.meetup.users as { user }}
-                    {@const {name, maori_name} = regions[user.region]}
                     <tr>
                         <td class="tc-dummy" />
-
                         <td class="tc-name">
                             <a href="/user/{user.id}"> {user.name} </a>
                         </td>
-
-                        <td class="tc-region">{maori_name} ({name})</td>
+                        <td class="tc-region">{regionToString(user.region)}</td>
 
 
                         <!-- TODO: only show checkmark if user has registeed  -->

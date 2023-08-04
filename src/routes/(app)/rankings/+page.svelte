@@ -3,7 +3,7 @@
     import { page } from "$app/stores";
     import { goto } from "$app/navigation";
 
-    import regions from "$lib/data/regions";
+    import regions, {regionToString} from "$lib/data/regions";
 
     import { Region } from "@prisma/client";
 
@@ -123,8 +123,8 @@
             
             <Select name="region" bind:value={regionSelected}>
                 <option selected value>All Regions</option>
-                {#each Object.entries(regions) as [value, {name, maori_name}] }
-                    <option value={value}>{name} {maori_name !== undefined ? `(${maori_name})` : ""}</option>
+                {#each Object.keys(regions) as value }
+                    <option value={value}>{regionToString(value)}</option>
                 {/each}
             </Select>
         </div>

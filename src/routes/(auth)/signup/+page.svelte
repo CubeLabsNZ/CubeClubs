@@ -1,6 +1,6 @@
 <script lang="ts">
     import type { ActionData } from "./$types";
-    import regions from "$lib/data/regions"
+    import regions, {regionToString} from "$lib/data/regions"
 
     import Select from "$lib/components/global/Select.svelte";
     import AuthCard from "$lib/components/auth/AuthCard.svelte";
@@ -52,8 +52,8 @@
 
             <Select name="region" value={form?.region}>
                 <option disabled selected value>Select a Region</option>
-                {#each Object.entries(regions) as [value, {name, maori_name}] }
-                    <option value={value}>{name} {maori_name !== undefined ? `(${maori_name})` : ""}</option>
+                {#each Object.keys(regions) as value }
+                    <option value={value}>{regionToString(value)}</option>
                 {/each}
             </Select>
 

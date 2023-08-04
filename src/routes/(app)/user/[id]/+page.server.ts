@@ -125,7 +125,10 @@ export const load = (async ({ params }) => {
 
         const average = await prisma.result.findFirst({
             where: {
-                userId: user.id
+                userId: user.id,
+                round: {
+                    puzzle: key
+                }
             },
             orderBy: {
                 average: 'asc'

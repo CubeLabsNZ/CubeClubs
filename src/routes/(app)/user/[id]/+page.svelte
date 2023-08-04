@@ -7,7 +7,7 @@
 
     import RecordRow from '$lib/components/user/RecordRow.svelte'
 
-    import regions from '$lib/data/regions'
+    import {regionToString} from '$lib/data/regions'
 
     import type { PageData } from './$types'
 
@@ -20,9 +20,6 @@
     let historyIndex: number;
 
     export let data: PageData;
-    const regionInfo = regions[data.user.region]
-
-
     let innerWidth;
 </script>
 
@@ -38,13 +35,12 @@
             <div style:padding=16px>
                 <div class="section-column">
                     <h3 style:font-weight=500 class="fsize-title2">{data.user.name}</h3>
-
                     <div class="section-row">
                         <Badge 
                             size={BadgeSize.Regular} 
                             fg=var(--c-g)
                             bg=var(--c-lgh)
-                            label={`${regionInfo.name} (${regionInfo.maori_name})`}/>
+                            label={regionToString(data.user.region)}/>
 
                         <Badge 
                             size={BadgeSize.Regular} 
