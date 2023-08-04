@@ -89,10 +89,24 @@ table {
     background-color: white;
 
     border-spacing: 0;
+
+    overflow-x: scroll;
 }
 
 table * {
     font-size: 14px;
+}
+
+@media(max-width: 1040px) {
+    table {
+        width: 100%;
+    }
+}
+
+@media(max-width: 550px) {
+    table {
+        display: block;
+    }
 }
 
 tr {
@@ -112,6 +126,11 @@ th {
     /* TODO: add sticky header, tried but cannot think of a good method with the floating tab bar - maybe hide tab bar? do not have it always in top position? */
     /* position: sticky; */
     /* top: 126px; */
+}
+
+td {
+    white-space: nowrap;
+    min-width: max-content;
 }
 
 /* INFO: add border radius to the inner table */ 
@@ -138,13 +157,15 @@ td:nth-child(2) {
 }
 
 
+
 .td-dummy {
     height: 8px;
     background-color: white;
 }
 
+/* TODO: table widths can't be set? max-width doesn't work either....  */
 .tc-dummy {
-    width: 8px;
+    min-width: 6px;
     background-color: white;
 }
 

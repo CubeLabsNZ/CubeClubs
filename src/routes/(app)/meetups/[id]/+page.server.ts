@@ -48,7 +48,11 @@ export const load = (async ({ params }) => {
 
     populateRounds(meetup.rounds)
 
+    const puzzles = [... new Set(meetup.rounds.map(round => round.puzzle))];
+
     return {
-        meetup
+        meetup,
+        puzzles
     }
+
 }) satisfies PageServerLoad

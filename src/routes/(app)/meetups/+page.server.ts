@@ -41,7 +41,7 @@ export const load = (async () => {
        if (meetup.date < new Date()) {
            pastMeetups.push(meetup)
        } else {
-           ongoingMeetups.push(meetup)
+           upcomingMeetups.push(meetup)
        }
    }
 

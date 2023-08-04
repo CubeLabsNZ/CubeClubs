@@ -95,21 +95,33 @@
                 <h3 class="fsize-title2">{name}</h3>
             </div>
 
+            <div style:overflow-x=auto>
+                <table>
+                    <!-- NOTE: tc-dummy is entirely invisible to provide padding to either side of the table -->
+                    <tr>
+                        <th class="tc-dummy"></th>
 
-            <table>
-                <!-- NOTE: tc-dummy is entirely invisible to provide padding to either side of the table -->
-                <tr>
-                    <th class="tc-dummy"></th>
+                        <th class="tc-type">Format</th>
+                        <th class="tc-name">Name</th>
+                        <th class="tc-result">Average</th>
+                        <th class="tc-region">Region</th>
+                        <th class="tc-meetup">Meetup</th>
+                        <th class="tc-solves">Solves</th>
 
-                    <th class="tc-type">Format</th>
-                    <th class="tc-name">Name</th>
-                    <th class="tc-result">Average</th>
-                    <th class="tc-region">Region</th>
-                    <th class="tc-meetup">Meetup</th>
-                    <th class="tc-solves">Solves</th>
+                        <th class="tc-dummy"></th>
+                    </tr>
 
-                    <th class="tc-dummy"></th>
-                </tr>
+                    <!-- NOTE: td-dummy is entirely invisible to provide padding to the top and bottom of the table -->
+                    <tr class="td-dummy">
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
 
                 <!-- NOTE: td-dummy is entirely invisible to provide padding to the top and bottom of the table -->
                 <tr class="td-dummy">
@@ -159,17 +171,18 @@
 
 
 
-                <tr class="td-dummy">
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                </tr>
-            </table>
+                    <tr class="td-dummy">
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </table>
+            </div>
         {/each}
     {:else}
         {#each Object.entries(puzzles) as [puzzle, { name, icon }], i}
@@ -272,7 +285,7 @@
     }
 
     .tc-name {
-        min-width: 200px;
+        min-width: 150px;
     }
 
     .tc-result, .tc-name {

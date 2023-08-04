@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { fly, fade } from "svelte/transition";
+    import Snackbar from "$lib/components/global/Snackbar.svelte";
 
     import Select from "$lib/components/global/Select.svelte";
 
@@ -171,8 +171,7 @@
                 <input required name="numberProceed" />
             </div>
 
-                <!-- TODO: justify-items ? ? -->
-            <div style:display=flex style:gap=8px justify-items=end>
+            <div style:display=flex style:gap=8px style:justify-content=flex-end>
                 <Button>
                     <div style:display=flex style:align-items=center style:gap=4px>
                         <span class="material-symbols-outlined" style:margin-left=-4px style:font-size=24px>cancel</span>
@@ -180,6 +179,7 @@
                         <p>Cancel</p>
                     </div>
                 </Button>
+
                 <Button>
                     <div style:display=flex style:align-items=center style:gap=4px>
                         <span class="material-symbols-outlined" style:margin-left=-4px style:font-size=24px>done</span>
@@ -193,49 +193,22 @@
 </div>
 
 {#if hasUnsavedChanges}
-    <div 
-        class="snackbar" 
-        in:fly={{ delay: 50, duration: 250, x: 400}}
-        out:fade={{ duration: 150 }}>
+    <Snackbar> 
         <p>Unsaved Changes!</p>
         <button on:click={saveChanges}>
             <Button type={ButtonType.TextOnly} size={ButtonSize.Regular}>
                 Save
             </Button>
         </button>
-    </div>
+    </Snackbar>
 {/if}
 
 
 
 <style>
-    .snackbar {
-        position: fixed;
-
-        top: 16px;
-        right: 16px;
-        padding-top: 4px;
-        padding-bottom: 4px;
-        padding-left: 12px;
-
-        border-radius: 6px;
-
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        gap: 16px;
-
-        background-color: white;
-        box-shadow: 0px 1px 6px 0px #10151B29; /* cdg3, 16% */
-    }
-
     .add-event-card {
         position: fixed;
         display: none;
         z-index: 999;
-    }
-
-    .testclass {
-        color: green;
     }
 </style>

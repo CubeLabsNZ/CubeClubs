@@ -33,7 +33,7 @@
         {#if data.upcomingMeetups.length > 0}
             <div class="meetup-list">
                 {#each data.upcomingMeetups as meetup}
-                    <MeetupBar meetup={meetup} href={`/meetups/${meetup.id}`}/>
+                    <MeetupBar meetup={meetup} current href={`/meetups/${meetup.id}`}/>
                 {/each}
             </div>
         {:else}

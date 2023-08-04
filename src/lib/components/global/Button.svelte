@@ -73,7 +73,7 @@
 
 
     /* INFO: hover states */
-    .button-regular:hover {
+    .button-simple:hover {
         background-color: var(--c-lg1);
     }
 

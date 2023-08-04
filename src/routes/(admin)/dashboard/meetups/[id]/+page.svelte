@@ -1,4 +1,5 @@
 <script lang="ts">
+    import Snackbar from "$lib/components/global/Snackbar.svelte";
     import Button from "$lib/components/global/Button.svelte";
     import type { PageData } from "./$types"
 
@@ -11,7 +12,10 @@
     let isPublished = data.meetup.isPublished
     let meetupFetch: Promise<Response> | undefined
 
+    let showPublishMessage = false;
+
     function togglePublish() {
+        showPublishMessage = true;
         // TODO: check relative path if it's ok later on/in prod
         const action = isPublished? "unpublish" : "publish";
         meetupFetch = fetch(`./${data.meetup.id}/edit/${action}`, {
@@ -23,8 +27,9 @@
                 isPublished = !isPublished
             }
         })
-    }
 
+        setTimeout(() => { showPublishMessage = false }, 5000);
+    }
 </script>
 
 <Breadcrumb paths={[
@@ -70,6 +75,13 @@
     <a href={$page.url + "/edit/schedule"}>
         <Button>
             Edit Schedule
+        </Button>
+    </a>
+
+
+    <a href={$page.url + "/edit/users"}>
+        <Button>
+            Edit Competitors
         </Button>
     </a>
     
@@ -135,6 +147,11 @@
 
 <h3 class="fsize-title2" style:font-weight=500 style:margin-top=48px style:margin-bottom=16px>Schedule</h3>
 
+{#if showPublishMessage}
+    <Snackbar> 
+        <p style:font-weight=500> {isPublished ? "Published!" : "Reverted to Draft"} </p>
+    </Snackbar>
+{/if}
 
 <style>
     hr {

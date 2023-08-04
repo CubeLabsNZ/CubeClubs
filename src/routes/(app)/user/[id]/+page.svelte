@@ -20,7 +20,10 @@
     let historyIndex: number;
 
     export let data: PageData;
+    let innerWidth;
 </script>
+
+<svelte:window bind:innerWidth/>
 
 <svelte:head>
     <title>{data.user.name}</title>
@@ -28,22 +31,24 @@
 
 <div class="container-grid">
     <div class="user-container">
-        <Card width={240} clickable={false}>
+        <Card width={innerWidth > 700 ? 240 : null} clickable={false}>
             <div style:padding=16px>
                 <div class="section-column">
                     <h3 style:font-weight=500 class="fsize-title2">{data.user.name}</h3>
+                    <div class="section-row">
+                        <Badge 
+                            size={BadgeSize.Regular} 
+                            fg=var(--c-g)
+                            bg=var(--c-lgh)
+                            label={regionToString(data.user.region)}/>
 
-                    <Badge 
-                        size={BadgeSize.Regular} 
-                        fg=var(--c-g)
-                        bg=var(--c-lgh)
-                        label={regionToString(data.user.region)}/>
+                        <Badge 
+                            size={BadgeSize.Regular} 
+                            fg=var(--c-a)
+                            bg=var(--c-la1)
+                            label="ASC Club Organiser"/>
 
-                    <Badge 
-                        size={BadgeSize.Regular} 
-                        fg=var(--c-a)
-                        bg=var(--c-la1)
-                        label="ASC Club Organiser"/>
+                    </div>
                 </div>
 
                 <div class="card-column" style:margin-top=32px>
@@ -210,12 +215,11 @@
             </table>
         </div>
 
-
         <div class="history-section">
             <TabBar labels={["Results History", "Records History"]} bind:selectedIndex={historyIndex} />
 
             {#if historyIndex == 0}
-                <MultiButton bind:selectedIndex={resultsEventIndex} padding={4} labels={[
+                <MultiButton bind:selectedIndex={resultsEventIndex} padding={4} fixedHeight={false} labels={[
                     {type: LabelType.Image, data: Icons.Icon3},
                     {type: LabelType.Image, data: Icons.Icon2},
                     {type: LabelType.Image, data: Icons.Icon4},
@@ -351,9 +355,6 @@
                     </table>
                 </div>
             {/if}
-
-
-
         </div>
     </div>
 </div>
@@ -367,6 +368,13 @@
     .section-column {
         flex-direction: column;
         row-gap: 4px;
+    }
+
+    .section-row {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 4px;
     }
 
     .card-column {
@@ -406,30 +414,56 @@
 
 
     .container-grid {
-        display: grid;
+        display: flex;
         width: 1000px;
         margin-left: auto;
         margin-right: auto;
 
         margin-top: 126px; /* tab bar + 32px either side */
-        grid-template-columns: 240px 1fr;
 
         column-gap: 16px;
     }
 
-
     .user-container {
-        grid-column: 1;
+        width: 240px;
     }
 
     .content {
-        grid-column: 2;
-
+        width: 100%;
         display: flex;
         flex-direction: column;
         row-gap: 48px;
     }
 
+    @media(max-width: 1040px) {
+        .container-grid {
+            width: calc(100% - 40px);
+
+            margin-left: 20px;
+            margin-right: 20px;
+        }
+
+    }
+
+    @media(max-width: 700px) {
+        .container-grid {
+            width: 100%;
+
+            flex-direction: column;
+        }
+
+        .user-container {
+            width: calc(100% - 40px);
+        }
+
+        .content {
+            width: calc(100% - 40px);
+        }
+
+        .pr-section {
+            margin-top: 16px;
+        }
+    }
 
 
     /* INFO: personal records table */
