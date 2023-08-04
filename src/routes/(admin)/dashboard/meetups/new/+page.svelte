@@ -1,4 +1,10 @@
 <script lang="ts">
+    import { clickOutside } from "$lib/utils";
+
+    import Badge, { BadgeSize } from "$lib/components/global/Badge.svelte";
+
+    import { fade } from "svelte/transition";
+
     import Form from "$lib/components/global/Form.svelte";
 
     import Select from "$lib/components/global/Select.svelte";
@@ -8,9 +14,14 @@
 
     export let data: PageData;
 
+    let searchString = "";
+    let addedOrganisers = [];
+
+
+    let sizes = [];
+
     let externalRegistration = false;
 </script>
-
 
 <Breadcrumb paths={[
     {name: "Meetups", href: "/dashboard/meetups"},
@@ -54,11 +65,45 @@
             <input required name="location" />
         </label>
 
-        <label class="form-label wide">
-            Organizers
-            <!-- TIM: organisers is an attribute of data (PageData) -->
-            <input required name="organisers" />
-        </label>
+        <div style:position=relative class="wide" use:clickOutside on:click_outside={() => { searchString = "" }}>
+            <label class="form-label">
+                Organisers
+                <input 
+                    bind:value={searchString} 
+                    name="organisers"
+                    style:padding-left={[...addedOrganisers].reduce((total, cur) => total + sizes[cur.id], 0) + (addedOrganisers.length + 1) * 6}px
+                />
+            </label>
+
+            {#if searchString !== ""}
+                {@const filtered = data.organisers.filter((org) => {return org.name.toLowerCase().includes(searchString.toLowerCase())})}
+                <div class="search-results" transition:fade={{ duration: 100 }}>
+                    {#if filtered.length === 0}
+                        <p class="search-result" style:display=grid style:align-items=center> oops, no organisers found </p>
+                    {:else}
+                        {#each filtered as organiser}
+                            <button class="search-result interactable" on:click|preventDefault|stopPropagation={() => {
+                                if (!addedOrganisers.includes(organiser)) { addedOrganisers.push(organiser); addedOrganisers = addedOrganisers }
+                                searchString = "";
+                            }}>
+                                {organiser.name}
+                            </button>
+                        {/each}
+                    {/if}
+                </div>
+            {/if}
+
+
+            <div class="added-organisers">
+                {#each addedOrganisers as { name, id }}
+                    <button class="organiser-button" bind:clientWidth={sizes[id]} on:click|preventDefault={() => {addedOrganisers = addedOrganisers.filter(org => org.id != id)}}>
+                        <Badge size={BadgeSize.Large} fg=var(--c-a) bg=var(--c-la1) label={` ${name}`}>
+                            <span class="material-symbols-outlined" style:color=var(--c-a) style:font-size=16px style:font-weight=600 style:padding-right=8px>close</span>
+                        </Badge>
+                    </button>
+                {/each}
+            </div>
+        </div>
 
         <label class="form-label regular">
             Contact Details
@@ -104,6 +149,9 @@
     </div>
 </Form>
 
+
+
+
 <style>
     .form-inner {
         display: grid;
@@ -121,5 +169,73 @@
 
     .semiwide {
         grid-column: span 3;
+    }
+
+
+    .search-results {
+        position: absolute;
+        margin-top: 8px;
+
+        width: 100%;
+
+        z-index: 10;
+
+
+        background-color: white;
+        border-radius: 6px;
+        box-shadow: 0px 1px 6px 0px #10151B29; /* cdg3, 16% */
+
+
+        height: fit-content;
+
+        display: flex;
+        flex-direction: column;
+        align-items: flex-begin;
+
+        border: 1px var(--c-lg1) solid;
+    }
+
+    .search-result {
+        height: 32px;
+        width: 100%;
+        padding-left: 8px;
+        padding-right: 8px;
+        color: var(--c-dg2);
+
+        font-size: 16px;
+
+        text-align: left;
+    }
+
+    .search-result.interactable {
+        cursor: pointer;
+    }
+
+    .search-result.interactable:hover {
+        color: var(--c-dg3);
+    }
+
+    .added-organisers {
+        display: flex;
+        z-index: 10;
+        position: absolute;
+
+        padding-left: 6px;
+        width: fit-content;
+
+        align-items: center;
+
+        height: 28px;
+        transform: translateY(-31px);
+
+        column-gap: 6px;
+    }
+
+    .organiser-button {
+        cursor: pointer;
+    }
+
+    .organiser-button:hover {
+        filter: brightness(90%);
     }
 </style>

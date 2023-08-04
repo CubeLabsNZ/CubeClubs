@@ -5,6 +5,7 @@ import type { Actions, PageServerLoad } from './$types';
 
 export const actions = {
     default: async ({request}) => {
+        console.log(request)
         const data = await request.formData();
         const meetup: Prisma.MeetupCreateInput = {
             name: data.get("name") as string,
@@ -15,8 +16,9 @@ export const actions = {
                     id: Number(data.get("clubId"))
                 }
             },
+            // TODO: actually make this work
             organisers: {
-                connect: data.getAll("organisers").map(x => ({id: Number(x as string)}))
+                connect: data.addedOrganisers.map(org => ({id: Number(org as string)}))
             },
             contact: data.get("contact") as string,
             competitorLimit: Number(data.get("competitorLimit")),
