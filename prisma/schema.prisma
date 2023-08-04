@@ -3,16 +3,15 @@ generator client {
 }
 
 datasource db {
-  provider ="postgres"
-  url      =env("DATABASE_URL")
+  provider = "postgres"
+  url      = env("DATABASE_URL")
 }
 
 model Club {
-  id        Int           @id @default(autoincrement())
-  name      String
+  id      Int      @id @default(autoincrement())
+  name    String
   meetups Meetup[]
 }
-
 
 model User {
   id              Int     @id @default(autoincrement())
@@ -27,15 +26,15 @@ model User {
 
   organiserFor Meetup[]
   competingIn  UserInMeetup[]
-  results Result[]
+  results      Result[]
 }
 
 // INFO: using session authentication instead of token
 model Session {
-  id                Bytes @id
-  ip    String
+  id Bytes  @id
+  ip String
 
-  user User @relation(fields: [userId], references: [id])
+  user   User @relation(fields: [userId], references: [id])
   userId Int
 }
 
@@ -61,9 +60,9 @@ model Meetup {
   contact         String
   competitorLimit Int
 
-  date            DateTime @db.Date
+  date DateTime @db.Date
 
-  isPublished     Boolean @default(false)
+  isPublished Boolean @default(false)
 
   users UserInMeetup[]
 
@@ -73,45 +72,41 @@ model Meetup {
   rounds Round[]
 }
 
-
 model Round {
-  id            Int          @id @default(autoincrement())
-  startDate     DateTime
-  endDate       DateTime
-  puzzle        Puzzle
-  format        Format
-  results       Result[]
+  id        Int      @id @default(autoincrement())
+  startDate DateTime
+  endDate   DateTime
+  puzzle    Puzzle
+  format    Format
+  results   Result[]
 
-  proceedNumber   Int
+  proceedNumber Int
 
   meetup   Meetup @relation(fields: [meetupId], references: [id])
   meetupId Int
 }
 
 model Result {
-  id Int @id @default(autoincrement())
-  round     Round @relation(fields: [roundId], references: [id])
-  roundId   Int
+  id      Int   @id @default(autoincrement())
+  round   Round @relation(fields: [roundId], references: [id])
+  roundId Int
 
-  user      User @relation(fields: [userId], references: [id])
+  user   User    @relation(fields: [userId], references: [id])
   userId Int
-  solves    Solve[]
+  solves Solve[]
 
-  average   Float
+  average Float
 }
 
-
 model Solve {
-  index Int
+  index   Int
   time    Int
   penalty Penalty
 
-  result Result @relation(fields: [resultId], references: [id])
+  result   Result @relation(fields: [resultId], references: [id])
   resultId Int
 
   @@id([resultId, index])
-
-
 }
 
 enum Penalty {
@@ -119,8 +114,6 @@ enum Penalty {
   PLUSTWO
   DNF
 }
-
-
 
 // INFO: ENUMS
 enum Gender {
