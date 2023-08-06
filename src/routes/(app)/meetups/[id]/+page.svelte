@@ -214,14 +214,19 @@
                 <div class="info-both">
                     <div class="label-group">
                         <p class="label">Registration Information</p>
-                        <!-- TODO: if stripe active, use this message, otherwise display external registration link -->
-                        <p>
-                            Registration is done through Stripe via the Register
-                            button above. The registration fee for this meetup
-                            is $20. We don’t profit off these meetups! All of
-                            the registration fees go towards hiring the venue
-                            and equipment.
-                        </p>
+                        {#if data.meetup.externalRegistrationLink}
+                            <p> Registration is handled by an external service. Please register at the link below. </p>
+
+                            <a href={data.meetup.externalRegistrationLink} class="registration-link" > {data.meetup.externalRegistrationLink} </a>
+                        {:else}
+                            <p>
+                                Registration is done through Stripe via the Register
+                                button above. The registration fee for this meetup
+                                is $20. We don’t profit off these meetups! All of
+                                the registration fees go towards hiring the venue
+                                and equipment.
+                            </p>
+                        {/if}
                     </div>
                 </div>
             </div>
@@ -320,4 +325,14 @@
         align-items: flex-start;
     }
 
+    .registration-link {
+        margin-top: 8px;
+        color: var(--c-a);
+
+        transition: color var(--v-animation-delay) ease-in-out;
+    }
+
+    .registration-link:hover {
+        color: var(--c-da1);
+    }
 </style>

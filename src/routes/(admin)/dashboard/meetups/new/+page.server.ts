@@ -18,7 +18,8 @@ export const actions = {
             },
             // TODO: actually make this work
             organisers: {
-                connect: data.addedOrganisers.map(org => ({id: Number(org as string)}))
+                // connect: data.addedOrganisers.map(org => ({id: Number(org as string)}))
+                connect: [{id: 1}]
             },
             contact: data.get("contact") as string,
             competitorLimit: Number(data.get("competitorLimit")),
