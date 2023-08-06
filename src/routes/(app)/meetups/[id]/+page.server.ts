@@ -1,16 +1,18 @@
 import prisma from '$lib/prisma';
 import { error } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
-import { populateRounds } from '$lib/utilsServer';
+import { populateRounds, getMeetupPuzzles } from '$lib/utilsServer';
+import type { Meetup } from '@prisma/client';
 
 export const load = (async ({ params }) => {
-
     const id = Number(params.id)
+
     if (isNaN(id)) {
         throw error(404, 'not found');
     }
+
     const meetup = await prisma.meetup.findUnique({
-        where: { id: Number(params.id) },
+        where: { id: id },
         include: {
             club: true,
             organisers: {
@@ -37,22 +39,16 @@ export const load = (async ({ params }) => {
         }
     })
 
-    if (!meetup) {
+    // TODO: check admin, can view "public page" in dashboard -> to here.
+    if (!meetup || !meetup.isPublished) {
         throw error(404, 'not found');
     }
 
-    // TODO: check admin, and then add button "view public page" in dashboard
-    if (!meetup.isPublished) {
-        throw error(404, "not found")
-    }
-
+    const puzzles = getMeetupPuzzles(meetup);
     populateRounds(meetup.rounds)
-
-    const puzzles = [... new Set(meetup.rounds.map(round => round.puzzle))];
 
     return {
         meetup,
         puzzles
     }
-
 }) satisfies PageServerLoad

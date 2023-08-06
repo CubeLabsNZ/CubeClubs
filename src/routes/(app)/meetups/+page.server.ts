@@ -1,6 +1,7 @@
 import type { PageServerLoad } from './$types';
 import prisma from '$lib/prisma';
 import type { Meetup, Round } from '@prisma/client';
+import { getMeetupPuzzles } from "$lib/utilsServer";
 
 export const load = (async () => {
     const allMeetups: Meetup[] = await prisma.meetup.findMany({
@@ -20,7 +21,7 @@ export const load = (async () => {
     };
 
     for (const meetup of allMeetups) {
-        meetup.puzzles = [... new Set(meetup.rounds.map((round: Round) => round.puzzle))];
+        meetup.puzzles = getMeetupPuzzles(meetup);
         delete meetup.rounds;
 
         if (meetup.date < new Date()) {
