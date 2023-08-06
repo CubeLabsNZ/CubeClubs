@@ -6,7 +6,7 @@
     import regions, { regionToString } from "$lib/data/regions";
     import puzzles from "$lib/data/puzzles";
 
-    import { Region } from "@prisma/client";
+    import type { Region } from "@prisma/client";
 
     import Select from "$lib/components/global/Select.svelte";
     import PageContent from "$lib/components/global/PageContent.svelte";
@@ -38,8 +38,6 @@
 
         goto(`?${query.toString()}`);
     }
-
-
 
 
     interface Result {
@@ -95,35 +93,21 @@
                 <h3 class="fsize-title2">{name}</h3>
             </div>
 
-            <div style:overflow-x=auto>
-                <table>
-                    <!-- NOTE: tc-dummy is entirely invisible to provide padding to either side of the table -->
-                    <tr>
-                        <th class="tc-dummy"></th>
+            <table style:overflow-x=auto>
+                <tr>
+                    <th class="tc-dummy"></th>
 
-                        <th class="tc-type">Format</th>
-                        <th class="tc-name">Name</th>
-                        <th class="tc-result">Average</th>
-                        <th class="tc-region">Region</th>
-                        <th class="tc-meetup">Meetup</th>
-                        <th class="tc-solves">Solves</th>
+                    <th class="tc-type">Format</th>
+                    <th class="tc-name">Name</th>
+                    <th class="tc-result">Result</th>
+                    <th class="tc-region">Region</th>
+                    <th class="tc-meetup">Meetup</th>
+                    <th class="tc-solves">Solves</th>
 
-                        <th class="tc-dummy"></th>
-                    </tr>
+                    <th class="tc-dummy"></th>
+                </tr>
 
-                    <!-- NOTE: td-dummy is entirely invisible to provide padding to the top and bottom of the table -->
-                    <tr class="td-dummy">
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                    </tr>
 
-                <!-- NOTE: td-dummy is entirely invisible to provide padding to the top and bottom of the table -->
                 <tr class="td-dummy">
                     <td></td>
                     <td></td>
@@ -134,7 +118,6 @@
                     <td></td>
                     <td></td>
                 </tr>
-                {@debug data}
 
                 <!-- INFO: single -->
                 {#if single}
@@ -150,39 +133,49 @@
 
                         <td class="tc-dummy"></td>
                     </tr>
+                {:else}
+                    <tr>
+                        <td class="tc-dummy"></td>
+                        <td class="tc-placeholder" align=center colspan=6>no results yet</td>
+                        <td class="tc-dummy"></td>
+                    </tr>
                 {/if}
 
 
                 <!-- INFO: average-->
                 {#if average}
-                <tr>
-                    <td class="tc-dummy"></td>
+                    <tr>
+                        <td class="tc-dummy"></td>
 
-                    <td class="tc-type">Average</td>
-                    <td class="tc-name"><a href={`/user/${average.user.id}`}>{average.user.name}</a></td>
-                    <td class="tc-result">{average.average}</td>
-                    <td class="tc-region">{regionToString(average.user.region)}</td>
-                    <td class="tc-meetup"><a href={`/meetups/${average.round.meetup.id}`}>{average.round.meetup.name}</a></td>
-                    <td class="tc-solves">{average.solves.map(s => s.time).join(', ')}</td>
+                        <td class="tc-type">Average</td>
+                        <td class="tc-name"><a href={`/user/${average.user.id}`}>{average.user.name}</a></td>
+                        <td class="tc-result">{average.average}</td>
+                        <td class="tc-region">{regionToString(average.user.region)}</td>
+                        <td class="tc-meetup"><a href={`/meetups/${average.round.meetup.id}`}>{average.round.meetup.name}</a></td>
+                        <td class="tc-solves">{average.solves.map(s => s.time).join(', ')}</td>
 
-                    <td class="tc-dummy"></td>
-                </tr>
+                        <td class="tc-dummy"></td>
+                    </tr>
+                {:else}
+                    <tr>
+                        <td class="tc-dummy"></td>
+                        <td class="tc-placeholder" align=center colspan=6>no results yet</td>
+                        <td class="tc-dummy"></td>
+                    </tr>
                 {/if}
 
 
-
-                    <tr class="td-dummy">
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                </table>
-            </div>
+                <tr class="td-dummy">
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </table>
         {/each}
     {:else}
         {#each Object.entries(puzzles) as [puzzle, { name, icon }], i}
@@ -252,10 +245,7 @@
                 </tr>
             </table>
         {/each}
-
-
     {/if}
-
 </PageContent>
 
 
@@ -277,7 +267,7 @@
     .group-label h3 {
         font-weight: 500;
     }
-    
+
 
 
     .tc-name, .tc-region, .tc-meetup, .tc-solves, .tc-type {
