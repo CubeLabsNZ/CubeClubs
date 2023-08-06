@@ -1,10 +1,7 @@
 import prisma from '$lib/prisma';
-import { error } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
-import { Puzzle } from '@prisma/client';
 
 import puzzles from '$lib/data/puzzles'
-import { islandRegions } from '$lib/data/regions';
 
 export const load = (async ({ params }) => {
     const records = {}
