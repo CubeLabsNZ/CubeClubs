@@ -1,11 +1,15 @@
 <script lang="ts"> 
+    import { enhance } from "$app/forms";
+
     export let name: string;
     export let fillWidth = true;
 
     import Button, { ButtonType, ButtonSize } from "$lib/components/global/Button.svelte";
+
+    export let run;
 </script>
 
-<form method="POST"> 
+<form method="POST" use:enhance={run ?? (() => {})}> 
     <slot/>
 
     <button style:margin-top=16px>

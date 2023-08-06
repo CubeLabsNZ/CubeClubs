@@ -7,6 +7,16 @@ export const actions = {
     default: async ({request}) => {
         console.log(request)
         const data = await request.formData();
+
+        const organisers = (data.get("organisers") as string).trim().split(" ");
+
+        const organisersList = [];
+        for (const org of organisers) {
+            organisersList.push({id: Number(org)})
+        }
+
+        console.log(organisersList);
+
         const meetup: Prisma.MeetupCreateInput = {
             name: data.get("name") as string,
             venue: data.get("venue") as string,
@@ -18,8 +28,7 @@ export const actions = {
             },
             // TODO: actually make this work
             organisers: {
-                // connect: data.addedOrganisers.map(org => ({id: Number(org as string)}))
-                connect: [{id: 1}]
+                connect: organisersList
             },
             contact: data.get("contact") as string,
             competitorLimit: Number(data.get("competitorLimit")),

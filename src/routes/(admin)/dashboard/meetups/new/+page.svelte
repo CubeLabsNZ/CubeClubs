@@ -21,6 +21,11 @@
     let sizes = [];
 
     let externalRegistration = false;
+
+
+    function handleForm({ formData }) {
+        formData.set("organisers", addedOrganisers.reduce((acc, cur) => `${acc} ${cur.id}`, ""));
+    }
 </script>
 
 <Breadcrumb paths={[
@@ -30,7 +35,7 @@
 
 <div style:height="16px" />
 
-<Form name="Create meetup">
+<Form name="Create meetup" run={handleForm}>
     <div class="form-inner">
         <label class="form-label regular">
             Meetup Name
