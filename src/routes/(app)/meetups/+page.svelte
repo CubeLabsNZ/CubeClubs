@@ -2,7 +2,6 @@
     import PageContent from "$lib/components/global/PageContent.svelte";
     import MeetupBar from "$lib/components/global/card/MeetupBar.svelte";
 
-
     import type { PageData } from './$types';
 
     export let data: PageData
@@ -19,20 +18,20 @@
     subheading="We welcome cubers of all skill levels! Most of our meetups are casual get-togethers, but will be in the format of WCA competitions.">
 
     <div class="container">
-        {#if data.ongoingMeetups.length > 0}
+        {#if data.ongoing.length > 0}
             <h3 class="fsize-title2">Ongoing Meetups</h3>
 
             <div class="meetup-list">
-                {#each data.ongoingMeetups as meetup}
+                {#each data.ongoing as meetup}
                     <MeetupBar meetup={meetup} current href={`/meetups/${meetup.id}`}/>
                 {/each}
             </div>
         {/if}
 
         <h3 class="fsize-title2">Upcoming Meetups</h3>
-        {#if data.upcomingMeetups.length > 0}
+        {#if data.upcoming.length > 0}
             <div class="meetup-list">
-                {#each data.upcomingMeetups as meetup}
+                {#each data.upcoming as meetup}
                     <MeetupBar meetup={meetup} current href={`/meetups/${meetup.id}`}/>
                 {/each}
             </div>
@@ -42,7 +41,7 @@
 
         <h3 class="fsize-title2">Past Meetups</h3>
         <div class="meetup-list">
-            {#each data.pastMeetups as meetup}
+            {#each data.past as meetup}
                 <MeetupBar meetup={meetup} href={`/meetups/${meetup.id}`}/>
             {/each}
         </div>

@@ -1,8 +1,9 @@
 import type { PageServerLoad } from './$types';
 import prisma from '$lib/prisma';
+import type { Meetup, Round } from '@prisma/client';
 
 export const load = (async () => {
-    const meetups = await prisma.meetup.findMany({
+    const allMeetups: Meetup[] = await prisma.meetup.findMany({
         where: {
             isPublished: true,
         },
@@ -12,42 +13,24 @@ export const load = (async () => {
         }
     })
 
-    for (const meetup of meetups) {
-        meetup.puzzles = [... new Set(meetup.rounds.map(round => round.puzzle))];
+    const meetups: { upcoming: Meetup[], ongoing: Meetup[], past: Meetup[] } = {
+        upcoming: [],
+        ongoing: [],
+        past: []
+    };
+
+    for (const meetup of allMeetups) {
+        meetup.puzzles = [... new Set(meetup.rounds.map((round: Round) => round.puzzle))];
         delete meetup.rounds;
-    }
 
-
-    const upcomingMeetups: any = []
-    const ongoingMeetups: any = []
-    const pastMeetups: any = []
-
-    /* TODO: test this when schedule is avaialable
-    for (const meetup of meetups) {
-        const lastEventTime = Math.max(...meetup.schedule.map(sched => sched.endDate.getTime()))
-        const firstEventTime = Math.min(...meetup.schedule.map(sched => sched.startDate.getTime()))
-
-        if (lastEventTime < (new Date()).getTime()) {
-            pastMeetups.push(meetup)
-        } else if (firstEventTime > (new Date()).getTime()) {
-            upcomingMeetups.push(meetup)
+        if (meetup.date < new Date()) {
+            meetups.past.push(meetup)
+        } else if (meetup.date == new Date()){
+            meetups.ongoing.push(meetup)
         } else {
-            ongoingMeetups.push(meetup)
+            meetups.upcoming.push(meetup)
         }
     }
-    */
 
-   for (const meetup of meetups) {
-       if (meetup.date < new Date()) {
-           pastMeetups.push(meetup)
-       } else {
-           upcomingMeetups.push(meetup)
-       }
-   }
-
-    return {
-        upcomingMeetups,
-        ongoingMeetups,
-        pastMeetups
-    };
+    return meetups;
 }) satisfies PageServerLoad;
