@@ -64,19 +64,19 @@
 
 <PageContent heading={data.meetup.name} subheading={data.meetup.club.name}>
     <TabBar
-        labels={["Meetup Info", "Competitors", "Schedule & Results"]}
+        labels={["Info", "Competitors", "Schedule & Results"]}
         bind:selectedIndex={tabIndex}>
-        <a href={`/meetups/${data.meetup.id}/register`}>
-            <Button size={ButtonSize.Small}>
-                <div
-                    style:display="flex"
-                    style:column-gap="8px"
-                    style:align-items="center">
-                    <span class="material-symbols-outlined" style:font-size="16px">login</span>
-                    <p>Register</p>
-                </div>
-            </Button>
-        </a>
+        <!-- <a href={`/meetups/${data.meetup.id}/register`}> -->
+        <!--     <Button size={ButtonSize.Small}> -->
+        <!--         <div -->
+        <!--             style:display="flex" -->
+        <!--             style:column-gap="8px" -->
+        <!--             style:align-items="center"> -->
+        <!--             <span class="material-symbols-outlined" style:font-size="16px">login</span> -->
+        <!--             <p>Register</p> -->
+        <!--         </div> -->
+        <!--     </Button> -->
+        <!-- </a> -->
     </TabBar>
 
     <div class="content">
