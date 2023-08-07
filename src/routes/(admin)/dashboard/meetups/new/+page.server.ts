@@ -10,6 +10,7 @@ export const actions = {
 
         const organisers = (data.get("organisers") as string).trim().split(" ");
 
+        // WARN: using map doesn't work for some reason?
         const organisersList = [];
         for (const org of organisers) {
             organisersList.push({id: Number(org)})
@@ -35,7 +36,8 @@ export const actions = {
             description: data.get("description") as string,
             date: new Date(data.get("date") as string),
 
-            externalRegistrationLink: data.get("usingExternalRegistration") ? data.get("externalRegistrationLink") : null
+            externalRegistrationLink: data.get("usingExternalRegistration") ? data.get("externalRegistrationLink") as string : null,
+            registrationInformation: data.get("registrationInformation")
         }
 
         console.log(meetup);

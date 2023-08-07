@@ -9,6 +9,7 @@
 
     import Select from "$lib/components/global/Select.svelte";
     import Breadcrumb from "$lib/components/global/Breadcrumb.svelte";
+    import Snackbar from "$lib/components/global/Snackbar.svelte";
 
     import type { PageData } from './$types';
 
@@ -23,9 +24,18 @@
     let externalRegistration = false;
 
 
-    function handleForm({ formData }) {
+    function handleForm({ formData, cancel }) {
+        if (addedOrganisers.length < 1) { cancel(); showError() }
         formData.set("organisers", addedOrganisers.reduce((acc, cur) => `${acc} ${cur.id}`, ""));
     }
+
+    let organisersError = false;
+    function showError() {
+        organisersError = true;
+
+        setTimeout(() => { organisersError = false }, 3000)
+    }
+
 </script>
 
 <Breadcrumb paths={[
@@ -138,26 +148,49 @@
             </label>
 
 
-            <p class="wide" style:color=var(--c-red)> Warning: you must provide your own registration link AND you are responsible for manually entering all competitors into a meetup including their events. </p>
+            <p class="wide" style:color=var(--c-red)> Warning: you must provide your own registration link AND you are responsible for manually entering all competitors into a meetup including the events they are registered for. You should also provide registration information, and additional details such as the price and payment options accepted. </p>
+
         {/if}
 
-
         <label class="form-label wide">
-            Description
+            Registration Information
             <textarea
                 required
-                name="description"
-                style:resize="none"
-                rows="8"
+                name=registrationInformation
+                rows=8
+                style:min-height=50px
+                style:max-height=500px
+                style:resize=vertical
+            />
+        </label>
+
+        <label class="form-label wide">
+            Meetup Description
+            <textarea
+                required
+                name=description
+                rows=8
+                style:min-height=50px
+                style:max-height=500px
+                style:resize=vertical
             />
         </label>
     </div>
 </Form>
 
-
+{#if organisersError}
+    <Snackbar> 
+        <span class="material-symbols-outlined" style:color=var(--c-red) style:font-size=20px> error </span>
+        <p style:color=var(--c-red)> no organisers added </p>
+    </Snackbar>
+{/if}
 
 
 <style>
+    textarea {
+        font-family: "IBMPlexSans"
+    }
+
     .form-inner {
         display: grid;
         grid-template-columns: 1fr 1fr 1fr 1fr;
@@ -242,5 +275,9 @@
 
     .organiser-button:hover {
         filter: brightness(90%);
+    }
+
+    .resizable-textarea {
+        resize: vertical;
     }
 </style>

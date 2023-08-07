@@ -4,7 +4,7 @@
 </script>
 
 
-<div class="content" style:margin-top={top}px> 
+<div class="content" style:margin-top={top}px style:margin-bottom=32px> 
     <h1 class="fstyle-heading" style:padding-bottom=8px>{heading}</h1>
 
     {#if subheading != ""}
