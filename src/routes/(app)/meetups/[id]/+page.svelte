@@ -234,7 +234,7 @@
 
                                 <p> {data.meetup.registrationInformation} </p>
                             {:else}
-                                <p> Registration is done through Stripe via the Register button above </p>
+                                <p> Registration is done through Stripe via the Register button above. </p>
 
                                 <p> {data.meetup.registrationInformation} </p>
                             {/if}
