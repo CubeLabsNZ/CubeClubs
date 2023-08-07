@@ -19,7 +19,6 @@ model User {
   passHash        String
   name            String
   region          Region
-  gender          Gender
   isClubOrganiser Boolean @default(false)
 
   sessions Session[]
@@ -61,7 +60,7 @@ model Meetup {
   competitorLimit Int
 
   externalRegistrationLink String?
-  registrationInformation String @default("")
+  registrationInformation  String  @default("")
 
   date DateTime @db.Date
 
@@ -102,27 +101,13 @@ model Result {
 }
 
 model Solve {
-  index   Int
-  time    Int
-  penalty Penalty
+  index Int
+  time  Int
 
   result   Result @relation(fields: [resultId], references: [id])
   resultId Int
 
   @@id([resultId, index])
-}
-
-enum Penalty {
-  NONE
-  PLUSTWO
-  DNF
-}
-
-// INFO: ENUMS
-enum Gender {
-  MALE
-  FEMALE
-  OTHER
 }
 
 enum Region {
