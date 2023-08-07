@@ -10,6 +10,9 @@ export const load = (async () => {
         include: {
             club: true,
             rounds: true,
+        },
+        orderBy: {
+            date: 'asc',
         }
     })
 

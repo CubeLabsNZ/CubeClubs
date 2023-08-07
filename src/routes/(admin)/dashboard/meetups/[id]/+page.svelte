@@ -149,7 +149,8 @@
 
 {#if showPublishMessage}
     <Snackbar> 
-        <p style:font-weight=500> {isPublished ? "Published!" : "Reverted to Draft"} </p>
+        <span class="material-symbols-outlined" style:color={isPublished ? "var(--c-green)" : "var(--c-dg2)"}> check </span>
+        <p style:font-weight=500 style:color={isPublished ? "var(--c-green)" : "var(--c-dg2)"}> {isPublished ? "Published!" : "Reverted to Draft"} </p>
     </Snackbar>
 {/if}
 

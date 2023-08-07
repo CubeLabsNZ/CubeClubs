@@ -66,7 +66,8 @@
 
         <label class="form-label">
             Date
-            <input required name="date" type="date" />
+            <!-- WARN: should i be worried? -->
+            <input required name="date" type="date" min={new Date().toISOString().slice(0, -14)}/>
         </label>
 
         <label class="form-label">
@@ -127,7 +128,7 @@
 
         <label class="form-label regular">
             Competitor Limit
-            <input required name="competitorLimit" type="number"/>
+            <input required name="competitorLimit" type="number" min=1/>
         </label>
 
 

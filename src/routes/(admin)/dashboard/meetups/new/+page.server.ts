@@ -5,9 +5,7 @@ import type { Actions, PageServerLoad } from './$types';
 
 export const actions = {
     default: async ({request}) => {
-        console.log(request)
         const data = await request.formData();
-
         const organisers = (data.get("organisers") as string).trim().split(" ");
 
         // WARN: using map doesn't work for some reason?
@@ -15,8 +13,6 @@ export const actions = {
         for (const org of organisers) {
             organisersList.push({id: Number(org)})
         }
-
-        console.log(organisersList);
 
         const meetup: Prisma.MeetupCreateInput = {
             name: data.get("name") as string,
@@ -40,8 +36,6 @@ export const actions = {
             registrationInformation: data.get("registrationInformation")
         }
 
-        console.log(meetup);
-
         // TODO: validate that every organizer really is an organizer
         // should be fine cause only trusted people can access this endpoint
         const createdMeetup = await prisma.meetup.create({
@@ -50,7 +44,7 @@ export const actions = {
 
         // TODO: figure out how to display a success message like GH - it's in the form actions docs.
         // Cannot figure out without wifi :(
-        throw redirect(303, `/dashboard/meetups/${createdMeetup.id}`)
+        throw redirect(303, `/dashboard/meetups/`)
     }
 } satisfies Actions;
 
