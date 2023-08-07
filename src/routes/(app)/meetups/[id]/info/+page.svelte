@@ -23,55 +23,53 @@
     bind:selectedIndex={tabIndex}>
 </TabBar>
 
-<div class="content">
-    <div class="info-grid">
-        <div class="info-left">
-            <div class="label-group">
-                <p class="label">Date</p>
-                <p>
-                    {data.meetup.date.toLocaleDateString("en-NZ", {
-                        weekday: "long",
-                        year: "numeric",
-                        month: "long",
-                        day: "numeric",
-                    })}
-                </p>
-            </div>
-
-            <div class="label-group">
-                <p class="label">Venue</p>
-                <p>{data.meetup.venue}</p>
-            </div>
-
-            <div class="label-group">
-                <p class="label">Location</p>
-                <p>{data.meetup.location}</p>
-            </div>
-
-            <div class="label-group">
-                <p class="label">Organisers</p>
-
-                <div style:display=flex>
-                    {#each data.meetup.organisers as { id, name }, i}
-                        {@const maxIndex = data.meetup.organisers.length - 1}
-                        <a href="/user/{id}" class="regular-link"> {name} </a>
-
-                        <p> 
-                            {#if i < maxIndex}
-                                {#if (i != maxIndex - 1)}
-                                    ,&nbsp;
-                                {:else}
-                                    &nbsp;and&nbsp;
-                                {/if}
-                            {/if}
-                        </p>
-                    {/each}
-                </div>
-            </div>
-
-            <p class="label">Competitor Limit</p>
-            <p>{data.meetup.competitorLimit}</p>
+<div class="info-grid">
+    <div class="info-left">
+        <div class="label-group">
+            <p class="label">Date</p>
+            <p>
+                {data.meetup.date.toLocaleDateString("en-NZ", {
+                    weekday: "long",
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                })}
+            </p>
         </div>
+
+        <div class="label-group">
+            <p class="label">Venue</p>
+            <p>{data.meetup.venue}</p>
+        </div>
+
+        <div class="label-group">
+            <p class="label">Location</p>
+            <p>{data.meetup.location}</p>
+        </div>
+
+        <div class="label-group">
+            <p class="label">Organisers</p>
+
+            <div style:display=flex>
+                {#each data.meetup.organisers as { id, name }, i}
+                    {@const maxIndex = data.meetup.organisers.length - 1}
+                    <a href="/user/{id}" class="regular-link"> {name} </a>
+
+                    <p> 
+                        {#if i < maxIndex}
+                            {#if (i != maxIndex - 1)}
+                                ,&nbsp;
+                            {:else}
+                                &nbsp;and&nbsp;
+                            {/if}
+                        {/if}
+                    </p>
+                {/each}
+            </div>
+        </div>
+
+        <p class="label">Competitor Limit</p>
+        <p>{data.meetup.competitorLimit}</p>
     </div>
 
     <div class="info-right">
