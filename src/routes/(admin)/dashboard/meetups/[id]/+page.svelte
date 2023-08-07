@@ -1,4 +1,6 @@
 <script lang="ts">
+    import { goto } from "$app/navigation";
+
     import Snackbar from "$lib/components/global/Snackbar.svelte";
     import Button from "$lib/components/global/Button.svelte";
     import type { PageData } from "./$types"
@@ -23,12 +25,22 @@
         });
         meetupFetch.then(res => {
             if (res.ok) {
-                console.log("HERE")
                 isPublished = !isPublished
             }
         })
 
         setTimeout(() => { showPublishMessage = false }, 5000);
+    }
+
+    function deleteMeetup() {
+        meetupFetch = fetch(`./${data.meetup.id}/edit/delete`, {
+            method: "POST"
+        });
+        meetupFetch.then(res => {
+            if (res.ok) {
+                goto("/dashboard/meetups")
+            }
+        })
     }
 </script>
 
@@ -58,7 +70,10 @@
     {#if isPublished}
         <a href={$page.url + "/edit/results"}>
             <Button>
-                Enter Results
+                <div class="button-inner">
+                    <span class="material-symbols-outlined"> pin </span>
+                    <p> Enter Results </p>
+                </div>
             </Button>
         </a>
     {/if}
@@ -67,30 +82,47 @@
 
     <a href={$page.url + "/edit"}>
         <Button>
-            Edit Details
+            <div class="button-inner">
+                <span class="material-symbols-outlined"> edit </span>
+                <p> Edit Details </p>
+            </div>
         </Button>
     </a>
     
 
     <a href={$page.url + "/edit/schedule"}>
         <Button>
-            Edit Schedule
+            <div class="button-inner">
+                <span class="material-symbols-outlined"> edit_calendar </span>
+                <p> Edit Schedule </p>
+            </div>
         </Button>
     </a>
 
 
     <a href={$page.url + "/edit/users"}>
         <Button>
-            Edit Competitors
+            <div class="button-inner">
+                <span class="material-symbols-outlined"> manage_accounts </span>
+                <p> Edit Competitors </p>
+            </div>
         </Button>
     </a>
     
 
     <hr>
 
-    <Button>
-        Delete Meetup
-    </Button>
+    <button on:click={() => {
+        if (confirm("Are you sure you want to delete this meetup?")) {
+            deleteMeetup();
+        }}}>
+        <Button>
+            <div class="button-inner" style:color=var(--c-red)>
+                <span class="material-symbols-outlined"> delete </span>
+                <p> Delete Meetup </p>
+            </div>
+        </Button>
+    </button>
 </div>
 
 <h3 class="fsize-title2" style:font-weight=500 style:margin-top=32px style:margin-bottom=16px>Meetup Info</h3>
@@ -201,5 +233,15 @@
         display: flex;
         flex-direction: column;
         row-gap: 24px;
+    }
+
+    .button-inner {
+        display: flex;
+        align-items: center;
+        column-gap: 8px;
+    }
+
+    .button-inner span {
+        font-size: 18px;
     }
 </style>
