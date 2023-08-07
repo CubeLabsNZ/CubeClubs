@@ -7,10 +7,6 @@
 
     import PageContent from "$lib/components/global/PageContent.svelte";
     import TabBar from "$lib/components/global/TabBar.svelte";
-    import Button, {
-        ButtonSize,
-        ButtonType,
-    } from "$lib/components/global/Button.svelte";
 
     import Card from "$lib/components/global/card/Card.svelte";
     import type { PageData } from "./$types";
@@ -56,6 +52,8 @@
 
         goto(`?${query.toString()}`);
     }
+
+    console.log(data.meetup.rounds);
 </script>
 
 <svelte:head>
@@ -82,22 +80,18 @@
     <div class="content">
         {#if tab === "schedule"}
             <div class="schedule-grid">
-                <!-- TODO: for each scheduled event -->
+                <!-- TODO: future todo, show by event? -->
+
                 {#each data.meetup.rounds as round}
                     {@const puzzle = puzzles[round.puzzle]}
                     <Card height={60}>
                         <div class="schedule-item">
-                            <p>IMG</p>
+                            <img src={puzzle.icon} alt="" height=36px style:filter="invert(30%) sepia(7%) saturate(500%) hue-rotate(164deg) brightness(94%) contrast(89%)">
 
                             <div class="schedule-item-title">
-                                <p style:font-weight="600">
-                                    {puzzle.name} - Round {round.number}
-                                </p>
-                                <p
-                                    style:font-weight="500"
-                                    style:color="var(--c-dg1)"
-                                >
-                                    {round.startDate} - {round.endDate}
+                                <p style:font-weight="600"> {puzzle.name} — {round.number == data.maxRounds[round.puzzle] ? "Final Round" : `Round ${round.number}`} </p>
+                                <p style:font-weight="500" style:color="var(--c-dg1)" >
+                                    {round.startDate.toLocaleTimeString("en-NZ", { minute: "2-digit", hour: "2-digit" })} – {round.endDate.toLocaleTimeString("en-NZ", { minute: "2-digit", hour: "2-digit" })}
                                 </p>
                             </div>
                         </div>
@@ -335,5 +329,9 @@
         display: flex;
         flex-direction: column;
         align-items: flex-start;
+    }
+
+    .schedule-item-title > p:first-child {
+        margin-bottom: -2px;
     }
 </style>

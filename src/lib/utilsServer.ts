@@ -47,6 +47,13 @@ export function populateRounds(rounds: Round[]) {
         round.number = roundForPuzzle[round.puzzle]
         roundForPuzzle[round.puzzle]++
     }
+
+    let maxRounds = {};
+    for (const [key, value] of Object.entries(roundForPuzzle)) {
+        maxRounds[key] = value - 1;
+    }
+
+    return maxRounds;
 }
 
 export function getMeetupPuzzles(meetup: Meetup): Puzzle[] {
