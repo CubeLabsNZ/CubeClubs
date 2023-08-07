@@ -1,7 +1,7 @@
 <script lang="ts">
     import { goto } from "$app/navigation";
 
-    import Snackbar from "$lib/components/global/Snackbar.svelte";
+    import Toast from "$lib/components/global/Toast.svelte";
     import Button from "$lib/components/global/Button.svelte";
     import type { PageData } from "./$types"
 
@@ -211,10 +211,10 @@
 <h3 class="fsize-title2" style:font-weight=500 style:margin-top=48px style:margin-bottom=16px>Schedule</h3>
 
 {#if showPublishMessage}
-    <Snackbar> 
+    <Toast> 
         <span class="material-symbols-outlined" style:color={isPublished ? "var(--c-green)" : "var(--c-dg2)"}> check </span>
         <p style:font-weight=500 style:color={isPublished ? "var(--c-green)" : "var(--c-dg2)"}> {isPublished ? "Published!" : "Reverted to Draft"} </p>
-    </Snackbar>
+    </Toast>
 {/if}
 
 <style>

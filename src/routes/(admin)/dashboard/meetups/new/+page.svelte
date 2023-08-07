@@ -9,7 +9,6 @@
 
     import Select from "$lib/components/global/Select.svelte";
     import Breadcrumb from "$lib/components/global/Breadcrumb.svelte";
-    import Snackbar from "$lib/components/global/Snackbar.svelte";
 
     import type { PageData } from './$types';
 
@@ -25,17 +24,11 @@
 
 
     function handleForm({ formData, cancel }) {
-        if (addedOrganisers.length < 1) { cancel(); showError() }
+        if (addedOrganisers.length < 1) { cancel(); organisersError = true }
         formData.set("organisers", addedOrganisers.reduce((acc, cur) => `${acc} ${cur.id}`, ""));
     }
 
     let organisersError = false;
-    function showError() {
-        organisersError = true;
-
-        setTimeout(() => { organisersError = false }, 3000)
-    }
-
 </script>
 
 <Breadcrumb paths={[
@@ -88,6 +81,7 @@
                     bind:value={searchString} 
                     name="organisers"
                     style:padding-left={[...addedOrganisers].reduce((total, cur) => total + sizes[cur.id], 0) + (addedOrganisers.length + 1) * 6}px
+                    data-error={organisersError}
                 />
             </label>
 
@@ -119,7 +113,12 @@
                     </button>
                 {/each}
             </div>
+
+            {#if organisersError}
+                <p class="fsize-subhead" style:color=var(--c-red)> there must be atleast one organiser added for a meetup. please add an organiser. </p>
+            {/if}
         </div>
+
 
         <label class="form-label regular">
             Contact Details
@@ -178,14 +177,6 @@
         </label>
     </div>
 </Form>
-
-{#if organisersError}
-    <Snackbar> 
-        <span class="material-symbols-outlined" style:color=var(--c-red) style:font-size=20px> error </span>
-        <p style:color=var(--c-red)> no organisers added </p>
-    </Snackbar>
-{/if}
-
 
 <style>
     textarea {
@@ -276,9 +267,5 @@
 
     .organiser-button:hover {
         filter: brightness(90%);
-    }
-
-    .resizable-textarea {
-        resize: vertical;
     }
 </style>

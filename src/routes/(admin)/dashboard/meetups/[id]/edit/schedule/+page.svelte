@@ -1,5 +1,5 @@
 <script lang="ts">
-    import Snackbar from "$lib/components/global/Snackbar.svelte";
+    import Toast from "$lib/components/global/Toast.svelte";
 
     import Select from "$lib/components/global/Select.svelte";
 
@@ -193,14 +193,14 @@
 </div>
 
 {#if hasUnsavedChanges}
-    <Snackbar> 
+    <Toast> 
         <p>Unsaved Changes!</p>
         <button on:click={saveChanges}>
             <Button type={ButtonType.TextOnly} size={ButtonSize.Regular}>
                 Save
             </Button>
         </button>
-    </Snackbar>
+    </Toast>
 {/if}
 
 

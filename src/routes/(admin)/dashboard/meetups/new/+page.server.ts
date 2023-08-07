@@ -2,11 +2,16 @@ import prisma from '$lib/prisma';
 import { redirect } from "@sveltejs/kit"
 import type { Prisma } from '@prisma/client'
 import type { Actions, PageServerLoad } from './$types';
+import { fail } from "@sveltejs/kit";
 
 export const actions = {
     default: async ({request}) => {
         const data = await request.formData();
         const organisers = (data.get("organisers") as string).trim().split(" ");
+
+        if (organisers.length < 1) {
+            return fail(400)
+        }
 
         // WARN: using map doesn't work for some reason?
         const organisersList = [];

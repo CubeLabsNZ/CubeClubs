@@ -5,7 +5,7 @@
 
 <!-- TODO: use stores to be able to show more than one toast at once -->
 <div 
-    class="snackbar" 
+    class="toast" 
     in:fly={{ delay: 50, duration: 250, x: 400}}
     out:fade={{ duration: 150 }}>
     <slot/>
@@ -13,7 +13,7 @@
 
 
 <style>
-    .snackbar {
+    .toast {
         position: fixed;
 
         height: 42px;
