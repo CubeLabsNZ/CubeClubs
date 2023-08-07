@@ -30,20 +30,22 @@
 <div class="schedule-grid">
     <!-- TODO: future todo, show by event? -->
 
-    {#each data.meetup.rounds as round}
+    {#each data.meetup.rounds as round, i}
         {@const puzzle = puzzles[round.puzzle]}
-        <Card height={60}>
-            <div class="schedule-item">
-                <img src={puzzle.icon} alt="" height=36px style:filter="invert(30%) sepia(7%) saturate(500%) hue-rotate(164deg) brightness(94%) contrast(89%)">
+        <a href="/meetups/{data.slug}/results/{i}"> 
+            <Card height={60}>
+                <div class="schedule-item">
+                    <img src={puzzle.icon} alt="" height=36px style:filter="invert(30%) sepia(7%) saturate(500%) hue-rotate(164deg) brightness(94%) contrast(89%)">
 
-                <div class="schedule-item-title">
-                    <p style:font-weight="600"> {puzzle.name} — {round.number == data.maxRounds[round.puzzle] ? "Final Round" : `Round ${round.number}`} </p>
-                    <p style:font-weight="500" style:color="var(--c-dg1)" >
-                        {round.startDate.toLocaleTimeString("en-NZ", { minute: "2-digit", hour: "2-digit" })} – {round.endDate.toLocaleTimeString("en-NZ", { minute: "2-digit", hour: "2-digit" })}
-                    </p>
+                    <div class="schedule-item-title">
+                        <p style:font-weight=600 style:color=var(--c-dg2)> {puzzle.name} — {round.number == data.maxRounds[round.puzzle] ? "Final Round" : `Round ${round.number}`} </p>
+                        <p style:font-weight=500 style:color=var(--c-dg1) >
+                            {round.startDate.toLocaleTimeString("en-NZ", { minute: "2-digit", hour: "2-digit" })} – {round.endDate.toLocaleTimeString("en-NZ", { minute: "2-digit", hour: "2-digit" })}
+                        </p>
+                    </div>
                 </div>
-            </div>
-        </Card>
+            </Card>
+        </a>
     {/each}
 </div>
 
