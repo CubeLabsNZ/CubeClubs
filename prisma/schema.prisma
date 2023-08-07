@@ -61,6 +61,7 @@ model Meetup {
   competitorLimit Int
 
   externalRegistrationLink String?
+  registrationInformation String
 
   date DateTime @db.Date
 

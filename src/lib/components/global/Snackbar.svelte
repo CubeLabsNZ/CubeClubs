@@ -3,6 +3,7 @@
 </script>
 
 
+<!-- TODO: use stores to be able to show more than one toast at once -->
 <div 
     class="snackbar" 
     in:fly={{ delay: 50, duration: 250, x: 400}}

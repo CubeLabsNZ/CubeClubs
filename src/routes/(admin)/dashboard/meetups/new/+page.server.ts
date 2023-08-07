@@ -36,7 +36,8 @@ export const actions = {
             description: data.get("description") as string,
             date: new Date(data.get("date") as string),
 
-            externalRegistrationLink: data.get("usingExternalRegistration") ? data.get("externalRegistrationLink") as string : null
+            externalRegistrationLink: data.get("usingExternalRegistration") ? data.get("externalRegistrationLink") as string : null,
+            registrationInformation: data.get("registrationInformation")
         }
 
         console.log(meetup);
