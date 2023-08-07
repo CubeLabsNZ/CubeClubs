@@ -12,8 +12,8 @@
 
 <a href="/dashboard/meetups/new">
     <Button>
-        <div style:display=flex style:align-items=center>
-            <span class="material-symbols-outlined" style:color=var(--c-dg2)>add</span>
+        <div class="button-inner">
+            <span class="material-symbols-outlined">add</span>
             <p> New Meetup </p>
         </div>
     </Button>
@@ -47,5 +47,15 @@
         flex-direction: column;
 
         row-gap: 16px;
+    }
+
+    .button-inner {
+        display: flex;
+        align-items: center;
+        column-gap: 8px;
+    }
+
+    .button-inner span {
+        font-size: 20px;
     }
 </style>

@@ -56,7 +56,7 @@
         <Button>
             {#await meetupFetch}
                 Loading...
-            {:then response}
+                {:then response}
                 {#if response == undefined || response.ok}
                     {isPublished ? "Revert to Draft" : "Publish Meetup"}
                 {:else}
@@ -65,7 +65,7 @@
             {/await}
         </Button>
     </button>
-        
+
 
     {#if isPublished}
         <a href={$page.url + "/edit/results"}>
@@ -88,7 +88,7 @@
             </div>
         </Button>
     </a>
-    
+
 
     <a href={$page.url + "/edit/schedule"}>
         <Button>
@@ -108,7 +108,7 @@
             </div>
         </Button>
     </a>
-    
+
 
     <hr>
 
@@ -154,11 +154,23 @@
 
         <div class="label-group">
             <p class="label">Organisers</p>
-            <ul>
-                {#each data.meetup.organisers as { name }}
-                    <li>{name}</li>
+
+            <div style:display=flex>
+                {#each data.meetup.organisers as { id, name }, i}
+                    {@const maxIndex = data.meetup.organisers.length - 1}
+                    <a href="/user/{id}" class="regular-link"> {name} </a>
+
+                    <p> 
+                        {#if i < maxIndex}
+                            {#if (i != maxIndex - 1)}
+                                ,&nbsp;
+                            {:else}
+                                &nbsp;and&nbsp;
+                            {/if}
+                        {/if}
+                    </p>
                 {/each}
-            </ul>
+            </div>
         </div>
 
         <div class="label-group">
@@ -171,6 +183,25 @@
         <div class="label-group">
             <p class="label">Meetup Description</p>
             <p>{data.meetup.description}</p>
+        </div>
+    </div>
+
+    <div class="info-both">
+        <div class="label-group">
+            <p class="label">Registration Information</p>
+            <div style:display=flex style:flex-direction=column style:row-gap=8px>
+                {#if data.meetup.externalRegistrationLink}
+                    <p> Registration is handled by an external service. Please register at the link below.  </p>
+
+                    <a href={data.meetup.externalRegistrationLink} class="regular-link" > {data.meetup.externalRegistrationLink} </a>
+
+                    <p> {data.meetup.registrationInformation} </p>
+                {:else}
+                    <p> Registration is done through Stripe via the Register button above </p>
+
+                    <p> {data.meetup.registrationInformation} </p>
+                {/if}
+            </div>
         </div>
     </div>
 </div>
@@ -205,6 +236,9 @@
         display: flex;
         flex-direction: row;
         column-gap: 16px;
+        row-gap: 12px;
+
+        flex-wrap: wrap;
 
         margin-top: 8px;
     }
@@ -234,6 +268,12 @@
         flex-direction: column;
         row-gap: 24px;
     }
+
+    .info-both {
+        margin-top: 24px;
+        grid-column: 1/3;
+    }
+
 
     .button-inner {
         display: flex;

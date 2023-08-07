@@ -149,7 +149,7 @@
             </label>
 
 
-            <p class="wide" style:color=var(--c-red)> Warning: you must provide your own registration link AND you are responsible for manually entering all competitors into a meetup including the events they are registered for. You should also provide registration information, and additional details such as the price and payment options accepted. </p>
+            <p class="wide" style:color=var(--c-red)> Warning: you are responsible for ensuring your external registration link is correct (must start with https://) and for manually entering all competitors into a meetup including the events they are registered for. You should also provide registration information, and additional details such as the price and payment options accepted. </p>
 
         {/if}
 

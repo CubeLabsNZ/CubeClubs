@@ -191,11 +191,23 @@
 
                     <div class="label-group">
                         <p class="label">Organisers</p>
-                        <ul>
-                            {#each data.meetup.organisers as { name }}
-                                <li>{name}</li>
+
+                        <div style:display=flex>
+                            {#each data.meetup.organisers as { id, name }, i}
+                                {@const maxIndex = data.meetup.organisers.length - 1}
+                                <a href="/user/{id}" class="regular-link"> {name} </a>
+
+                                <p> 
+                                    {#if i < maxIndex}
+                                        {#if (i != maxIndex - 1)}
+                                            ,&nbsp;
+                                        {:else}
+                                            &nbsp;and&nbsp;
+                                        {/if}
+                                    {/if}
+                                </p>
                             {/each}
-                        </ul>
+                        </div>
                     </div>
 
                     <div class="label-group">
@@ -214,19 +226,19 @@
                 <div class="info-both">
                     <div class="label-group">
                         <p class="label">Registration Information</p>
-                        {#if data.meetup.externalRegistrationLink}
-                            <p> Registration is handled by an external service. Please register at the link below. </p>
+                        <div style:display=flex style:flex-direction=column style:row-gap=8px>
+                            {#if data.meetup.externalRegistrationLink}
+                                <p> Registration is handled by an external service. Please register at the link below.  </p>
 
-                            <a href={data.meetup.externalRegistrationLink} class="registration-link" > {data.meetup.externalRegistrationLink} </a>
-                        {:else}
-                            <p>
-                                Registration is done through Stripe via the Register
-                                button above. The registration fee for this meetup
-                                is $20. We don’t profit off these meetups! All of
-                                the registration fees go towards hiring the venue
-                                and equipment.
-                            </p>
-                        {/if}
+                                <a href={data.meetup.externalRegistrationLink} class="regular-link" > {data.meetup.externalRegistrationLink} </a>
+
+                                <p> {data.meetup.registrationInformation} </p>
+                            {:else}
+                                <p> Registration is done through Stripe via the Register button above </p>
+
+                                <p> {data.meetup.registrationInformation} </p>
+                            {/if}
+                        </div>
                     </div>
                 </div>
             </div>
@@ -323,16 +335,5 @@
         display: flex;
         flex-direction: column;
         align-items: flex-start;
-    }
-
-    .registration-link {
-        margin-top: 8px;
-        color: var(--c-a);
-
-        transition: color var(--v-animation-delay) ease-in-out;
-    }
-
-    .registration-link:hover {
-        color: var(--c-da1);
     }
 </style>

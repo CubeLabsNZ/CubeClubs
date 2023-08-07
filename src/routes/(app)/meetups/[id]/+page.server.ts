@@ -17,6 +17,7 @@ export const load = (async ({ params }) => {
             club: true,
             organisers: {
                 select: {
+                    id: true,
                     name: true,
                 }
             },
