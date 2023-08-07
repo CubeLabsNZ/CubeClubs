@@ -20,7 +20,6 @@
 </a>
 
 
-
 {#if data.draftMeetups.length > 0}
     <h3 class="fsize-title2" style:font-weight=500 style:margin-bottom=4px style:margin-top=48px>Draft Meetups</h3>
 
