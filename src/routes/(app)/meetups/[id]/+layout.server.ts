@@ -1,6 +1,6 @@
 import prisma from '$lib/prisma';
 import { error } from '@sveltejs/kit';
-import type { PageServerLoad } from './$types';
+import type { LayoutServerLoad } from './$types';
 import { populateRounds, getMeetupPuzzles } from '$lib/utilsServer';
 
 export const load = (async ({ params }) => {
@@ -50,6 +50,7 @@ export const load = (async ({ params }) => {
     return {
         meetup,
         puzzles,
-        maxRounds
+        maxRounds,
+        slug: params.id
     }
-}) satisfies PageServerLoad
+}) satisfies LayoutServerLoad
