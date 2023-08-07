@@ -22,3 +22,7 @@ export function partition<T>(array: T[], filter: (e: T, idx: number, arr: T[]) =
     array.forEach((e: T, idx: number, arr: T[]) => (filter(e, idx, arr) ? pass : fail).push(e));
     return [pass, fail];
 }
+
+export function getRoundName(puzzleName: string, roundNumber: number, maxRound: number) {
+    return `${puzzleName} — ${roundNumber == maxRound ? "Final Round" : `Round ${roundNumber}`}`
+}

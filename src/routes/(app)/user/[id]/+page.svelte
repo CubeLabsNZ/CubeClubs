@@ -5,6 +5,8 @@
     import TabBar from '$lib/components/global/TabBar.svelte';
     import MultiButton, { LabelType } from '$lib/components/global/MultiButton.svelte';
 
+    import Medal, { PodiumPlace } from '$lib/components/user/Medal.svelte';
+
     import RecordRow from '$lib/components/user/RecordRow.svelte'
 
     import {regionToString} from '$lib/data/regions'
@@ -67,43 +69,22 @@
                     <hr>
 
                     <div class="section-column">
-                        <!-- INFO: gold -->
                         <div class="data-row">
-                            <div class="medal-container">
-                                <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" height=16 stroke-width=1.5 fill=#F9D953 stroke=#EFCC3A>
-                                    <circle cx="8" cy="8" r="6.75" />
-                                </svg>
-
-                                <p class="medal-text">1</p>
-                            </div>
+                            <Medal place={PodiumPlace.Gold}/>
 
                             <p style:font-weight=500>{data.medals[0]}</p>
                             <p> Gold Medals </p>
                         </div>
 
-                        <!-- INFO: silver -->
                         <div class="data-row">
-                            <div class="medal-container">
-                                <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" height=16 stroke-width=1.5 fill=#D3D3D3 stroke=#C4C4C4>
-                                    <circle cx="8" cy="8" r="6.75" />
-                                </svg>
-
-                                <p class="medal-text">2</p>
-                            </div>
+                            <Medal place={PodiumPlace.Silver}/>
 
                             <p style:font-weight=500>{data.medals[1]}</p>
                             <p> Silver Medals </p>
                         </div>
 
-                        <!-- INFO: bronze -->
                         <div class="data-row">
-                            <div class="medal-container">
-                                <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" height=16 stroke-width=1.5 fill=#F89656 stroke=#E47D43>
-                                    <circle cx="8" cy="8" r="6.75" />
-                                </svg>
-
-                                <p class="medal-text">3</p>
-                            </div>
+                            <Medal place={PodiumPlace.Bronze}/>
 
                             <p style:font-weight=500>{data.medals[2]}</p>
                             <p> Bronze Medals </p>
@@ -386,22 +367,6 @@
         flex-direction: row;
         align-items: center;
         column-gap: 12px;
-    }
-
-
-    .medal-container {
-        display: grid;
-        align-items: center;
-        justify-items: center;
-    }
-
-    .medal-text {
-        grid-area: 1/1;
-        position: absolute;
-        z-index: 2;
-        font-weight: 600;
-        font-size: 10px;
-        color: white;
     }
 
     hr {
