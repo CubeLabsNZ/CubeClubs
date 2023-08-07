@@ -10,14 +10,10 @@
     export let current: boolean | undefined = undefined;
 
     console.log(meetup.puzzles);
-
-    let innerWidth = 1000;
 </script>
 
-<svelte:window bind:innerWidth />
-
 <a {href}>
-    <Card height={innerWidth > 550 ? 60 : null}>
+    <Card>
         <div class="meetup-detail">
             <div class="date" data-current="{current}">
                 <p class="fsize-footnote" style:margin-bottom="-1px">
@@ -59,6 +55,9 @@
         width: 100%;
 
         align-items: center;
+
+        margin-top: 8.5px;
+        margin-bottom: 8.5px;
 
         grid-template-columns: [date] 56px [line] 1px [title] 2fr [events] 1fr [arrow] 56px [end];
     }
@@ -147,14 +146,6 @@
         }
 
         .meetup-detail {
-            display: grid;
-            width: 100%;
-
-            margin-top: 8.5px;
-            margin-bottom: 8.5px;
-
-            align-items: center;
-
             grid-template-columns: [date] 56px [line] 1px [title] auto [arrow] 56px [end];
         }
     }
