@@ -57,7 +57,7 @@ model Meetup {
   organisers      User[] // TODO: check relation?
   description     String
   contact         String
-  competitorLimit Int
+  competitorLimit Int?
 
   externalRegistrationLink String?
   registrationInformation  String  @default("")

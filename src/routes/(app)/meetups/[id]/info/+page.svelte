@@ -68,8 +68,10 @@
             </div>
         </div>
 
-        <p class="label">Competitor Limit</p>
-        <p>{data.meetup.competitorLimit}</p>
+        <div class="label-group">
+            <p class="label">Competitor Limit</p>
+            <p>{data.meetup.competitorLimit ?? "No competitor Limit"}</p>
+        </div>
     </div>
 
     <div class="info-right">
