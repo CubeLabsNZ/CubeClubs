@@ -22,7 +22,7 @@
 - [ ] login -> use old pbfkdjf2 hashing
 - [ ] signup -> doesn't let me create new account? tries to use old id???? (will this happen with everything?)
 
-- [ ] calculations
+- [ ] calculations (also see https://github.com/CubeClubsNZ/app/issues/8)
   - [ ] dnfs cannot podium / get medal
   - [ ] tied results should have same placing
     - [ ] should also show multiple people under records if tied       
