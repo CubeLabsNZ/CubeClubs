@@ -28,7 +28,8 @@ export const load = (async ({ params }) => {
                             region: true,
                             id: true,
                         }
-                    }
+                    },
+                    registeredEvents: true
                 }
             },
             rounds: {

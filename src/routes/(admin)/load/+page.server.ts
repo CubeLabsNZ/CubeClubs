@@ -192,7 +192,8 @@ async function populateUsersInMeetups() {
                             connect: {
                                 id: x.userId
                             }
-                        }
+                        },
+                        registeredEvents: a
                     }
                 }
             }
@@ -361,6 +362,8 @@ async function populateSolves() {
             })
         }
     }
+
+    console.log("SUCCESS: populated solves")
 }
 
 

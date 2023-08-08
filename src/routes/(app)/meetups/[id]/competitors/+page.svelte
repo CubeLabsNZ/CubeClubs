@@ -58,7 +58,7 @@
     </tr>
 
 
-    {#each data.meetup.users as { user }}
+    {#each data.meetup.users as { user, registeredEvents } }
         <tr>
             <td class="tc-dummy" />
             <td class="tc-name">
@@ -67,10 +67,12 @@
             <td class="tc-region">{regionToString(user.region)}</td>
 
 
-            <!-- TODO: only show checkmark if user has registeed  -->
+            <!-- WARN: this is actually working, but it seems data is not perfect, and those with no results in an event is registered? -->
             {#each data.puzzles as puzzle}
                 <td class="tc-puzzle">
-                    <span class="material-symbols-outlined">check</span>
+                    {#if registeredEvents.includes(puzzle)}
+                        <span class="material-symbols-outlined">check</span>
+                    {/if}
                 </td>
             {/each}
 

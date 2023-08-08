@@ -8,8 +8,6 @@
 
     export let meetup: Meetup
     export let current: boolean | undefined = undefined;
-
-    console.log(meetup.puzzles);
 </script>
 
 <a {href}>
@@ -28,7 +26,6 @@
 
             <div class="title">
                 <p class="fsize-body">{meetup.name}</p>
-                <!-- TODO: fix ts -->
                 <p class="fsize-subhead">{meetup.club.name}</p>
             </div>
 
