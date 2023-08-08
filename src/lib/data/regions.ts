@@ -8,15 +8,17 @@ const regions: {[key in Region]: {name: string, maori_name?: string}} = {
 	GISBORNE: { name: "Gisborne", maori_name: "Te Tairāwhiti" },
 	HAWKES_BAY: { name: "Hawke's Bay", maori_name: "Te Matau-a-Māui" },
 	TARANAKI: { name: "Taranaki" },
-	MANGAWATU_WHANGANUI: { name: "Manawatū-Whanganui" },
+	MANAWATU_WHANGANUI: { name: "Manawatū-Whanganui" },
 	WELLINGTON: { name: "Wellington", maori_name: "Te Whanga-nui-a-Tara" },
 	TASMAN: { name: "Tasman", maori_name: "Te Tai-o-Aorere" },
 	NELSON: { name: "Nelson", maori_name: "Whakatū" },
-	MALBOROUGH: { name: "Marlborough", maori_name: "Te Tauihu-o-te-waka" },
+	MARLBOROUGH: { name: "Marlborough", maori_name: "Te Tauihu-o-te-waka" },
 	WEST_COAST: { name: "West Coast", maori_name: "Te Tai Poutini" },
 	CANTERBURY: { name: "Canterbury", maori_name: "Waitaha" },
 	OTAGO: { name: "Otago", maori_name: "Ōtākou" },
 	SOUTHLAND: { name: "Southland", maori_name: "Murihiku" },
+
+	VISITOR: { name: "Visitor" }
 }
 
 const regionKeys = Object.keys(regions)

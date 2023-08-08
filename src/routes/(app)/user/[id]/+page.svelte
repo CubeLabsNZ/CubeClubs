@@ -22,7 +22,7 @@
     let historyIndex: number;
 
     export let data: PageData;
-    let innerWidth;
+    let innerWidth = 1000;
 </script>
 
 <svelte:window bind:innerWidth/>
