@@ -36,5 +36,7 @@ export const load = (async () => {
         }
     }
 
+    meetups.past.sort((m1, m2) => m2.date.getTime() - m1.date.getTime());
+
     return meetups;
 }) satisfies PageServerLoad;

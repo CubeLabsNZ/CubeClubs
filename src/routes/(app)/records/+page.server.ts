@@ -52,10 +52,10 @@ export const load = (async ({ params }) => {
                 }
             },
             orderBy: {
-                average: 'asc'
+                value: 'asc'
             },
             select: {
-                average: true,
+                value: true,
                 user: {
                     select: {
                         name: true,

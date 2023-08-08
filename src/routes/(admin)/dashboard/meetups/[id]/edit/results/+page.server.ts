@@ -55,6 +55,8 @@ export const actions = {
             return fail(400)
         }
 
+        console.log(solves.map((time, idx) => ({index: idx, time: time})))
+
         const meetup = await prisma.round.update({
             where: { 
                 id: eventId,
@@ -63,7 +65,7 @@ export const actions = {
                 results: {
                     create: {
                         // TODO: trim + other types of averages
-                        average: solves.reduce((x, y) => x + y) / 5,
+                        value: solves.reduce((x, y) => x + y) / 5,
                         solves: {
                             createMany: {
                                 data: solves.map((time, idx) => ({ index: idx, time: time }))

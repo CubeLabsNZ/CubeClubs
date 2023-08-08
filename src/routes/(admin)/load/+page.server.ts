@@ -1,6 +1,6 @@
 import prisma from "$lib/prisma";
 
-import { Region, Puzzle, Format } from "@prisma/client";
+import { Region, Puzzle, Format, Prisma } from "@prisma/client";
 
 
 import * as clubs from "../../../../temp/club.json";
@@ -12,6 +12,8 @@ import * as solves from "../../../../temp/solve.json";
 import * as userinmeetups from "../../../../temp/userinmeetup.json";
 import * as users from "../../../../temp/user.json";
 
+
+const INF = 10000;
 
 const tables = ["Club", "Meetup_id_seq", "Result_id_seq", "Round_id_seq", "Solve", "User_id_seq", "Club_id_seq", "Meetup", "_MeetupToUser", "Result", "Round", "Session", "User","UserInMeetup"]
 
@@ -55,19 +57,34 @@ const puzzles = {
     "Pyraminx": Puzzle.PYRA,
     "Megaminx": Puzzle.MEGA,
     "\"3x3x3 One Handed\"": Puzzle.OH,
+    "3x3x3 One Handed": Puzzle.OH,
     "Clock": Puzzle.CLOCK,
     "FMC": Puzzle.FMC,
     "3BLD": Puzzle.THREEBLD,
+    "THREEBLD": Puzzle.THREEBLD,
     "3MBLD": Puzzle.MULTIBLD,
     "4BLD": Puzzle.FOURBLD,
     "5BLD": Puzzle.FIVEBLD
 }
 
+const formats = {
+    "ao5": Format.AO5,
+    "bo3": Format.BO3,
+    "bo1": Format.BO1,
+    "mo3": Format.MO3
+}
+
+
+
 async function populateClubs() {
     await prisma.club.createMany({
         data: clubs.default
     });
+
+
+    console.log("SUCCESS: populated clubs")
 }
+
 
 async function populateMeetups() {
     for (const meetup of meetups.default) {
@@ -104,6 +121,8 @@ async function populateMeetups() {
             }
         })
     }
+
+    console.log("SUCCESS: populated meetups")
 }
 
 
@@ -125,7 +144,10 @@ async function populateUsers() {
             data: user
         })
     }
+
+    console.log("SUCCESS: populated users")
 }
+
 
 async function populateUsersInMeetups() {
     for (const x of userinmeetups.default) {
@@ -176,11 +198,183 @@ async function populateUsersInMeetups() {
             }
         })
     }
+
+    console.log("SUCCESS: populated users in meetups")
 }
+
+
+async function populateOrganisers() {
+    for (const x of meetuptousers.default) {
+        const meetup = await prisma.meetup.findUnique({
+            where: {
+                id: x.meetupId
+            },
+            select: {
+                organisers: true
+            }
+        })
+
+        if (!meetup) { 
+            console.log("meetup doesn't exist: ", x.meetupId);
+            continue;
+        }
+
+        const currentOrganisers = [];
+        if (meetup.organisers.length != 0) {
+            for (const org of meetup.organisers) {
+                currentOrganisers.push({id: Number(org.id)})
+            }
+        }
+
+        const organisers = ((meetup.organisers.length === 0) ? [{ id: x.userId }] : [...currentOrganisers, {id: x.userId}]);
+        console.log(organisers);
+
+        await prisma.meetup.update({
+            where: {
+                id: x.meetupId
+            },
+            data: {
+                organisers: {
+                    connect: organisers
+                }
+            }
+        })
+    }
+
+    console.log("SUCCESS: populated organisers in meetups")
+}
+
+
+async function populateRounds() {
+    for (const round of rounds.default) {
+        if (round.puzzle == "" || round.format == "") {
+            console.log("BREAK DETECTED")
+            continue;
+        }
+
+
+        await prisma.meetup.update({
+            where: {
+                id: round.meetupId
+            },
+            data: {
+                rounds: {
+                    create: {
+                        startDate: new Date(round.startDate),
+                        endDate: new Date(round.endDate),
+                        puzzle: puzzles[round.puzzle],
+                        format: formats[round.format.toLowerCase()],
+                        proceedNumber: round.proceedNumber === "" ? 0 : round.proceedNumber,
+                        id: round.id
+                    }
+                }
+            }
+        })
+    }
+
+    console.log("SUCCESS: populated rounds")
+}
+
+
+async function populateResults() {
+    for (const result of results.default) {
+        await prisma.round.update({
+            where: {
+                id: result.roundId
+            },
+            data: {
+                results: {
+                    createMany: {
+                        data: [{
+                            id: result.id,
+                            value: result.result == "" ? INF : result.result,
+                            userId: result.userId,
+                        }]
+                    }
+                }
+            }
+        })
+    }
+
+    console.log("SUCCESS: populated results")
+}
+
+
+async function populateSolves() { 
+    const groupedSolves = new Array(7000).fill(0).map(x => []);
+
+
+    for (const solve of solves.default) {
+        if (solve.resultId === "") { continue; }
+
+        groupedSolves[solve.resultId].push({
+            id: solve.id,
+            time: (solve.penalty === "DNF" || solve.time === "") ? INF : solve.time
+        });
+    }
+
+    groupedSolves.forEach((x, i) => {
+        if (x.length > 0) {
+            const initial = x[0].id;
+
+            x.forEach((s, j) => {
+                groupedSolves[i][j].id = s.id - initial
+            })
+        }
+    })
+
+    for (let i = 0; i < 7000; ++i) {
+        if (groupedSolves[i].length > 0) {
+            // const solvesPerResult: Prisma.SolveCreateManyResultInput = groupedSolves[i].map(s => ({ index: s.id, time: s.time, }));
+            // console.log(solvesPerResult)
+
+            // for (const gs of groupedSolves[i]) {
+            //     console.log(gs)
+
+            //     await prisma.result.update({
+            //         where: {
+            //             id: i
+            //         },
+            //         data: {
+            //             solves: {
+            //                 createMany: {
+            //                     data: [{ index: gs.id, time: gs.time }]
+            //                 }
+            //             } 
+            //         }
+            //     })
+            // }
+            
+
+
+            await prisma.result.update({
+                where: {
+                    id: i
+                },
+                data: {
+                    solves: {
+                        createMany: {
+                            data: groupedSolves[i].map(s => ({ index: s.id, time: s.time, }))
+                        }
+                    } 
+                }
+            })
+        }
+    }
+}
+
+
+
 
 export const load = (async () => {
     await populateClubs();
     await populateMeetups();
     await populateUsers();
     await populateUsersInMeetups()
+    await populateOrganisers();
+    await populateRounds();
+
+    await populateResults();
+
+    await populateSolves();
 })
