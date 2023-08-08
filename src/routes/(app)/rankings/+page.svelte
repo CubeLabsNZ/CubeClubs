@@ -16,6 +16,10 @@
 
     import * as Icons from "$lib/assets/cube-icons/icons";
 
+    import type { PageData } from "./$types"
+    import puzzles from "$lib/data/puzzles";
+
+    export let data: PageData
 
     interface Result {
         ranking: number;
@@ -46,44 +50,23 @@
             16 = 5bld
     */
 
-    let formatIndex: number, eventIndex: number;
-    let regionSelected: string;
+    let formatIndex: number;
+    let regionSelected: string
+    let eventSelected: string;
+    // TODO: make stupid multibutton more fleible than just stupid index stupid
+    let eventIndex = 0;
+    $: eventSelected = Object.keys(puzzles)[eventIndex];
 
+    $: updateQuery(formatIndex, eventSelected, regionSelected);
 
-    let results: Result[] = [
-        { ranking: 1, name: "John Doe", result: 1.67, region: Region.AUCKLAND, meetupName: "ASC Meetup April 2023", data: "1.54, 1.64, 1.45, 1.90, 1.24" },
-        { ranking: 2, name: "Joe Bloggs", result: 1.78, region: Region.OTAGO, meetupName: "Christchurch Meetups", data: "1.54, 1.64, 1.45, 1.90, 1.24" },
-        { ranking: 1, name: "John Doe", result: 1.67, region: Region.AUCKLAND, meetupName: "ASC Meetup April 2023", data: "1.54, 1.64, 1.45, 1.90, 1.24" },
-        { ranking: 1, name: "John Doe", result: 1.67, region: Region.AUCKLAND, meetupName: "ASC Meetup April 2023", data: "1.54, 1.64, 1.45, 1.90, 1.24" },
-        { ranking: 1, name: "John Doe", result: 1.67, region: Region.AUCKLAND, meetupName: "ASC Meetup April 2023", data: "1.54, 1.64, 1.45, 1.90, 1.24" },
-        { ranking: 1, name: "John Doe", result: 1.67, region: Region.AUCKLAND, meetupName: "ASC Meetup April 2023", data: "1.54, 1.64, 1.45, 1.90, 1.24" },
-        { ranking: 2, name: "Joe Bloggs", result: 1.78, region: Region.OTAGO, meetupName: "Christchurch Meetups", data: "1.54, 1.64, 1.45, 1.90, 1.24" },
-        { ranking: 2, name: "Joe Bloggs", result: 1.78, region: Region.OTAGO, meetupName: "Christchurch Meetups", data: "1.54, 1.64, 1.45, 1.90, 1.24" },
-        { ranking: 2, name: "Joe Bloggs", result: 1.78, region: Region.OTAGO, meetupName: "Christchurch Meetups", data: "1.54, 1.64, 1.45, 1.90, 1.24" },
-        { ranking: 2, name: "Joe Bloggs", result: 1.78, region: Region.OTAGO, meetupName: "Christchurch Meetups", data: "1.54, 1.64, 1.45, 1.90, 1.24" },
-        { ranking: 1, name: "John Doe", result: 1.67, region: Region.AUCKLAND, meetupName: "ASC Meetup April 2023", data: "1.54, 1.64, 1.45, 1.90, 1.24" },
-        { ranking: 2, name: "Joe Bloggs", result: 1.78, region: Region.OTAGO, meetupName: "Christchurch Meetups", data: "1.54, 1.64, 1.45, 1.90, 1.24" },
-        { ranking: 1, name: "John Doe", result: 1.67, region: Region.AUCKLAND, meetupName: "ASC Meetup April 2023", data: "1.54, 1.64, 1.45, 1.90, 1.24" },
-        { ranking: 1, name: "John Doe", result: 1.67, region: Region.AUCKLAND, meetupName: "ASC Meetup April 2023", data: "1.54, 1.64, 1.45, 1.90, 1.24" },
-        { ranking: 1, name: "John Doe", result: 1.67, region: Region.AUCKLAND, meetupName: "ASC Meetup April 2023", data: "1.54, 1.64, 1.45, 1.90, 1.24" },
-        { ranking: 1, name: "John Doe", result: 1.67, region: Region.AUCKLAND, meetupName: "ASC Meetup April 2023", data: "1.54, 1.64, 1.45, 1.90, 1.24" },
-        { ranking: 2, name: "Joe Bloggs", result: 1.78, region: Region.OTAGO, meetupName: "Christchurch Meetups", data: "1.54, 1.64, 1.45, 1.90, 1.24" },
-        { ranking: 2, name: "Joe Bloggs", result: 1.78, region: Region.OTAGO, meetupName: "Christchurch Meetups", data: "1.54, 1.64, 1.45, 1.90, 1.24" },
-        { ranking: 2, name: "Joe Bloggs", result: 1.78, region: Region.OTAGO, meetupName: "Christchurch Meetups", data: "1.54, 1.64, 1.45, 1.90, 1.24" },
-        { ranking: 2, name: "Joe Bloggs", result: 1.78, region: Region.OTAGO, meetupName: "Christchurch Meetups", data: "1.54, 1.64, 1.45, 1.90, 1.24" },
-    ];
-
-
-    $: updateQuery(formatIndex, eventIndex, regionSelected);
-
-    function updateQuery(formatIndex: number, eventIndex: number, selectedRegion: string) {
+    function updateQuery(formatIndex: number, selectedEvent: number, selectedRegion: string) {
         if (!browser) { return }
 
         let query = new URLSearchParams($page.url.searchParams.toString());
 
         query.set("format", formatIndex ? "average" : "single");
 
-        query.set("event", String(eventIndex));
+        query.set("event", selectedEvent);
 
         console.log($page.url.searchParams);
 
@@ -187,20 +170,22 @@
         </tr>
 
 
-        {#each results as { ranking, name, result, region, meetupName, data} }
+        {#if data.results.single.allregions[eventSelected]}
+        {#each data.results.single.allregions[eventSelected] as single }
             <tr>
                 <td class="tc-dummy"></td>
 
-                <td class="tc-ranking">{ranking}</td>
-                <td class="tc-name">{name}</td>
-                <td class="tc-result">{result}</td>
-                <td class="tc-region">{region}</td>
-                <td class="tc-meetup">{meetupName}</td>
-                <td class="tc-solves">{data}</td>
+                <td class="tc-type">Single</td>
+                <td class="tc-name"><a href={`/user/${single.result.user.id}`}>{single.result.user.name}</a></td>
+                <td class="tc-result">{single.time}</td>
+                <td class="tc-region">{regionToString(single.result.user.region)}</td>
+                <td class="tc-meetup"><a href={`/meetups/${single.result.round.meetup.id}`}>{single.result.round.meetup.name}</a></td>
+                <td class="tc-solves"></td>
 
                 <td class="tc-dummy"></td>
             </tr>
         {/each}
+        {/if}
 
 
         <tr class="td-dummy">

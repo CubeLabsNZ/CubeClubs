@@ -24,7 +24,28 @@ export const load = (async ({ params, cookies }) => {
                     }
                 }
             },
-            rounds: true
+            rounds: {
+                include: {
+                    results: {
+                        select: {
+                            user: {
+                                select: {
+                                    name: true
+                                }
+                            },
+                            solves: {
+                                orderBy: {
+                                    index: 'asc'
+                                },
+                                select: {
+                                    time: true
+                                }
+                            },
+                            average: true,
+                        }
+                    }
+                }
+            }
         }
     })
 
@@ -36,7 +57,7 @@ export const load = (async ({ params, cookies }) => {
 
     // TODO: live resuts needs round
     return {
-        meetup
+        meetup,
     }
 }) satisfies PageServerLoad
 

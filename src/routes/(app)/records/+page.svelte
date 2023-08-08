@@ -134,7 +134,6 @@
                     <td></td>
                     <td></td>
                 </tr>
-                {@debug data}
 
                 <!-- INFO: single -->
                 {#if single}

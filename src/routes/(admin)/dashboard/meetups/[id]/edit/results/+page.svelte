@@ -92,21 +92,23 @@
             </tr>
 
 
-            <tr>
-                <td class="tc-dummy"></td>
+            {#each data.meetup.rounds as round }
+                {#each round.results as result,idx }
+                    <tr>
+                        <td class="tc-dummy"></td>
 
-                <td class="tc-ranking"></td>
-                <td class="tc-name">Name</td>
-                <td class="tc-result">Average</td>
-                <!-- TODO: as many solves as the round has -->
-                <td class="tc-solves">S1</td>
-                <td class="tc-solves">S2</td>
-                <td class="tc-solves">S3</td>
-                <td class="tc-solves">S4</td>
-                <td class="tc-solves">S5</td>
+                        <td class="tc-ranking">{idx+1}</td>
+                        <td class="tc-name">{result.user.name}</td>
+                        <td class="tc-result">{result.average}</td>
+                        <!-- TODO: as many solves as the round has -->
+                        {#each result.solves as solve}
+                        <td class="tc-solves">{solve.time}</td>
+                        {/each}
 
-                <td class="tc-dummy"></td>
-            </tr>
+                        <td class="tc-dummy"></td>
+                    </tr>
+                {/each}
+            {/each}
 
 
             <tr class="td-dummy">

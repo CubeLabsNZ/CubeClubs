@@ -40,7 +40,7 @@ export const load = (async ({ cookies, params }) => {
         end: round.endDate,
         // TODO: deduplicate this - it's in the client too
         title: `${puzzles[round.puzzle].name} - Round ${round.number}`,
-        enditable: round._count.results == 0, // Only editable if no results
+        editable: round._count.results == 0, // Only editable if no results
         extendedProps: {
             puzzleType: round.puzzle,
             server: true,
