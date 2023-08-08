@@ -19,7 +19,6 @@ model User {
   passHash        String
   name            String
   region          Region
-  gender          Gender
   isClubOrganiser Boolean @default(false)
 
   sessions Session[]
@@ -58,9 +57,10 @@ model Meetup {
   organisers      User[] // TODO: check relation?
   description     String
   contact         String
-  competitorLimit Int
+  competitorLimit Int?
 
   externalRegistrationLink String?
+  registrationInformation  String  @default("")
 
   date DateTime @db.Date
 
@@ -76,13 +76,14 @@ model Meetup {
 
 model Round {
   id        Int      @id @default(autoincrement())
+
   startDate DateTime
   endDate   DateTime
   puzzle    Puzzle
   format    Format
+  proceedNumber Int
   results   Result[]
 
-  proceedNumber Int
 
   meetup   Meetup @relation(fields: [meetupId], references: [id])
   meetupId Int
@@ -90,38 +91,26 @@ model Round {
 
 model Result {
   id      Int   @id @default(autoincrement())
-  round   Round @relation(fields: [roundId], references: [id])
-  roundId Int
+
+  solves Solve[]
+  value Float
+
 
   user   User    @relation(fields: [userId], references: [id])
   userId Int
-  solves Solve[]
 
-  average Float
+  round   Round @relation(fields: [roundId], references: [id])
+  roundId Int
 }
 
 model Solve {
-  index   Int
-  time    Int
-  penalty Penalty
+  index Int
+  time  Float
 
   result   Result @relation(fields: [resultId], references: [id])
   resultId Int
 
   @@id([resultId, index])
-}
-
-enum Penalty {
-  NONE
-  PLUSTWO
-  DNF
-}
-
-// INFO: ENUMS
-enum Gender {
-  MALE
-  FEMALE
-  OTHER
 }
 
 enum Region {
@@ -132,15 +121,17 @@ enum Region {
   GISBORNE
   HAWKES_BAY
   TARANAKI
-  MANGAWATU_WHANGANUI
+  MANAWATU_WHANGANUI
   WELLINGTON
   TASMAN
   NELSON
-  MALBOROUGH
+  MARLBOROUGH
   WEST_COAST
   CANTERBURY
   OTAGO
   SOUTHLAND
+
+  VISITOR
 }
 
 enum Puzzle {

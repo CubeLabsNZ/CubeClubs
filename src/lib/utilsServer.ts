@@ -1,6 +1,6 @@
 import { redirect, error, type Cookies } from "@sveltejs/kit";
 import prisma from "$lib/prisma";
-import type { User } from "@prisma/client";
+import type { Meetup, Puzzle, Round, User } from "@prisma/client";
 
 export async function getUserSession(cookies: Cookies): Promise<User | null | undefined> {
     const sessionId = cookies.get("sessionId");
@@ -37,7 +37,7 @@ export async function getUserSessionOrThrow(cookies: Cookies, needsAdmin: boolea
 }
 
 
-export function populateRounds(rounds) {
+export function populateRounds(rounds: Round[]) {
     const roundForPuzzle = {}
     for (const round of rounds) {
         // TODO: find better way
@@ -47,4 +47,15 @@ export function populateRounds(rounds) {
         round.number = roundForPuzzle[round.puzzle]
         roundForPuzzle[round.puzzle]++
     }
+
+    let maxRounds = {};
+    for (const [key, value] of Object.entries(roundForPuzzle)) {
+        maxRounds[key] = value - 1;
+    }
+
+    return maxRounds;
+}
+
+export function getMeetupPuzzles(meetup: Meetup): Puzzle[] {
+    return [... new Set(meetup.rounds.map((round: Round) => round.puzzle))];
 }

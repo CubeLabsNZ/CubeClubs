@@ -2,7 +2,6 @@ import prisma from '$lib/prisma';
 import { error, fail } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
 import { getUserSessionOrThrow, populateRounds } from '$lib/utilsServer';
-import { Penalty } from '@prisma/client';
 
 export const load = (async ({ params, cookies }) => {
     // FIXME: broken ? await getUserSessionOrThrow(cookies, true)
@@ -77,6 +76,8 @@ export const actions = {
             return fail(400)
         }
 
+        console.log(solves.map((time, idx) => ({index: idx, time: time})))
+
         const meetup = await prisma.round.update({
             where: { 
                 id: eventId,
@@ -85,10 +86,10 @@ export const actions = {
                 results: {
                     create: {
                         // TODO: trim + other types of averages
-                        average: solves.reduce((x, y) => x + y) / 5,
+                        value: solves.reduce((x, y) => x + y) / 5,
                         solves: {
                             createMany: {
-                                data: solves.map((time, idx) => ({index: idx, time: time, penalty: Penalty.NONE}))
+                                data: solves.map((time, idx) => ({ index: idx, time: time }))
                             }
                         },
                         user: {

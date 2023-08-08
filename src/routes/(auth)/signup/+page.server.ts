@@ -1,5 +1,5 @@
 import type { Actions } from "./$types";
-import type { Region, Gender } from "@prisma/client";
+import type { Region } from "@prisma/client";
 
 import { fail, redirect } from "@sveltejs/kit";
 
@@ -57,8 +57,7 @@ export const actions = {
                 email: email as string,
                 passHash: hash,
                 name: fullName as string,
-                region: region as Region,
-                gender: "MALE"
+                region: region as Region
             }
         });
 
