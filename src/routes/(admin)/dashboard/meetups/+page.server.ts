@@ -12,7 +12,7 @@ export const load = (async () => {
             rounds: true,
         },
         orderBy: {
-            date: 'asc',
+            date: 'desc',
         }
     })
 
