@@ -3,6 +3,9 @@
     import { goto } from '$app/navigation';
 
     import puzzles from "$lib/data/puzzles";
+    import formats from "$lib/data/formats";
+    import regions from "$lib/data/regions";
+
     import { getRoundName } from "$lib/utils";
 
     import TabBar from '$lib/components/global/TabBar.svelte';
@@ -24,6 +27,7 @@
     const currentRound = data.rounds.find(r => r.id === Number(data.roundId));
 
     console.log(currentRound);
+    console.log(formats[currentRound.format].count)
 </script>
 
 <TabBar
@@ -48,7 +52,7 @@
             <th class="tc-best">Best</th>
             <th class="tc-region">Region</th>
             <!-- TODO: depends on if ao5, mo3, single... -->
-            {#each Array(5) as _, i}
+            {#each Array(formats[currentRound.format].count) as _, i}
                 <th class="tc-solves">{i + 1}</th>
             {/each}
 
@@ -63,7 +67,7 @@
             <td></td>
             <td></td>
 
-            {#each Array(5) as _, i}
+            {#each Array(formats[currentRound.format].count) as _}
                 <td></td>
             {/each}
 
@@ -71,7 +75,7 @@
         </tr>
 
 
-        {#each Array(15) as _, rank}
+        {#each currentRound.results as { value, solves, user }, rank}
             <tr>
                 <td class="tc-dummy"></td>
 
@@ -93,13 +97,13 @@
                     <td class="tc-ranking" data-proceed={rank < currentRound.proceedNumber ?? 0}> {rank + 1} </td>
                 {/if}
 
-                <td class="tc-name">Name</td>
-                <td class="tc-average">Average</td>
-                <td class="tc-best">Best</td>
-                <td class="tc-region">Region</td>
-                <!-- TODO: depends on if ao5, mo3, single... -->
-                {#each Array(5) as _, i}
-                    <td class="tc-solves">{i + 1}</td>
+                <td class="tc-name">{user.name}</td>
+                <td class="tc-average">{value}</td>
+                <td class="tc-best">{Math.min(...solves.map(s => s.time))}</td>
+                <td class="tc-region">{user.region}</td>
+
+                {#each solves as { time }}
+                    <td class="tc-solves">{time}</td>
                 {/each}
 
                 <td class="tc-dummy"></td>
@@ -114,7 +118,7 @@
             <td></td>
             <td></td>
 
-            {#each Array(5) as _, i}
+            {#each Array(formats[currentRound.format].count) as _, i}
                 <td></td>
             {/each}
 

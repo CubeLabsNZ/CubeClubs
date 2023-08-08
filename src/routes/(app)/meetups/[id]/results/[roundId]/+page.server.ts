@@ -13,12 +13,34 @@ export const load = (async ({ params }) => {
         where: { id: id },
         include: {
             rounds: {
+                include: {
+                    results: {
+                        include: {
+                            solves: {
+                                orderBy: {
+                                    index: "asc"
+                                }
+                            },
+                            user: {
+                                select: {
+                                    name: true,
+                                    region: true
+                                }
+                            }
+                        },
+                        orderBy: {
+                            value: "asc"
+                        }
+                    },
+                },
                 orderBy: {
                     startDate: "asc"
                 }
             }
-        }
+        },
     })
+
+
 
     // TODO: check admin, can view "public page" in dashboard -> to here.
     if (!meetup || !meetup.isPublished) {
