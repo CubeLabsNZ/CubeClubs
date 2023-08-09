@@ -143,8 +143,8 @@ export const load = (async ({ params }) => {
         if (countRRSingle == 0) records.regional.single++;
         if (countIRSingle == 0) records.island.single++;
 
-        const countRRAverage = await prisma.result.count({where: {value: {lt: average.average}, user: {region: user.region}}})
-        const countIRAverage = await prisma.result.count({where: {value: {lt: average.average}, user: {region: {in: islandRegions(user.region)}}}}) + 1
+        const countRRAverage = await prisma.result.count({where: {value: {lt: average.value}, user: {region: user.region}}})
+        const countIRAverage = await prisma.result.count({where: {value: {lt: average.value}, user: {region: {in: islandRegions(user.region)}}}}) + 1
 
 
         PRs[key] = {single: {
@@ -153,7 +153,7 @@ export const load = (async ({ params }) => {
             RR: countRRSingle + 1,
             IR: countIRSingle + 1
         }, average: {
-            time: average.average,
+            time: average.value,
             RR: countRRAverage + 1,
             IR: countIRAverage + 1,
         }}

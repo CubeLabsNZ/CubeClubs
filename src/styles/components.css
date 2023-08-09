@@ -146,6 +146,11 @@ td:not(:first-child):not(:last-child), th:not(:first-child):not(:last-child) {
     padding-right: 6px;
 }
 
+.tc-empty {
+    min-width: 0px;
+    padding: 0 !important;
+}
+
 td:nth-last-child(2) {
     border-top-right-radius: var(--v-border-radius-small);
     border-bottom-right-radius: var(--v-border-radius-small);

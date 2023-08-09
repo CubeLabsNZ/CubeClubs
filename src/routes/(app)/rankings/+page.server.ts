@@ -14,7 +14,6 @@ export const load = (async ( { url }) => {
     // WARN: this entire thing is so bad... so inefficient -> combine into one query, but filter out duplicates? how to take only 1 from each user?
 
     const { id } = await prisma.user.findFirst({
-        take: 1,
         orderBy: {
             id: 'desc'
         }
@@ -32,7 +31,6 @@ export const load = (async ( { url }) => {
                     }
                 },
             },
-            take: 1,
             orderBy: {
                 time: "asc"
             },

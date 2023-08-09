@@ -27,65 +27,89 @@
 
 
 <table style:margin-top=32px>
-    <!-- TODO: for each event in the meetup, show new column AND show ticks for registered */
+    <colgroup>
+        <col span=1 style:width=8px>
+
+        <col span=1 style:width=175px>
+        <col span=1 style:width=160px>
+
+        {#each Array(data.puzzles.length) as _}
+            <col span=1 style:width=36px>
+        {/each}
+
+        <col span=1 style:width=auto>
+
+        <col span=1 style:width=8px>
+    </colgroup>
+
+
+    <tbody>
+        <!-- TODO: for each event in the meetup, show new column AND show ticks for registered */
 <!-- NOTE: tc-dummy is entirely invisible to provide padding to either side of the table -->
-    <tr>
-        <th class="tc-dummy" />
-
-        <th class="tc-name">Name</th>
-        <th class="tc-region">Region</th>
-
-        {#each data.puzzles as puzzle}
-            <th class="tc-puzzle">
-                <img src={puzzles[puzzle].icon} alt={puzzles[puzzle].name} style:height=24px>
-            </th>
-        {/each}
-
-        <th class="tc-dummy" />
-    </tr>
-
-    <!-- NOTE: td-dummy is entirely invisible to provide padding to the top and bottom of the table -->
-    <tr class="td-dummy">
-        <td />
-        <td />
-        <td />
-
-        {#each data.puzzles as puzzle}
-            <td />
-        {/each}
-
-        <td />
-    </tr>
-
-
-    {#each data.meetup.users as { user, registeredEvents } }
         <tr>
-            <td class="tc-dummy" />
-            <td class="tc-name">
-                <a href="/user/{user.id}"> {user.name} </a>
-            </td>
-            <td class="tc-region">{regionToString(user.region)}</td>
+            <th class="tc-dummy" />
 
+            <th class="tc-name">Name</th>
+            <th class="tc-region">Region</th>
 
-            <!-- WARN: this is actually working, but it seems data is not perfect, and those with no results in an event is registered? -->
             {#each data.puzzles as puzzle}
-                <td class="tc-puzzle">
-                    {#if registeredEvents.includes(puzzle)}
-                        <span class="material-symbols-outlined">check</span>
-                    {/if}
-                </td>
+                <th class="tc-puzzle">
+                    <img src={puzzles[puzzle].icon} alt={puzzles[puzzle].name} style:height=24px>
+                </th>
             {/each}
 
-            <td class="tc-dummy" />
-        </tr>
-    {/each}
+            <th class="tc-empty" />
 
-    <tr class="td-dummy">
-        <td />
-        <td />
-        <td />
-        <td />
-    </tr>
+            <th class="tc-dummy" />
+        </tr>
+
+        <!-- NOTE: td-dummy is entirely invisible to provide padding to the top and bottom of the table -->
+        <tr class="td-dummy">
+            <td />
+            <td />
+            <td />
+
+            {#each data.puzzles as puzzle}
+                <td />
+            {/each}
+
+            <td />
+            <td />
+        </tr>
+
+
+        {#each data.meetup.users as { user, registeredEvents } }
+            <tr>
+                <td class="tc-dummy" />
+                <td class="tc-name">
+                    <a class="regular-link" style:font-weight=500 href="/user/{user.id}"> {user.name} </a>
+                </td>
+                <td class="tc-region">{regionToString(user.region)}</td>
+
+
+                <!-- WARN: this is actually working, but it seems data is not perfect, and those with no results in an event is registered? -->
+                {#each data.puzzles as puzzle}
+                    <td class="tc-puzzle">
+                        {#if registeredEvents.includes(puzzle)}
+                            <span class="material-symbols-outlined">check</span>
+                        {/if}
+                    </td>
+                {/each}
+
+                <td class="tc-empty" />
+
+                <td class="tc-dummy" />
+            </tr>
+        {/each}
+
+        <tr class="td-dummy">
+            <td />
+            <td />
+            <td />
+            <td />
+            <td />
+        </tr>
+    </tbody>
 </table>
 
 
@@ -96,17 +120,6 @@
     .tc-puzzle {
         text-align: left;
     }
-
-    .tc-name {
-        min-width: 200px;
-        font-weight: 500;
-    }
-
-    tr:not(:first-child) .tc-name,
-    tr:not(:first-child) .tc-name a {
-        color: var(--c-a);
-    }
-
 
     tr:first-child .tc-puzzle {
         vertical-align: top;

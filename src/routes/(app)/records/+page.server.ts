@@ -86,8 +86,6 @@ export const load = (async ({ params }) => {
 
         if (!average) continue; // Should never happen
 
-
-
         records[key] = {
             single: single,
             average: average

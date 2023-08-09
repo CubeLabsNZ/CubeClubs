@@ -91,7 +91,7 @@
 
         <div class="label-group">
             <p class="label">Region</p>
-            
+
             <Select name="region" bind:value={regionSelected}>
                 <option selected value>All Regions</option>
                 {#each Object.keys(regions) as value }
@@ -131,94 +131,115 @@
 
 
     <table>
-        <!-- NOTE: tc-dummy is entirely invisible to provide padding to either side of the table -->
-        <tr>
-            <th class="tc-dummy"></th>
+        <colgroup>
+            <col span=1 style:width=8px>
 
-            <th class="tc-ranking"></th>
-            <th class="tc-name">Name</th>
-            <th class="tc-result">Average</th>
-            <th class="tc-region">Region</th>
-            <th class="tc-meetup">Meetup</th>
+            <col span=1 style:width=50px>
+            <col span=1 style:width=160px>
+            <col span=1 style:width=80px>
+            <col span=1 style:width=160px>
+            <col span=1 style:width=auto>
 
             {#if formatIndex}
-                <th class="tc-solves">Solves</th>
+                <col span=1 style:width=auto>
             {/if}
 
-            <th class="tc-dummy"></th>
-        </tr>
+                <col span=1 style:width=8px>
+        </colgroup>
 
-        <!-- NOTE: td-dummy is entirely invisible to provide padding to the top and bottom of the table -->
-        <tr class="td-dummy">
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
+        <tbody>
+            <!-- NOTE: tc-dummy is entirely invisible to provide padding to either side of the table -->
+            <tr>
+                <th class="tc-dummy"></th>
 
-            {#if formatIndex}
+                <th class="tc-ranking"></th>
+                <th class="tc-name">Name</th>
+                <th class="tc-result">Average</th>
+                <th class="tc-region">Region</th>
+                <th class="tc-meetup">Meetup</th>
+
+                {#if formatIndex}
+                    <th class="tc-solves">Solves</th>
+                {/if}
+
+                <th class="tc-dummy"></th>
+            </tr>
+
+            <!-- NOTE: td-dummy is entirely invisible to provide padding to the top and bottom of the table -->
+            <tr class="td-dummy">
                 <td></td>
-            {/if}
-
-            <td></td>
-        </tr>
-
-
-        {#if data.results}
-            {#if formatIndex}
-                {#each data.results as average, i }
-                    <tr>
-                        <td class="tc-dummy"></td>
-
-                        <td class="tc-ranking">{i + 1}</td>
-                        <td class="tc-name"><a class="regular-link" href={`/user/${average.user.id}`}>{average.user.name}</a></td>
-                        <td class="tc-result">{average.value}</td>
-                        <td class="tc-region">{regionToString(average.user.region)}</td>
-                        <td class="tc-meetup"><a class="regular-link" href={`/meetups/${average.round.meetup.id}`}>{average.round.meetup.name}</a></td>
-
-                        {#each average.solves as solve }
-                            <td class="tc-solves">{solve.time}</td>
-                        {/each}
-
-                        <td class="tc-dummy"></td>
-                    </tr>
-                {/each}
-            {:else}
-                {#each data.results as single, i }
-                    <tr>
-                        <td class="tc-dummy"></td>
-
-                        <td class="tc-ranking">{i + 1}</td>
-                        <td class="tc-name"><a class="regular-link" href={`/user/${single.result.user.id}`}>{single.result.user.name}</a></td>
-                        <td class="tc-result">{single.time}</td>
-                        <td class="tc-region">{regionToString(single.result.user.region)}</td>
-                        <td class="tc-meetup"><a class="regular-link" href={`/meetups/${single.result.round.meetup.id}`}>{single.result.round.meetup.name}</a></td>
-
-                        <td class="tc-dummy"></td>
-                    </tr>
-                {/each}
-            {/if}
-        {/if}
-
-
-        <tr class="td-dummy">
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-
-            {#if formatIndex}
                 <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+
+                {#if formatIndex}
+                    <td></td>
+                {/if}
+
+                <td></td>
+            </tr>
+
+
+            {#if data.results}
+                {#if formatIndex}
+                    {#each data.results as average, i }
+                        <tr>
+                            <td class="tc-dummy"></td>
+
+                            <td class="tc-ranking">{i + 1}</td>
+                            <td class="tc-name"><a class="regular-link" href={`/user/${average.user.id}`}>{average.user.name}</a></td>
+                            <td class="tc-result">{average.value}</td>
+                            <td class="tc-region">{regionToString(average.user.region)}</td>
+                            <td class="tc-meetup"><a class="regular-link" href={`/meetups/${average.round.meetup.id}`}>{average.round.meetup.name}</a></td>
+
+                            {#each average.solves as solve }
+                                <td class="tc-solves">{solve.time}</td>
+                            {/each}
+
+                            <td class="tc-dummy"></td>
+                        </tr>
+                    {/each}
+                {:else}
+                    {#each data.results as single, i }
+                        <tr>
+                            <td class="tc-dummy"></td>
+
+                            <td class="tc-ranking">{i + 1}</td>
+                            <td class="tc-name"><a class="regular-link" href={`/user/${single.result.user.id}`}>{single.result.user.name}</a></td>
+                            <td class="tc-result">{single.time}</td>
+                            <td class="tc-region">{regionToString(single.result.user.region)}</td>
+                            <td class="tc-meetup"><a class="regular-link" href={`/meetups/${single.result.round.meetup.id}`}>{single.result.round.meetup.name}</a></td>
+
+                            <td class="tc-dummy"></td>
+                        </tr>
+                    {/each}
+                {/if}
             {/if}
 
-            <td></td>
-        </tr>
+
+            <tr class="td-dummy">
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+
+                {#if formatIndex}
+                    <td></td>
+                {/if}
+
+                <td></td>
+            </tr>
+        </tbody>
+
+
+
     </table>
 
-    
+
 </PageContent>
 
 
@@ -228,17 +249,8 @@
         text-align: left;
     }
 
-    .tc-name {
-        min-width: 200px;
-    }
-
     .tc-result, .tc-name {
         font-weight: 500;
-    }
-
-    tr:not(:first-child) .tc-name,
-    tr:not(:first-child) .tc-meetup {
-        color: var(--c-a);
     }
 
     .tc-result, .tc-ranking {

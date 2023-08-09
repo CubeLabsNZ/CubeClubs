@@ -126,6 +126,27 @@
             <h3 class="fsize-body" style:font-weight=500>Personal Records</h3>
 
             <table style:width=100%>
+                <colgroup>
+                    <col span=1 style:width=8px>
+
+                    <col span=1 style:width=auto>
+                    <col span=1 style:width=60px>
+                    <col span=1 style:width=60px>
+                    <col span=1 style:width=60px>
+                    <col span=1 style:width=80px>
+                    <col span=1 style:width=80px>
+                    <col span=1 style:width=60px>
+                    <col span=1 style:width=60px>
+                    <col span=1 style:width=60px>
+
+                    <col span=1 style:width=8px>
+                </colgroup>
+
+                <tbody>
+
+                </tbody>
+
+
                 <tr>
                     <th class="tc-dummy"></th>
 
@@ -170,7 +191,7 @@
                     <td class="tc-icr">IcR</td>
                     <td class="tc-result">{single.time}</td>
 
-                    <td class="tc-result">{average.time}</td>
+                    <td class="tc-result">{average.average}</td>
                     <td class="tc-icr">IcR</td>
                     <td class="tc-ir">{average.IR}</td>
                     <td class="tc-rr">{average.RR}</td>

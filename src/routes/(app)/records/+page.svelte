@@ -93,49 +93,67 @@
                 <h3 class="fsize-title2">{name}</h3>
             </div>
 
-            <table style:overflow-x=auto>
-                <tr>
-                    <th class="tc-dummy"></th>
+            <!-- BUG: i hate tables, extends out of page... before being set to block display? -->
+            <table>
+                <colgroup>
+                    <col span=1 style:width=8px>
 
-                    <th class="tc-type">Format</th>
-                    <th class="tc-name">Name</th>
-                    <th class="tc-result">Result</th>
-                    <th class="tc-region">Region</th>
-                    <th class="tc-meetup">Meetup</th>
-                    <th class="tc-solves">Solves</th>
+                    <col span=1 style:width=50px>
+                    <col span=1 style:width=160px>
+                    <col span=1 style:width=80px>
+                    <col span=1 style:width=160px>
+                    <col span=1 style:width=270px>
+                    <col span=1 style:width=auto>
 
-                    <th class="tc-dummy"></th>
-                </tr>
+                    <col span=1 style:width=8px>
+                </colgroup>
 
-
-                <tr class="td-dummy">
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                </tr>
-
-                <!-- INFO: single -->
-                {#if single}
+                <tbody>
                     <tr>
-                        <td class="tc-dummy"></td>
+                        <th class="tc-dummy"></th>
 
-                        <td class="tc-type">Single</td>
-                        <td class="tc-name"><a href={`/user/${single.result.user.id}`}>{single.result.user.name}</a></td>
-                        <td class="tc-result">{single.time}</td>
-                        <td class="tc-region">{regionToString(single.result.user.region)}</td>
-                        <td class="tc-meetup"><a href={`/meetups/${single.result.round.meetup.id}`}>{single.result.round.meetup.name}</a></td>
-                        <td class="tc-solves"></td>
+                        <th class="tc-type">Format</th>
+                        <th class="tc-name">Name</th>
+                        <th class="tc-result">Result</th>
+                        <th class="tc-region">Region</th>
+                        <th class="tc-meetup">Meetup</th>
+                        <th class="tc-solves">Solves</th>
 
-                        <td class="tc-dummy"></td>
+                        <th class="tc-dummy"></th>
                     </tr>
-                {:else}
-                    <tr>
-                        <td class="tc-dummy"></td>
+
+
+                    <tr class="td-dummy">
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+
+                    <!-- INFO: single -->
+                    {#if single}
+                        <tr>
+                            <td class="tc-dummy"></td>
+
+                            <td class="tc-type">Single</td>
+
+                            <td class="tc-name"><a class="regular-link" href={`/user/${single.result.user.id}`}>{single.result.user.name}</a></td>
+
+                            <td class="tc-result">{single.time}</td>
+                            <td class="tc-region">{regionToString(single.result.user.region)}</td>
+                            <td class="tc-meetup"><a class="regular-link" href={`/meetups/${single.result.round.meetup.id}`}>{single.result.round.meetup.name}</a></td>
+                            <td class="tc-solves"></td>
+
+                            <td class="tc-dummy"></td>
+                        </tr>
+                    {:else}
+                        <tr>
+                            <td class="tc-dummy"></td>
+
                         <td class="tc-placeholder" align=center colspan=6>no results yet</td>
                         <td class="tc-dummy"></td>
                     </tr>
@@ -148,10 +166,12 @@
                         <td class="tc-dummy"></td>
 
                         <td class="tc-type">Average</td>
-                        <td class="tc-name"><a href={`/user/${average.user.id}`}>{average.user.name}</a></td>
-                        <td class="tc-result">{average.average}</td>
+
+                        <td class="tc-name"><a class="regular-link" href={`/user/${average.user.id}`}>{average.user.name}</a></td>
+
+                        <td class="tc-result">{average.value}</td>
                         <td class="tc-region">{regionToString(average.user.region)}</td>
-                        <td class="tc-meetup"><a href={`/meetups/${average.round.meetup.id}`}>{average.round.meetup.name}</a></td>
+                        <td class="tc-meetup"><a class="regular-link" href={`/meetups/${average.round.meetup.id}`}>{average.round.meetup.name}</a></td>
                         <td class="tc-solves">{average.solves.map(s => s.time).join(', ')}</td>
 
                         <td class="tc-dummy"></td>
@@ -175,6 +195,8 @@
                     <td></td>
                     <td></td>
                 </tr>
+                </tbody>
+
             </table>
         {/each}
     {:else}
@@ -274,17 +296,8 @@
         text-align: left;
     }
 
-    .tc-name {
-        min-width: 150px;
-    }
-
     .tc-result, .tc-name {
         font-weight: 500;
-    }
-
-    tr:not(:first-child) .tc-name > a,
-    tr:not(:first-child) .tc-meetup > a {
-        color: var(--c-a);
     }
 
     .tc-result {

@@ -34,10 +34,10 @@ export function islandRegions(region: string) {
 
 export function regionToString(region: string) {
 	let str = regions[region].name
-	const maori_name = regions[region].maori_name
-	if (maori_name) {
-		str += " (" + maori_name + ")"
-	}
+	// const maori_name = regions[region].maori_name
+	// if (maori_name) {
+	// 	str += " (" + maori_name + ")"
+	// }
 	return str
 }
 
