@@ -33,6 +33,7 @@
 		"@event-calendar/time-grid": "^1.5.0",
 		"@prisma/client": "^4.16.2",
 		"argon2": "^0.30.3",
+		"pbkdf2": "^3.1.2",
 		"svelte-kit-cookie-session": "^3.4.1"
 	}
 }
