@@ -21,16 +21,6 @@
 
     export let data: PageData
 
-    interface Result {
-        ranking: number;
-        name: string;
-        result: number;
-        region: Region;
-        meetupName: string;
-        data: any;
-    }
-
-
     /* INFO:
         format: 0 = single, 1 - average
 
@@ -59,7 +49,7 @@
 
     $: updateQuery(formatIndex, eventSelected, regionSelected);
 
-    function updateQuery(formatIndex: number, selectedEvent: number, selectedRegion: string) {
+    async function updateQuery(formatIndex: number, selectedEvent: number, selectedRegion: string) {
         if (!browser) { return }
 
         let query = new URLSearchParams($page.url.searchParams.toString());
@@ -67,8 +57,6 @@
         query.set("format", formatIndex ? "average" : "single");
 
         query.set("event", selectedEvent);
-
-        console.log($page.url.searchParams);
 
         if (selectedRegion == "") {
             query.delete("region")
@@ -152,7 +140,10 @@
             <th class="tc-result">Average</th>
             <th class="tc-region">Region</th>
             <th class="tc-meetup">Meetup</th>
-            <th class="tc-solves">Solves</th>
+
+            {#if formatIndex}
+                <th class="tc-solves">Solves</th>
+            {/if}
 
             <th class="tc-dummy"></th>
         </tr>
@@ -165,26 +156,49 @@
             <td></td>
             <td></td>
             <td></td>
-            <td></td>
+
+            {#if formatIndex}
+                <td></td>
+            {/if}
+
             <td></td>
         </tr>
 
 
-        {#if data.results.single.allregions[eventSelected]}
-        {#each data.results.single.allregions[eventSelected] as single }
-            <tr>
-                <td class="tc-dummy"></td>
+        {#if data.results}
+            {#if formatIndex}
+                {#each data.results as average, i }
+                    <tr>
+                        <td class="tc-dummy"></td>
 
-                <td class="tc-type">Single</td>
-                <td class="tc-name"><a href={`/user/${single.result.user.id}`}>{single.result.user.name}</a></td>
-                <td class="tc-result">{single.time}</td>
-                <td class="tc-region">{regionToString(single.result.user.region)}</td>
-                <td class="tc-meetup"><a href={`/meetups/${single.result.round.meetup.id}`}>{single.result.round.meetup.name}</a></td>
-                <td class="tc-solves"></td>
+                        <td class="tc-ranking">{i + 1}</td>
+                        <td class="tc-name"><a class="regular-link" href={`/user/${average.user.id}`}>{average.user.name}</a></td>
+                        <td class="tc-result">{average.value}</td>
+                        <td class="tc-region">{regionToString(average.user.region)}</td>
+                        <td class="tc-meetup"><a class="regular-link" href={`/meetups/${average.round.meetup.id}`}>{average.round.meetup.name}</a></td>
 
-                <td class="tc-dummy"></td>
-            </tr>
-        {/each}
+                        {#each average.solves as solve }
+                            <td class="tc-solves">{solve.time}</td>
+                        {/each}
+
+                        <td class="tc-dummy"></td>
+                    </tr>
+                {/each}
+            {:else}
+                {#each data.results as single, i }
+                    <tr>
+                        <td class="tc-dummy"></td>
+
+                        <td class="tc-ranking">{i + 1}</td>
+                        <td class="tc-name"><a class="regular-link" href={`/user/${single.result.user.id}`}>{single.result.user.name}</a></td>
+                        <td class="tc-result">{single.time}</td>
+                        <td class="tc-region">{regionToString(single.result.user.region)}</td>
+                        <td class="tc-meetup"><a class="regular-link" href={`/meetups/${single.result.round.meetup.id}`}>{single.result.round.meetup.name}</a></td>
+
+                        <td class="tc-dummy"></td>
+                    </tr>
+                {/each}
+            {/if}
         {/if}
 
 
@@ -195,7 +209,11 @@
             <td></td>
             <td></td>
             <td></td>
-            <td></td>
+
+            {#if formatIndex}
+                <td></td>
+            {/if}
+
             <td></td>
         </tr>
     </table>

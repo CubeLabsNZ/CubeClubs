@@ -69,6 +69,7 @@
                     name="organisers"
                     style:padding-left={[...addedOrganisers].reduce((total, cur) => total + sizes[cur.id], 0) + (addedOrganisers.length + 1) * 6}px
                     data-error={organisersError}
+                    autocomplete=off
                 />
             </label>
 
