@@ -18,9 +18,13 @@
     - [ ] show by region
     - [ ] show history
     - [ ] average is undefined :(
-- [ ] rankings (the entire thing)
+- [ ] rankings:
+    - [ ] **IMPROVE PERFORMANCE**
+    - [x] show by event
+    - [ ] show average/single
+    - [ ] show by region
 - [ ] login -> use old pbfkdjf2 hashing
-- [ ] signup -> doesn't let me create new account? tries to use old id???? (will this happen with everything?)
+- [x] signup -> doesn't let me create new account? tries to use old id???? (will this happen with everything?)
 
 - [ ] calculations (also see https://github.com/CubeClubsNZ/app/issues/8)
   - [ ] dnfs cannot podium / get medal
