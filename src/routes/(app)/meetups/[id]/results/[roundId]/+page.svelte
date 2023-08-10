@@ -4,9 +4,9 @@
 
     import puzzles from "$lib/data/puzzles";
     import formats from "$lib/data/formats";
-    import regions from "$lib/data/regions";
+    import regions, { regionToString } from "$lib/data/regions";
 
-    import { getRoundName } from "$lib/utils";
+    import { getRoundName, formatTime } from "$lib/utils";
 
     import TabBar from '$lib/components/global/TabBar.svelte';
     import Breadcrumb from '$lib/components/global/Breadcrumb.svelte';
@@ -98,12 +98,12 @@
                 {/if}
 
                 <td class="tc-name">{user.name}</td>
-                <td class="tc-average">{value}</td>
-                <td class="tc-best">{Math.min(...solves.map(s => s.time))}</td>
-                <td class="tc-region">{user.region}</td>
+                <td class="tc-average">{formatTime(value)}</td>
+                <td class="tc-best">{formatTime(Math.min(...solves.map(s => s.time)))}</td>
+                <td class="tc-region">{regionToString(user.region)}</td>
 
                 {#each solves as { time }}
-                    <td class="tc-solves">{time}</td>
+                    <td class="tc-solves">{formatTime(time)}</td>
                 {/each}
 
                 <td class="tc-dummy"></td>
