@@ -3,7 +3,7 @@
     import { goto, invalidate, invalidateAll } from "$app/navigation";
     import { page } from "$app/stores";
 
-    import { DNF } from "$lib/utils";
+    import { DNF, formatTime } from "$lib/utils";
 
     import Breadcrumb from "$lib/components/global/Breadcrumb.svelte";
     import Form from "$lib/components/global/Form.svelte";
@@ -131,11 +131,11 @@
                     <th class="tc-name">Name</th>
                     <th class="tc-result">Average</th>
                     <!-- TODO: as many solves as the round has -->
-                    <th class="tc-solves">S1</th>
-                    <th class="tc-solves">S2</th>
-                    <th class="tc-solves">S3</th>
-                    <th class="tc-solves">S4</th>
-                    <th class="tc-solves">S5</th>
+                    <th class="tc-solves">1</th>
+                    <th class="tc-solves">2</th>
+                    <th class="tc-solves">3</th>
+                    <th class="tc-solves">4</th>
+                    <th class="tc-solves">5</th>
 
                     <th class="tc-dummy"></th>
                 </tr>
@@ -162,10 +162,10 @@
 
                             <td class="tc-ranking">{idx+1}</td>
                             <td class="tc-name">{result.user.name}</td>
-                            <td class="tc-result">{result.value}</td>
+                            <td class="tc-result">{formatTime(result.value)}</td>
                             <!-- TODO: as many solves as the round has -->
                             {#each result.solves as solve}
-                                <td class="tc-solves">{solve.time}</td>
+                                <td class="tc-solves">{formatTime(solve.time)}</td>
                             {/each}
 
                             <td class="tc-dummy"></td>
@@ -210,4 +210,23 @@
     .live-results {
         width: 100%;
     }
+
+
+    /* INFO: ranking table */
+    .tc-name {
+        text-align: left;
+    }
+
+    .tc-result, .tc-name {
+        font-weight: 500;
+    }
+
+    .tc-result, .tc-ranking, .tc-solves {
+        text-align: right;
+    }
+
+    .tc-ranking {
+        color: var(--c-dg1);
+    }
+
 </style>

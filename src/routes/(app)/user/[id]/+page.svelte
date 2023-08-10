@@ -13,6 +13,8 @@
 
     import type { PageData } from './$types'
 
+    import { formatTime } from "$lib/utils"
+
     import * as Icons from "$lib/assets/cube-icons/icons";
 
     import puzzles from "$lib/data/puzzles"
@@ -181,23 +183,28 @@
 
 
                 {#each Object.entries(data.PRs) as [puzzleType, {single, average}]}
-                {@const puzzle = puzzles[puzzleType]}
-                <tr>
-                    <td class="tc-dummy"></td>
+                    {@const puzzle = puzzles[puzzleType]}
+                    <tr>
+                        <td class="tc-dummy"></td>
 
-                    <td class="tc-event">{puzzle.name}</td>
-                    <td class="tc-rr">{single.RR}</td>
-                    <td class="tc-ir">{single.IR}</td>
-                    <td class="tc-icr">IcR</td>
-                    <td class="tc-result">{single.time}</td>
+                        <td class="tc-event">
+                            <div style:display=flex style:align-items=center style:column-gap=12px>
+                                <img src={puzzle.icon} alt="" height=24>
+                                {puzzle.name}
+                            </div>
+                        </td>
+                        <td class="tc-rr">{single.RR}</td>
+                        <td class="tc-ir">{single.IR}</td>
+                        <td class="tc-icr">IcR</td>
+                        <td class="tc-result">{formatTime(single.time)}</td>
 
-                    <td class="tc-result">{average.average}</td>
-                    <td class="tc-icr">IcR</td>
-                    <td class="tc-ir">{average.IR}</td>
-                    <td class="tc-rr">{average.RR}</td>
+                        <td class="tc-result">{formatTime(average.time)}</td>
+                        <td class="tc-icr">IcR</td>
+                        <td class="tc-ir">{average.IR}</td>
+                        <td class="tc-rr">{average.RR}</td>
 
-                    <td class="tc-dummy"></td>
-                </tr>
+                        <td class="tc-dummy"></td>
+                    </tr>
                 {/each}
 
 
@@ -241,7 +248,7 @@
                     {type: LabelType.Image, data: Icons.IconMbld},
                     {type: LabelType.Image, data: Icons.Icon4bld},
                     {type: LabelType.Image, data: Icons.Icon5bld},
-                    ]} />
+                ]} />
 
                 <div class="results-history">
                     <div class="results-history-header">

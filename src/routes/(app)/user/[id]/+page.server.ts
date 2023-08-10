@@ -181,6 +181,8 @@ export const load = (async ({ params }) => {
     //  - what is interclub
     //
 
+    console.log(PRs)
+
     return {
         user,
         completedSolves,

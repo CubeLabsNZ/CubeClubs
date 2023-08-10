@@ -3,15 +3,18 @@ import type { PageServerLoad } from './$types';
 
 import puzzles from '$lib/data/puzzles'
 
-export const load = (async ({ params }) => {
+export const load = (async ({ url }) => {
+    const filterRegion = url.searchParams.get("region");
+
     const records = {}
+
     for (const [key, puzzle] of Object.entries(puzzles)) {
-        const single = await prisma.solve.findFirst({
+        const singleQuery = {
             where: {
                 result: {
                     round: {
                         puzzle: key
-                    }
+                    },
                 },
             },
             orderBy: {
@@ -41,11 +44,18 @@ export const load = (async ({ params }) => {
                     }
                 }
             }
-        })
+        }
+        
+        if (filterRegion !== null) {
+            singleQuery.where.result.user.region = filterRegion;
+        }
+
+
+        const single = await prisma.solve.findFirst(singleQuery)
 
         if (!single) continue;
 
-        const average = await prisma.result.findFirst({
+        const averageQuery = {
             where: {
                 round: {
                     puzzle: key
@@ -82,7 +92,13 @@ export const load = (async ({ params }) => {
                     }
                 }
             }
-        })
+        }
+
+        if (filterRegion !== null) {
+            averageQuery.where.user.region = filterRegion;
+        }
+
+        const average = await prisma.result.findFirst(averageQuery);
 
         if (!average) continue; // Should never happen
 
