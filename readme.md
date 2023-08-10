@@ -26,6 +26,9 @@
 - [ ] login -> use old pbfkdjf2 hashing
 - [x] signup -> doesn't let me create new account? tries to use old id???? (will this happen with everything?)
 
+- [ ] format all times correctly
+- [ ] MULTIBLIND SUPPORT
+
 - [ ] calculations (also see https://github.com/CubeClubsNZ/app/issues/8)
   - [ ] dnfs cannot podium / get medal
   - [ ] tied results should have same placing
@@ -44,6 +47,7 @@
        - [ ] results are shown for kept event, but the select is reset...?
     - [x] validate
     - [x] enter dnfs
+    - [ ] input string of digits -> formats into mm:ss.msms
 - [ ] make schedule work
 
 ### before release:
