@@ -1,3 +1,5 @@
+export const DNF = 1e7;
+
 export function clickOutside(node: HTMLElement) {
     function handleClick(event) {
         if (node && !node.contains(event.target) && !event.defaultPrevented) {

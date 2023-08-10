@@ -1,5 +1,7 @@
 import prisma from "$lib/prisma";
 
+import { DNF } from "$lib/utils";
+
 import { Region, Puzzle, Format, Prisma } from "@prisma/client";
 
 
@@ -12,8 +14,6 @@ import * as solves from "../../../../temp/solve.json";
 import * as userinmeetups from "../../../../temp/userinmeetup.json";
 import * as users from "../../../../temp/user.json";
 
-
-const INF = 10000;
 
 const tables = ["Club", "Meetup_id_seq", "Result_id_seq", "Round_id_seq", "Solve", "User_id_seq", "Club_id_seq", "Meetup", "_MeetupToUser", "Result", "Round", "Session", "User","UserInMeetup"]
 
@@ -288,7 +288,7 @@ async function populateResults() {
                     createMany: {
                         data: [{
                             id: result.id,
-                            value: result.result == "" ? INF : result.result,
+                            value: result.result == "" ? DNF : result.result,
                             userId: result.userId,
                         }]
                     }
@@ -310,7 +310,7 @@ async function populateSolves() {
 
         groupedSolves[solve.resultId].push({
             id: solve.id,
-            time: (solve.penalty === "DNF" || solve.time === "") ? INF : solve.time
+            time: (solve.penalty === "DNF" || solve.time === "") ? DNF : solve.time
         });
     }
 
