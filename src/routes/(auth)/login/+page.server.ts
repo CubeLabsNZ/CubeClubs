@@ -38,12 +38,13 @@ export const actions = {
         }
 
 
-        const ispbkdf = user.passHash.startsWith("$pbkdf2")
+        const ispbkdf = user.passHash.startsWith("pbkdf2")
         let passIsCorrect
         if (ispbkdf) {
-            const parts = user.passHash.split('$')
-            passIsCorrect = parts[4] == crypto.pbkdf2Sync(password as string, Buffer.from(parts[3].replace(/\./g, '+') + '='.repeat(parts[3].length % 3), 'base64'),
-                +parts[2], 32, parts[1].split('-')[1]).toString('base64').replace(/=/g, '').replace(/\+/g, '.')
+            const [algorithm, iterations, salt, hash] = user.passHash.split('$');
+            const hashcheck = crypto.pbkdf2Sync(password as string, Buffer.from(salt), Number(iterations), 32, 'sha256').toString('base64');
+            passIsCorrect = hash == hashcheck
+
         } else {
             passIsCorrect = await argon2.verify(user.passHash, password as string);
         }
