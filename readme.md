@@ -38,10 +38,12 @@
 
 ### dashboard
 - [ ] adding competitors to meetups, editing competitors
-- [ ] data entry:
-    - [ ] display results
-    - [ ] validate
-    - [ ] enter dnfs
+- [x] data entry:
+    - [x] display results
+    - [x] keep event
+       - [ ] results are shown for kept event, but the select is reset...?
+    - [x] validate
+    - [x] enter dnfs
 - [ ] make schedule work
 
 ### before release:
