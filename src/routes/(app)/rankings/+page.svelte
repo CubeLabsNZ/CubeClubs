@@ -5,7 +5,7 @@
 
     import regions, {regionToString} from "$lib/data/regions";
 
-    import { Region } from "@prisma/client";
+    import { Puzzle, Region } from "@prisma/client";
 
     import MultiButton, { LabelType } from "$lib/components/global/MultiButton.svelte";
     import Select from "$lib/components/global/Select.svelte";
@@ -185,7 +185,7 @@
 
             {#if data.results}
                 {#if formatIndex}
-                    {#each data.results as average, i }
+                    {#each data.average?.results as average, i }
                         <tr>
                             <td class="tc-dummy"></td>
 
@@ -203,7 +203,7 @@
                         </tr>
                     {/each}
                 {:else}
-                    {#each data.results as single, i }
+                    {#each data.results.single.allregions[Puzzle.THREE] as single, i }
                         <tr>
                             <td class="tc-dummy"></td>
 

@@ -98,9 +98,10 @@ export const load = (async ({ params }) => {
         average: number
     }
 
-    const records: {regional: RInfo, island: RInfo} = {
+    const records: {regional: RInfo, island: RInfo, interclub: RInfo} = {
         regional: {single: 0, average: 0},
-        island: {single: 0, average: 0}
+        island: {single: 0, average: 0},
+        interclub: {single: 0, average: 0}
     }
     
     const PRs: {[key in Puzzle]: {single: PRInfo, average: PRInfo}} = {}
@@ -137,25 +138,39 @@ export const load = (async ({ params }) => {
 
         if (!average) continue; // Should never happen
 
-        const countRRSingle = await prisma.solve.count({where: {time: {lt: single.time}, result: {user: {region: user.region}}}});
-        const countIRSingle = await prisma.solve.count({where: {time: {lt: single.time}, result: {user: {region: {in: islandRegions(user.region)}}}}});
+        // TODO: import these types sobbing
+        const getWhereRegionSingle = (region: EnumRegionFilter | Region) => ({where: {time: {lt: single.time}, result: {round: {puzzle: key}, user: {region: region}}}})
 
+        const countRRSingle = await prisma.solve.count(getWhereRegionSingle(user.region));
+        const countIRSingle = await prisma.solve.count(getWhereRegionSingle({in: islandRegions(user.region)}));
+        const countIcRSingle = await prisma.solve.count(getWhereRegionSingle(undefined));
+
+        // If there are no times less than the users, he has the record
         if (countRRSingle == 0) records.regional.single++;
         if (countIRSingle == 0) records.island.single++;
+        if (countIcRSingle == 0) records.interclub.single++;
 
-        const countRRAverage = await prisma.result.count({where: {value: {lt: average.value}, user: {region: user.region}}})
-        const countIRAverage = await prisma.result.count({where: {value: {lt: average.value}, user: {region: {in: islandRegions(user.region)}}}}) + 1
+        const getWhereRegionAverage = (region: EnumRegionFilter | Region) => ({where: {value: {lt: average.value}, round: {puzzle: key}, user: {region: region}}})
+
+        const countRRAverage = await prisma.result.count(getWhereRegionAverage(user.region))
+        const countIRAverage = await prisma.result.count(getWhereRegionAverage({in: islandRegions(user.region)}))
+        const countIcRAverage = await prisma.result.count(getWhereRegionAverage(undefined))
+
+        if (countRRAverage == 0) records.regional.average++;
+        if (countIRAverage == 0) records.island.average++;
+        if (countIcRAverage == 0) records.interclub.average++;
 
 
         PRs[key] = {single: {
             time: single.time,
-            // TODO: IMPORTANT: Should meetups have a region? Or is it based on people for that region?
             RR: countRRSingle + 1,
-            IR: countIRSingle + 1
+            IR: countIRSingle + 1,
+            IcR: countIcRSingle + 1,
         }, average: {
             time: average.value,
             RR: countRRAverage + 1,
             IR: countIRAverage + 1,
+            IcR: countIcRAverage + 1
         }}
     }
     

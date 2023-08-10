@@ -95,6 +95,7 @@
 
                     <hr>
 
+
                     <div class="section-column">
                         <div class="data-row">
                             <RecordRow
@@ -113,7 +114,7 @@
 
                         <div class="data-row">
                             <RecordRow
-                                record={{single: "?", average: "?"}}
+                                record={data.records.interclub}
                                 name="Interclub Records" shortname=IcR
                                 bg=var(--c-lpurple) fg=var(--c-purple)/>
                         </div>
@@ -195,11 +196,11 @@
                         </td>
                         <td class="tc-rr">{single.RR}</td>
                         <td class="tc-ir">{single.IR}</td>
-                        <td class="tc-icr">IcR</td>
+                        <td class="tc-icr">{single.IcR}</td>
                         <td class="tc-result">{formatTime(single.time)}</td>
 
                         <td class="tc-result">{formatTime(average.time)}</td>
-                        <td class="tc-icr">IcR</td>
+                        <td class="tc-icr">{average.IcR}</td>
                         <td class="tc-ir">{average.IR}</td>
                         <td class="tc-rr">{average.RR}</td>
 
