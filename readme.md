@@ -42,8 +42,8 @@
     - [x] display results
     - [x] keep event
        - [ ] results are shown for kept event, but the select is reset...?
-    - [ ] validate
-    - [ ] enter dnfs
+    - [x] validate
+    - [x] enter dnfs
 - [ ] make schedule work
 
 ### before release:
