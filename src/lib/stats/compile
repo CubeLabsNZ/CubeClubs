@@ -1,0 +1,3 @@
+#!/bin/sh
+
+emcc calc.c -s EXPORT_ES6=1 -s MODULARIZE=1 -s EXPORTED_RUNTIME_METHODS="['ccall']" -I/home/tim/emc/emsdk/upstream/emscripten/cache/sysroot/include/
