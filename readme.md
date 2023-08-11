@@ -3,7 +3,7 @@
 This repo contains the code that runs the new cubeclubs.nz. The site is not yet public, but should be soon!
 
 
-### Info
+## Info
 - Built with SvelteKit and uses Prisma with PostgreSQL for the backend
 - The user interface and all components used are written from scratch. No templates are used.
 - This project addresses the countless issues with the original poorly written site, adds new features and improves the overall user experience.
@@ -11,9 +11,18 @@ This repo contains the code that runs the new cubeclubs.nz. The site is not yet 
 
 - Migration scripts can be viewed [here](https://github.com/CubeClubsNZ/migrate).
 
+<br>
 
 
-### Project Structure
+## Contributing
+CubeClubs NZ is [GPLv3 licensed](license).
+
+If you want to help out, please view our [contributing guide](contributing.md).
+
+<br>
+
+
+## Project Structure
 <pre>
 <b>cubeclubs</b>
 ├── prisma
