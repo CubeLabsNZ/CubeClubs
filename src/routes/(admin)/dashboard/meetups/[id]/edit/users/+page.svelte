@@ -32,129 +32,133 @@
 
 <h3 class="fsize-title2" style:font-weight=500 style:margin-top=32px style:margin-bottom=16px>Registered Competitors</h3>
 
-<table>
-    <colgroup>
-        <col span=1 style:width=8px>
-
-        <col span=1 style:width=24px>
-        <col span=1 style:width=24px>
-
-        <col span=1 style:width=175px>
-        <col span=1 style:width=160px>
-
-            {#each Array(data.meetup.puzzles.length) as _}
-            <col span=1 style:width=36px>
-                {/each}
-
-            <col span=1 style:width=auto>
-
+{#if data.meetup.users.length > 0}
+    <table>
+        <colgroup>
             <col span=1 style:width=8px>
-    </colgroup>
+
+            <col span=1 style:width=24px>
+            <col span=1 style:width=24px>
+
+            <col span=1 style:width=175px>
+            <col span=1 style:width=160px>
+
+                {#each Array(data.meetup.puzzles.length) as _}
+                <col span=1 style:width=36px>
+                    {/each}
+
+                <col span=1 style:width=auto>
+
+                <col span=1 style:width=8px>
+        </colgroup>
 
 
-    <tbody>
-        <tr>
-            <th class="tc-dummy" />
-
-            <th class="tc-delete" />
-            <th class="tc-edit" />
-
-            <th class="tc-name">Name</th>
-            <th class="tc-region">Region</th>
-
-            {#each data.meetup.puzzles as puzzle}
-                <th class="tc-puzzle">
-                    <img src={puzzles[puzzle].icon} alt={puzzles[puzzle].name} style:height=24px>
-                </th>
-            {/each}
-
-            <th class="tc-empty" />
-
-            <th class="tc-dummy" />
-        </tr>
-
-
-        <tr class="td-dummy">
-            <td />
-            <td />
-            <td />
-            <td />
-            <td />
-
-            {#each data.meetup.puzzles as _}
-                <td />
-            {/each}
-
-            <td />
-            <td />
-        </tr>
-
-
-        {#each data.meetup.users as { user, registeredEvents } }
+        <tbody>
             <tr>
-                <td class="tc-dummy" />
+                <th class="tc-dummy" />
 
+                <th class="tc-delete" />
+                <th class="tc-edit" />
 
-                <td class="tc-delete">
-                    <button on:click={() => {
-                        confirm(`Are you sure you want to delete ${user.name}?`);
+                <th class="tc-name">Name</th>
+                <th class="tc-region">Region</th>
 
-                        fetch(`/dashboard/meetups/${data.meetup.id}/edit/users/${user.id}/delete`, {
-                            method: "POST"
-                        })
-                            .then(() => {
-                                invalidateAll()
-                            })
-                    }}>
-                        <span class="material-symbols-outlined" style:margin-right=4px style:font-size=18px>delete</span>
-                    </button>
-                </td>
-
-                <td class="tc-edit">
-                    <button on:click={() => {
-                        goto(`/dashboard/meetups/${data.meetup.id}/edit/users/${user.id}`);
-                    }}>
-                        <span class="material-symbols-outlined" style:margin-right=4px style:font-size=18px>edit</span>
-                    </button>
-                </td>
-
-                <td class="tc-name">
-                    <a class="regular-link" style:font-weight=500 href="/user/{user.id}"> {user.name} </a>
-                </td>
-                <td class="tc-region">{regionToString(user.region)}</td>
-
-
-                <!-- WARN: this is actually working, but it seems data is not perfect, and those with no results in an event is registered? -->
                 {#each data.meetup.puzzles as puzzle}
-                    <td class="tc-puzzle">
-                        {#if registeredEvents.includes(puzzle)}
-                            <span class="material-symbols-outlined">check</span>
-                        {/if}
-                    </td>
+                    <th class="tc-puzzle">
+                        <img src={puzzles[puzzle].icon} alt={puzzles[puzzle].name} style:height=24px>
+                    </th>
                 {/each}
 
-                <td class="tc-empty" />
+                <th class="tc-empty" />
 
-                <td class="tc-dummy" />
+                <th class="tc-dummy" />
             </tr>
-        {/each}
 
-        <tr class="td-dummy">
-            <td />
-            <td />
-            <td />
-            <td />
-            <td />
 
-            {#each data.meetup.puzzles as _}
+            <tr class="td-dummy">
                 <td />
+                <td />
+                <td />
+                <td />
+                <td />
+
+                {#each data.meetup.puzzles as _}
+                    <td />
+                {/each}
+
+                <td />
+                <td />
+            </tr>
+
+
+            {#each data.meetup.users as { user, registeredEvents } }
+                <tr>
+                    <td class="tc-dummy" />
+
+
+                    <td class="tc-delete">
+                        <button on:click={() => {
+                            confirm(`Are you sure you want to delete ${user.name}?`);
+
+                            fetch(`/dashboard/meetups/${data.meetup.id}/edit/users/${user.id}/delete`, {
+                                method: "POST"
+                            })
+                                .then(() => {
+                                    invalidateAll()
+                                })
+                        }}>
+                            <span class="material-symbols-outlined" style:margin-right=4px style:font-size=18px>delete</span>
+                        </button>
+                    </td>
+
+                    <td class="tc-edit">
+                        <button on:click={() => {
+                            goto(`/dashboard/meetups/${data.meetup.id}/edit/users/${user.id}`);
+                        }}>
+                            <span class="material-symbols-outlined" style:margin-right=4px style:font-size=18px>edit</span>
+                        </button>
+                    </td>
+
+                    <td class="tc-name">
+                        <a class="regular-link" style:font-weight=500 href="/user/{user.id}"> {user.name} </a>
+                    </td>
+                    <td class="tc-region">{regionToString(user.region)}</td>
+
+
+                    <!-- WARN: this is actually working, but it seems data is not perfect, and those with no results in an event is registered? -->
+                    {#each data.meetup.puzzles as puzzle}
+                        <td class="tc-puzzle">
+                            {#if registeredEvents.includes(puzzle)}
+                                <span class="material-symbols-outlined">check</span>
+                            {/if}
+                        </td>
+                    {/each}
+
+                    <td class="tc-empty" />
+
+                    <td class="tc-dummy" />
+                </tr>
             {/each}
 
-            <td />
-            <td />
-        </tr>
-    </tbody>
-</table>
+            <tr class="td-dummy">
+                <td />
+                <td />
+                <td />
+                <td />
+                <td />
+
+                {#each data.meetup.puzzles as _}
+                    <td />
+                {/each}
+
+                <td />
+                <td />
+            </tr>
+        </tbody>
+    </table>
+{:else}
+    <p style:color=var(--c-g)>No competitors currently registered for this competition.</p>
+{/if}
 
 
 <style>
