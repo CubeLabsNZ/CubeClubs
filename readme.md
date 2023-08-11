@@ -38,6 +38,12 @@
   - [ ] edit account details
     - [ ] edit password
     - [ ] edit email?
+- [ ] profile
+    - [ ] records are historical records collection
+    - [ ] rankings are ranked by people not solves
+    - [ ] completed solves are excluding dnfs
+    - [ ] results history
+    - [ ] records history
 
 ### dashboard
 - [ ] adding competitors to meetups, editing competitors
