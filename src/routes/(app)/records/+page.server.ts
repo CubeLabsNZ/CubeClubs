@@ -4,7 +4,7 @@ import type { PageServerLoad } from './$types';
 import puzzles from '$lib/data/puzzles'
 
 export const load = (async ({ url }) => {
-    const filterRegion = url.searchParams.get("region");
+    const filterRegion = url.searchParams.has("region") ? url.searchParams.get("region") : undefined;
 
     const records = {}
 
@@ -46,8 +46,8 @@ export const load = (async ({ url }) => {
             }
         }
         
-        if (filterRegion !== null) {
-            singleQuery.where.result.user.region = filterRegion;
+        if (!(filterRegion === undefined || filterRegion === null || filterRegion === "undefined")) {
+            singleQuery.where.result.user = { region: filterRegion };
         }
 
 
@@ -94,8 +94,8 @@ export const load = (async ({ url }) => {
             }
         }
 
-        if (filterRegion !== null) {
-            averageQuery.where.user.region = filterRegion;
+        if (!(filterRegion === undefined || filterRegion === null || filterRegion === "undefined")) {
+            averageQuery.where.user = { region: filterRegion };
         }
 
         const average = await prisma.result.findFirst(averageQuery);
