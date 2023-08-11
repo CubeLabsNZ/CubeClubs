@@ -5,6 +5,7 @@ import { Puzzle } from '@prisma/client';
 
 import puzzles from '$lib/data/puzzles'
 import { islandRegions } from '$lib/data/regions';
+import { DNF } from '$lib/utils';
 
 export const load = (async ({ params }) => {
 
@@ -12,18 +13,40 @@ export const load = (async ({ params }) => {
     if (isNaN(id)) {
         throw error(404, 'not found');
     }
+
     const user = await prisma.user.findUnique({
-        where: { id: Number(params.id) },
+        where: { 
+            id: Number(params.id),
+        },
         select: {
             name: true,
             id: true,
             region: true,
             results: {
-                include: {
-                    solves: true,
-                }
+                select: {
+                    solves: {
+                        where: {
+                            NOT: {
+                                time: DNF
+                            }
+                        }
+                    }
+                },
             },
-            isClubOrganiser: true
+            isClubOrganiser: true,
+            _count: {
+                select: {
+                    competingIn: {
+                        where: {
+                            meetup: {
+                                date: {
+                                    lt: new Date()
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     })
 
@@ -32,13 +55,6 @@ export const load = (async ({ params }) => {
     }
 
     const completedSolves = user.results.reduce((x,y) => x + y.solves.length, 0)
-    // TODO: somehow include this in the first findUnique call?
-    // TODO: maybe limit only to previous comps somehow?
-    const meetupsAttended = prisma.userInMeetup.count({
-        where: {
-            userId: user.id,
-        }
-    });
 
 
     // TODO: you have to make it to the last round for a medal right ?
@@ -66,7 +82,6 @@ export const load = (async ({ params }) => {
         }
     });
 
-    console.log(JSON.stringify(meetupsTop3Solves))
     // TODO: this is embarrassing,.. how to range?
     // TODO: is medal based on average or single?
     const medals = [0,1,2].map((medalIdx) => {
@@ -82,8 +97,6 @@ export const load = (async ({ params }) => {
         return count
     })
 
-    console.log("AAA")
-    console.log(meetupsTop3Solves[0].rounds[0])
     
     // TODO: figure out a way to get PRs with groupBy and min or discrete or smth
     //
@@ -192,17 +205,9 @@ export const load = (async ({ params }) => {
         }
     })
 
-    // TODO: ask about records 
-    //  - historical or current?
-    //  - what is interclub
-    //
-
-    console.log(PRs)
-
     return {
         user,
         completedSolves,
-        meetupsAttended,
         medals,
         results: {THREE: THREEresults},
         PRs,

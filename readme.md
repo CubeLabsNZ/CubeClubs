@@ -45,7 +45,8 @@
 - [ ] profile
     - [ ] records are historical records collection
     - [ ] rankings are ranked by people not solves
-    - [ ] completed solves are excluding dnfs
+    - [x] comps attended are before today date
+    - [x] completed solves are excluding dnfs
     - [ ] results history
     - [ ] records history
 

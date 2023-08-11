@@ -60,7 +60,7 @@
                 <div class="card-column" style:margin-top=32px>
                     <div class="section-column">
                         <div class="data-row">
-                            <p style:font-weight=500>{data.meetupsAttended}</p>
+                            <p style:font-weight=500>{data.user._count.competingIn}</p>
                             <p> Meetups Attended </p>
                         </div>
 
