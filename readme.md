@@ -15,14 +15,14 @@
     - [x] competitors actually show which events registered for
     - [x] schedule show results for each round
 - [ ] records:
-    - [ ] show by region
+    - [x] show by region
     - [ ] show history
     - [x] average is undefined :(
 - [ ] rankings:
     - [ ] **IMPROVE PERFORMANCE**
     - [x] show by event
     - [ ] show average/single
-    - [ ] show by region
+    - [x] show by region
 - [x] login -> use old pbfkdjf2 hashing
 - [x] signup -> doesn't let me create new account? tries to use old id???? (will this happen with everything?)
 

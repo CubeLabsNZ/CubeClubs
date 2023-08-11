@@ -6,9 +6,12 @@ import { Puzzle } from '@prisma/client';
 import puzzles from '$lib/data/puzzles'
 import { islandRegions } from '$lib/data/regions';
 
-export const load = (async () => {
-    const results = {single: { allregions: {} }, average: {}}
-    const temp = await prisma.solve.findMany({
+export const load = (async ({ url }) => {
+    const filterRegion = url.searchParams.has("region") ? url.searchParams.get("region") : undefined;
+
+    const results = {single: {}, average: {}};
+
+    const query = {
         where: {
             result: {
                 round: {
@@ -43,9 +46,16 @@ export const load = (async () => {
                 }
             }
         }
-    })
+    }
+
+    if (!(filterRegion === undefined || filterRegion === null || filterRegion === "undefined")) {
+        query.where.result.user = { region: filterRegion };
+    }
+
+    const temp = await prisma.solve.findMany(query);
+
     const userIds = temp.map(({result}) => result.user.id)
-    results.single.allregions[Puzzle.THREE] = temp.filter(({result}, index) => !userIds.slice(0, index).includes(result.user.id))
+    results.single[Puzzle.THREE] = temp.filter(({result}, index) => !userIds.slice(0, index).includes(result.user.id))
 
 
     return {

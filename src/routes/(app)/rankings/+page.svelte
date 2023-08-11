@@ -81,16 +81,6 @@
 
     <div class="filter-bar">
         <div class="label-group">
-            <p class="label">Format</p>
-
-            <MultiButton bind:selectedIndex={formatIndex} labels={[
-                {type: LabelType.Text, data: "Single"},
-                {type: LabelType.Text, data: "Average"}
-            ]} /> 
-        </div>
-
-
-        <div class="label-group">
             <p class="label">Region</p>
 
             <Select name="region" bind:value={regionSelected}>
@@ -99,6 +89,15 @@
                     <option value={value}>{regionToString(value)}</option>
                 {/each}
             </Select>
+        </div>
+
+        <div class="label-group">
+            <p class="label">Format</p>
+
+            <MultiButton bind:selectedIndex={formatIndex} labels={[
+                {type: LabelType.Text, data: "Single"},
+                {type: LabelType.Text, data: "Average"}
+            ]} /> 
         </div>
     </div>
 
@@ -131,7 +130,7 @@
     </div>
 
 
-    <table>
+    <table style:margin-top=16px>
         <colgroup>
             <col span=1 style:width=8px>
 
@@ -203,7 +202,7 @@
                         </tr>
                     {/each}
                 {:else}
-                    {#each data.results.single.allregions[Puzzle.THREE] as single, i }
+                    {#each data.results.single[Puzzle.THREE] as single, i }
                         <tr>
                             <td class="tc-dummy"></td>
 
