@@ -27,7 +27,7 @@ export const actions = {
         const password = data.get("password");
         const confirmPassword = data.get("confirmPassword");
         const region = data.get("region");
-        const fullName = data.get("fullName");
+        const fullName = (data.get("fullName") as string).trim().split(" ").filter(c => c).map(s => s.length > 1 ? s[0].toUpperCase() + s.slice(1, s.length) : s[0].toUpperCase()).join(" ");
 
 
         const userExists = await prisma.user.count({
