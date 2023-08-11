@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { goto, invalidateAll } from '$app/navigation';
     import Breadcrumb from '$lib/components/global/Breadcrumb.svelte';
     import Button from '$lib/components/global/Button.svelte';
 
@@ -35,24 +36,28 @@
     <colgroup>
         <col span=1 style:width=8px>
 
+        <col span=1 style:width=24px>
+        <col span=1 style:width=24px>
+
         <col span=1 style:width=175px>
         <col span=1 style:width=160px>
 
-        {#each Array(data.meetup.puzzles.length) as _}
+            {#each Array(data.meetup.puzzles.length) as _}
             <col span=1 style:width=36px>
-        {/each}
+                {/each}
 
-        <col span=1 style:width=auto>
+            <col span=1 style:width=auto>
 
-        <col span=1 style:width=8px>
+            <col span=1 style:width=8px>
     </colgroup>
 
 
     <tbody>
-        <!-- TODO: for each event in the meetup, show new column AND show ticks for registered */
-<!-- NOTE: tc-dummy is entirely invisible to provide padding to either side of the table -->
         <tr>
             <th class="tc-dummy" />
+
+            <th class="tc-delete" />
+            <th class="tc-edit" />
 
             <th class="tc-name">Name</th>
             <th class="tc-region">Region</th>
@@ -68,13 +73,15 @@
             <th class="tc-dummy" />
         </tr>
 
-        <!-- NOTE: td-dummy is entirely invisible to provide padding to the top and bottom of the table -->
+
         <tr class="td-dummy">
             <td />
             <td />
             <td />
+            <td />
+            <td />
 
-            {#each data.meetup.puzzles as puzzle}
+            {#each data.meetup.puzzles as _}
                 <td />
             {/each}
 
@@ -86,6 +93,31 @@
         {#each data.meetup.users as { user, registeredEvents } }
             <tr>
                 <td class="tc-dummy" />
+
+
+                <td class="tc-delete">
+                    <button on:click={() => {
+                        confirm(`Are you sure you want to delete ${user.name}?`);
+
+                        fetch(`/dashboard/meetups/${data.meetup.id}/edit/users/${user.id}/delete`, {
+                            method: "POST"
+                        })
+                            .then(() => {
+                                invalidateAll()
+                            })
+                    }}>
+                        <span class="material-symbols-outlined" style:margin-right=4px style:font-size=18px>delete</span>
+                    </button>
+                </td>
+
+                <td class="tc-edit">
+                    <button on:click={() => {
+                        goto(`/dashboard/meetups/${data.meetup.id}/edit/users/${user.id}`);
+                    }}>
+                        <span class="material-symbols-outlined" style:margin-right=4px style:font-size=18px>edit</span>
+                    </button>
+                </td>
+
                 <td class="tc-name">
                     <a class="regular-link" style:font-weight=500 href="/user/{user.id}"> {user.name} </a>
                 </td>
@@ -113,6 +145,13 @@
             <td />
             <td />
             <td />
+
+            {#each data.meetup.puzzles as _}
+                <td />
+            {/each}
+
+            <td />
+            <td />
         </tr>
     </tbody>
 </table>
@@ -124,6 +163,24 @@
     .tc-region,
     .tc-puzzle {
         text-align: left;
+    }
+
+    .tc-edit button, 
+    .tc-delete button {
+        display: grid;
+        align-items: center;
+        justify-items: center;
+        color: var(--c-g);
+        transition: color var(--v-animation-delay) ease-in-out;
+        cursor: pointer;
+    }
+
+    .tc-delete:hover span {
+        color: var(--c-red);
+    }
+
+    .tc-edit:hover span {
+        color: var(--c-dg1);
     }
 
     tr:first-child .tc-puzzle {

@@ -44,8 +44,6 @@
 
 
     <tbody>
-        <!-- TODO: for each event in the meetup, show new column AND show ticks for registered */
-<!-- NOTE: tc-dummy is entirely invisible to provide padding to either side of the table -->
         <tr>
             <th class="tc-dummy" />
 
@@ -63,7 +61,6 @@
             <th class="tc-dummy" />
         </tr>
 
-        <!-- NOTE: td-dummy is entirely invisible to provide padding to the top and bottom of the table -->
         <tr class="td-dummy">
             <td />
             <td />
@@ -106,6 +103,11 @@
             <td />
             <td />
             <td />
+
+            {#each data.puzzles as puzzle}
+                <td />
+            {/each}
+
             <td />
             <td />
         </tr>

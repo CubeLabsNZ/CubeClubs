@@ -3,8 +3,6 @@ import { getUserSessionOrThrow } from '$lib/utilsServer';
 
 import { error } from "@sveltejs/kit"
 
-// CANT LOOK UP TYPES TODO: HELP FIX
-
 export const POST = (async ({params, cookies}) => {
     await getUserSessionOrThrow(cookies, true)
 
