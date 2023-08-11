@@ -10,6 +10,7 @@
     import Select from "$lib/components/global/Select.svelte";
 
     import puzzles from "$lib/data/puzzles"
+    import formats from "$lib/data/formats"
 
     import type { PageData, ActionData } from "./$types";
 
@@ -20,9 +21,14 @@
     // TODO: set the fucking event select to what it was previously
     let roundId: number | undefined = form?.event ?? data.roundId;
 
+    let selectedRound;
+    let selectedRoundPuzzleFormatCount;
+
     $: {
         updateQuery(roundId);
-        console.log("ROUND ID PAGE", roundId)
+
+        selectedRound = data.meetup.rounds.find(r => r.id === roundId);
+        selectedRoundPuzzleFormatCount = formats[selectedRound.format].count;
     }
 
     async function updateQuery(roundId: number) {
@@ -67,6 +73,8 @@
                 i++
             }
 
+            formData.set("roundFormat", selectedRound.format);
+
             return async ({ result, update }) => {
                 update();
                 inputError = -1;
@@ -95,8 +103,7 @@
             </label>
 
 
-            <!-- TODO: as many as the format of the round it (eg ao5 = 5, mo3 = 3, bld = 1?) -->
-            {#each Array(5) as _, i}
+            {#each Array(selectedRoundPuzzleFormatCount) as _, i}
                 <label class="form-label">
                     Solve {i+1}
                     <input required name={`solve-${i}`} autocomplete=off data-error={inputError} />
@@ -123,69 +130,82 @@
 
             <!-- TODO: more duplicataion yay -->
             <table style:width=100%>
-                <!-- NOTE: tc-dummy is entirely invisible to provide padding to either side of the table -->
-                <tr>
-                    <th class="tc-dummy"></th>
+                <colgroup>
+                    <col span=1 style:width=8px>
 
-                    <th class="tc-ranking"></th>
-                    <th class="tc-name">Name</th>
-                    <th class="tc-result">Average</th>
-                    <!-- TODO: as many solves as the round has -->
-                    <th class="tc-solves">1</th>
-                    <th class="tc-solves">2</th>
-                    <th class="tc-solves">3</th>
-                    <th class="tc-solves">4</th>
-                    <th class="tc-solves">5</th>
+                    <col span=1 style:width=50px>
+                    <col span=1 style:width=auto>
+                    <col span=1 style:width=80px>
 
-                    <th class="tc-dummy"></th>
-                </tr>
-
-                <!-- NOTE: td-dummy is entirely invisible to provide padding to the top and bottom of the table -->
-                <tr class="td-dummy">
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                </tr>
-
-
-                {#each data.meetup.rounds as round }
-                    {#each round.results as result,idx }
-                        <tr>
-                            <td class="tc-dummy"></td>
-
-                            <td class="tc-ranking">{idx+1}</td>
-                            <td class="tc-name">{result.user.name}</td>
-                            <td class="tc-result">{formatTime(result.value)}</td>
-                            <!-- TODO: as many solves as the round has -->
-                            {#each result.solves as solve}
-                                <td class="tc-solves">{formatTime(solve.time)}</td>
-                            {/each}
-
-                            <td class="tc-dummy"></td>
-                        </tr>
+                    {#each Array(selectedRoundPuzzleFormatCount) as _}
+                        <col span=1 style:width=80px>
                     {/each}
-                {/each}
+
+                    <col span=1 style:width=8px>
+                </colgroup>
 
 
-                <tr class="td-dummy">
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                </tr>
+                <tbody>
+                    <tr>
+                        <th class="tc-dummy"></th>
+
+                        <th class="tc-ranking"></th>
+                        <th class="tc-name">Name</th>
+                        <th class="tc-result">Average</th>
+
+                        {#each Array(selectedRoundPuzzleFormatCount) as _, i}
+                            <th class="tc-solves">{i + 1}</th>
+                        {/each}
+
+                        <th class="tc-dummy"></th>
+                    </tr>
+
+                    <tr class="td-dummy">
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+
+                        {#each Array(selectedRoundPuzzleFormatCount) as _, i}
+                            <td></td>
+                        {/each}
+
+                        <td></td>
+                    </tr>
+
+
+                    {#each data.meetup.rounds as round }
+                        {#each round.results as result,idx }
+                            <tr>
+                                <td class="tc-dummy"></td>
+
+                                <td class="tc-ranking">{idx+1}</td>
+                                <td class="tc-name">{result.user.name}</td>
+                                <td class="tc-result">{formatTime(result.value)}</td>
+
+                                {#each result.solves as solve}
+                                    <td class="tc-solves">{formatTime(solve.time)}</td>
+                                {/each}
+
+                                <td class="tc-dummy"></td>
+                            </tr>
+                        {/each}
+                    {/each}
+
+
+                    <tr class="td-dummy">
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+
+                        {#each Array(selectedRoundPuzzleFormatCount) as _, i}
+                            <td></td>
+                        {/each}
+
+                        <td></td>
+                    </tr>
+                </tbody>
             </table>
         {/if}
     </div>

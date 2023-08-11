@@ -38,7 +38,7 @@ export const actions = {
             date: new Date(data.get("date") as string),
 
             externalRegistrationLink: data.get("usingExternalRegistration") ? data.get("externalRegistrationLink") as string : null,
-            registrationInformation: data.get("registrationInformation")
+            registrationInformation: data.get("registrationInformation") ? data.get("registrationInformation") as string : undefined
         }
 
         // TODO: validate that every organizer really is an organizer

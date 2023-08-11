@@ -19,9 +19,9 @@
     - [ ] show history
     - [x] average is undefined :(
 - [ ] rankings:
-    - [ ] **IMPROVE PERFORMANCE**
-    - [x] show by event
-    - [ ] show average/single
+    - [x] **IMPROVE PERFORMANCE**
+    - [ ] show by event
+    - [x] show average/single
     - [x] show by region
 - [x] login -> use old pbfkdjf2 hashing
 - [x] signup -> doesn't let me create new account? tries to use old id???? (will this happen with everything?)
@@ -38,6 +38,7 @@
   - [ ] edit account details
     - [ ] edit password
     - [ ] edit email?
+  - [ ] recover account
 - [ ] profile
     - [ ] records are historical records collection
     - [ ] rankings are ranked by people not solves
@@ -54,6 +55,7 @@
     - [x] validate
     - [x] enter dnfs
     - [ ] input string of digits -> formats into mm:ss.msms
+    - [x] calculate averages correctly
 - [ ] make schedule work
 
 ### before release:

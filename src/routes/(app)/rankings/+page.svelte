@@ -26,7 +26,6 @@
     let formatIndex: number;
     let regionSelected: string
     let eventSelected: string;
-    let formatCount: number;
 
     // TODO: make stupid multibutton more fleible than just stupid index stupid
     let eventIndex = 0;
@@ -35,7 +34,6 @@
 
     $: {
         eventSelected = Object.keys(puzzles)[eventIndex];
-        formatCount = formats[puzzles[eventSelected].format].count;
 
         selectedResults = formatIndex ? data.results.average[eventSelected] : data.results.single[eventSelected];
 
@@ -109,13 +107,11 @@
             <col span=1 style:width=50px>
             <col span=1 style:width=160px>
             <col span=1 style:width=80px>
-            <col span=1 style:width=160px>
+            <col span=1 style:width=80px>
             <col span=1 style:width=auto>
 
             {#if formatIndex}
-                {#each Array(formatCount) as _}
-                    <col span=1 style:width=auto>
-                {/each}
+                <col span=1 style:width=auto>
             {/if}
 
             <col span=1 style:width=8px>

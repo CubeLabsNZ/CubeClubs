@@ -2,8 +2,9 @@ import prisma from '$lib/prisma';
 import { error, fail } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
 import { getUserSessionOrThrow, populateRounds } from '$lib/utilsServer';
-import { DNF } from "$lib/utils";
-import type { Prisma } from "@prisma/client";
+import { DNF, calculateAverage } from "$lib/utils";
+import type { Format, Prisma } from "@prisma/client";
+import formats from '$lib/data/formats';
 
 export const load = (async ({ url, params, cookies }) => {
     // FIXME: broken ? await getUserSessionOrThrow(cookies, true)
@@ -95,23 +96,25 @@ export const load = (async ({ url, params, cookies }) => {
 export const actions = {
     // NOTE: You can update any meetup with this endpoint but it doesnt really matter since only events for the correct meetup will show up in the form
 
-    default: async ({ cookies, params, request }) => {
+    default: async ({ cookies, request }) => {
         await getUserSessionOrThrow(cookies, true)
         const data = await request.formData()
 
         const eventId = Number(data.get("event"))
         const competitorId = Number(data.get("competitor"))
 
-        // TODO: check how many solves there are in the round
-        const solves = Array.from(Array(5).keys()).map((x) => Number(data.get(`solve-${x}`) === "dnf" ? DNF : data.get(`solve-${x}`)))
+        const roundFormat = data.get("roundFormat") as Format;
+
+        const solves = Array.from(Array(formats[roundFormat].count).keys()).map((x) => Number(data.get(`solve-${x}`) === "dnf" ? DNF : data.get(`solve-${x}`)))
 
         if (isNaN(eventId) || isNaN(competitorId) || solves.includes(NaN)) {
             return fail(400, { event: eventId, competitor: competitorId })
         }
 
-        console.log(solves.map((time, idx) => ({index: idx, time: time})))
+        console.log(roundFormat);
+        console.log(calculateAverage(data.get("roundFormat") as Format, solves));
 
-        const meetup = await prisma.round.update({
+        await prisma.round.update({
             where: { 
                 id: eventId,
             },
@@ -119,8 +122,7 @@ export const actions = {
                 results: {
                     // TODO: make create upsert, so if competitor selected again, it will override existing results (ALSO TODO: populate results if selects competitor that has already been entered)
                     create: {
-                        // TODO: trim + other types of averages
-                        value: solves.reduce((x, y) => x + y) / 5,
+                        value: calculateAverage(data.get("roundFormat") as Format, solves),
                         solves: {
                             createMany: {
                                 data: solves.map((time, idx) => ({ index: idx, time: time }))

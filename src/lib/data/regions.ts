@@ -8,7 +8,7 @@ const regions: {[key in Region]: {name: string, maori_name?: string}} = {
 	GISBORNE: { name: "Gisborne", maori_name: "Te Tairāwhiti" },
 	HAWKES_BAY: { name: "Hawke's Bay", maori_name: "Te Matau-a-Māui" },
 	TARANAKI: { name: "Taranaki" },
-	MANAWATU_WHANGANUI: { name: "Manawatū-Whanganui" },
+	MANAWATU_WHANGANUI: { name: "Manawatū" },
 	WELLINGTON: { name: "Wellington", maori_name: "Te Whanga-nui-a-Tara" },
 	TASMAN: { name: "Tasman", maori_name: "Te Tai-o-Aorere" },
 	NELSON: { name: "Nelson", maori_name: "Whakatū" },

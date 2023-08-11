@@ -42,7 +42,8 @@ export const load = (async ({ url }) => {
                                     name: true,
                                     id: true
                                 }
-                            }
+                            },
+                            format: true
                         }
                     }
                 }
@@ -106,7 +107,6 @@ export const load = (async ({ url }) => {
 
     results.average[filterEvent] = averageTemp.filter((result, index) => !averageUserIds.slice(0, index).includes(result.user.id))
     // }
-
 
 
     return { results }

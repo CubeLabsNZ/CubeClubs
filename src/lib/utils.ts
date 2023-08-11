@@ -1,3 +1,5 @@
+import { Format } from "@prisma/client";
+
 export const DNF = 1e7;
 
 export function clickOutside(node: HTMLElement) {
@@ -42,5 +44,35 @@ export function formatTime(rawValue: number): string {
         return seconds.toFixed(2)
     } else {
         return `${minutes}:${seconds.toFixed(2).padStart(5, '0')}`
+    }
+}
+
+
+export function calculateAverage(format: Format, data: number[]): number {
+    switch (format) {
+        case Format.AO5: {
+            data = data as number[]
+
+            const used = data.sort((t1, t2) => t1 - t2).slice(1, 4);
+            if (used.includes(DNF)) { return DNF }
+
+            return used.reduce((acc, cur) => acc + cur) / 3;
+        }
+
+        case Format.MO3: {
+            data = data as number[]
+
+            if (data.includes(DNF)) { return DNF}
+
+            return data.reduce((acc, cur) => acc + cur) / 3;
+        }
+
+        case Format.BO1: {
+            return data[0];
+        }
+
+        case Format.BO3: {
+            return Math.min(...data as number[]);
+        }
     }
 }
