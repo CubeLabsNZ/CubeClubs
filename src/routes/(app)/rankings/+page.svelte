@@ -15,40 +15,32 @@
 
     import { formatTime } from "$lib/utils"
 
-    import * as Icons from "$lib/assets/cube-icons/icons";
-
     import type { PageData } from "./$types"
     import puzzles from "$lib/data/puzzles";
+    import formats from "$lib/data/formats";
 
     export let data: PageData
 
-    /* INFO:
-        format: 0 = single, 1 - average
-
-        event:
-            0 = 3x3
-            1-5 = 2x2, 4x4-7x7
-            6 = squan
-            7 = skewb
-            8 = pyra
-            9 = mega
-            10 = oh
-            11 = clock
-            12 = fmc
-            13 = 3bld
-            14 = mbld
-            15 = 4bld
-            16 = 5bld
-    */
+    // INFO: format: 0 = single, 1 - average
 
     let formatIndex: number;
     let regionSelected: string
     let eventSelected: string;
+    let formatCount: number;
+
     // TODO: make stupid multibutton more fleible than just stupid index stupid
     let eventIndex = 0;
-    $: eventSelected = Object.keys(puzzles)[eventIndex];
 
-    $: updateQuery(formatIndex, eventSelected, regionSelected);
+    let selectedResults;
+
+    $: {
+        eventSelected = Object.keys(puzzles)[eventIndex];
+        formatCount = formats[puzzles[eventSelected].format].count;
+
+        selectedResults = formatIndex ? data.results.average[eventSelected] : data.results.single[eventSelected];
+
+        updateQuery(formatIndex, eventSelected, regionSelected);
+    }
 
     async function updateQuery(formatIndex: number, selectedEvent: number, selectedRegion: string) {
         if (!browser) { return }
@@ -105,27 +97,7 @@
         <div class="label-group">
             <p class="label">Event</p>
 
-            <MultiButton bind:selectedIndex={eventIndex} padding={4} fixedHeight={false} labels={[
-                {type: LabelType.Image, data: Icons.Icon3},
-                {type: LabelType.Image, data: Icons.Icon2},
-                {type: LabelType.Image, data: Icons.Icon4},
-                {type: LabelType.Image, data: Icons.Icon5},
-                {type: LabelType.Image, data: Icons.Icon6},
-                {type: LabelType.Image, data: Icons.Icon7},
-
-                {type: LabelType.Image, data: Icons.IconSq1},
-                {type: LabelType.Image, data: Icons.IconSkewb},
-                {type: LabelType.Image, data: Icons.IconPyra},
-                {type: LabelType.Image, data: Icons.IconMega},
-                {type: LabelType.Image, data: Icons.IconOH},
-                {type: LabelType.Image, data: Icons.IconClock},
-
-                {type: LabelType.Image, data: Icons.IconFMC},
-                {type: LabelType.Image, data: Icons.Icon3bld},
-                {type: LabelType.Image, data: Icons.IconMbld},
-                {type: LabelType.Image, data: Icons.Icon4bld},
-                {type: LabelType.Image, data: Icons.Icon5bld},
-            ]} />
+            <MultiButton bind:selectedIndex={eventIndex} padding={4} fixedHeight={false} labels={ Object.values(puzzles).map(p => ({type: LabelType.Image, data: p.icon})) } />
         </div>
     </div>
 
@@ -141,10 +113,12 @@
             <col span=1 style:width=auto>
 
             {#if formatIndex}
-                <col span=1 style:width=auto>
+                {#each Array(formatCount) as _}
+                    <col span=1 style:width=auto>
+                {/each}
             {/if}
 
-                <col span=1 style:width=8px>
+            <col span=1 style:width=8px>
         </colgroup>
 
         <tbody>
@@ -184,37 +158,39 @@
 
             {#if data.results}
                 {#if formatIndex}
-                    {#each data.average?.results as average, i }
-                        <tr>
-                            <td class="tc-dummy"></td>
+                    {#if Object.keys(data.results.average).length > 0}
+                        {#each selectedResults as average, i }
+                            <tr>
+                                <td class="tc-dummy"></td>
 
-                            <td class="tc-ranking">{i + 1}</td>
-                            <td class="tc-name"><a class="regular-link" href={`/user/${average.user.id}`}>{average.user.name}</a></td>
-                            <td class="tc-result">{formatTime(average.value)}</td>
-                            <td class="tc-region">{regionToString(average.user.region)}</td>
-                            <td class="tc-meetup"><a class="regular-link" href={`/meetups/${average.round.meetup.id}`}>{average.round.meetup.name}</a></td>
+                                <td class="tc-ranking">{i + 1}</td>
+                                <td class="tc-name"><a class="regular-link" href={`/user/${average.user.id}`}>{average.user.name}</a></td>
+                                <td class="tc-result">{formatTime(average.value)}</td>
+                                <td class="tc-region">{regionToString(average.user.region)}</td>
+                                <td class="tc-meetup"><a class="regular-link" href={`/meetups/${average.round.meetup.id}`}>{average.round.meetup.name}</a></td>
 
-                            {#each average.solves as solve }
-                                <td class="tc-solves">{formatTime(solve.time)}</td>
-                            {/each}
+                                <td class="tc-solves">{average.solves.map(s => formatTime(s.time)).join(", ")}</td>
 
-                            <td class="tc-dummy"></td>
-                        </tr>
-                    {/each}
+                                <td class="tc-dummy"></td>
+                            </tr>
+                        {/each}
+                    {/if}
                 {:else}
-                    {#each data.results.single[Puzzle.THREE] as single, i }
-                        <tr>
-                            <td class="tc-dummy"></td>
+                    {#if Object.keys(data.results.single).length > 0}
+                        {#each selectedResults as single, i }
+                            <tr>
+                                <td class="tc-dummy"></td>
 
-                            <td class="tc-ranking">{i + 1}</td>
-                            <td class="tc-name"><a class="regular-link" href={`/user/${single.result.user.id}`}>{single.result.user.name}</a></td>
-                            <td class="tc-result">{formatTime(single.time)}</td>
-                            <td class="tc-region">{regionToString(single.result.user.region)}</td>
-                            <td class="tc-meetup"><a class="regular-link" href={`/meetups/${single.result.round.meetup.id}`}>{single.result.round.meetup.name}</a></td>
+                                <td class="tc-ranking">{i + 1}</td>
+                                <td class="tc-name"><a class="regular-link" href={`/user/${single.result.user.id}`}>{single.result.user.name}</a></td>
+                                <td class="tc-result">{formatTime(single.time)}</td>
+                                <td class="tc-region">{regionToString(single.result.user.region)}</td>
+                                <td class="tc-meetup"><a class="regular-link" href={`/meetups/${single.result.round.meetup.id}`}>{single.result.round.meetup.name}</a></td>
 
-                            <td class="tc-dummy"></td>
-                        </tr>
-                    {/each}
+                                <td class="tc-dummy"></td>
+                            </tr>
+                        {/each}
+                    {/if}
                 {/if}
             {/if}
 
