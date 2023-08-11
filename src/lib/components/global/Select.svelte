@@ -9,7 +9,7 @@
         <slot/>
     </select>
 
-    <span class="material-symbols-outlined" style:font-size=20px>expand_more</span>
+    <span class="material-symbols-outlined">expand_more</span>
 </div>
 
 
@@ -20,9 +20,12 @@
 
     select {
         grid-area: 1/1;
+
+        padding-right: 32px;
     }
 
     span {
+        font-size: 20px;
         align-self: center;
         justify-self: flex-end;
         padding-right: 4px;
