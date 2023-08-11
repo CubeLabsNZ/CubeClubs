@@ -1,3 +1,5 @@
+<!-- WARN: this is pretty much entirely duplicated from multibutton -> can combine base template -->
+
 <script lang="ts">
     export let selectedIndices = new Set();
 
