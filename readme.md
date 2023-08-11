@@ -51,7 +51,10 @@
     - [ ] records history
 
 ### dashboard
-- [ ] adding competitors to meetups, editing competitors
+- [ ] competitors to meetups:
+    - [x] adding competitors to meetups
+    - [x] displaying added competitors
+    - [ ] editing competitors
 - [x] data entry:
     - [x] display results
     - [x] keep event

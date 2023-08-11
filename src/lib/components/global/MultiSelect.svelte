@@ -41,8 +41,6 @@
             {/if}
         </button>
     {/each}
-
-    <slot/>
 </div>
 
 
