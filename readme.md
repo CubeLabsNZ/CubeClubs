@@ -17,16 +17,16 @@
 - [ ] records:
     - [ ] show by region
     - [ ] show history
-    - [ ] average is undefined :(
+    - [x] average is undefined :(
 - [ ] rankings:
     - [ ] **IMPROVE PERFORMANCE**
     - [x] show by event
     - [ ] show average/single
     - [ ] show by region
-- [ ] login -> use old pbfkdjf2 hashing
+- [x] login -> use old pbfkdjf2 hashing
 - [x] signup -> doesn't let me create new account? tries to use old id???? (will this happen with everything?)
 
-- [ ] format all times correctly
+- [x] format all times correctly
 - [ ] MULTIBLIND SUPPORT
 
 - [ ] calculations (also see https://github.com/CubeClubsNZ/app/issues/8)
