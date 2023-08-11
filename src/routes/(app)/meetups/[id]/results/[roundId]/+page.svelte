@@ -6,7 +6,7 @@
     import formats from "$lib/data/formats";
     import regions, { regionToString } from "$lib/data/regions";
 
-    import { getRoundName, formatTime } from "$lib/utils";
+    import { getRoundName, formatTime, DNF } from "$lib/utils";
 
     import TabBar from '$lib/components/global/TabBar.svelte';
     import Breadcrumb from '$lib/components/global/Breadcrumb.svelte';
@@ -82,7 +82,7 @@
                 <!-- if final round -->
                 {#if currentRound.number === data.maxRounds[currentRound.puzzle]}
                     <!-- TODO: error checking? -->
-                    {#if rank < 3}
+                    {#if rank < 3 && value != DNF}
                         <td class="tc-ranking">
                             <div style:float=right>
                                 <Medal place={rank} /> 
@@ -94,7 +94,7 @@
                         </td>
                     {/if}
                 {:else}
-                    <td class="tc-ranking" data-proceed={rank < currentRound.proceedNumber ?? 0}> {rank + 1} </td>
+                    <td class="tc-ranking" data-proceed={(rank < currentRound.proceedNumber ?? 0) && value != DNF}> {rank + 1} </td>
                 {/if}
 
                 <td class="tc-name">{user.name}</td>

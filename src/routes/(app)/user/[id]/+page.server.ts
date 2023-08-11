@@ -23,6 +23,7 @@ export const load = (async ({ params }) => {
                     solves: true,
                 }
             },
+            isClubOrganiser: true
         }
     })
 

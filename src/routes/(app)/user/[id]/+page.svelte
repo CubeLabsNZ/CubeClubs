@@ -46,11 +46,13 @@
                             bg=var(--c-lgh)
                             label={regionToString(data.user.region)}/>
 
-                        <Badge 
-                            size={BadgeSize.Regular} 
-                            fg=var(--c-a)
-                            bg=var(--c-la1)
-                            label="ASC Club Organiser"/>
+                        {#if data.user.isClubOrganiser}
+                            <Badge 
+                                size={BadgeSize.Regular} 
+                                fg=var(--c-a)
+                                bg=var(--c-la1)
+                                label="Club Organiser"/>
+                        {/if}
 
                     </div>
                 </div>

@@ -118,7 +118,6 @@
         </colgroup>
 
         <tbody>
-            <!-- NOTE: tc-dummy is entirely invisible to provide padding to either side of the table -->
             <tr>
                 <th class="tc-dummy"></th>
 
@@ -135,7 +134,6 @@
                 <th class="tc-dummy"></th>
             </tr>
 
-            <!-- NOTE: td-dummy is entirely invisible to provide padding to the top and bottom of the table -->
             <tr class="td-dummy">
                 <td></td>
                 <td></td>

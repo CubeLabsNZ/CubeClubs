@@ -30,15 +30,18 @@
 - [ ] MULTIBLIND SUPPORT
 
 - [ ] calculations (also see https://github.com/CubeClubsNZ/app/issues/8)
-  - [ ] dnfs cannot podium / get medal
+  - [x] dnfs cannot podium / get medal
   - [ ] tied results should have same placing
-    - [ ] should also show multiple people under records if tied       
+    - [ ] should also show multiple people under records if tied
+    - [ ] calculate competitors that make next round????????
 
 - [ ] user:
-  - [ ] edit account details
-    - [ ] edit password
-    - [ ] edit email?
+  - [x] edit account details
+    - [x] edit password
+    - [x] edit email?
+  - [ ] invalidate session after change + redirect to login
   - [ ] recover account
+  - [x] show club organiser
 - [ ] profile
     - [ ] records are historical records collection
     - [ ] rankings are ranked by people not solves
