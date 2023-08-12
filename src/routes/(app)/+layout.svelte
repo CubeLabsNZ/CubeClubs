@@ -48,7 +48,7 @@
                     <div style:display=flex style:align-items=center style:column-gap=8px>
                         <span class="material-symbols-outlined" style:font-size=20px>account_circle</span>
 
-                        <p style:font-weight=500 style:padding-right=6px style:height=20px>{data.user.name.split(" ")[0]}</p>
+                        <p style:font-weight=500 style:padding-right=6px style:height=20px style:transform=translateY(1px)>{data.user.name.split(" ")[0]}</p>
                     </div>
                 </Button>
             </button>

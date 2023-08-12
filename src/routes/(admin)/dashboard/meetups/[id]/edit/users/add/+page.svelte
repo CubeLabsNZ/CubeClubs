@@ -110,14 +110,18 @@
     <label class="form-label">
         Add Events
 
-        <MultiSelect 
-            bind:selectedIndices={selectedEvents} 
-            padding={4} 
-            fixedHeight={false} 
-            labels={ Object.entries(puzzles).filter(p => data.meetup.puzzles.includes(p[0])).map(p => ({type: LabelType.Image, data: p[1].icon})) } />
+        {#if data.meetup.puzzles.length > 0}
+            <MultiSelect 
+                bind:selectedIndices={selectedEvents} 
+                padding={4} 
+                fixedHeight={false} 
+                labels={ Object.entries(puzzles).filter(p => data.meetup.puzzles.includes(p[0])).map(p => ({type: LabelType.Image, data: p[1].icon})) } />
 
-        {#if error === "events"}
-            <p class="fsize-subhead" style:color=var(--c-red)> please select atleast one event </p>
+            {#if error === "events"}
+                <p class="fsize-subhead" style:color=var(--c-red)> please select atleast one event </p>
+            {/if}
+        {:else}
+            <p style:color={error === "events" ? "var(--c-red)" : "var(--c-g)"}> There are no events added to this meetup. Please add events to the schedule before adding competitors.</p>
         {/if}
     </label>
 </Form>
