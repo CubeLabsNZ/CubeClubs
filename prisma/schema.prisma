@@ -1,9 +1,18 @@
+generator kysely {
+  provider = "prisma-kysely"
+
+  output = "../src/lib/db"
+  fileName = "types.ts"
+  // Optionally generate runtime enums to a separate file
+  enumFileName = "enums.ts"
+}
+
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider ="postgres"
+  provider ="postgresql"
   url      =env("DATABASE_URL")
 }
 

@@ -14,6 +14,7 @@
 		"@sveltejs/adapter-auto": "^2.1.0",
 		"@sveltejs/kit": "^1.24.1",
 		"@types/node": "^20.5.9",
+		"@types/pg": "^8.10.2",
 		"@typescript-eslint/eslint-plugin": "^6.6.0",
 		"@typescript-eslint/parser": "^6.6.0",
 		"eslint": "^8.48.0",
@@ -32,6 +33,9 @@
 		"@event-calendar/interaction": "^2.3.2",
 		"@event-calendar/time-grid": "^2.3.2",
 		"@prisma/client": "^5.2.0",
-		"argon2": "^0.31.1"
+		"argon2": "^0.31.1",
+		"kysely": "^0.26.3",
+		"pg": "^8.11.3",
+		"prisma-kysely": "^1.7.0"
 	}
 }
