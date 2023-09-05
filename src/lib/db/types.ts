@@ -4,7 +4,7 @@ export type Generated<T> = T extends ColumnType<infer S, infer I, infer U>
   : ColumnType<T, T | undefined, T>;
 export type Timestamp = ColumnType<Date, Date | string, Date | string>;
 
-import type { Penalty, Gender, Region, Puzzle, Format } from "./enums";
+import type { Region, Puzzle, Format } from "./enums";
 
 export type Club = {
     id: Generated<number>;
@@ -17,7 +17,9 @@ export type Meetup = {
     location: string;
     description: string;
     contact: string;
-    competitorLimit: number;
+    competitorLimit: number | null;
+    externalRegistrationLink: string | null;
+    registrationInformation: Generated<string>;
     date: Timestamp;
     isPublished: Generated<boolean>;
     clubId: number;
@@ -28,15 +30,15 @@ export type MeetupToUser = {
 };
 export type Result = {
     id: Generated<number>;
-    roundId: number;
+    value: number;
     userId: number;
+    roundId: number;
 };
 export type Round = {
     id: Generated<number>;
     startDate: Timestamp;
     endDate: Timestamp;
     puzzle: Puzzle;
-    roundNumber: number;
     format: Format;
     proceedNumber: number;
     meetupId: number;
@@ -49,7 +51,6 @@ export type Session = {
 export type Solve = {
     index: number;
     time: number;
-    penalty: Penalty;
     resultId: number;
 };
 export type User = {
@@ -58,7 +59,6 @@ export type User = {
     passHash: string;
     name: string;
     region: Region;
-    gender: Gender;
     isClubOrganiser: Generated<boolean>;
 };
 export type UserInMeetup = {

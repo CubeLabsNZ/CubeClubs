@@ -6,6 +6,7 @@ import { Puzzle } from '@prisma/client';
 import puzzles from '$lib/data/puzzles'
 import { islandRegions } from '$lib/data/regions';
 import { DNF } from '$lib/utils';
+import { db } from '$lib/db';
 
 export const load = (async ({ params }) => {
 
@@ -152,12 +153,17 @@ export const load = (async ({ params }) => {
 
         if (!average) continue; // Should never happen
 
-        // TODO: import these types sobbing
-        const getWhereRegionSingle = (region: EnumRegionFilter | Region) => ({where: {time: {lt: single.time}, result: {round: {puzzle: key}, user: {region: region}}}})
+        const countSingleBaseQuery = db.selectFrom('Solve')
+            .innerJoin('Result', 'Result.id', 'Solve.resultId')
+            .innerJoin('Round', 'Round.id', 'Result.roundId')
+            .innerJoin('User', 'User.id', 'Result.userId')
+            .where('time', '<', single.time)
+            .where('Round.puzzle', '=', key)
+            .select(({ fn }) => [fn.count<number>('Result.userId').distinct().as("count")])
 
-        const countRRSingle = await prisma.solve.count(getWhereRegionSingle(user.region));
-        const countIRSingle = await prisma.solve.count(getWhereRegionSingle({in: islandRegions(user.region)}));
-        const countIcRSingle = await prisma.solve.count(getWhereRegionSingle(undefined));
+        const countRRSingle = Number((await countSingleBaseQuery.where('User.region', '=', user.region).executeTakeFirst())?.count)
+        const countIRSingle = Number((await countSingleBaseQuery.where('User.region', 'in', islandRegions(user.region)).executeTakeFirst())?.count)
+        const countIcRSingle = Number((await countSingleBaseQuery.executeTakeFirst())?.count)
 
         // If there are no times less than the users, he has the record
         if (countRRSingle == 0) records.regional.single++;
@@ -165,10 +171,16 @@ export const load = (async ({ params }) => {
         if (countIcRSingle == 0) records.interclub.single++;
 
         const getWhereRegionAverage = (region: EnumRegionFilter | Region) => ({where: {value: {lt: average.value}, round: {puzzle: key}, user: {region: region}}})
+        const countAverageBaseQuery = db.selectFrom('Result')
+            .innerJoin('Round', 'Round.id', 'Result.roundId')
+            .innerJoin('User', 'User.id', 'Result.userId')
+            .where('value', '<', single.time)
+            .where('Round.puzzle', '=', key)
+            .select(({ fn }) => [fn.count('Result.userId').distinct().as("count")])
 
-        const countRRAverage = await prisma.result.count(getWhereRegionAverage(user.region))
-        const countIRAverage = await prisma.result.count(getWhereRegionAverage({in: islandRegions(user.region)}))
-        const countIcRAverage = await prisma.result.count(getWhereRegionAverage(undefined))
+        const countRRAverage = Number((await countAverageBaseQuery.where('User.region', '=', user.region).executeTakeFirst())?.count)
+        const countIRAverage = Number((await countAverageBaseQuery.where('User.region', 'in', islandRegions(user.region)).executeTakeFirst())?.count)
+        const countIcRAverage = Number((await countAverageBaseQuery.executeTakeFirst())?.count)
 
         if (countRRAverage == 0) records.regional.average++;
         if (countIRAverage == 0) records.island.average++;
