@@ -24,9 +24,9 @@
             <h4 class="fsize-title2">Our clubs host regular meetups for all ages and all skill levels, come join us at one of our meetups!</h4>
         </div>
 
-        <a href="/meetups">
+        <a href="/meetups" style:display=block style:width=fit-content>
             <Button type={ButtonType.Coloured} size={ButtonSize.Regular}>
-                <div id="landing-button">
+                <div id="landing-button" style:margin=0 style:padding=0>
                     <p>Explore our meetups</p>
     
                     <span class="material-symbols-outlined" style:font-size=20px>chevron_right</span>
@@ -37,14 +37,10 @@
 
     <img id="landing-clubs" src="/landing/clubs.webp" alt="">
 
-
     <div class="footer">
         <!-- TODO: link github when public -->
-        <a href="https://www.github.com" style:height=18px>
-            <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 28 28" style="enable-background:new 0 0 28 28;" xml:space="preserve" height=18px style:height=18px>
-                <style type="text/css">
-                    .st0{fill-rule:evenodd;clip-rule:evenodd;fill:var(--c-lg1);}
-                </style>
+        <a href="https://github.com/CubeClubsNZ/app" target="_blank" class="hoverable-link" style:height=18px style:fill=var(--c-lg1)>
+            <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" viewBox="0 0 28 28" height=18px style:height=18px >
                 <path class="st0" d="M14,0.2C6.3,0.2,0,6.5,0,14.3c0,6.2,4,11.5,9.6,13.4c0.7,0.1,1-0.3,1-0.7c0-0.3,0-1.4,0-2.6
                     c-3.9,0.8-4.7-1.7-4.7-1.7c-0.6-1.6-1.6-2.1-1.6-2.1c-1.3-0.9,0.1-0.9,0.1-0.9c1.4,0.1,2.2,1.4,2.2,1.4c1.3,2.1,3.3,1.5,4.1,1.2
                     c0.1-0.9,0.5-1.5,0.9-1.9c-3.1-0.3-6.4-1.5-6.4-7c0-1.5,0.6-2.8,1.4-3.8C6.4,9.5,5.9,8,6.7,6.1c0,0,1.2-0.4,3.9,1.4
@@ -56,7 +52,7 @@
 
         <hr>
 
-        <p> © 2023 Tim Xie, CubeClubs NZ. All rights reserved.  </p>
+        <p> © 2023 <a href="https://tim-xie.com" target="_blank" class="hoverable-link">Tim Xie</a>, CubeClubs NZ.</p>
     </div>
 </div>
 
@@ -68,7 +64,7 @@
         z-index: -1;
         position: fixed;
 
-        --_clubs-width: min(1800px, 85vw);
+        --_clubs-width: max(min(1800px, 85vw), 75vh);
 
         bottom: calc(-0.1 * var(--_clubs-width));
         right: calc(-0.1 * var(--_clubs-width));
@@ -76,11 +72,6 @@
     }
 
     #landing-button {
-        fill: var(--c-a);
-
-        padding-right: 6px;
-        padding-left: 6px;
-
         display: flex;
         gap: 16px;
         align-items: center;
@@ -111,6 +102,7 @@
     #landing-subtitle {
         gap: 16px;
         margin-bottom: 30px; /* 32px adjusted for font descenders */
+        width: min(550px, 40vw);
     }
 
     #landing-title *,
@@ -121,16 +113,16 @@
 
     h4 {
         font-weight: 400;
-        width: min(550px, 40vw);
         color: var(--c-dg1);
     }
 
     #landing-content {
-        margin-left: min(125px, 10vw);
-        margin-top: min(250px, 25vh);
+        margin-left: min(110px, 8.8vw);
+        margin-top: min(220px, 22vh);
 
         z-index: 2;
     }
+
 
 
 
@@ -173,7 +165,7 @@
     #landing-main {
         display: grid;
 
-        grid-template-rows: 1fr 128px;
+        grid-template-rows: 1fr 110px;
 
         height: 100dvh;
         overflow: hidden;
@@ -186,7 +178,7 @@
         height: 24px;
         
         z-index: 10;
-        margin-left: min(125px, 10vw);
+        margin-left: min(110px, 8.8vw);
     }
 
     .footer * {
@@ -204,5 +196,48 @@
 
         border: none;
         border-right: 1px var(--c-lg1) solid;
+    }
+
+    .hoverable-link {
+        transition: color var(--v-animation-delay) ease-in-out;
+    }
+
+    .hoverable-link:hover {
+        color: var(--c-lg2);
+    }
+
+    .hoverable-link svg {
+        transition: fill var(--v-animation-delay) ease-in-out;
+    }
+
+    .hoverable-link:hover svg {
+        fill: var(--c-lg2);
+    }
+
+
+
+
+    @media(max-width: 550px) {
+        #landing-content {
+            margin-left: 20px;
+            margin-right: 20px;
+            margin-top: 20vh;
+        }
+
+        #landing-subtitle {
+            width: 100%;
+        }
+
+        .footer {
+            margin-left: 20px;
+        }
+
+        #landing-clubs {
+            display: none;
+        }
+
+        #landing-main {
+            grid-template-rows: 1fr 64px;
+        }
     }
 </style>

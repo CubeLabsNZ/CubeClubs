@@ -11,6 +11,8 @@ import { redirect } from "@sveltejs/kit";
 import type { PageServerLoad } from './$types';
 import { getUserSession } from '$lib/utilsServer';
 
+import crypto from 'crypto'
+
 export const load = (async ({ cookies }) => {
     const user = await getUserSession(cookies);
     if (user) {
@@ -34,14 +36,33 @@ export const actions = {
         if (!user) { 
             return fail(400, { email, error: "email" });
         }
-        
 
-        const passIsCorrect = await argon2.verify(user.passHash, password as string);
+
+        const ispbkdf = user.passHash.startsWith("pbkdf2")
+        let passIsCorrect
+        if (ispbkdf) {
+            const [algorithm, iterations, salt, hash] = user.passHash.split('$');
+            const hashcheck = crypto.pbkdf2Sync(password as string, Buffer.from(salt), Number(iterations), 32, 'sha256').toString('base64');
+            passIsCorrect = hash == hashcheck
+
+        } else {
+            passIsCorrect = await argon2.verify(user.passHash, password as string);
+        }
 
         if (!passIsCorrect) { 
             return fail(401, { email, error: "pass"})
         }
 
+        if (ispbkdf) {
+            await prisma.user.update({
+                where: {
+                    id: user.id
+                },
+                data: {
+                    passHash: await argon2.hash(password as string)
+                }
+            })
+        }
 
         const session = await prisma.session.create({
             data: {

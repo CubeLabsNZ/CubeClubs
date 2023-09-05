@@ -4,6 +4,8 @@
     export let padding = 12;
 
     export let labels: Label[];
+
+    export let fixedHeight = true;
 </script>
 
 <script context="module" lang="ts">
@@ -19,7 +21,7 @@
 </script>
 
 
-<div class="container" style:--p={padding}px>
+<div class="container" style:--p={padding}px style:height={fixedHeight ? "34px" : "auto"} style:flex-wrap={fixedHeight ? "nowrap" : "wrap"}>
     {#each labels as { type, data, }, i}
         <button on:click|preventDefault = { () => { 
             selectedIndex = i
@@ -32,7 +34,6 @@
         </button>
     {/each}
 
-
     <slot/>
 </div>
 
@@ -40,7 +41,6 @@
 <style>
     /* TODO: add large/medium */
     .container {
-        height: 34px;
         border: 1px var(--c-lg1) solid;
         background-color: white;
         box-shadow: 0px 1px 4px 0px #10151B1F; /* cdg3, 12% */
@@ -55,6 +55,8 @@
 
         column-gap: 16px;
 
+        padding-top: 2px;
+        padding-bottom: 2px;
     }
 
     .container * {

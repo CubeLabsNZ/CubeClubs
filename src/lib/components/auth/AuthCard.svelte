@@ -19,7 +19,7 @@
 <style> 
     #wrapper {
         width: 350px;
-
+        height: 600px;
         /* background-color: white; */
         /* box-shadow: 0 4px 8px 0px #10151B29; */
         /* padding: 16px; */

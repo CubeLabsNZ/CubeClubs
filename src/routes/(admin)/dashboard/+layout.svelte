@@ -1,4 +1,6 @@
 <script lang="ts">
+    import { dev } from "$app/environment";
+
     import { goto } from "$app/navigation";
 
     import "$styles/fonts.css";
@@ -14,7 +16,7 @@
 
     let currentPage: string;
 
-    /* NOTE: IMPORTANT: this is REALLY BAD code but cannot be bothered writing a store
+    /* WARN: IMPORTANT: this is REALLY BAD code but cannot be bothered writing a store
      * the value 19 is based off of "/(admin)/dashboard/"
      * AND WILL BREAK if the route is modified.
      */
@@ -25,7 +27,6 @@
 <svelte:head>
     <title>CubeClubs NZ Dashboard</title>
 </svelte:head>
-
 
 <div class="container">
     <div class="sidebar">
@@ -48,11 +49,10 @@
 <style>
     .container {
         display: grid;
-        grid-template-columns: 364px 1fr;
+        grid-template-columns: 300px 1fr;
         height: 100dvh;
         overflow-y: hidden;
     }
-
 
     .sidebar {
         grid-column: 1;
@@ -81,5 +81,16 @@
     .content {
         grid-column: 2;
         overflow-y: scroll;
+    }
+
+
+    @media(max-width: 1040px) {
+        .container {
+            grid-template-columns: 1fr;
+        }
+
+        .sidebar {
+            display: none
+        }
     }
 </style>

@@ -3,14 +3,20 @@
     import { page } from "$app/stores";
     import { goto } from "$app/navigation";
 
-    import regions from "$lib/data/regions";
+    import { formatTime } from "$lib/utils"
+
+    import regions, { regionToString } from "$lib/data/regions";
     import puzzles from "$lib/data/puzzles";
 
-    import { Region } from "@prisma/client";
+    import type { Region } from "@prisma/client";
 
+    import Select from "$lib/components/global/Select.svelte";
     import PageContent from "$lib/components/global/PageContent.svelte";
 
     import MultiButton, { LabelType } from "$lib/components/global/MultiButton.svelte";
+
+
+    import type { PageData } from "./$types"
 
 
     let regionSelected: string, displayType: number;
@@ -36,8 +42,6 @@
     }
 
 
-
-
     interface Result {
         name: string;
         result: number;
@@ -46,11 +50,7 @@
         data: any;
     }
 
-    let results: Result[] = [
-        { name: "John Doe", result: 1.67, region: Region.AUCKLAND, meetupName: "ASC Meetup April 2023", data: "" },
-        { name: "Joe Bloggs", result: 1.78, region: Region.OTAGO, meetupName: "Christchurch Meetups", data: "1.54, 1.64, 1.45, 1.90, 1.24" }
-    ];
-
+    export let data: PageData
 </script>
 
 
@@ -67,12 +67,12 @@
         <div class="label-group">
             <p class="label">Region</p>
 
-            <select name="region" bind:value={regionSelected}>
+            <Select name="region" bind:value={regionSelected}>
                 <option selected value>All Regions</option>
-                {#each Object.entries(regions) as [value, {name, maori_name}] }
-                    <option value={value}>{name} {maori_name !== undefined ? `(${maori_name})` : ""}</option>
+                {#each Object.keys(regions) as value }
+                    <option value={value}>{regionToString(value)}</option>
                 {/each}
-            </select>
+            </Select>
         </div>
 
         <div class="label-group">
@@ -87,69 +87,104 @@
 
     {#if displayType == 0} <!-- current -->
         {#each Object.entries(puzzles) as [puzzle, { name, icon }], i}
+            {@const single = data.records[puzzle]?.single}
+            {@const average = data.records[puzzle]?.average}
             <div class={"group-label group-label-" + i}>
                 <img src={icon} alt="">
 
                 <h3 class="fsize-title2">{name}</h3>
             </div>
 
-
+            <!-- BUG: i hate tables, extends out of page... before being set to block display? -->
             <table>
-                <!-- NOTE: tc-dummy is entirely invisible to provide padding to either side of the table -->
-                <tr>
-                    <th class="tc-dummy"></th>
+                <colgroup>
+                    <col span=1 style:width=8px>
 
-                    <th class="tc-type">Format</th>
-                    <th class="tc-name">Name</th>
-                    <th class="tc-result">Average</th>
-                    <th class="tc-region">Region</th>
-                    <th class="tc-meetup">Meetup</th>
-                    <th class="tc-solves">Solves</th>
+                    <col span=1 style:width=50px>
+                    <col span=1 style:width=160px>
+                    <col span=1 style:width=80px>
+                    <col span=1 style:width=160px>
+                    <col span=1 style:width=270px>
+                    <col span=1 style:width=auto>
 
-                    <th class="tc-dummy"></th>
-                </tr>
+                    <col span=1 style:width=8px>
+                </colgroup>
 
-                <!-- NOTE: td-dummy is entirely invisible to provide padding to the top and bottom of the table -->
-                <tr class="td-dummy">
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                </tr>
+                <tbody>
+                    <tr>
+                        <th class="tc-dummy"></th>
 
-                <!-- INFO: single -->
-                <tr>
-                    <td class="tc-dummy"></td>
+                        <th class="tc-type">Format</th>
+                        <th class="tc-name">Name</th>
+                        <th class="tc-result">Result</th>
+                        <th class="tc-region">Region</th>
+                        <th class="tc-meetup">Meetup</th>
+                        <th class="tc-solves">Solves</th>
 
-                    <td class="tc-type">Single</td>
-                    <td class="tc-name">{results[0].name}</td>
-                    <td class="tc-result">{results[0].result}</td>
-                    <td class="tc-region">{results[0].region}</td>
-                    <td class="tc-meetup">{results[0].meetupName}</td>
-                    <td class="tc-solves">{results[0].data}</td>
+                        <th class="tc-dummy"></th>
+                    </tr>
 
-                    <td class="tc-dummy"></td>
-                </tr>
+
+                    <tr class="td-dummy">
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+
+                    <!-- INFO: single -->
+                    {#if single}
+                        <tr>
+                            <td class="tc-dummy"></td>
+
+                            <td class="tc-type">Single</td>
+
+                            <td class="tc-name"><a class="regular-link" href={`/user/${single.result.user.id}`}>{single.result.user.name}</a></td>
+
+                            <td class="tc-result">{formatTime(single.time)}</td>
+                            <td class="tc-region">{regionToString(single.result.user.region)}</td>
+                            <td class="tc-meetup"><a class="regular-link" href={`/meetups/${single.result.round.meetup.id}`}>{single.result.round.meetup.name}</a></td>
+                            <td class="tc-solves"></td>
+
+                            <td class="tc-dummy"></td>
+                        </tr>
+                    {:else}
+                        <tr>
+                            <td class="tc-dummy"></td>
+
+                        <td class="tc-placeholder" align=center colspan=6>no results yet</td>
+                        <td class="tc-dummy"></td>
+                    </tr>
+                {/if}
 
 
                 <!-- INFO: average-->
-                <tr>
-                    <td class="tc-dummy"></td>
+                {#if average}
+                    <tr>
+                        <td class="tc-dummy"></td>
 
-                    <td class="tc-type">Average</td>
-                    <td class="tc-name">{results[1].name}</td>
-                    <td class="tc-result">{results[1].result}</td>
-                    <td class="tc-region">{results[1].region}</td>
-                    <td class="tc-meetup">{results[1].meetupName}</td>
-                    <td class="tc-solves">{results[1].data}</td>
+                        <td class="tc-type">Average</td>
 
-                    <td class="tc-dummy"></td>
-                </tr>
+                        <td class="tc-name"><a class="regular-link" href={`/user/${average.user.id}`}>{average.user.name}</a></td>
 
+                        <td class="tc-result">{formatTime(average.value)}</td>
+                        <td class="tc-region">{regionToString(average.user.region)}</td>
+                        <td class="tc-meetup"><a class="regular-link" href={`/meetups/${average.round.meetup.id}`}>{average.round.meetup.name}</a></td>
+                        <td class="tc-solves">{average.solves.map(s => s.time).join(', ')}</td>
+
+                        <td class="tc-dummy"></td>
+                    </tr>
+                {:else}
+                    <tr>
+                        <td class="tc-dummy"></td>
+                        <td class="tc-placeholder" align=center colspan=6>no results yet</td>
+                        <td class="tc-dummy"></td>
+                    </tr>
+                {/if}
 
 
                 <tr class="td-dummy">
@@ -162,6 +197,8 @@
                     <td></td>
                     <td></td>
                 </tr>
+                </tbody>
+
             </table>
         {/each}
     {:else}
@@ -232,10 +269,7 @@
                 </tr>
             </table>
         {/each}
-
-
     {/if}
-
 </PageContent>
 
 
@@ -257,24 +291,15 @@
     .group-label h3 {
         font-weight: 500;
     }
-    
+
 
 
     .tc-name, .tc-region, .tc-meetup, .tc-solves, .tc-type {
         text-align: left;
     }
 
-    .tc-name {
-        min-width: 200px;
-    }
-
     .tc-result, .tc-name {
         font-weight: 500;
-    }
-
-    tr:not(:first-child) .tc-name,
-    tr:not(:first-child) .tc-meetup {
-        color: var(--c-a);
     }
 
     .tc-result {

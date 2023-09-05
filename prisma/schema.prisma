@@ -12,16 +12,15 @@ generator client {
 }
 
 datasource db {
-  provider ="postgresql"
-  url      =env("DATABASE_URL")
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 model Club {
-  id        Int           @id @default(autoincrement())
-  name      String
+  id      Int      @id @default(autoincrement())
+  name    String
   meetups Meetup[]
 }
-
 
 model User {
   id              Int     @id @default(autoincrement())
@@ -29,22 +28,21 @@ model User {
   passHash        String
   name            String
   region          Region
-  gender          Gender
   isClubOrganiser Boolean @default(false)
 
   sessions Session[]
 
   organiserFor Meetup[]
   competingIn  UserInMeetup[]
-  results Result[]
+  results      Result[]
 }
 
 // INFO: using session authentication instead of token
 model Session {
-  id                Bytes @id
-  ip    String
+  id Bytes  @id
+  ip String
 
-  user User @relation(fields: [userId], references: [id])
+  user   User @relation(fields: [userId], references: [id])
   userId Int
 }
 
@@ -68,11 +66,14 @@ model Meetup {
   organisers      User[] // TODO: check relation?
   description     String
   contact         String
-  competitorLimit Int
+  competitorLimit Int?
 
-  date            DateTime @db.Date
+  externalRegistrationLink String?
+  registrationInformation  String  @default("")
 
-  isPublished     Boolean @default(false)
+  date DateTime @db.Date
+
+  isPublished Boolean @default(false)
 
   users UserInMeetup[]
 
@@ -82,59 +83,43 @@ model Meetup {
   rounds Round[]
 }
 
-
 model Round {
-  id            Int          @id @default(autoincrement())
-  startDate     DateTime
-  endDate       DateTime
-  puzzle        Puzzle
-  roundNumber         Int
-  format        Format
-  results       Result[]
+  id        Int      @id @default(autoincrement())
 
-  proceedNumber   Int
+  startDate DateTime
+  endDate   DateTime
+  puzzle    Puzzle
+  format    Format
+  proceedNumber Int
+  results   Result[]
+
 
   meetup   Meetup @relation(fields: [meetupId], references: [id])
   meetupId Int
 }
 
 model Result {
-  id Int @id @default(autoincrement())
-  round     Round @relation(fields: [roundId], references: [id])
-  roundId   Int
+  id      Int   @id @default(autoincrement())
 
-  user      User @relation(fields: [userId], references: [id])
+  solves Solve[]
+  value Float
+
+
+  user   User    @relation(fields: [userId], references: [id])
   userId Int
-  solves    Solve[]
-}
 
+  round   Round @relation(fields: [roundId], references: [id])
+  roundId Int
+}
 
 model Solve {
   index Int
-  time    Int
-  penalty Penalty
+  time  Float
 
-  result Result @relation(fields: [resultId], references: [id])
+  result   Result @relation(fields: [resultId], references: [id])
   resultId Int
 
   @@id([resultId, index])
-
-
-}
-
-enum Penalty {
-  NONE
-  PLUSTWO
-  DNF
-}
-
-
-
-// INFO: ENUMS
-enum Gender {
-  MALE
-  FEMALE
-  OTHER
 }
 
 enum Region {
@@ -145,15 +130,17 @@ enum Region {
   GISBORNE
   HAWKES_BAY
   TARANAKI
-  MANGAWATU_WHANGANUI
+  MANAWATU_WHANGANUI
   WELLINGTON
   TASMAN
   NELSON
-  MALBOROUGH
+  MARLBOROUGH
   WEST_COAST
   CANTERBURY
   OTAGO
   SOUTHLAND
+
+  VISITOR
 }
 
 enum Puzzle {

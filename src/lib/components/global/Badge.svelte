@@ -4,27 +4,30 @@
     export let fg: string, bg: string;
 
     export let label: string;
+    export let fontFamily = "IBMPlexSans";
 </script>
 
 <script context="module" lang="ts">
     export enum BadgeSize {
         Regular,
-        Small
+        Small,
+        Large
     }
 </script>
 
 
 <div 
     class="outer" 
-    style:height={`${size == BadgeSize.Regular ? 20 : 16}px`}
+    style:height={`${size == BadgeSize.Regular ? 20 : (size == BadgeSize.Large ? 24 : 16)}px`}
     style:background-color={bg}>
 
-    <p style:font-size={`${size == BadgeSize.Regular ? 12 : 10}px`} style:color={fg} style:font-weight=600> {label} </p>
+    <slot/>
+    <p style:font-size={`${size == BadgeSize.Regular ? 12 : (size == BadgeSize.Large ? 14 : 10)}px`} style:color={fg} style:font-weight=600 style:font-family={fontFamily}> {label} </p>
 </div>
 
 <style>
     .outer {
-        display: grid;
+        display: flex;
         align-items: center;
         width: fit-content;
         padding-left: 6px;
