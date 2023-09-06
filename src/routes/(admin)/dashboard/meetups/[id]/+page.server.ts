@@ -17,6 +17,7 @@ export const load = (async ({ cookies, params }) => {
             organisers: {
                 select: {
                     name: true,
+                    id: true,
                 }
             },
             users: {

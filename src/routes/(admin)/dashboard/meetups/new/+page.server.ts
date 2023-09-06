@@ -1,8 +1,7 @@
 import prisma from '$lib/prisma';
-import { redirect } from "@sveltejs/kit"
 import type { Prisma } from '@prisma/client'
 import type { Actions, PageServerLoad } from './$types';
-import { fail } from "@sveltejs/kit";
+import { redirect, fail } from '@sveltejs/kit';
 
 export const actions = {
     default: async ({request}) => {
@@ -47,9 +46,8 @@ export const actions = {
             data: meetup
         })
 
-        // TODO: figure out how to display a success message like GH - it's in the form actions docs.
-        // Cannot figure out without wifi :(
-        throw redirect(303, `/dashboard/meetups/`)
+        // TODO: does this have success message?
+        throw redirect(303, `/dashboard/meetups/${createdMeetup.id}`)
     }
 } satisfies Actions;
 
