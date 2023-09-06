@@ -155,6 +155,7 @@ export const load = (async ({ params }) => {
 
         // PERSONAL RECORDS / RANKINGS
 
+        console.log("HERE")
         const countSingleBaseQuery = db.selectFrom('Solve')
             .innerJoin('Result', 'Result.id', 'Solve.resultId')
             .innerJoin('Round', 'Round.id', 'Result.roundId')
@@ -167,10 +168,11 @@ export const load = (async ({ params }) => {
         const countIRSingle = Number((await countSingleBaseQuery.where('User.region', 'in', islandRegions(user.region)).executeTakeFirst())?.count)
         const countIcRSingle = Number((await countSingleBaseQuery.executeTakeFirst())?.count)
 
+        console.log("HERE2")
         const countAverageBaseQuery = db.selectFrom('Result')
             .innerJoin('Round', 'Round.id', 'Result.roundId')
             .innerJoin('User', 'User.id', 'Result.userId')
-            .where('value', '<', single.time)
+            .where('value', '<', average.value)
             .where('Round.puzzle', '=', key)
             .select(({ fn }) => [fn.count('Result.userId').distinct().as("count")])
 
