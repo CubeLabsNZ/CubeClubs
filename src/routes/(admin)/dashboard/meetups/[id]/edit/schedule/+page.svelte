@@ -1,9 +1,12 @@
 <script lang="ts">
+    import type { PageData } from "./$types";
+
     import Toast from "$lib/components/global/Toast.svelte";
-
     import Select from "$lib/components/global/Select.svelte";
+    import Breadcrumb from "$lib/components/global/Breadcrumb.svelte";
+    import Button, { ButtonType, ButtonSize } from "$lib/components/global/Button.svelte";
+    import Card from "$lib/components/global/card/Card.svelte";
 
-    
 
     export let data: PageData;
 
@@ -11,36 +14,28 @@
     import Interaction from "@event-calendar/interaction";
     import TimeGrid from "@event-calendar/time-grid";
 
-    import Breadcrumb from "$lib/components/global/Breadcrumb.svelte";
-
-    import Button, { ButtonType, ButtonSize } from "$lib/components/global/Button.svelte";
-
-    import Card from "$lib/components/global/card/Card.svelte";
 
     import formats from "$lib/data/formats";
     import puzzles from "$lib/data/puzzles";
-    import type { Puzzle } from '@prisma/client'
-    import { onMount } from "svelte";
 
     let events = [];
 
     let plugins = [TimeGrid, Interaction];
 
-    let options;
-    let eventCalendar;
-
-
-    let addEventCard;
+    let options, eventCalendar, addEventCard;
 
     let displayingUUID: string | null = null
 
     // TODO: figureout figure out key in puzle
     function updateRoundFor(puzzleType: string) {
         let roundNum = 1;
-        for (const event of eventCalendar.getEvents().sort((a,z) => a.start - z.start).filter(x => x.extendedProps.puzzleType == puzzleType)) {
+        for (const event of eventCalendar
+            .getEvents()
+            .sort((e1,e2) => e1.start - e2.start)
+            .filter(x => x.extendedProps.puzzleType == puzzleType)) {
             eventCalendar.updateEvent({
                 ...event,
-                title: `${puzzles[event.extendedProps.puzzleType].name} - Round ${roundNum}`,
+                title: getRoundName(puzzles[event.extendedProps.puzzleType].name, roundNum, data.maxRounds[event.extendedProps.puzzleType]),
             })
             roundNum++;
         }
@@ -172,13 +167,18 @@
             </div>
 
             <div style:display=flex style:gap=8px style:justify-content=flex-end>
-                <Button>
-                    <div style:display=flex style:align-items=center style:gap=4px>
-                        <span class="material-symbols-outlined" style:margin-left=-4px style:font-size=24px>cancel</span>
+                <button on:click={() => {
+                        eventCalendar.removeEventById(displayingUUID)
+                        addEventCard.style.display = "none";
+                    }}>
+                    <Button>
+                        <div style:display=flex style:align-items=center style:gap=4px>
+                            <span class="material-symbols-outlined" style:margin-left=-4px style:font-size=24px>cancel</span>
 
-                        <p>Cancel</p>
-                    </div>
-                </Button>
+                            <p>Cancel</p>
+                        </div>
+                    </Button>
+                </button>
 
                 <Button>
                     <div style:display=flex style:align-items=center style:gap=4px>

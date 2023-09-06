@@ -86,7 +86,7 @@
 
     @media(max-width: 1040px) {
         .container {
-            grid-template-columns: 1fr;
+            grid-template-columns: 0px 1fr;
         }
 
         .sidebar {
