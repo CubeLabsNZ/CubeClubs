@@ -99,27 +99,21 @@
 
 
                     <div class="section-column">
-                        <div class="data-row">
-                            <RecordRow
-                                record={data.records.regional}
-                                name="Regional Records" shortname=RR
-                                bg=var(--c-lgreen) fg=var(--c-green)/>
-                        </div>
+                        <RecordRow
+                            record={data.records.regional}
+                            name="Regional Records" shortname=RR
+                            bg=var(--c-lgreen) fg=var(--c-green)/>
 
-                        <div class="data-row">
-                            <RecordRow
-                                record={data.records.island}
-                                name="Island Records" shortname=IR
-                                bg=var(--c-lred) fg=var(--c-red)/>
-                        </div>
+                        <RecordRow
+                            record={data.records.island}
+                            name="Island Records" shortname=IR
+                            bg=var(--c-lred) fg=var(--c-red)/>
 
 
-                        <div class="data-row">
-                            <RecordRow
-                                record={data.records.interclub}
-                                name="Interclub Records" shortname=IcR
-                                bg=var(--c-lpurple) fg=var(--c-purple)/>
-                        </div>
+                        <RecordRow
+                            record={data.records.interclub}
+                            name="Interclub Records" shortname=IcR
+                            bg=var(--c-lpurple) fg=var(--c-purple)/>
                     </div>
                 </div>
             </div>
