@@ -28,16 +28,20 @@
     let eventSelected: string;
 
     // TODO: make stupid multibutton more fleible than just stupid index stupid
-    let eventIndex = 0;
+    let eventIndex = Object.keys(puzzles).indexOf($page.url.searchParams.get("event")) ?? 0
 
     let selectedResults;
 
+// TODO: make this good and all backend 
     $: {
         eventSelected = Object.keys(puzzles)[eventIndex];
-
-        selectedResults = formatIndex ? data.results.average[eventSelected] : data.results.single[eventSelected];
+        console.log("EVENT INDEX IS " + eventIndex)
+        console.log("EVENT SELECTED IS NOW " + eventSelected)
 
         updateQuery(formatIndex, eventSelected, regionSelected);
+        selectedResults = formatIndex ? data.results.average[eventSelected] : data.results.single[eventSelected];
+        console.assert(selectedResults)
+
     }
 
     async function updateQuery(formatIndex: number, selectedEvent: number, selectedRegion: string) {
