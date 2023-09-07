@@ -32,17 +32,19 @@ export async function getUserSessionOrThrow(cookies: Cookies, needsAdmin: boolea
 
 
 export function populateRounds(rounds: Round[]) {
-    const roundForPuzzle = {}
+    const roundForPuzzle = {};
+
     for (const round of rounds) {
         // TODO: find better way
-        if (!roundForPuzzle[round.puzzle]) {
-            roundForPuzzle[round.puzzle] = 1
-        }
+        if (!roundForPuzzle[round.puzzle])
+            roundForPuzzle[round.puzzle] = 1;
+        
+
         round.number = roundForPuzzle[round.puzzle]
         roundForPuzzle[round.puzzle]++
     }
 
-    let maxRounds = {};
+    const maxRounds = {};
     for (const [key, value] of Object.entries(roundForPuzzle)) {
         maxRounds[key] = value - 1;
     }
