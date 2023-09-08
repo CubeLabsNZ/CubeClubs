@@ -17,6 +17,7 @@
 
     import formats from "$lib/data/formats";
     import puzzles from "$lib/data/puzzles";
+    import { getRoundName } from "$lib/utils";
 
     let events = [];
 
@@ -29,20 +30,27 @@
     // TODO: figureout figure out key in puzle
     function updateRoundFor(puzzleType: string) {
         let roundNum = 1;
-        for (const event of eventCalendar
+        const filteredEvents = eventCalendar
             .getEvents()
             .sort((e1,e2) => e1.start - e2.start)
-            .filter(x => x.extendedProps.puzzleType == puzzleType)) {
+            .filter(x => x.extendedProps.puzzleType == puzzleType)
+        for (const event of filteredEvents) {
             eventCalendar.updateEvent({
                 ...event,
-                title: getRoundName(puzzles[event.extendedProps.puzzleType].name, roundNum, data.maxRounds[event.extendedProps.puzzleType]),
+                title: getRoundName(puzzles[event.extendedProps.puzzleType].name, roundNum, filteredEvents.length),
             })
             roundNum++;
         }
     }
 
     let hasUnsavedChanges = false
-    let saveFetch: Promise<Response>
+    let saveFetch: Promise<Response> | null = null
+
+    let unselectCancel = true
+
+    let selectedFormat: string | undefined
+    let selectedPuzzle: string | undefined
+    let proceedNumber: number | undefined
 
     function saveChanges() {
         // TODO cancel promise and stuff
@@ -95,13 +103,27 @@
             unselectAuto: false,
             unselect: (info) => {
                 console.log("unseleect")
-                if (addEventCard.contains(info.jsEvent.target)) {
-                    return false // Keep editing
+                if (!unselectCancel) {
+                    const event = eventCalendar.getEventById(displayingUUID)
+                    eventCalendar.updateEvent({
+                        ...event,
+                        extendedProps: {
+                            puzzleType: selectedPuzzle,
+                            formatType: selectedFormat,
+                            proceedNumber: proceedNumber
+                        }
+                    })
+                    updateRoundFor(selectedPuzzle!)
+                    hasUnsavedChanges = true
                 } else {
-                    // Cancel
                     eventCalendar.removeEventById(displayingUUID)
-                    addEventCard.style.display = "none";
                 }
+
+                addEventCard.style.display = "none";
+
+                selectedPuzzle = undefined
+                selectedFormat = undefined
+                proceedNumber = undefined
             },
             eventDrop: (info) => {
                 // Update all round numbers
@@ -137,7 +159,7 @@
             <div class="label-group">
                 <p class="label">Event</p>
 
-                <Select name="event">
+                <Select name="event" bind:value={selectedPuzzle}>
                     <option disabled selected value>Select an event</option>
 
                     {#each Object.entries(puzzles) as [type, { name }]}
@@ -151,7 +173,7 @@
             <div class="label-group" style:padding-top=16px>
                 <p class="label">Format</p>
 
-                <Select name="format">
+                <Select name="format" bind:value={selectedFormat}>
                     <option disabled selected value>Select a round format</option>
 
                     {#each Object.entries(formats) as [type, { name }]}
@@ -163,13 +185,13 @@
             <div class="label-group" style:padding-top=16px style:padding-bottom=32px>
                 <p class="label"> Number to Proceed </p>
 
-                <input required name="numberProceed" />
+                <input required name="numberProceed" bind:value={proceedNumber} />
             </div>
 
             <div style:display=flex style:gap=8px style:justify-content=flex-end>
                 <button on:click={() => {
-                        eventCalendar.removeEventById(displayingUUID)
-                        addEventCard.style.display = "none";
+                        unselectCancel = true
+                        eventCalendar.unselect()
                     }}>
                     <Button>
                         <div style:display=flex style:align-items=center style:gap=4px>
@@ -180,13 +202,18 @@
                     </Button>
                 </button>
 
-                <Button>
-                    <div style:display=flex style:align-items=center style:gap=4px>
-                        <span class="material-symbols-outlined" style:margin-left=-4px style:font-size=24px>done</span>
+                <button  on:click={() => {
+                        unselectCancel = false
+                        eventCalendar.unselect()
+                    }}>
+                    <Button>
+                        <div style:display=flex style:align-items=center style:gap=4px>
+                            <span class="material-symbols-outlined" style:margin-left=-4px style:font-size=24px>done</span>
 
-                        <p> Add Event </p>
-                    </div>
-                </Button>
+                            <p> Add Event </p>
+                        </div>
+                    </Button>
+                </button>
             </div>
         </div>
     </Card>
@@ -209,6 +236,6 @@
     .add-event-card {
         position: fixed;
         display: none;
-        z-index: 999;
+        z-index: 2000;
     }
 </style>

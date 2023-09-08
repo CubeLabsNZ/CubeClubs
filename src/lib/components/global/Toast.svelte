@@ -34,5 +34,7 @@
 
         background-color: white;
         box-shadow: 0px 1px 6px 0px #10151B29; /* cdg3, 16% */
+
+        z-index: 9999;
     }
 </style>

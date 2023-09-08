@@ -28,9 +28,8 @@
     let eventSelected: string;
 
     // TODO: make stupid multibutton more fleible than just stupid index stupid
-    let eventIndex = Object.keys(puzzles).indexOf($page.url.searchParams.get("event")) ?? 0
+    let eventIndex = $page.url.searchParams.has("event") ? Object.keys(puzzles).indexOf($page.url.searchParams.get("event")) : 0
 
-    let selectedResults;
 
 // TODO: make this good and all backend 
     $: {
@@ -39,12 +38,10 @@
         console.log("EVENT SELECTED IS NOW " + eventSelected)
 
         updateQuery(formatIndex, eventSelected, regionSelected);
-        selectedResults = formatIndex ? data.results.average[eventSelected] : data.results.single[eventSelected];
-        console.assert(selectedResults)
 
     }
 
-    async function updateQuery(formatIndex: number, selectedEvent: number, selectedRegion: string) {
+    async function updateQuery(formatIndex: number, selectedEvent: string, selectedRegion: string) {
         if (!browser) { return }
 
         let query = new URLSearchParams($page.url.searchParams.toString());
@@ -155,41 +152,25 @@
 
 
             {#if data.results}
-                {#if formatIndex}
-                    {#if Object.keys(data.results.average).length > 0}
-                        {#each selectedResults as average, i }
-                            <tr>
-                                <td class="tc-dummy"></td>
+                {#each data.results as result, i}
+                    {@debug result}
+                    <tr>
+                        <td class="tc-dummy"></td>
 
-                                <td class="tc-ranking">{i + 1}</td>
-                                <td class="tc-name"><a class="regular-link" href={`/user/${average.user.id}`}>{average.user.name}</a></td>
-                                <td class="tc-result">{formatTime(average.value)}</td>
-                                <td class="tc-region">{regionToString(average.user.region)}</td>
-                                <td class="tc-meetup"><a class="regular-link" href={`/meetups/${average.round.meetup.id}`}>{average.round.meetup.name}</a></td>
+                        <td class="tc-ranking">{i + 1}</td>
+                        <td class="tc-name"><a class="regular-link" href={`/user/${result.user_id}`}>{result.user_name}</a></td>
+                        <td class="tc-result">{formatTime(data.isSingle ? result.time : result.value)}</td>
+                        <td class="tc-region">{regionToString(result.user_region)}</td>
+                        <td class="tc-meetup"><a class="regular-link" href={`/meetups/${result.meetup_id}`}>{result.meetup_name}</a></td>
 
-                                <td class="tc-solves">{average.solves.map(s => formatTime(s.time)).join(", ")}</td>
+                        {#if !data.isSingle}
+                            <td class="tc-solves">{result.solves.map(s => formatTime(s)).join(", ")}</td>
+                        {/if}
 
-                                <td class="tc-dummy"></td>
-                            </tr>
-                        {/each}
-                    {/if}
-                {:else}
-                    {#if Object.keys(data.results.single).length > 0}
-                        {#each selectedResults as single, i }
-                            <tr>
-                                <td class="tc-dummy"></td>
-
-                                <td class="tc-ranking">{i + 1}</td>
-                                <td class="tc-name"><a class="regular-link" href={`/user/${single.result.user.id}`}>{single.result.user.name}</a></td>
-                                <td class="tc-result">{formatTime(single.time)}</td>
-                                <td class="tc-region">{regionToString(single.result.user.region)}</td>
-                                <td class="tc-meetup"><a class="regular-link" href={`/meetups/${single.result.round.meetup.id}`}>{single.result.round.meetup.name}</a></td>
-
-                                <td class="tc-dummy"></td>
-                            </tr>
-                        {/each}
-                    {/if}
-                {/if}
+                        <td class="tc-dummy"></td>
+                    </tr>
+                    
+                {/each}
             {/if}
 
 

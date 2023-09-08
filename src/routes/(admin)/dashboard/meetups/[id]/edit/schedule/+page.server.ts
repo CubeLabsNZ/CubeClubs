@@ -23,6 +23,8 @@ export const load = (async ({ params }) => {
                     endDate: true,
                     startDate: true,
                     puzzle: true,
+                    format: true,
+                    proceedNumber: true,
                     _count: true
                 }
             }
@@ -43,6 +45,8 @@ export const load = (async ({ params }) => {
         editable: round._count.results == 0, // Only editable if no results
         extendedProps: {
             puzzleType: round.puzzle,
+            formatType: round.format,
+            proceedNumber: round.proceedNumber,
             server: true,
         }
     }))
