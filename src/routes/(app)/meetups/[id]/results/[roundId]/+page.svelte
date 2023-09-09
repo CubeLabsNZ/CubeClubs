@@ -42,89 +42,93 @@
 
     <h3 class="fsize-title2" style:font-weight=500 style:margin-top=8px style:margin-bottom=8px>{getRoundName(puzzles[currentRound.puzzle].name, currentRound.number, data.maxRounds[currentRound.puzzle])} Results</h3>
 
-    <table>
-        <tr>
-            <th class="tc-dummy"></th>
-
-            <th class="tc-ranking"></th>
-            <th class="tc-name">Name</th>
-            <th class="tc-average">Average</th>
-            <th class="tc-best">Best</th>
-            <th class="tc-region">Region</th>
-            <!-- TODO: depends on if ao5, mo3, single... -->
-            {#each Array(formats[currentRound.format].count) as _, i}
-                <th class="tc-solves">{i + 1}</th>
-            {/each}
-
-            <th class="tc-dummy"></th>
-        </tr>
-
-        <tr class="td-dummy">
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-
-            {#each Array(formats[currentRound.format].count) as _}
-                <td></td>
-            {/each}
-
-            <td></td>
-        </tr>
-
-
-        {#each currentRound.results as { value, solves, user }, rank}
+    {#if currentRound.results.length}
+        <table>
             <tr>
-                <td class="tc-dummy"></td>
+                <th class="tc-dummy"></th>
 
-                <!-- if final round -->
-                {#if currentRound.number === data.maxRounds[currentRound.puzzle]}
-                    <!-- TODO: error checking? -->
-                    {#if rank < 3 && value != DNF}
-                        <td class="tc-ranking">
-                            <div style:float=right>
-                                <Medal place={rank} /> 
-                            </div>
-                        </td>
-                    {:else}
-                        <td class="tc-ranking">
-                            <p style:margin-right=4px> {rank + 1} </p> 
-                        </td>
-                    {/if}
-                {:else}
-                    <td class="tc-ranking" data-proceed={(rank < currentRound.proceedNumber ?? 0) && value != DNF}> {rank + 1} </td>
-                {/if}
-
-                <td class="tc-name">{user.name}</td>
-                <td class="tc-average">{formatTime(value)}</td>
-                <td class="tc-best">{formatTime(Math.min(...solves.map(s => s.time)))}</td>
-                <td class="tc-region">{regionToString(user.region)}</td>
-
-                {#each solves as { time }}
-                    <td class="tc-solves">{formatTime(time)}</td>
+                <th class="tc-ranking"></th>
+                <th class="tc-name">Name</th>
+                <th class="tc-average">Average</th>
+                <th class="tc-best">Best</th>
+                <th class="tc-region">Region</th>
+                <!-- TODO: depends on if ao5, mo3, single... -->
+                {#each Array(formats[currentRound.format].count) as _, i}
+                    <th class="tc-solves">{i + 1}</th>
                 {/each}
 
-                <td class="tc-dummy"></td>
+                <th class="tc-dummy"></th>
             </tr>
-        {/each}
 
-        <tr class="td-dummy">
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-
-            {#each Array(formats[currentRound.format].count) as _, i}
+            <tr class="td-dummy">
                 <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+
+                {#each Array(formats[currentRound.format].count) as _}
+                    <td></td>
+                {/each}
+
+                <td></td>
+            </tr>
+
+
+            {#each currentRound.results as { value, solves, user }, rank}
+                <tr>
+                    <td class="tc-dummy"></td>
+
+                    <!-- if final round -->
+                    {#if currentRound.number === data.maxRounds[currentRound.puzzle]}
+                        <!-- TODO: error checking? -->
+                        {#if rank < 3 && value != DNF}
+                            <td class="tc-ranking">
+                                <div style:float=right>
+                                    <Medal place={rank} /> 
+                                </div>
+                            </td>
+                        {:else}
+                            <td class="tc-ranking">
+                                <p style:margin-right=4px> {rank + 1} </p> 
+                            </td>
+                        {/if}
+                    {:else}
+                        <td class="tc-ranking" data-proceed={(rank < currentRound.proceedNumber ?? 0) && value != DNF}> {rank + 1} </td>
+                    {/if}
+
+                    <td class="tc-name">{user.name}</td>
+                    <td class="tc-average">{formatTime(value)}</td>
+                    <td class="tc-best">{formatTime(Math.min(...solves.map(s => s.time)))}</td>
+                    <td class="tc-region">{regionToString(user.region)}</td>
+
+                    {#each solves as { time }}
+                        <td class="tc-solves">{formatTime(time)}</td>
+                    {/each}
+
+                    <td class="tc-dummy"></td>
+                </tr>
             {/each}
 
-            <td></td>
-        </tr>
-    </table>
+            <tr class="td-dummy">
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+
+                {#each Array(formats[currentRound.format].count) as _, i}
+                    <td></td>
+                {/each}
+
+                <td></td>
+            </tr>
+        </table>
+    {:else}
+        <p>No results yet - check back later!</p>
+    {/if}
 </div>
 
 <style>

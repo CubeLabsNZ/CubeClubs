@@ -4,7 +4,6 @@ import type { PageServerLoad } from './$types';
 import { Puzzle } from '@prisma/client';
 
 export const load = (async ({ url }) => {
-    console.log("load called");
     const filterRegion = url.searchParams.has("region") ? url.searchParams.get("region") : undefined;
     const filterEvent = url.searchParams.has("event") ? url.searchParams.get("event")! : Puzzle.THREE;
     const filterFormat = url.searchParams.has("format") ? url.searchParams.get("format") : "single";
@@ -54,7 +53,6 @@ export const load = (async ({ url }) => {
     }
 
     const results = await query.execute()
-    console.log(results)
 
     return { results, isSingle }
 }) satisfies PageServerLoad

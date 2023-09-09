@@ -153,13 +153,14 @@
 
             {#if data.results}
                 {#each data.results as result, i}
-                    {@debug result}
+                    {@const time = data.isSingle ? result.time : result.value}
+                    {@const isTie = data.results[i-1]?.time == time}
                     <tr>
                         <td class="tc-dummy"></td>
 
-                        <td class="tc-ranking">{i + 1}</td>
+                        <td class="tc-ranking">{isTie ? "-" : i + 1}</td>
                         <td class="tc-name"><a class="regular-link" href={`/user/${result.user_id}`}>{result.user_name}</a></td>
-                        <td class="tc-result">{formatTime(data.isSingle ? result.time : result.value)}</td>
+                        <td class="tc-result">{formatTime(time)}</td>
                         <td class="tc-region">{regionToString(result.user_region)}</td>
                         <td class="tc-meetup"><a class="regular-link" href={`/meetups/${result.meetup_id}`}>{result.meetup_name}</a></td>
 
