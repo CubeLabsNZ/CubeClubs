@@ -82,14 +82,18 @@
         }}>
             <label class="form-label">
                 Event
+                <div style:display=grid>
+                    <!-- FIXME: this is this the Select component inlined! Select component for some reason doesnt bind correctly -->
+                    <select required name="event" bind:value={roundId}>
+                        <option disabled selected value>Select an event</option>
+                        {#each data.meetup.rounds as round}
+                            {@const puzzle = puzzles[round.puzzle]}
+                            <option value={round.id}>{puzzle.name} - Round {round.number}</option>
+                        {/each}
+                    </select>
 
-                <Select name="event" bind:value={roundId}>
-                    <option disabled selected value>Select an event</option>
-                    {#each data.meetup.rounds as round}
-                        {@const puzzle = puzzles[round.puzzle]}
-                        <option value={round.id}>{puzzle.name} - Round {round.number}</option>
-                    {/each}
-                </Select>
+                    <span class="material-symbols-outlined select-icon">expand_more</span>
+                </div>
             </label>
 
             <label class="form-label">
@@ -249,4 +253,18 @@
         color: var(--c-dg1);
     }
 
+    select {
+        grid-area: 1/1;
+
+        padding-right: 32px;
+    }
+
+    .select-icon {
+        font-size: 20px;
+        align-self: center;
+        justify-self: flex-end;
+        padding-right: 4px;
+        grid-area: 1/1;
+        pointer-events: none;
+    }
 </style>
