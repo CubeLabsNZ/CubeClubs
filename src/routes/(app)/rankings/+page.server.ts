@@ -22,6 +22,7 @@ export const load = (async ({ url }) => {
             .where('Round.puzzle', '=', filterEvent)
             .distinctOn('User.id')
             .select(['time', 'User.name as user_name', 'User.region as user_region', 'User.id as user_id', 'Meetup.id as meetup_id', 'Meetup.name as meetup_name'])
+            .orderBy(['User.id asc', 'time asc'])
         )
             .selectFrom('temp')
             .orderBy('time', 'asc')
@@ -41,6 +42,7 @@ export const load = (async ({ url }) => {
                 // TODO: check order
                 fn.agg<string[]>('array_agg', ['solve.time']).as('solves')
             ])
+            .orderBy(['User.id asc', 'value asc'])
         )
             .selectFrom('temp')
             .orderBy('value', 'asc')
