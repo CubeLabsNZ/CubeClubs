@@ -98,7 +98,7 @@
 
             <label class="form-label">
                 Competitor Name
-                <Select name="competitor">
+                <Select name="competitor" on:change={changeCompetitor}>
                     <option disabled selected value>Select a competitor</option>
                     {#each data.meetup.users as {user}}
                         <option value={user.id}>{user.name}</option>

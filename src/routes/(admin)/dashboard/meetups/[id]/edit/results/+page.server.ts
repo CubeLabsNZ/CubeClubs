@@ -114,26 +114,45 @@ export const actions = {
         console.log(roundFormat);
         console.log(calculateAverage(data.get("roundFormat") as Format, solves));
 
+        // TODO: make this compound ID later on
+        const idToUpsert = (await prisma.result.findFirst({
+            where: {
+                roundId: eventId,
+                userId: competitorId
+            }
+        }))?.id
+
+        // Just delete TODO: make this properly with kysely
+        if (idToUpsert) {
+            console.log(idToUpsert)
+            await prisma.result.deleteMany({
+                where: {
+                    id: idToUpsert
+                }
+            })
+        }
+
+        const saveData = {
+            value: calculateAverage(data.get("roundFormat") as Format, solves),
+            solves: {
+                createMany: {
+                    data: solves.map((time, idx) => ({ index: idx, time: time }))
+                }
+            },
+            user: {
+                connect: {
+                    id: competitorId
+                }
+            },
+        }
+
         await prisma.round.update({
-            where: { 
+            where: {
                 id: eventId,
             },
             data: {
                 results: {
-                    // TODO: make create upsert, so if competitor selected again, it will override existing results (ALSO TODO: populate results if selects competitor that has already been entered)
-                    create: {
-                        value: calculateAverage(data.get("roundFormat") as Format, solves),
-                        solves: {
-                            createMany: {
-                                data: solves.map((time, idx) => ({ index: idx, time: time }))
-                            }
-                        },
-                        user: {
-                            connect: {
-                                id: competitorId
-                            }
-                        }
-                    }
+                    create: saveData
                 }
             }
         })

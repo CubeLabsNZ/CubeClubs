@@ -116,7 +116,7 @@ model Solve {
   index Int
   time  Float
 
-  result   Result @relation(fields: [resultId], references: [id])
+  result   Result @relation(fields: [resultId], references: [id], onDelete: Cascade)
   resultId Int
 
   @@id([resultId, index])
