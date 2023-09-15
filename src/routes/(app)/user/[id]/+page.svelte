@@ -13,13 +13,15 @@
 
     import type { PageData } from './$types'
 
-    import { formatTime } from "$lib/utils"
+    import { formatTime, getRoundName } from "$lib/utils"
 
     import * as Icons from "$lib/assets/cube-icons/icons";
 
     import puzzles from "$lib/data/puzzles"
+    import { Puzzle } from '$lib/db/enums';
 
-    let resultsEventIndex: number;
+    let resultsEventIndex: number = 0;
+    $: resultsEvent = Object.keys(Puzzle)[resultsEventIndex]
 
     let historyIndex: number;
 
@@ -249,8 +251,8 @@
 
                 <div class="results-history">
                     <div class="results-history-header">
-                        <img src={Icons.Icon3} alt="" height=28/>
-                        <p class="fsize-body">3x3 Results (index = {resultsEventIndex})</p>
+                        <img src={puzzles[resultsEvent].icon} alt="" height=28/>
+                        <p class="fsize-body">{puzzles[resultsEvent].name} Results (index = {resultsEventIndex})</p>
                     </div>
 
                     <table style:width=100%>
@@ -281,18 +283,21 @@
                         </tr>
 
 
-                        <tr>
-                            <td class="tc-dummy"></td>
+                        {#each data.results[resultsEvent] as result, i}
+                            {@const showMeetup = result.meetup_name != data.results[resultsEvent][i-1]?.meetup_name}
+                            <tr>
+                                <td class="tc-dummy"></td>
 
-                            <td class="tc-meetup">Meetup</td>
-                            <td class="tc-round">Round</td>
-                            <td class="tc-place">Place</td>
-                            <td class="tc-single">Single</td>
-                            <td class="tc-average">Average</td>
-                            <td class="tc-solves">Solves</td>
+                                <td class="tc-meetup"><a class="regular-link" href={`/meetups/${result.meetup_id}/info`}>{ showMeetup ? result.meetup_name : "" }</a></td>
+                                <td class="tc-round"><a class="regular-link" href={`/meetups/${result.meetup_id}/results/${result.round_id}`}>{ getRoundName(puzzles[result.puzzle].name, result.round_number + 1, result.round_maximum) }</a></td>
+                                <td class="tc-place">{ result.rank + 1 }</td>
+                                <td class="tc-single">{ result.single }</td>
+                                <td class="tc-average">{ result.value }</td>
+                                <td class="tc-solves">{result.solves.join(', ')}</td>
 
-                            <td class="tc-dummy"></td>
-                        </tr>
+                                <td class="tc-dummy"></td>
+                            </tr>
+                        {/each}
 
 
                         <tr class="td-dummy">

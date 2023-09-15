@@ -7,6 +7,7 @@ import puzzles from '$lib/data/puzzles'
 import { islandRegions } from '$lib/data/regions';
 import { DNF } from '$lib/utils';
 import { db } from '$lib/db';
+import { sql } from 'kysely';
 
 export const load = (async ({ params }) => {
 
@@ -239,28 +240,64 @@ export const load = (async ({ params }) => {
 
     }
 
+    let results = await db.with('temp', (eb) => eb.selectFrom('Result')
+        .innerJoin('Round', 'Round.id', 'Result.roundId')
+        .innerJoin('Meetup', 'Meetup.id', 'Round.meetupId')
+        .leftJoin("Solve", 'Result.id', 'Solve.resultId')
+        .select(({ fn, selectFrom }) => [
+            'Meetup.name as meetup_name',
+            'Meetup.id as meetup_id',
+            'Round.puzzle as puzzle',
+            'Round.id as round_id',
+            'Result.value as value',
+            'Round.endDate as round_end',
+            selectFrom('Round as Round_inner')
+                .whereRef('Round_inner.puzzle', '=', 'Round.puzzle')
+                .whereRef('Round_inner.meetupId', '=', 'Round.meetupId')
+                .whereRef('Round_inner.startDate', '<', 'Round.startDate')
+                // Cant figure out coalesce, it makes things :(
+                .select([ sql`COALESCE(COUNT(*),0) AS round_number` ])
+                .limit(1),
+            // Don't even talk to me right now >:(
+            selectFrom('Round as Round_inner')
+                .whereRef('Round_inner.puzzle', '=', 'Round.puzzle')
+                .whereRef('Round_inner.meetupId', '=', 'Round.meetupId')
+                // Cant figure out coalesce, it makes things :(
+                .select([ sql`COALESCE(COUNT(*),0) AS round_maximum` ])
+                .limit(1),
+            selectFrom('Round as Round_inner')
+                .innerJoin('Result as Result_inner', 'Result_inner.roundId', 'Round_inner.id')
+                .whereRef('Round_inner.id', '=', 'Round.id')
+                .whereRef('Result_inner.value', '<', 'Result.value')
+                .select((eb2) => [eb2.fn.countAll().as('better_result_cnt')])
+                .limit(1)
+                .as('rank'),
+            fn.min('Solve.time').as('single'),
+            fn.agg<string[]>('array_agg', ['Solve.time']).as('solves'),
+        ])
+        .groupBy(['Round.puzzle', 'Result.value', 'meetup_name', 'meetup_id', 'round_id'])
+        .orderBy('round_end desc')
+        .where('Result.userId', '=', user.id)
+    )
+    .selectFrom('temp')
+    .groupBy('puzzle')
+    // TODO try this better
+    .select(({fn}) => ['puzzle',
+            sql<any>`json_agg(temp) as values`
+        ])
+    .execute()
 
-    const THREEresults = await prisma.result.findMany({
-        take: 10, // TODO: before push: change to 50
-        where: {
-            round: {
-                puzzle: Puzzle.THREE
-            },
-            userId: user.id
-        },
-        orderBy: {
-            // TODO: order by time or date?
-            round: {
-                endDate: 'desc'
-            }
-        }
-    })
+    // TODO: figure out how to sort in the query
+    results.sort((a, z) => z.round_end - a.round_end)
+    results = Object.fromEntries(results.map(x => [x.puzzle, x.values]))
+
+    console.log(results)
 
     return {
         user,
         completedSolves,
         medals,
-        results: { THREE: THREEresults },
+        results,
         PRs,
         records
     }
