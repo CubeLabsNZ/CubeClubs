@@ -16,8 +16,12 @@ export const load = (async ({ params }) => {
             club: true,
             organisers: {
                 select: {
-                    id: true,
-                    name: true,
+                    user_id: true,
+                    user: {
+                        select: {
+                            name: true
+                        }
+                    },
                 }
             },
             users: {
@@ -29,19 +33,19 @@ export const load = (async ({ params }) => {
                             id: true,
                         }
                     },
-                    registeredEvents: true
+                    registered_events: true
                 }
             },
             rounds: {
                 orderBy: {
-                    startDate: "asc"
+                    start_date: "asc"
                 }
             }
         }
     })
 
     // TODO: check admin, can view "public page" in dashboard -> to here.
-    if (!meetup || !meetup.isPublished) {
+    if (!meetup || !meetup.is_published) {
         throw error(404, 'not found');
     }
 

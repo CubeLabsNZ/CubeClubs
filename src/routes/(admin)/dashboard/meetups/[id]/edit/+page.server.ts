@@ -19,10 +19,10 @@ export const load = (async ({ params }) => {
             organisers: true,
             description: true,
             contact: true,
-            competitorLimit: true,
-            externalRegistrationLink: true,
-            registrationInformation: true,
-            clubId: true
+            competitor_limit: true,
+            external_registration_link: true,
+            registration_information: true,
+            club_id: true
         }
     })
 
@@ -32,7 +32,7 @@ export const load = (async ({ params }) => {
 
     return { 
         clubs: await prisma.club.findMany(),
-        organisers: await prisma.user.findMany({where: {isClubOrganiser: true}}),
+        organisers: await prisma.user.findMany({where: {is_club_organiser: true}}),
         meetup
     }
 }) satisfies PageServerLoad

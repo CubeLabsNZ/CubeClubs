@@ -55,7 +55,7 @@ export const actions = {
         const user = await prisma.user.create({
             data: {
                 email: email as string,
-                passHash: hash,
+                pass_hash: hash,
                 name: fullName as string,
                 region: region as Region
             }

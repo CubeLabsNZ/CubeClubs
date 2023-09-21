@@ -4,76 +4,76 @@ export type Generated<T> = T extends ColumnType<infer S, infer I, infer U>
   : ColumnType<T, T | undefined, T>;
 export type Timestamp = ColumnType<Date, Date | string, Date | string>;
 
-import type { Region, Puzzle, Format } from "./enums";
+import type { region, puzzle, format } from "./enums";
 
-export type Club = {
+export type club = {
     id: Generated<number>;
     name: string;
 };
-export type Meetup = {
+export type meetup = {
     id: Generated<number>;
     name: string;
     venue: string;
     location: string;
     description: string;
     contact: string;
-    competitorLimit: number | null;
-    externalRegistrationLink: string | null;
-    registrationInformation: Generated<string>;
+    competitor_limit: number | null;
+    external_registration_link: string | null;
+    registration_information: Generated<string>;
     date: Timestamp;
-    isPublished: Generated<boolean>;
-    clubId: number;
+    is_published: Generated<boolean>;
+    club_id: number;
 };
-export type MeetupToUser = {
-    A: number;
-    B: number;
+export type organiser_in_meetup = {
+    user_id: number;
+    meetup_id: number;
 };
-export type Result = {
+export type result = {
     id: Generated<number>;
     value: number;
-    userId: number;
-    roundId: number;
+    user_id: number;
+    round_id: string;
 };
-export type Round = {
-    id: Generated<number>;
-    startDate: Timestamp;
-    endDate: Timestamp;
-    puzzle: Puzzle;
-    format: Format;
-    proceedNumber: number;
-    meetupId: number;
+export type round = {
+    id: string;
+    start_date: Timestamp;
+    end_date: Timestamp;
+    puzzle: puzzle;
+    format: format;
+    proceed_number: number;
+    meetup_id: number;
 };
-export type Session = {
+export type session = {
     id: Buffer;
     ip: string;
-    userId: number;
+    user_id: number;
 };
-export type Solve = {
+export type solve = {
     index: number;
     time: number;
-    resultId: number;
+    result_id: number;
 };
-export type User = {
+export type user = {
     id: Generated<number>;
-    email: string;
-    passHash: string;
+    email: string | null;
+    pass_hash: string | null;
     name: string;
-    region: Region;
-    isClubOrganiser: Generated<boolean>;
+    region: region;
+    is_club_organiser: Generated<boolean>;
 };
-export type UserInMeetup = {
-    userId: number;
-    meetupId: number;
-    registeredEvents: Puzzle[];
+export type user_in_meetup = {
+    user_id: number;
+    meetup_id: number;
+    registered_events: puzzle[];
 };
 export type DB = {
-    _MeetupToUser: MeetupToUser;
-    Club: Club;
-    Meetup: Meetup;
-    Result: Result;
-    Round: Round;
-    Session: Session;
-    Solve: Solve;
-    User: User;
-    UserInMeetup: UserInMeetup;
+    club: club;
+    meetup: meetup;
+    organiser_in_meetup: organiser_in_meetup;
+    result: result;
+    round: round;
+    session: session;
+    solve: solve;
+    user: user;
+    user_in_meetup: user_in_meetup;
 };

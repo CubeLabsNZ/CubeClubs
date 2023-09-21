@@ -16,113 +16,124 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Club {
+model club {
   id      Int      @id @default(autoincrement())
   name    String
-  meetups Meetup[]
+  meetups meetup[]
 }
 
-model User {
+model user {
   id              Int     @id @default(autoincrement())
-  email           String  @unique
-  passHash        String
+  email           String?  @unique
+  // pass hash can be null when migrating
+  pass_hash       String?
   name            String
-  region          Region
-  isClubOrganiser Boolean @default(false)
+  region          region
+  is_club_organiser Boolean @default(false)
 
-  sessions Session[]
+  sessions session[]
 
-  organiserFor Meetup[]
-  competingIn  UserInMeetup[]
-  results      Result[]
+  organiser_for organiser_in_meetup[]
+  competing_in  user_in_meetup[]
+  results      result[]
 }
 
 // INFO: using session authentication instead of token
-model Session {
+model session {
   id Bytes  @id
   ip String
 
-  user   User @relation(fields: [userId], references: [id])
-  userId Int
+  user   user @relation(fields: [user_id], references: [id])
+  user_id Int
 }
 
-model UserInMeetup {
-  user   User @relation(fields: [userId], references: [id])
-  userId Int
+model user_in_meetup {
+  user   user @relation(fields: [user_id], references: [id])
+  user_id Int
 
-  meetup   Meetup @relation(fields: [meetupId], references: [id])
-  meetupId Int
+  meetup   meetup @relation(fields: [meetup_id], references: [id])
+  meetup_id Int
 
-  registeredEvents Puzzle[]
+  registered_events puzzle[]
 
-  @@id([userId, meetupId])
+  @@id([user_id, meetup_id])
 }
 
-model Meetup {
+model organiser_in_meetup {
+  user   user @relation(fields: [user_id], references: [id])
+  user_id Int
+
+  meetup   meetup @relation(fields: [meetup_id], references: [id])
+  meetup_id Int
+
+  @@id([user_id, meetup_id])
+}
+
+model meetup {
   id              Int    @id @default(autoincrement())
   name            String
   venue           String
   location        String
-  organisers      User[] // TODO: check relation?
+  organisers      organiser_in_meetup[] // TODO: check relation?
   description     String
   contact         String
-  competitorLimit Int?
+  competitor_limit Int?
 
-  externalRegistrationLink String?
-  registrationInformation  String  @default("")
+  external_registration_link String?
+  registration_information  String  @default("")
 
   date DateTime @db.Date
 
-  isPublished Boolean @default(false)
+  is_published Boolean @default(false)
 
-  users UserInMeetup[]
+  users user_in_meetup[]
 
-  club   Club @relation(fields: [clubId], references: [id])
-  clubId Int
+  club   club @relation(fields: [club_id], references: [id])
+  club_id Int
 
-  rounds Round[]
+  rounds round[]
 }
 
-model Round {
-  id        Int      @id @default(autoincrement())
+model round {
+  id        String @db.Uuid @id @default(uuid())
 
-  startDate DateTime
-  endDate   DateTime
-  puzzle    Puzzle
-  format    Format
-  proceedNumber Int
-  results   Result[]
+  start_date DateTime
+  end_date   DateTime
+  puzzle    puzzle
+  format    format
+  proceed_number Int
+  results   result[]
 
 
-  meetup   Meetup @relation(fields: [meetupId], references: [id])
-  meetupId Int
+  meetup   meetup @relation(fields: [meetup_id], references: [id])
+  meetup_id Int
 }
 
-model Result {
+model result {
   id      Int   @id @default(autoincrement())
 
-  solves Solve[]
+  solves solve[]
   value Float
 
 
-  user   User    @relation(fields: [userId], references: [id])
-  userId Int
+  user   user    @relation(fields: [user_id], references: [id])
+  user_id Int
 
-  round   Round @relation(fields: [roundId], references: [id])
-  roundId Int
+  round   round @relation(fields: [round_id], references: [id])
+  round_id String @db.Uuid
 }
 
-model Solve {
+model solve {
   index Int
   time  Float
 
-  result   Result @relation(fields: [resultId], references: [id], onDelete: Cascade)
-  resultId Int
+  result   result @relation(fields: [result_id], references: [id], onDelete: Cascade)
+  result_id Int
 
-  @@id([resultId, index])
+  @@id([result_id, index])
 }
 
-enum Region {
+enum region {
   NORTHLAND
   AUCKLAND
   WAIKATO
@@ -143,7 +154,7 @@ enum Region {
   VISITOR
 }
 
-enum Puzzle {
+enum puzzle {
   THREE
   TWO
   FOUR
@@ -165,9 +176,10 @@ enum Puzzle {
   FIVEBLD
 }
 
-enum Format {
+enum format {
   BO3
   BO1
   MO3
   AO5
 }
+

@@ -137,44 +137,46 @@
                     </tr>
 
                     <!-- INFO: single -->
-                    {#if single}
-                        <tr>
-                            <td class="tc-dummy"></td>
-
-                            <td class="tc-type">Single</td>
-
-                            <td class="tc-name"><a class="regular-link" href={`/user/${single.result.user.id}`}>{single.result.user.name}</a></td>
-
-                            <td class="tc-result">{formatTime(single.time)}</td>
-                            <td class="tc-region">{regionToString(single.result.user.region)}</td>
-                            <td class="tc-meetup"><a class="regular-link" href={`/meetups/${single.result.round.meetup.id}`}>{single.result.round.meetup.name}</a></td>
-                            <td class="tc-solves"></td>
-
-                            <td class="tc-dummy"></td>
-                        </tr>
-                    {:else}
-                        <tr>
-                            <td class="tc-dummy"></td>
-
-                        <td class="tc-placeholder" align=center colspan=6>no results yet</td>
+                {#if single}
+                    {@debug single}
+                    <tr>
                         <td class="tc-dummy"></td>
+
+                        <td class="tc-type">Single</td>
+
+                        <td class="tc-name"><a class="regular-link" href={`/user/${single.user_id}`}>{single.user_name}</a></td>
+
+                        <td class="tc-result">{formatTime(single.time)}</td>
+                        <td class="tc-region">{regionToString(single.user_region)}</td>
+                        <td class="tc-meetup"><a class="regular-link" href={`/meetups/${single.meetup_id}`}>{single.meetup_name}</a></td>
+                        <td class="tc-solves"></td>
+
+                        <td class="tc-dummy"></td>
+                    </tr>
+                {:else}
+                    <tr>
+                        <td class="tc-dummy"></td>
+
+                    <td class="tc-placeholder" align=center colspan=6>no results yet</td>
+                    <td class="tc-dummy"></td>
                     </tr>
                 {/if}
 
 
                 <!-- INFO: average-->
                 {#if average}
+                    {@debug average}
                     <tr>
                         <td class="tc-dummy"></td>
 
                         <td class="tc-type">Average</td>
 
-                        <td class="tc-name"><a class="regular-link" href={`/user/${average.user.id}`}>{average.user.name}</a></td>
+                        <td class="tc-name"><a class="regular-link" href={`/user/${average.user_id}`}>{average.user_name}</a></td>
 
                         <td class="tc-result">{formatTime(average.value)}</td>
-                        <td class="tc-region">{regionToString(average.user.region)}</td>
-                        <td class="tc-meetup"><a class="regular-link" href={`/meetups/${average.round.meetup.id}`}>{average.round.meetup.name}</a></td>
-                        <td class="tc-solves">{average.solves.map(s => s.time).join(', ')}</td>
+                        <td class="tc-region">{regionToString(average.user_region)}</td>
+                        <td class="tc-meetup"><a class="regular-link" href={`/meetups/${average.meetup_id}`}>{average.meetup_name}</a></td>
+                        <td class="tc-solves">{average.solves}</td>
 
                         <td class="tc-dummy"></td>
                     </tr>

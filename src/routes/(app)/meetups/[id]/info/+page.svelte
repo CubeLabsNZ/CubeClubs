@@ -51,9 +51,9 @@
             <p class="label">Organisers</p>
 
             <div style:display=flex>
-                {#each data.meetup.organisers as { id, name }, i}
+                {#each data.meetup.organisers as { user_id, user }, i}
                     {@const maxIndex = data.meetup.organisers.length - 1}
-                    <a href="/user/{id}" class="regular-link"> {name} </a>
+                    <a href="/user/{user_id}" class="regular-link">{user.name}</a>
 
                     <p> 
                         {#if i < maxIndex}
@@ -70,7 +70,7 @@
 
         <div class="label-group">
             <p class="label">Competitor Limit</p>
-            <p>{data.meetup.competitorLimit ?? "No competitor Limit"}</p>
+            <p>{data.meetup.competitor_limit ?? "No competitor Limit"}</p>
         </div>
     </div>
 
@@ -85,16 +85,16 @@
         <div class="label-group">
             <p class="label">Registration Information</p>
             <div style:display=flex style:flex-direction=column style:row-gap=8px>
-                {#if data.meetup.externalRegistrationLink}
+                {#if data.meetup.external_registration_link}
                     <p> Registration is handled by an external service. Please register at the link below.  </p>
 
-                    <a href={data.meetup.externalRegistrationLink} class="regular-link" > {data.meetup.externalRegistrationLink} </a>
+                    <a href={data.meetup.external_registration_link} class="regular-link" > {data.meetup.external_registration_link} </a>
 
-                    <p> {data.meetup.registrationInformation} </p>
+                    <p> {data.meetup.registration_information} </p>
                 {:else}
                     <p> Registration is done through Stripe via the Register button above. </p>
 
-                    <p> {data.meetup.registrationInformation} </p>
+                    <p> {data.meetup.registration_information} </p>
                 {/if}
             </div>
         </div>

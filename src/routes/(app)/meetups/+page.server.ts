@@ -6,7 +6,7 @@ import { getMeetupPuzzles } from "$lib/utilsServer";
 export const load = (async () => {
     const allMeetups: Meetup[] = await prisma.meetup.findMany({
         where: {
-            isPublished: true,
+            is_published: true,
         },
         include: {
             club: true,

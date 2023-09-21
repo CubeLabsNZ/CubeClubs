@@ -6,7 +6,7 @@
     import formats from "$lib/data/formats";
     import regions, { regionToString } from "$lib/data/regions";
 
-    import { getRoundName, formatTime, DNF } from "$lib/utils";
+    import { getRoundName, formatTime } from "$lib/utils";
 
     import TabBar from '$lib/components/global/TabBar.svelte';
     import Breadcrumb from '$lib/components/global/Breadcrumb.svelte';
@@ -24,7 +24,7 @@
         }
     }
 
-    const currentRound = data.rounds.find(r => r.id === Number(data.roundId));
+    const currentRound = data.rounds.find(r => r.id === data.roundId)!;
 
     console.log(currentRound);
     console.log(formats[currentRound.format].count)
@@ -43,6 +43,8 @@
     <h3 class="fsize-title2" style:font-weight=500 style:margin-top=8px style:margin-bottom=8px>{getRoundName(puzzles[currentRound.puzzle].name, currentRound.number, data.maxRounds[currentRound.puzzle])} Results</h3>
 
     {#if currentRound.results.length}
+        {@const firstres = currentRound.results[0]}
+        {@debug firstres}
         <table>
             <tr>
                 <th class="tc-dummy"></th>
@@ -76,14 +78,14 @@
             </tr>
 
 
-            {#each currentRound.results as { value, solves, user }, rank}
+            {#each currentRound.results as { value, solves, user_id, user_name, user_region }, rank}
                 <tr>
                     <td class="tc-dummy"></td>
 
                     <!-- if final round -->
                     {#if currentRound.number === data.maxRounds[currentRound.puzzle]}
                         <!-- TODO: error checking? -->
-                        {#if rank < 3 && value != DNF}
+                        {#if rank < 3 && value != Infinity}
                             <td class="tc-ranking">
                                 <div style:float=right>
                                     <Medal place={rank} /> 
@@ -95,15 +97,16 @@
                             </td>
                         {/if}
                     {:else}
-                        <td class="tc-ranking" data-proceed={(rank < currentRound.proceedNumber ?? 0) && value != DNF}> {rank + 1} </td>
+                        <td class="tc-ranking" data-proceed={(rank < currentRound.proceed_number ?? 0) && value != Infinity}> {rank + 1} </td>
                     {/if}
 
-                    <td class="tc-name">{user.name}</td>
+                    <!-- TODO: make link -->
+                    <td class="tc-name">{user_name}</td>
                     <td class="tc-average">{formatTime(value)}</td>
-                    <td class="tc-best">{formatTime(Math.min(...solves.map(s => s.time)))}</td>
-                    <td class="tc-region">{regionToString(user.region)}</td>
+                    <td class="tc-best">{formatTime(Math.min(...solves))}</td>
+                    <td class="tc-region">{regionToString(user_region)}</td>
 
-                    {#each solves as { time }}
+                    {#each solves as time}
                         <td class="tc-solves">{formatTime(time)}</td>
                     {/each}
 

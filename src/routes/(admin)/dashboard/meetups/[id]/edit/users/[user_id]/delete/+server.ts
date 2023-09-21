@@ -6,18 +6,18 @@ import { error } from "@sveltejs/kit"
 export const POST = (async ({ params, cookies }) => {
     await getUserSessionOrThrow(cookies, true);
 
-    const meetupId = Number(params.id);
-    const userId = Number(params.userId);
+    const meetup_id = Number(params.id);
+    const user_id = Number(params.user_id);
 
-    if (isNaN(meetupId) || isNaN(userId)) {
+    if (isNaN(meetup_id) || isNaN(user_id)) {
         throw error(404, 'not found')
     }
 
-    await prisma.userInMeetup.delete({
+    await prisma.user_in_meetup.delete({
         where: {
-            userId_meetupId: {
-                userId: userId,
-                meetupId: meetupId
+            user_id_meetup_id: {
+                user_id: user_id,
+                meetup_id: meetup_id
             }
         }
     })

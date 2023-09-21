@@ -2,7 +2,7 @@ import prisma from "$lib/prisma";
 
 import { DNF } from "$lib/utils";
 
-import { Region, Puzzle, Format, Prisma } from "@prisma/client";
+import { region, puzzle, format, Prisma } from "@prisma/client";
 
 
 import * as clubs from "../../../../temp/club.json";
@@ -25,53 +25,53 @@ async function cleanup() {
 
 
 const regions = {
-    "Northland": Region.NORTHLAND,
-    "Auckland": Region.AUCKLAND,
-    "Waikato": Region.WAIKATO,
-    "Bay of Plenty": Region.BOP,
-    "Gisborne": Region.GISBORNE,
-    "Hawke’s Bay": Region.HAWKES_BAY,
-    "Taranaki": Region.TARANAKI,
-    "Manawatu": Region.MANAWATU_WHANGANUI,
-    "Wellington": Region.WELLINGTON,
-    "Tasman": Region.TASMAN,
-    "Nelson": Region.NELSON,
-    "Marlborough": Region.MARLBOROUGH,
-    "West Coast": Region.WEST_COAST,
-    "Canterbury": Region.CANTERBURY,
-    "Otago": Region.OTAGO,
-    "Southland": Region.SOUTHLAND,
+    "Northland": region.NORTHLAND,
+    "Auckland": region.AUCKLAND,
+    "Waikato": region.WAIKATO,
+    "Bay of Plenty": region.BOP,
+    "Gisborne": region.GISBORNE,
+    "Hawke’s Bay": region.HAWKES_BAY,
+    "Taranaki": region.TARANAKI,
+    "Manawatu": region.MANAWATU_WHANGANUI,
+    "Wellington": region.WELLINGTON,
+    "Tasman": region.TASMAN,
+    "Nelson": region.NELSON,
+    "Marlborough": region.MARLBOROUGH,
+    "West Coast": region.WEST_COAST,
+    "Canterbury": region.CANTERBURY,
+    "Otago": region.OTAGO,
+    "Southland": region.SOUTHLAND,
 
-    "Visitor": Region.VISITOR
+    "Visitor": region.VISITOR
 }
 
 const puzzles = {
-    "3x3x3": Puzzle.THREE,
-    "2x2x2": Puzzle.TWO,
-    "4x4x4": Puzzle.FOUR,
-    "5x5x5": Puzzle.FIVE,
-    "6x6x6": Puzzle.SIX,
-    "7x7x7": Puzzle.SEVEN,
-    "Square-1": Puzzle.SQ1,
-    "Skewb": Puzzle.SKEWB,
-    "Pyraminx": Puzzle.PYRA,
-    "Megaminx": Puzzle.MEGA,
-    "\"3x3x3 One Handed\"": Puzzle.OH,
-    "3x3x3 One Handed": Puzzle.OH,
-    "Clock": Puzzle.CLOCK,
-    "FMC": Puzzle.FMC,
-    "3BLD": Puzzle.THREEBLD,
-    "THREEBLD": Puzzle.THREEBLD,
-    "3MBLD": Puzzle.MULTIBLD,
-    "4BLD": Puzzle.FOURBLD,
-    "5BLD": Puzzle.FIVEBLD
+    "3x3x3": puzzle.THREE,
+    "2x2x2": puzzle.TWO,
+    "4x4x4": puzzle.FOUR,
+    "5x5x5": puzzle.FIVE,
+    "6x6x6": puzzle.SIX,
+    "7x7x7": puzzle.SEVEN,
+    "Square-1": puzzle.SQ1,
+    "Skewb": puzzle.SKEWB,
+    "Pyraminx": puzzle.PYRA,
+    "Megaminx": puzzle.MEGA,
+    "\"3x3x3 One Handed\"": puzzle.OH,
+    "3x3x3 One Handed": puzzle.OH,
+    "Clock": puzzle.CLOCK,
+    "FMC": puzzle.FMC,
+    "3BLD": puzzle.THREEBLD,
+    "THREEBLD": puzzle.THREEBLD,
+    "3MBLD": puzzle.MULTIBLD,
+    "4BLD": puzzle.FOURBLD,
+    "5BLD": puzzle.FIVEBLD
 }
 
 const formats = {
-    "ao5": Format.AO5,
-    "bo3": Format.BO3,
-    "bo1": Format.BO1,
-    "mo3": Format.MO3
+    "ao5": format.AO5,
+    "bo3": format.BO3,
+    "bo1": format.BO1,
+    "mo3": format.MO3
 }
 
 
@@ -91,32 +91,32 @@ async function populateMeetups() {
         meetup.venue = meetup.venue_details + ", " + meetup.venue;
         delete meetup.venue_details
 
-        if (typeof meetup.competitorLimit === "string") {
-            meetup.competitorLimit = null
+        if (typeof meetup.competitor_limit === "string") {
+            meetup.competitor_limit = null
         }
 
         meetup.date = new Date(Date.parse(meetup.date.slice(0, 10)));
-        meetup.registrationInformation = "",
+        meetup.registration_information = "",
         meetup.isPublished = true;
     }
 
     for (const meetup of meetups.default) {
         await prisma.meetup.create({
             data: {
-                clubId: {
+                club_id: {
                     connect: {
-                        id: meetup.clubId
+                        id: meetup.club_id
                     }
                 },
                 name: meetup.name,
                 venue: meetup.venue,
                 location: meetup.location,
                 contact: meetup.contact,
-                competitorLimit: meetup.competitorLimit === "" ? 1 : meetup.competitorLimit,
+                competitor_limit: meetup.competitor_limit === "" ? 1 : meetup.competitor_limit,
                 description: meetup.description,
                 date: new Date(meetup.date),
-                externalRegistrationLink: meetup.externalRegistrationLink,
-                registrationInformation: meetup.registrationInformation,
+                external_registration_link: meetup.external_registration_link,
+                registration_information: meetup.registration_information,
                 ...meetup
             }
         })
@@ -154,14 +154,14 @@ async function populateUsersInMeetups() {
         let a = x.registeredEvents.trim();
         a = a.slice(1, a.length - 1).split(",").map(e => puzzles[e]);
 
-        if (!x.userId || !x.meetupId) {
+        if (!x.user_id || !x.meetupId) {
             console.log("empty value")
             continue;
         }
 
         const user = await prisma.user.findFirst({
             where: {
-                id: x.userId
+                id: x.user_id
             }
         })
 
@@ -172,7 +172,7 @@ async function populateUsersInMeetups() {
         })
 
         if (!user) { 
-            console.log("user doesn't exist:", x.userId)
+            console.log("user doesn't exist:", x.user_id)
             continue; 
         }
 
@@ -190,7 +190,7 @@ async function populateUsersInMeetups() {
                     create: {
                         user: {
                             connect: {
-                                id: x.userId
+                                id: x.user_id
                             }
                         },
                         registeredEvents: a
@@ -227,7 +227,7 @@ async function populateOrganisers() {
             }
         }
 
-        const organisers = ((meetup.organisers.length === 0) ? [{ id: x.userId }] : [...currentOrganisers, {id: x.userId}]);
+        const organisers = ((meetup.organisers.length === 0) ? [{ id: x.user_id }] : [...currentOrganisers, {id: x.user_id}]);
         console.log(organisers);
 
         await prisma.meetup.update({
@@ -261,11 +261,11 @@ async function populateRounds() {
             data: {
                 rounds: {
                     create: {
-                        startDate: new Date(round.startDate),
-                        endDate: new Date(round.endDate),
+                        start_date: new Date(round.start_date),
+                        end_date: new Date(round.end_date),
                         puzzle: puzzles[round.puzzle],
                         format: formats[round.format.toLowerCase()],
-                        proceedNumber: round.proceedNumber === "" ? 0 : round.proceedNumber,
+                        proceed_number: round.proceed_number === "" ? 0 : round.proceed_number,
                         id: round.id
                     }
                 }
@@ -289,7 +289,7 @@ async function populateResults() {
                         data: [{
                             id: result.id,
                             value: result.result == "" ? DNF : result.result,
-                            userId: result.userId,
+                            user_id: result.user_id,
                         }]
                     }
                 }

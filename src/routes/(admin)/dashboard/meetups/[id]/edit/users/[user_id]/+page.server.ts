@@ -5,9 +5,9 @@ import { getMeetupPuzzles } from "$lib/utilsServer"
 
 export const load = (async ({ params }) => {
     const meetupId = Number(params.id);
-    const userId = Number(params.userId);
+    const user_id = Number(params.user_id);
 
-    if (isNaN(meetupId) || isNaN(userId)) {
+    if (isNaN(meetupId) || isNaN(user_id)) {
         throw error(404, 'not found')
     }
 
@@ -30,7 +30,7 @@ export const load = (async ({ params }) => {
                     }
                 },
                 where: {
-                    userId: userId
+                    user_id: user_id
                 },
             },
             rounds: {
@@ -70,7 +70,7 @@ export const actions = {
                 users: {
                     updateMany: {
                         where: {
-                            userId: Number(params.userId)
+                            user_id: Number(params.user_id)
                         },
                         data: {
                             registeredEvents: events

@@ -14,23 +14,23 @@ export const load = (async ({ url, params, cookies }) => {
         throw error(404, 'not found');
     }
 
-    const queryRoundId = Number(url.searchParams.get("roundId"));
+    const queryRoundId = url.searchParams.get("round_id");
 
-    let roundId: number | undefined;
+    let round_id: string | undefined;
 
-    if (isNaN(queryRoundId) || !url.searchParams.has("roundId")) {
+    if (!url.searchParams.has("round_id")) {
         const round = await prisma.round.findFirst({
             where: {
-                meetupId: id
+                meetup_id: id
             },
             select: {
                 id: true
             }
         })
 
-        roundId = round?.id
+        round_id = round?.id
     } else {
-        roundId = queryRoundId
+        round_id = queryRoundId
     }
 
     let meetupQuery = {
@@ -74,8 +74,8 @@ export const load = (async ({ url, params, cookies }) => {
         }
     }
 
-    if (roundId != undefined) {
-        meetupQuery.include.rounds.include.results.where = { roundId: roundId };
+    if (round_id != undefined) {
+        meetupQuery.include.rounds.include.results.where = { round_id: round_id };
     }
 
     const meetup = await prisma.meetup.findUnique(meetupQuery)
@@ -88,7 +88,7 @@ export const load = (async ({ url, params, cookies }) => {
 
     // TODO: live resuts needs round
     return {
-        roundId: roundId,
+        round_id: round_id,
         meetup,
     }
 }) satisfies PageServerLoad
@@ -117,8 +117,8 @@ export const actions = {
         // TODO: make this compound ID later on
         const idToUpsert = (await prisma.result.findFirst({
             where: {
-                roundId: eventId,
-                userId: competitorId
+                round_id: eventId,
+                user_id: competitorId
             }
         }))?.id
 

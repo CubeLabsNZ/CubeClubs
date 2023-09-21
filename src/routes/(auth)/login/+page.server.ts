@@ -38,15 +38,15 @@ export const actions = {
         }
 
 
-        const ispbkdf = user.passHash.startsWith("pbkdf2")
+        const ispbkdf = user.pass_hash.startsWith("pbkdf2")
         let passIsCorrect
         if (ispbkdf) {
-            const [algorithm, iterations, salt, hash] = user.passHash.split('$');
+            const [algorithm, iterations, salt, hash] = user.pass_hash.split('$');
             const hashcheck = crypto.pbkdf2Sync(password as string, Buffer.from(salt), Number(iterations), 32, 'sha256').toString('base64');
             passIsCorrect = hash == hashcheck
 
         } else {
-            passIsCorrect = await argon2.verify(user.passHash, password as string);
+            passIsCorrect = await argon2.verify(user.pass_hash, password as string);
         }
 
         if (!passIsCorrect) { 
@@ -59,7 +59,7 @@ export const actions = {
                     id: user.id
                 },
                 data: {
-                    passHash: await argon2.hash(password as string)
+                    pass_hash: await argon2.hash(password as string)
                 }
             })
         }

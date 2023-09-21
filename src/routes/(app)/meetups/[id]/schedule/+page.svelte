@@ -43,7 +43,7 @@
                         <p style:font-weight=600 style:color=var(--c-dg2)>{getRoundName(puzzle.name, round.number, data.maxRounds[round.puzzle])}</p>
                         
                         <p style:font-weight=500 style:color=var(--c-dg1) >
-                            {round.startDate.toLocaleTimeString("en-NZ", { minute: "2-digit", hour: "2-digit" })} – {round.endDate.toLocaleTimeString("en-NZ", { minute: "2-digit", hour: "2-digit" })}
+                            {round.start_date.toLocaleTimeString("en-NZ", { minute: "2-digit", hour: "2-digit" })} – {round.end_date.toLocaleTimeString("en-NZ", { minute: "2-digit", hour: "2-digit" })}
                         </p>
                     </div>
                 </div>

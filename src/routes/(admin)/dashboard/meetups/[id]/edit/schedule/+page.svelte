@@ -50,7 +50,8 @@
 
     let selectedFormat: string | undefined
     let selectedPuzzle: string | undefined
-    let proceedNumber: number | undefined
+    $: allowedFormats = selectedPuzzle ? puzzles[selectedPuzzle].allowedFormats : []
+    let proceed_number: number | undefined
 
     function saveChanges() {
         // TODO cancel promise and stuff
@@ -110,7 +111,7 @@
                         extendedProps: {
                             puzzleType: selectedPuzzle,
                             formatType: selectedFormat,
-                            proceedNumber: proceedNumber
+                            proceed_number: proceed_number
                         }
                     })
                     updateRoundFor(selectedPuzzle!)
@@ -123,7 +124,7 @@
 
                 selectedPuzzle = undefined
                 selectedFormat = undefined
-                proceedNumber = undefined
+                proceed_number = undefined
             },
             eventDrop: (info) => {
                 // Update all round numbers
@@ -176,8 +177,8 @@
                 <Select name="format" bind:value={selectedFormat}>
                     <option disabled selected value>Select a round format</option>
 
-                    {#each Object.entries(formats) as [type, { name }]}
-                        <option value={type}>{name}</option>
+                    {#each allowedFormats as format}
+                        <option value={format}>{formats[format].name}</option>
                     {/each}
                 </Select>
             </div>
@@ -185,7 +186,7 @@
             <div class="label-group" style:padding-top=16px style:padding-bottom=32px>
                 <p class="label"> Number to Proceed </p>
 
-                <input required name="numberProceed" bind:value={proceedNumber} />
+                <input required name="numberProceed" bind:value={proceed_number} />
             </div>
 
             <div style:display=flex style:gap=8px style:justify-content=flex-end>

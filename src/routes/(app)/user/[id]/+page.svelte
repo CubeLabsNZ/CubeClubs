@@ -18,10 +18,10 @@
     import * as Icons from "$lib/assets/cube-icons/icons";
 
     import puzzles from "$lib/data/puzzles"
-    import { Puzzle } from '$lib/db/enums';
+    import { puzzle } from '$lib/db/enums';
 
     let resultsEventIndex: number = 0;
-    $: resultsEvent = Object.keys(Puzzle)[resultsEventIndex]
+    $: resultsEvent = Object.keys(puzzle)[resultsEventIndex]
 
     let historyIndex: number;
 
@@ -48,7 +48,7 @@
                             bg=var(--c-lgh)
                             label={regionToString(data.user.region)}/>
 
-                        {#if data.user.isClubOrganiser}
+                        {#if data.user.is_club_organiser}
                             <Badge 
                                 size={BadgeSize.Regular} 
                                 fg=var(--c-a)
@@ -62,7 +62,7 @@
                 <div class="card-column" style:margin-top=32px>
                     <div class="section-column">
                         <div class="data-row">
-                            <p style:font-weight=500>{data.user._count.competingIn}</p>
+                            <p style:font-weight=500>{data.user._count.competing_in}</p>
                             <p> Meetups Attended </p>
                         </div>
 

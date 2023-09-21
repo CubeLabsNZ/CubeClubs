@@ -14,7 +14,7 @@ export const actions = {
     default: async ({ request, getClientAddress, cookies }) =>  {
         const data = await request.formData();
 
-        const userId = Number(data.get("userId"));
+        const user_id = Number(data.get("user_id"));
 
         const currentPassword = data.get("current");
 
@@ -25,20 +25,20 @@ export const actions = {
         // INFO: this should never fail
         const user = await prisma.user.findUnique({
             where: {
-                id: userId
+                id: user_id
             }
         })
 
-        const ispbkdf = user.passHash.startsWith("pbkdf2")
+        const ispbkdf = user.pass_hash.startsWith("pbkdf2")
         let passIsCorrect
 
         if (ispbkdf) {
-            const [algorithm, iterations, salt, hash] = user.passHash.split('$');
+            const [algorithm, iterations, salt, hash] = user.pass_hash.split('$');
             const hashcheck = crypto.pbkdf2Sync(currentPassword as string, Buffer.from(salt), Number(iterations), 32, 'sha256').toString('base64');
             passIsCorrect = hash == hashcheck
 
         } else {
-            passIsCorrect = await argon2.verify(user.passHash, currentPassword as string);
+            passIsCorrect = await argon2.verify(user.pass_hash, currentPassword as string);
         }
 
 
@@ -54,10 +54,10 @@ export const actions = {
         // INFO: this should never fail
         await prisma.user.update({
             where: {
-                id: userId
+                id: user_id
             },
             data: {
-                passHash: await argon2.hash(newPassword as string)
+                pass_hash: await argon2.hash(newPassword as string)
             }
         })
 

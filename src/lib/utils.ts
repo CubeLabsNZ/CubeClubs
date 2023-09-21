@@ -1,6 +1,4 @@
-import { Format } from "@prisma/client";
-
-export const DNF = 1e7;
+import { format } from "@prisma/client";
 
 export function clickOutside(node: HTMLElement) {
     function handleClick(event) {
@@ -33,7 +31,7 @@ export function getRoundName(puzzleName: string, roundNumber: number, maxRound: 
 
 
 export function formatTime(rawValue: number): string {
-    if (rawValue === DNF) {
+    if (rawValue === Infinity || rawValue === "Infinity") {
         return "DNF"
     }
 
@@ -48,30 +46,25 @@ export function formatTime(rawValue: number): string {
 }
 
 
-export function calculateAverage(format: Format, data: number[]): number {
+export function calculateAverage(format: format, data: number[]): number {
     switch (format) {
-        case Format.AO5: {
+        case format.AO5: {
             data = data as number[]
 
             const used = data.sort((t1, t2) => t1 - t2).slice(1, 4);
-            if (used.includes(DNF)) { return DNF }
 
             return used.reduce((acc, cur) => acc + cur) / 3;
         }
 
-        case Format.MO3: {
-            data = data as number[]
-
-            if (data.includes(DNF)) { return DNF}
-
+        case format.MO3: {
             return data.reduce((acc, cur) => acc + cur) / 3;
         }
 
-        case Format.BO1: {
+        case format.BO1: {
             return data[0];
         }
 
-        case Format.BO3: {
+        case format.BO3: {
             return Math.min(...data as number[]);
         }
     }

@@ -84,7 +84,7 @@
                 <a class="dropdown-link" href="/user/edit">Edit Account</a>
             </div>
 
-            {#if data.user?.isClubOrganiser}
+            {#if data.user?.is_club_organiser}
                 <hr class="dropdown-hr">
 
                 <div class="dropdown-inner">

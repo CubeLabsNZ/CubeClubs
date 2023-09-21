@@ -18,7 +18,7 @@
 
     <AuthCard title="Update Account Password" subtitle=""> 
         <Form name="Update Password" run={({ formData }) => {
-            formData.set("userId", data.user.id);
+            formData.set("user_id", data.user.id);
         }}>
             <div>
                 <label class="form-label">

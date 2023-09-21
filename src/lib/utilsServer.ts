@@ -25,7 +25,7 @@ export async function getUserSessionOrThrow(cookies: Cookies, needsAdmin: boolea
 
     if (!user) { throw redirect(303, "/login"); }
 
-    if (needsAdmin && !user.isClubOrganiser) { throw error(403, "unauthorised"); }
+    if (needsAdmin && !user.is_club_organiser) { throw error(403, "unauthorised"); }
 
     return user;
 }

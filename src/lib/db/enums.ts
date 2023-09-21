@@ -1,4 +1,4 @@
-export const Region = {
+export const region = {
     NORTHLAND: "NORTHLAND",
     AUCKLAND: "AUCKLAND",
     WAIKATO: "WAIKATO",
@@ -17,8 +17,8 @@ export const Region = {
     SOUTHLAND: "SOUTHLAND",
     VISITOR: "VISITOR"
 } as const;
-export type Region = (typeof Region)[keyof typeof Region];
-export const Puzzle = {
+export type region = (typeof region)[keyof typeof region];
+export const puzzle = {
     THREE: "THREE",
     TWO: "TWO",
     FOUR: "FOUR",
@@ -37,11 +37,11 @@ export const Puzzle = {
     FOURBLD: "FOURBLD",
     FIVEBLD: "FIVEBLD"
 } as const;
-export type Puzzle = (typeof Puzzle)[keyof typeof Puzzle];
-export const Format = {
+export type puzzle = (typeof puzzle)[keyof typeof puzzle];
+export const format = {
     BO3: "BO3",
     BO1: "BO1",
     MO3: "MO3",
     AO5: "AO5"
 } as const;
-export type Format = (typeof Format)[keyof typeof Format];
+export type format = (typeof format)[keyof typeof format];

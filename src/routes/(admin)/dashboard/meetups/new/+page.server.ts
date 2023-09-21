@@ -24,7 +24,7 @@ export const actions = {
             location: data.get("location") as string,
             club: {
                 connect: {
-                    id: Number(data.get("clubId"))
+                    id: Number(data.get("club_id"))
                 }
             },
             // TODO: actually make this work
@@ -32,12 +32,12 @@ export const actions = {
                 connect: organisersList
             },
             contact: data.get("contact") as string,
-            competitorLimit: Number(data.get("competitorLimit")),
+            competitor_limit: Number(data.get("competitor_limit")),
             description: data.get("description") as string,
             date: new Date(data.get("date") as string),
 
-            externalRegistrationLink: data.get("usingExternalRegistration") ? data.get("externalRegistrationLink") as string : null,
-            registrationInformation: data.get("registrationInformation") ? data.get("registrationInformation") as string : undefined
+            external_registration_link: data.get("using_external_registration") ? data.get("external_registration_link") as string : null,
+            registration_information: data.get("registration_information") ? data.get("registration_information") as string : undefined
         }
 
         // TODO: validate that every organizer really is an organizer
@@ -54,6 +54,6 @@ export const actions = {
 export const load = (async () => {
     return {
         clubs: await prisma.club.findMany(),
-        organisers: await prisma.user.findMany({where: {isClubOrganiser: true}})
+        organisers: await prisma.user.findMany({where: {is_club_organiser: true}})
     };
 }) satisfies PageServerLoad;

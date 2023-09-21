@@ -23,19 +23,21 @@ export const POST: RequestHandler = (async ({ request, params, cookies }) => {
     console.log(events)
 
     await db.transaction().execute(async (trx) => {
-        await trx.deleteFrom('Round')
-            .where('meetupId', '=', id)
-            .execute()
-
-        await trx.insertInto('Round')
+        await trx.insertInto('round')
             .values(events.map(event => ({
-                meetupId: id,
-                startDate: event.start,
-                endDate: event.end,
+                id: event.id,
+                meetup_id: id,
+                start_date: event.start,
+                end_date: event.end,
                 puzzle: event.extendedProps.puzzleType,
                 format: event.extendedProps.formatType,
-                proceedNumber: event.extendedProps.proceedNumber,
+                proceed_number: event.extendedProps.proceed_number ?? 0,
             })))
+            .onConflict((oc) => oc.column('id')
+                       .doUpdateSet((eb) => ({
+                           start_date: eb.ref('excluded.start_date'),
+                           end_date: eb.ref('excluded.end_date'),
+                       })))
             .execute()
 
     })

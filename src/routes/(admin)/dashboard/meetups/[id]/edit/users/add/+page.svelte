@@ -73,7 +73,7 @@
 
         {#if searchString !== ""}
             {@const filtered = data.users.filter((user) => {
-                return user.name.toLowerCase().includes(searchString.toLowerCase()) && !(data.meetup.users.map(u => u.userId).includes(user.id))
+                return user.name.toLowerCase().includes(searchString.toLowerCase()) && !(data.meetup.users.map(u => u.user_id).includes(user.id))
             })}
             <div class="search-results" transition:fade={{ duration: 100 }}>
                 {#if filtered.length === 0}

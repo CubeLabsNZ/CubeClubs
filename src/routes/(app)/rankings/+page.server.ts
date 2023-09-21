@@ -1,47 +1,47 @@
 import { db } from '$lib/db';
 import prisma from '$lib/prisma';
 import type { PageServerLoad } from './$types';
-import { Puzzle } from '@prisma/client';
+import { puzzle } from "$lib/db/enums"
 
 export const load = (async ({ url }) => {
-    const filterRegion = url.searchParams.has("region") ? url.searchParams.get("region") : undefined;
-    const filterEvent = url.searchParams.has("event") ? url.searchParams.get("event")! : Puzzle.THREE;
-    const filterFormat = url.searchParams.has("format") ? url.searchParams.get("format") : "single";
+    const filterRegion = url.searchParams.has("region") ? url.searchParams.get("region")! : undefined;
+    const filterEvent = url.searchParams.has("event") ? url.searchParams.get("event")! : puzzle.THREE;
+    const filterFormat = url.searchParams.has("format") ? url.searchParams.get("format")! : "single";
 
     let query
 
     const isSingle = filterFormat === "single"
 
     if (isSingle) {
-        query = db.with('temp', (eb) => eb.selectFrom('Solve')
-            .innerJoin('Result', 'Result.id', 'Solve.resultId')
-            .innerJoin('Round', 'Round.id', 'Result.roundId')
-            .innerJoin('Meetup', 'Meetup.id', 'Round.meetupId')
-            .innerJoin('User', 'User.id', 'Result.userId')
-            .where('Round.puzzle', '=', filterEvent)
-            .distinctOn('User.id')
-            .select(['time', 'User.name as user_name', 'User.region as user_region', 'User.id as user_id', 'Meetup.id as meetup_id', 'Meetup.name as meetup_name'])
-            .orderBy(['User.id asc', 'time asc'])
+        query = db.with('temp', (eb) => eb.selectFrom('solve')
+            .innerJoin('result', 'result.id', 'solve.result_id')
+            .innerJoin('round', 'round.id', 'result.round_id')
+            .innerJoin('meetup', 'meetup.id', 'round.meetup_id')
+            .innerJoin('user', 'user.id', 'result.user_id')
+            .where('round.puzzle', '=', filterEvent)
+            .distinctOn('user.id')
+            .select(['time', 'user.name as user_name', 'user.region as user_region', 'user.id as user_id', 'meetup.id as meetup_id', 'meetup.name as meetup_name'])
+            .orderBy(['user.id asc', 'time asc'])
         )
             .selectFrom('temp')
             .orderBy('time', 'asc')
             .selectAll()
 
     } else {
-        query = db.with('temp', (eb) => eb.selectFrom('Result')
-            .innerJoin('Round', 'Round.id', 'Result.roundId')
-            .innerJoin('Meetup', 'Meetup.id', 'Round.meetupId')
-            .innerJoin('User', 'User.id', 'Result.userId')
-            .leftJoin("Solve as solve", 'Result.id', 'solve.resultId')
-            .where('Round.puzzle', '=', filterEvent)
-            .distinctOn('User.id')
-            .groupBy(['value', 'User.name', 'User.region', 'User.id', 'Meetup.id', 'Meetup.name'])
+        query = db.with('temp', (eb) => eb.selectFrom('result')
+            .innerJoin('round', 'round.id', 'result.round_id')
+            .innerJoin('meetup', 'meetup.id', 'round.meetup_id')
+            .innerJoin('user', 'user.id', 'result.user_id')
+            .leftJoin("solve", 'result.id', 'solve.result_id')
+            .where('round.puzzle', '=', filterEvent)
+            .distinctOn('user.id')
+            .groupBy(['value', 'user.name', 'user.region', 'user.id', 'meetup.id', 'meetup.name'])
             .select(({ fn }) => [
-                'value', 'User.name as user_name', 'User.region as user_region', 'User.id as user_id', 'Meetup.id as meetup_id', 'Meetup.name as meetup_name',
+                'value', 'user.name as user_name', 'user.region as user_region', 'user.id as user_id', 'meetup.id as meetup_id', 'meetup.name as meetup_name',
                 // TODO: check order
                 fn.agg<string[]>('array_agg', ['solve.time']).as('solves')
             ])
-            .orderBy(['User.id asc', 'value asc'])
+            .orderBy(['user.id asc', 'value asc'])
         )
             .selectFrom('temp')
             .orderBy('value', 'asc')

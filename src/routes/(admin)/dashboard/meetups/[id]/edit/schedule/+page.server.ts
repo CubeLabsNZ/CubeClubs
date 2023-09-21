@@ -20,12 +20,18 @@ export const load = (async ({ params }) => {
             id: true,
             rounds: {
                 select: {
-                    endDate: true,
-                    startDate: true,
+                    id: true,
+                    end_date: true,
+                    start_date: true,
                     puzzle: true,
                     format: true,
-                    proceedNumber: true,
+                    proceed_number: true,
                     _count: true
+                },
+                orderBy: {
+                    // TODO: check consistency.
+                    // Just dont have overlapping rounds please.
+                    start_date: "asc"
                 }
             }
         ,
@@ -38,15 +44,15 @@ export const load = (async ({ params }) => {
     const maxRounds = populateRounds(meetup.rounds);
 
     const events = meetup.rounds.map(round => ({
-        id: crypto.randomUUID(),
-        start: round.startDate,
-        end: round.endDate,
+        id: round.id,
+        start: round.start_date,
+        end: round.end_date,
         title: getRoundName(puzzles[round.puzzle].name, round.number, maxRounds[round.puzzle]),
         editable: round._count.results == 0, // Only editable if no results
         extendedProps: {
             puzzleType: round.puzzle,
             formatType: round.format,
-            proceedNumber: round.proceedNumber,
+            proceed_number: round.proceed_number,
             server: true,
         }
     }))

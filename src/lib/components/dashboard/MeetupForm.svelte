@@ -18,7 +18,7 @@
     let meetup = data.meetup;
     export let addedOrganisers = meetup ? meetup.organisers : [];
 
-    let externalRegistration: boolean = meetup ? meetup.externalRegistrationLink != null : false;
+    let externalRegistration: boolean = meetup ? meetup.external_registration_link != null : false;
 
     export let organisersError = false;
 </script>
@@ -34,7 +34,7 @@
         <label class="form-label regular">
             Host Club
 
-            <Select name="clubId" value={meetup ? meetup.clubId : undefined}>
+            <Select name="club_id" value={meetup ? meetup.club_id : undefined}>
                 <option disabled selected value>Select a Club</option>
                 <!-- TODO: figure out ts complaining? -->
                 {#each data.clubs as {id, name} }
@@ -115,7 +115,7 @@
 
         <label class="form-label regular">
             Competitor Limit
-            <input required name="competitorLimit" type="number" min=1 value={meetup ? meetup.competitorLimit : null}/>
+            <input required name="competitor_limit" type="number" min=1 value={meetup ? meetup.competitor_limit : null}/>
         </label>
 
 
@@ -132,7 +132,7 @@
             <label class="form-label semiwide">
                 External Registration Link
 
-                <input required name="externalRegistrationLink" value={meetup ? meetup.externalRegistrationLink : null} />
+                <input required name="external_registration_link" value={meetup ? meetup.external_registration_link : null} />
             </label>
 
 
@@ -144,12 +144,12 @@
             Registration Information
             <textarea
                 required
-                name=registrationInformation
+                name=registration_information
                 rows=8
                 style:min-height=50px
                 style:max-height=500px
                 style:resize=vertical
-                value={meetup ? meetup.registrationInformation : null}
+                value={meetup ? meetup.registration_information : null}
             />
         </label>
 
