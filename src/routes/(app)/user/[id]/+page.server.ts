@@ -5,7 +5,6 @@ import { Puzzle } from '@prisma/client';
 
 import puzzles from '$lib/data/puzzles'
 import { islandRegions } from '$lib/data/regions';
-import { DNF } from '$lib/utils';
 import { db } from '$lib/db';
 import { sql } from 'kysely';
 
@@ -48,18 +47,17 @@ export const load = (async ({ params }) => {
     // TODO: why is everything awaited immediately? it should all go to promise and await and the end.
 
     //const completedSolves = user.results.reduce((x, y) => x + y.solves.length, 0)
-    const solvesQuery = await db.selectFrom('solve')
+    const solvesQuery = db.selectFrom('solve')
         .select(({fn}) => [fn.countAll().as('completedSolves')])
         .innerJoin('result', 'result.id', 'solve.result_id')
         .where('result.user_id', '=', user.id)
         .where('solve.time', '!=', Infinity)
         .executeTakeFirst()
 
-    const completedSolves = solvesQuery?.completedSolves ?? 0
 
 
     // TODO: try make this an array right away
-    const medalsTemp = await db.with('last_rounds', (eb) =>
+    const medalsTempPromise = db.with('last_rounds', (eb) =>
         eb.selectFrom('round')
             .select(['id', 'end_date'])
             .distinctOn(['puzzle', 'meetup_id'])
@@ -89,8 +87,6 @@ export const load = (async ({ params }) => {
         .executeTakeFirst()
 
 
-    const medals = [medalsTemp.gold, medalsTemp.silver, medalsTemp.bronze]
-
 
 
     // TODO: figure out a way to get PRs with groupBy and min or discrete or smth
@@ -115,35 +111,25 @@ export const load = (async ({ params }) => {
 
     const PRs: { [key in Puzzle]: { single: PRInfo, average: PRInfo } } = {}
 
+    // TODO: partition by puzzle instead of foreach
     for (const [key, puzzle] of Object.entries(puzzles)) {
         // TODO: plusTwo - consult - maybe DNF = inf
-        const single = await prisma.solve.findFirst({
-            where: {
-                result: {
-                    user_id: user.id,
-                    round: {
-                        puzzle: key
-                    }
-                },
-            },
-            orderBy: {
-                time: 'asc'
-            }
-        })
+        const single = await db.selectFrom('solve')
+            .selectAll()
+            .innerJoin('result', 'solve.result_id', 'result.id')
+            .innerJoin('round', 'result.round_id', 'round.id')
+            .where('result.user_id', '=', user.id)
+            .where('round.puzzle', '=', key)
+            .executeTakeFirst()
 
         if (!single) continue;
 
-        const average = await prisma.result.findFirst({
-            where: {
-                user_id: user.id,
-                round: {
-                    puzzle: key
-                }
-            },
-            orderBy: {
-                value: 'asc'
-            }
-        })
+        const average = await db.selectFrom('result')
+            .selectAll()
+            .innerJoin('round', 'result.round_id', 'round.id')
+            .where('result.user_id', '=', user.id)
+            .where('round.puzzle', '=', key)
+            .executeTakeFirst()
 
         if (!average) continue; // Should never happen
 
@@ -271,20 +257,26 @@ export const load = (async ({ params }) => {
             fn.agg<string[]>('array_agg', ['solve.time']).as('solves'),
         ])
         .groupBy(['round.puzzle', 'result.value', 'meetup_name', 'meetup.id', 'round.id'])
-        .orderBy('round_end desc')
         .where('result.user_id', '=', user.id)
     )
         .selectFrom('temp')
-        .groupBy('puzzle')
+        .groupBy(['puzzle'])
         // TODO try this better
         .select(({ fn }) => ['puzzle',
-            sql<any>`json_agg(temp) as values`
+            sql<any>`json_agg(temp ORDER BY round_end DESC) as values`
         ])
         .execute()
 
     // TODO: figure out how to sort in the query
-    results.sort((a, z) => z.round_end - a.round_end)
+    //results.sort((a, z) => z.round_end - a.round_end)
     results = Object.fromEntries(results.map(x => [x.puzzle, x.values]))
+
+
+
+    const completedSolves = (await solvesQuery)?.completedSolves ?? 0
+    const medalsTemp = (await medalsTempPromise)!
+    const medals = [medalsTemp.gold, medalsTemp.silver, medalsTemp.bronze]
+
 
     return {
         user,
