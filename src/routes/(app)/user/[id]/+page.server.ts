@@ -199,6 +199,8 @@ export const load = (async ({ params }) => {
                 .where(...regionPredicate)
                 .select(({ fn }) => [fn.min('time').over(ob => ob.orderBy('round.end_date', 'asc')).as('cum_min'), 'user.id as user_id'])
                 .distinctOn('cum_min')
+                // Must order by time so distinct on picks correct value
+                .orderBy(['cum_min asc', 'time asc'])
         ))
             .selectFrom('all_records')
             .where('all_records.user_id', '=', user.id)
@@ -219,6 +221,8 @@ export const load = (async ({ params }) => {
                 .where(...regionPredicate)
                 .select(({ fn }) => [fn.min('value').over(ob => ob.orderBy('round.end_date', 'asc')).as('cum_min'), 'user.id as user_id'])
                 .distinctOn('cum_min')
+                // Must order by time so distinct on picks correct value
+                .orderBy(['cum_min asc', 'value asc'])
         ))
             .selectFrom('all_records')
             .where('all_records.user_id', '=', user.id)
