@@ -91,7 +91,7 @@
             </tr>
 
 
-            {#each data.meetup.users as { user, registeredEvents } }
+            {#each data.meetup.users as { user, registered_events } }
                 <tr>
                     <td class="tc-dummy" />
 
@@ -128,7 +128,7 @@
                     <!-- WARN: this is actually working, but it seems data is not perfect, and those with no results in an event is registered? -->
                     {#each data.meetup.puzzles as puzzle}
                         <td class="tc-puzzle">
-                            {#if registeredEvents.includes(puzzle)}
+                            {#if registered_events.includes(puzzle)}
                                 <span class="material-symbols-outlined">check</span>
                             {/if}
                         </td>

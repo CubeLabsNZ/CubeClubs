@@ -44,8 +44,6 @@ export const load = (async ({ params }) => {
         throw error(404, 'not found');
     }
     
-    // TODO: why is everything awaited immediately? it should all go to promise and await and the end.
-
     //const completedSolves = user.results.reduce((x, y) => x + y.solves.length, 0)
     const solvesQuery = db.selectFrom('solve')
         .select(({fn}) => [fn.countAll().as('completedSolves')])

@@ -115,6 +115,8 @@ model result {
   solves solve[]
   value Float
 
+  mbld_score Int?
+  mbld_total Int?
 
   user   user    @relation(fields: [user_id], references: [id])
   user_id Int
@@ -126,6 +128,9 @@ model result {
 model solve {
   index Int
   time  Float
+
+  mbld_score Int?
+  mbld_total Int?
 
   result   result @relation(fields: [result_id], references: [id], onDelete: Cascade)
   result_id Int

@@ -18,7 +18,7 @@ export const POST = (async ({params, cookies}) => {
             id: id
         },
         data: {
-            isPublished: true
+            is_published: true
         }
     })
 

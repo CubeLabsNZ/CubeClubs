@@ -18,8 +18,8 @@ export const actions = {
                 users: {
                     createMany: {
                         data: [{
-                            userId: selectedCompetitor,
-                            registeredEvents: events
+                            user_id: selectedCompetitor,
+                            registered_events: events
                         }]
                     }
                 }

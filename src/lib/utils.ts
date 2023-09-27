@@ -45,12 +45,23 @@ export function formatTime(rawValue: number): string {
     }
 }
 
+export function calulateMbldAverage(fformat: format, data: {time: number, score: number, total_attempts: number}[]) {
+    switch (fformat) {
+        case format.BO3:
+            data.sort((a, z) => {
+                const score_order = a.score - z.score
+                const time_order = a.time - z.time
+                return score_order || time_order
+            })
+        case format.BO1:
+            return data[0]
+    }
+}
 
-export function calculateAverage(format: format, data: number[]): number {
-    switch (format) {
+
+export function calculateAverage(fformat: format, data: number[]): number {
+    switch (fformat) {
         case format.AO5: {
-            data = data as number[]
-
             const used = data.sort((t1, t2) => t1 - t2).slice(1, 4);
 
             return used.reduce((acc, cur) => acc + cur) / 3;

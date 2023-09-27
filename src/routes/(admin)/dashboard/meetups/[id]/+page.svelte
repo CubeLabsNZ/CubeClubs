@@ -11,7 +11,7 @@
 
     export let data: PageData;
 
-    let isPublished = data.meetup.isPublished
+    let isPublished = data.meetup.is_published
     let meetupFetch: Promise<Response> | undefined
 
     let showPublishMessage = false;
@@ -155,22 +155,19 @@
         <div class="label-group">
             <p class="label">Organisers</p>
 
-            <div style:display=flex>
+            <p>
                 {#each data.meetup.organisers as { user }, i}
                     {@const maxIndex = data.meetup.organisers.length - 1}
-                    <a href="/user/{user.id}" class="regular-link"> {user.name} </a>
-
-                    <p> 
-                        {#if i < maxIndex}
-                            {#if (i != maxIndex - 1)}
-                                ,&nbsp;
-                            {:else}
-                                &nbsp;and&nbsp;
-                            {/if}
+                    <!-- if statement is deliberately on the same line to prevent whitespace! -->
+                    <a href="/user/{user.id}" class="regular-link">{user.name}</a>{#if i < maxIndex}
+                        {#if (i != maxIndex - 1)}
+                            ,&nbsp;
+                        {:else}
+                            &nbsp;and&nbsp;
                         {/if}
-                    </p>
+                    {/if}
                 {/each}
-            </div>
+            </p>
         </div>
 
         <div class="label-group">

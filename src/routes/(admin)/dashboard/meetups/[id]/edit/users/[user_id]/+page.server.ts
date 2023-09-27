@@ -20,7 +20,7 @@ export const load = (async ({ params }) => {
             name: true,
             users: {
                 select: {
-                    registeredEvents: true,
+                    registered_events: true,
                     user: {
                         select: {
                             id: true,
@@ -48,10 +48,14 @@ export const load = (async ({ params }) => {
         throw error(404, 'not found')
     }
 
+    console.log("A")
+    console.log(meetup.users[0])
+    console.log("B")
+
     return { 
         puzzles: meetup.puzzles,
         user: meetup.users[0].user,
-        registeredEvents: meetup.users[0].registeredEvents
+        registered_events: meetup.users[0].registered_events
     }
 }) satisfies PageServerLoad
 
@@ -73,7 +77,7 @@ export const actions = {
                             user_id: Number(params.user_id)
                         },
                         data: {
-                            registeredEvents: events
+                            registered_events: events
                         }
                     }
                 }

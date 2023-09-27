@@ -1,6 +1,6 @@
 import prisma from '$lib/prisma';
 import { error } from '@sveltejs/kit';
-import type { PageServerLoad } from './$types';
+import type { LayoutServerLoad } from './$types';
 import { getMeetupPuzzles } from "$lib/utilsServer"
 
 export const load = (async ({ params }) => {
@@ -16,7 +16,7 @@ export const load = (async ({ params }) => {
             name: true,
             users: {
                 select: {
-                    registeredEvents: true,
+                    registered_events: true,
                     user: {
                         select: {
                             id: true,
@@ -41,6 +41,8 @@ export const load = (async ({ params }) => {
 
     meetup.puzzles = getMeetupPuzzles(meetup);
     delete meetup.rounds;
+
+    console.log(meetup)
 
     const users = await prisma.user.findMany({
         select: {

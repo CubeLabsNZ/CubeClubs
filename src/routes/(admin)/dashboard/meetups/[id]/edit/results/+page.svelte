@@ -3,7 +3,7 @@
     import { goto, invalidate, invalidateAll } from "$app/navigation";
     import { page } from "$app/stores";
 
-    import { DNF, formatTime } from "$lib/utils";
+    import { formatTime, getRoundName } from "$lib/utils";
 
     import Breadcrumb from "$lib/components/global/Breadcrumb.svelte";
     import Form from "$lib/components/global/Form.svelte";
@@ -19,7 +19,7 @@
 
     // BUG: NOTHING FUCKING WORKS
     // TODO: set the fucking event select to what it was previously
-    let roundId: number | undefined = form?.event ?? data.roundId;
+    let roundId: number | undefined = form?.event ?? $page.url.searchParams.get("roundId") ?? data.meetup.rounds[0].id;
 
     let selectedRound;
     let selectedRoundPuzzleFormatCount;
@@ -60,12 +60,12 @@
                 if (i < 0) { i++; continue; }
 
                 if (value.toLowerCase() === "dnf") {
-                    formData.set(`solve-${i}`, "dnf");
+                    formData.set(`solve-${i}`, Infinity);
                     i++;
                     continue;
                 }
 
-                if (isNaN(value) || value >= DNF) {
+                if (isNaN(value)) {
                     cancel();
                     inputError = i;
                 }
@@ -76,6 +76,7 @@
             formData.set("roundFormat", selectedRound.format);
 
             return async ({ result, update }) => {
+                console.log("AAAA")
                 update();
                 inputError = -1;
             }
@@ -88,7 +89,7 @@
                         <option disabled selected value>Select an event</option>
                         {#each data.meetup.rounds as round}
                             {@const puzzle = puzzles[round.puzzle]}
-                            <option value={round.id}>{puzzle.name} - Round {round.number}</option>
+                            <option value={round.id}>{getRoundName(puzzle.name, round.number, round.maxRounds)}</option>
                         {/each}
                     </select>
 
@@ -98,10 +99,10 @@
 
             <label class="form-label">
                 Competitor Name
-                <Select name="competitor" on:change={changeCompetitor}>
+                <Select name="competitor">
                     <option disabled selected value>Select a competitor</option>
-                    {#each data.meetup.users as {user}}
-                        <option value={user.id}>{user.name}</option>
+                    {#each selectedRound.users as {user_id, user_name}}
+                        <option value={user_id}>{user_name}</option>
                     {/each}
                 </Select>
             </label>
@@ -178,22 +179,20 @@
                     </tr>
 
 
-                    {#each data.meetup.rounds as round }
-                        {#each round.results as result,idx }
-                            <tr>
-                                <td class="tc-dummy"></td>
+                    {#each selectedRound.results as result,idx }
+                        <tr>
+                            <td class="tc-dummy"></td>
 
-                                <td class="tc-ranking">{idx+1}</td>
-                                <td class="tc-name">{result.user.name}</td>
-                                <td class="tc-result">{formatTime(result.value)}</td>
+                            <td class="tc-ranking">{idx+1}</td>
+                            <td class="tc-name">{result.user_name}</td>
+                            <td class="tc-result">{formatTime(result.value)}</td>
 
-                                {#each result.solves as solve}
-                                    <td class="tc-solves">{formatTime(solve.time)}</td>
-                                {/each}
+                            {#each result.solves as solve}
+                                <td class="tc-solves">{formatTime(solve.time)}</td>
+                            {/each}
 
-                                <td class="tc-dummy"></td>
-                            </tr>
-                        {/each}
+                            <td class="tc-dummy"></td>
+                        </tr>
                     {/each}
 
 

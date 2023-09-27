@@ -2,9 +2,12 @@ import prisma from '$lib/prisma';
 import { error, fail } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
 import { getUserSessionOrThrow, populateRounds } from '$lib/utilsServer';
-import { DNF, calculateAverage } from "$lib/utils";
+import { calculateAverage } from "$lib/utils";
 import type { Format, Prisma } from "@prisma/client";
 import formats from '$lib/data/formats';
+import { db } from '$lib/db';
+import { jsonArrayFrom } from 'kysely/helpers/postgres';
+import { sql } from 'kysely';
 
 export const load = (async ({ url, params, cookies }) => {
     // FIXME: broken ? await getUserSessionOrThrow(cookies, true)
@@ -14,81 +17,89 @@ export const load = (async ({ url, params, cookies }) => {
         throw error(404, 'not found');
     }
 
-    const queryRoundId = url.searchParams.get("round_id");
 
-    let round_id: string | undefined;
-
-    if (!url.searchParams.has("round_id")) {
-        const round = await prisma.round.findFirst({
-            where: {
-                meetup_id: id
-            },
-            select: {
-                id: true
-            }
-        })
-
-        round_id = round?.id
-    } else {
-        round_id = queryRoundId
-    }
-
-    let meetupQuery = {
-        where: { id: Number(params.id) },
-        include: {
-            users: {
-                select: {
-                    user: {
-                        select: {
-                            name: true,
-                            id: true,
-                        }
-                    }
+    // TODO: find some better way, maybe use TO_ARRAY or ARRAY_AGG instead of json
+    let meetupQuery = db.selectFrom('meetup')
+        .where('meetup.id', '=', id)
+        .select(({ fn, selectFrom }) => [
+            'id', 'name',
+            jsonArrayFrom(selectFrom('round')
+                .leftJoin(
+                    selectFrom('result')
+                        .innerJoin('solve', 'solve.result_id', 'result.id')
+                        .innerJoin('user', 'user.id', 'result.user_id')
+                        .select(
+                            (eb) => [
+                                'result.id',
+                                'value',
+                                'round_id',
+                                'user.id as user_id',
+                                'user.name as user_name',
+                                fn.agg('array_agg', 'solve').as('solves')
+                            ]
+                        )
+                        .groupBy(['result.id', 'user.name', 'user.id'])
+                        .as('result'),
+                    'round.id', 'result.round_id')
+                .select(({ selectFrom, fn, selectNoFrom }) => {
+                    return [
+                        'round.id',
+                        'format',
+                        'puzzle',
+                        fn.agg('row_number').over((ov) => ov.partitionBy('puzzle').orderBy('round.end_date asc')).as('number'),
+                        //fn.agg('lag', jsonArrayFrom(r.select(['user.id', 'value']).orderBy('value asc').limit(10)), 1).over((ov) => ov.partitionBy('puzzle').orderBy('round.end_date asc')).as('prev_round_results'),
+                        fn.count('round.id').filterWhereRef('puzzle', '=', 'round.puzzle').as('round_maximum'),
+                        jsonArrayFrom(selectFrom('user')
+                            .innerJoin('user_in_meetup', 'user_in_meetup.user_id', 'user.id')
+                            .select(['round.id', 'name as user_name', 'user.id as user_id'])
+                            .whereRef('user_in_meetup.meetup_id', '=', 'meetup.id')
+                            .where((eb) => eb('round.puzzle', '=', eb.fn('any', eb.ref('user_in_meetup.registered_events'))))
+                        ).as('users'),
+                        fn.agg('array_agg', 'result').as('results')
+                    ]
                 }
-            },
-            rounds: {
-                include: {
-                    results: {
-                        orderBy: {
-                            value: 'asc'
-                        },
-                        select: {
-                            user: {
-                                select: {
-                                    name: true
-                                }
-                            },
-                            solves: {
-                                orderBy: {
-                                    index: 'asc'
-                                },
-                                select: {
-                                    time: true
-                                }
-                            },
-                            value: true,
-                        }
-                    }
-                }
-            }
-        }
-    }
+                )
+                .groupBy('round.id')
+                .orderBy('round.start_date asc')
+                .where('round.meetup_id', '=', id)
+            ).as('rounds')
+        ])
 
-    if (round_id != undefined) {
-        meetupQuery.include.rounds.include.results.where = { round_id: round_id };
-    }
 
-    const meetup = await prisma.meetup.findUnique(meetupQuery)
+    /*
+        selectFrom('round as round_inner')
+            .whereRef('round_inner.puzzle', '=', 'round.puzzle')
+            .whereRef('round_inner.meetup_id', '=', 'round.meetup_id')
+            .whereRef('round_inner.start_date', '<', 'round.start_date')
+            // Cant figure out coalesce, it makes things :(
+            .select([sql`COALESCE(COUNT(*),0) AS round_number`])
+            .limit(1),
+        // TODO: merge with above select and do FILTER WHERE
+        selectFrom('round as round_inner')
+            .whereRef('round_inner.puzzle', '=', 'round.puzzle')
+            .whereRef('round_inner.meetup_id', '=', 'round.meetup_id')
+            // Cant figure out coalesce, it makes things :(
+            .select([sql`COALESCE(COUNT(*),0) AS round_maximum`])
+            .limit(1), */
+    const meetup = await meetupQuery.executeTakeFirst()
 
     if (!meetup) {
         throw error(404, 'not found');
     }
 
-    populateRounds(meetup.rounds)
+    const prevRoundForPuzzle: any = {}
+    for (const round of meetup.rounds) {
+        if (prevRoundForPuzzle[round.puzzle] == undefined) {
+            prevRoundForPuzzle[round.puzzle] = round
+            continue;
+        }
+        const prevRound = prevRoundForPuzzle[round.puzzle]
+        round.users = prevRound.results.toSorted((a, z) => (a.value - z.value)).slice(0, prevRound.proceed_number)
+        prevRoundForPuzzle[round.puzzle] = round
+    }
 
     // TODO: live resuts needs round
     return {
-        round_id: round_id,
         meetup,
     }
 }) satisfies PageServerLoad
@@ -100,15 +111,15 @@ export const actions = {
         await getUserSessionOrThrow(cookies, true)
         const data = await request.formData()
 
-        const eventId = Number(data.get("event"))
+        const eventId = data.get("event")
         const competitorId = Number(data.get("competitor"))
 
         const roundFormat = data.get("roundFormat") as Format;
 
-        const solves = Array.from(Array(formats[roundFormat].count).keys()).map((x) => Number(data.get(`solve-${x}`) === "dnf" ? DNF : data.get(`solve-${x}`)))
+        const solves = Array.from(Array(formats[roundFormat].count).keys()).map((x) => Number(data.get(`solve-${x}`)))
 
-        if (isNaN(eventId) || isNaN(competitorId) || solves.includes(NaN)) {
-            return fail(400, { event: eventId, competitor: competitorId })
+        if (isNaN(competitorId) || solves.includes(NaN)) {
+            throw error(400, { event: eventId, competitor: competitorId })
         }
 
         console.log(roundFormat);

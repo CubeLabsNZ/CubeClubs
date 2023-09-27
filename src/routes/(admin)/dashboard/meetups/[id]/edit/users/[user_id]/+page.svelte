@@ -7,7 +7,7 @@
 
     export let data: PageData;
 
-    let selectedEvents = new Set(data.registeredEvents.map(e => Object.keys(puzzles).findIndex(p => p === e)));
+    let selectedEvents = new Set(data.registered_events.map(e => Object.keys(puzzles).findIndex(p => p === e)));
 
     import type { PageData } from './$types';
 
@@ -23,6 +23,7 @@
 
 <div style:height="16px" />
 
+{@debug selectedEvents}
 
 <Form 
     name="Edit Competitor" 
