@@ -13,6 +13,7 @@
     import formats from "$lib/data/formats"
 
     import type { PageData, ActionData } from "./$types";
+    import { puzzle } from "@prisma/client";
 
     export let data: PageData
     export let form: ActionData
@@ -112,9 +113,15 @@
                 <label class="form-label">
                     Solve {i+1}
                     <input required name={`solve-${i}`} autocomplete=off data-error={inputError} />
+                    {#if selectedRound.puzzle == puzzle.MULTIBLD}
+                        Successes {i+1}
+                        <input required name={`successes-${i}`} autocomplete=off data-error={inputError} />
+                        Attempts {i+1}
+                        <input required name={`attempts-${i}`} autocomplete=off data-error={inputError} />
+                    {/if}
 
                     {#if inputError === i}
-                        <p class="fsize-subhead" style:color=var(--c-red)>please enter a valid time</p>
+                        <p class="fsize-subhead" style:color=var(--c-red)>please enter a valid value</p>
                     {/if}
                 </label>
 
@@ -180,6 +187,7 @@
 
 
                     {#each selectedRound.results as result,idx }
+                        {#if result}
                         <tr>
                             <td class="tc-dummy"></td>
 
@@ -193,6 +201,7 @@
 
                             <td class="tc-dummy"></td>
                         </tr>
+                        {/if}
                     {/each}
 
 

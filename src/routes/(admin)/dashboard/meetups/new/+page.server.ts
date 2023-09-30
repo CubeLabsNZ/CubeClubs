@@ -18,7 +18,7 @@ export const actions = {
             organisersList.push({id: Number(org)})
         }
 
-        const meetup: Prisma.MeetupCreateInput = {
+        const meetup: Prisma.meetupCreateInput = {
             name: data.get("name") as string,
             venue: data.get("venue") as string,
             location: data.get("location") as string,
@@ -27,9 +27,12 @@ export const actions = {
                     id: Number(data.get("club_id"))
                 }
             },
-            // TODO: actually make this work
             organisers: {
-                connect: organisersList
+                createMany: {
+                    data: organisers.map(organiser => ({
+                        user_id: Number(organiser)
+                    }))
+                }
             },
             contact: data.get("contact") as string,
             competitor_limit: Number(data.get("competitor_limit")),

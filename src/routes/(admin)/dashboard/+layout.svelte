@@ -40,7 +40,7 @@
         <SidebarTab iconName=exit_to_app label="Return to CubeClubs" perform={() => { goto("/") }} />
     </div>
 
-    <div class="content">
+    <div class="content" style:position=relative>
         <slot/>
     </div>
 </div>

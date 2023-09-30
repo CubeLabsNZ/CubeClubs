@@ -63,8 +63,7 @@
             }
         }) 
         saveFetch.then((res) => {
-            // if (res.ok) { hasUnsavedChanges = false }
-            hasUnsavedChanges = false;
+            if (res.ok) { hasUnsavedChanges = false }
         })
     }
 
@@ -98,8 +97,10 @@
                 // TODO: try to use position relative to the event to make it scroll with the event itself
                 addEventCard.style.display = "block";
 
-                addEventCard.style.top = `${info.jsEvent.clientY}px`;
-                addEventCard.style.left = `${info.jsEvent.clientX}px`;
+                const e = document.getElementsByClassName("content")[0]
+                const rect = e.getBoundingClientRect();
+                addEventCard.style.top = `${info.jsEvent.clientY - rect.top + e.scrollTop}px`;
+                addEventCard.style.left = `${info.jsEvent.clientX - rect.left}px`;
             },
             unselectAuto: false,
             unselect: (info) => {
@@ -206,7 +207,10 @@
                 <button  on:click={() => {
                         unselectCancel = false
                         eventCalendar.unselect()
-                    }}>
+                        }}
+                        disabled={!selectedPuzzle || !selectedFormat}
+
+                        >
                     <Button>
                         <div style:display=flex style:align-items=center style:gap=4px>
                             <span class="material-symbols-outlined" style:margin-left=-4px style:font-size=24px>done</span>
@@ -220,14 +224,25 @@
     </Card>
 </div>
 
-{#if hasUnsavedChanges}
+{#if hasUnsavedChanges || saveFetch}
     <Toast> 
+        {#if hasUnsavedChanges}
         <p>Unsaved Changes!</p>
         <button on:click={saveChanges}>
             <Button type={ButtonType.TextOnly} size={ButtonSize.Regular}>
                 Save
             </Button>
         </button>
+        {/if}
+        {#await saveFetch}
+            Saving your changes...
+        {:then res}
+            {#if !res?.ok}
+                Uh oh... An error occurred!
+            {/if}
+        {:catch e}
+            Uh oh... An error occurred!
+        {/await}
     </Toast>
 {/if}
 
@@ -235,7 +250,7 @@
 
 <style>
     .add-event-card {
-        position: fixed;
+        position: absolute;
         display: none;
         z-index: 2000;
     }

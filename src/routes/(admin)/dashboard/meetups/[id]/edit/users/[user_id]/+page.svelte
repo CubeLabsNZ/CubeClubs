@@ -7,7 +7,7 @@
 
     export let data: PageData;
 
-    let selectedEvents = new Set(data.registered_events.map(e => Object.keys(puzzles).findIndex(p => p === e)));
+    let selectedEvents = new Set(data.registered_events.map(e => data.puzzles.findIndex(p => p === e)));
 
     import type { PageData } from './$types';
 
@@ -23,7 +23,7 @@
 
 <div style:height="16px" />
 
-{@debug selectedEvents}
+{@debug selectedEvents, data}
 
 <Form 
     name="Edit Competitor" 
@@ -39,7 +39,7 @@
         }
 
         if (error === "") {
-            formData.set("events", eventsArray.map(i => Object.keys(puzzles)[i]).join(":"))
+            formData.set("events", eventsArray.map(i => data.puzzles[i]).join(":"))
         }
     }}>
 
@@ -54,7 +54,7 @@
             labels={ Object.entries(puzzles).filter(p => data.puzzles.includes(p[0])).map(p => ({type: LabelType.Image, data: p[1].icon})) } />
 
         {#if error === "events"}
-            <p class="fsize-subhead" style:color=var(--c-red)> please select atleast one event </p>
+            <p class="fsize-subhead" style:color=var(--c-red)> please select at least one event </p>
         {/if}
     </label>
 </Form>

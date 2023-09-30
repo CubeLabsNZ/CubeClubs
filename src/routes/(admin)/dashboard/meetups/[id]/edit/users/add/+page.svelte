@@ -54,7 +54,7 @@
         }
 
         if (error === "") {
-            formData.set("events", eventsArray.map(i => Object.keys(puzzles)[i]).join(":"))
+            formData.set("events", eventsArray.map(i => data.meetup.puzzles[i]).join(":"))
             formData.set("competitor", selectedCompetitor.id)
         }
     }}>
