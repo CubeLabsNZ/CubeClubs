@@ -183,6 +183,7 @@ enum puzzle {
 
 enum format {
   BO3
+  BO2
   BO1
   MO3
   AO5

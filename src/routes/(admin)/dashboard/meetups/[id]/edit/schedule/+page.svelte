@@ -64,6 +64,7 @@
         }) 
         saveFetch.then((res) => {
             if (res.ok) { hasUnsavedChanges = false }
+            saveFetch = null
         })
     }
 
@@ -74,6 +75,10 @@
             view: "timeGridDay",
             date: data.meetup.date,
             allDaySlot: false,
+            slotMinTime: '08:00:00',
+            slotMaxTime: '18:00:00',
+            slotHeight: 48,
+            flexibleSlotTimeLimits: true,
             slotDuration: {
                 seconds: 900
             },
@@ -237,7 +242,7 @@
         {#await saveFetch}
             Saving your changes...
         {:then res}
-            {#if !res?.ok}
+            {#if res && !res.ok}
                 Uh oh... An error occurred!
             {/if}
         {:catch e}
@@ -253,5 +258,10 @@
         position: absolute;
         display: none;
         z-index: 2000;
+    }
+
+
+    :global(.ec-time), :global(.ec-line) {
+        height: 48px;  /* override this value */
     }
 </style>

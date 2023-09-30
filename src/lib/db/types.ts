@@ -31,6 +31,8 @@ export type organiser_in_meetup = {
 export type result = {
     id: Generated<number>;
     value: number;
+    mbld_score: number | null;
+    mbld_total: number | null;
     user_id: number;
     round_id: string;
 };
@@ -51,6 +53,8 @@ export type session = {
 export type solve = {
     index: number;
     time: number;
+    mbld_score: number | null;
+    mbld_total: number | null;
     result_id: number;
 };
 export type user = {

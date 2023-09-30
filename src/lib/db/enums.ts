@@ -40,6 +40,7 @@ export const puzzle = {
 export type puzzle = (typeof puzzle)[keyof typeof puzzle];
 export const format = {
     BO3: "BO3",
+    BO2: "BO2",
     BO1: "BO1",
     MO3: "MO3",
     AO5: "AO5"

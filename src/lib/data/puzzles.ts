@@ -1,4 +1,4 @@
-import { format, puzzle } from "$lib/db/enums.ts"
+import { format, puzzle } from "$lib/db/enums"
 
 import * as Icons from "$lib/assets/cube-icons/icons";
 
@@ -19,7 +19,7 @@ const puzzles: {[key in puzzle]: { name: string, icon: string, allowedFormats: f
 
     FMC:        { name: "3x3 Fewest Moves",             icon: Icons.IconFMC,    allowedFormats: [format.MO3, format.BO1]},
     THREEBLD:   { name: "3x3 Blindfolded",              icon: Icons.Icon3bld,   allowedFormats: [format.BO3]},
-    MULTIBLD:   { name: "3x3 Multiple Blindfolded",     icon: Icons.IconMbld,   allowedFormats: [format.BO1]},
+    MULTIBLD:   { name: "3x3 Multiple Blindfolded",     icon: Icons.IconMbld,   allowedFormats: [format.BO1, format.BO2, format.BO3]},
     FOURBLD:    { name: "4x4 Blindfolded",              icon: Icons.Icon4bld,   allowedFormats: [format.BO3]},
     FIVEBLD:    { name: "5x5 Blindfolded",              icon: Icons.Icon5bld,   allowedFormats: [format.BO3]},
 }

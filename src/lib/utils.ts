@@ -48,6 +48,7 @@ export function formatTime(rawValue: number): string {
 export function calulateMbldAverage(fformat: format, data: {time: number, score: number, total_attempts: number}[]) {
     switch (fformat) {
         case format.BO3:
+        case format.BO2:
             data.sort((a, z) => {
                 const score_order = a.score - z.score
                 const time_order = a.time - z.time
