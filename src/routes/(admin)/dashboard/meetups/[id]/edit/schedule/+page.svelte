@@ -25,6 +25,8 @@
 
     let options, eventCalendar, addEventCard;
 
+    let deleteButton;
+        
     let displayingUUID: string | null = null
 
     // TODO: figureout figure out key in puzle
@@ -106,6 +108,15 @@
             eventClassNames: "testclass",
             eventBackgroundColor: "var(--c-la2)",
             eventTextColor: "var(--c-a)",
+            eventMouseEnter: (info) => {
+                let elRect = info.el.getBoundingClientRect();
+                deleteButton.style.top = `${elRect.y + elRect.height + info.el.scrollTop}px`;
+                deleteButton.style.right = "0px";
+                deleteButton.style.display = "block";
+            },
+            eventMouseLeave: (info) => {
+                deleteButton.style.display = "none";
+            },
             // eventContent: (info) => info.event.display === 'auto'
             // ? {html: '<div class="ec-event-time">' + info.timeText + '</div>' +
             // (info.event.editable ? '<button>Delete</button>' : '') +
@@ -320,12 +331,19 @@
     </Toast>
 {/if}
 
+<div bind:this={deleteButton} class="delete-button">delete</div>
+
 <style>
     .add-event-card {
         position: absolute;
         display: none;
         z-index: 2000;
         box-shadow: 0px 1px 6px 0px #10151B29; /* cdg3, 16% */
+    }
+
+    .delete-button {
+        position: absolute;
+        z-index: 2000;
     }
 
     :global(.ec-time),
