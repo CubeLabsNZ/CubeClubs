@@ -122,7 +122,7 @@
         </Card>
     </div>
 
-    <div class="content">
+    <div class="content" style:margin-bottom=64px>
         <div class="pr-section">
             <h3 class="fsize-body" style:font-weight=500 style:padding-bottom=4px>Personal Records</h3>
 
