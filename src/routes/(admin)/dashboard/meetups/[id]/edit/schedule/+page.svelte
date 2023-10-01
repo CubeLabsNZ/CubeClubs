@@ -257,7 +257,7 @@
                             <span
                                 class="material-symbols-outlined"
                                 style:margin-left="-4px"
-                                style:font-size="24px">cancel</span
+                                style:font-size="20px">cancel</span
                             >
 
                             <p>Cancel</p>
@@ -274,7 +274,7 @@
                     }}
                     disabled={!selectedPuzzle || !selectedFormat}
                 >
-                    <Button>
+                    <Button type={!selectedPuzzle || !selectedFormat ? ButtonType.Disabled : ButtonType.Bordered}>
                         <div
                             style:display="flex"
                             style:align-items="center"
@@ -322,6 +322,7 @@
         position: absolute;
         display: none;
         z-index: 2000;
+        box-shadow: 0px 1px 6px 0px #10151B29; /* cdg3, 16% */
     }
 
     :global(.ec-time),
