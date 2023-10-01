@@ -12,3 +12,5 @@ vite.config.ts.timestamp-*
 
 temp/
 run.log
+
+src/lib/db/index.ts
