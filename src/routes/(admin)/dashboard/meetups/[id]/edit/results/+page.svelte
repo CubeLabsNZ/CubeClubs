@@ -78,7 +78,6 @@
             formData.set("roundFormat", selectedRound.format);
 
             return async ({ result, update }) => {
-                console.log("AAAA")
                 update();
                 inputError = -1;
             }

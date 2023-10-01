@@ -29,7 +29,7 @@
 
     .container2 {
         height: 24px;
-        line-height: 24px;
+        line-height: 22px;
 
         border-radius: var(--v-border-radius-small);
         padding-left: 3px;

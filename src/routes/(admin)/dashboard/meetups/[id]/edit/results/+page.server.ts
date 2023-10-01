@@ -2,7 +2,7 @@ import prisma from '$lib/prisma';
 import { error, fail } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
 import { getUserSessionOrThrow, populateRounds } from '$lib/utilsServer';
-import { calculateAverage } from "$lib/utils";
+import { calculateAverage, calulateMbldAverage } from "$lib/utils";
 import type { Format, Prisma } from "@prisma/client";
 import formats from '$lib/data/formats';
 import { db } from '$lib/db';
@@ -107,23 +107,33 @@ export const load = (async ({ url, params, cookies }) => {
 export const actions = {
     // NOTE: You can update any meetup with this endpoint but it doesnt really matter since only events for the correct meetup will show up in the form
 
-    default: async ({ cookies, request }) => {
+    default: async ({ cookies, request, params }) => {
         await getUserSessionOrThrow(cookies, true)
         const data = await request.formData()
 
         const eventId = data.get("event")
         const competitorId = Number(data.get("competitor"))
 
-        const roundFormat = data.get("roundFormat") as Format;
+        const id = Number(params.id)
+        if (isNaN(id)) {
+            throw error(404, 'not found');
+        }
 
-        const solves = Array.from(Array(formats[roundFormat].count).keys()).map((x) => Number(data.get(`solve-${x}`)))
+        const round = await db.selectFrom('round')
+            .select(['puzzle', 'format'])
+            .where('meetup_id', '=', id)
+            .where('id', '=', eventId)
+            .executeTakeFirst()
+
+        if (!round) {
+            throw error(404, 'not found')
+        }
+
+        const solves = Array.from(Array(formats[round.format].count).keys()).map((x) => Number(data.get(`solve-${x}`)))
 
         if (isNaN(competitorId) || solves.includes(NaN)) {
             throw error(400, { event: eventId, competitor: competitorId })
         }
-
-        console.log(roundFormat);
-        console.log(calculateAverage(data.get("roundFormat") as Format, solves));
 
         // TODO: make this compound ID later on
         const idToUpsert = (await prisma.result.findFirst({
@@ -143,8 +153,7 @@ export const actions = {
             })
         }
 
-        const saveData = {
-            value: calculateAverage(data.get("roundFormat") as Format, solves),
+        const saveData: Prisma.XOR<Prisma.resultCreateInput, Prisma.resultUncheckedCreateInput> = {
             solves: {
                 createMany: {
                     data: solves.map((time, idx) => ({ index: idx, time: time }))
@@ -155,6 +164,29 @@ export const actions = {
                     id: competitorId
                 }
             },
+        }
+
+        if (round.puzzle == "MULTIBLD") {
+            let mbld_data = [...Array(formats[round.format].count)].map((_, i) => {
+                const successes = Number(data.get(`successes-${i}`) ?? undefined)
+                const attempts = Number(data.get(`attempts-${i}`) ?? undefined)
+                if (isNaN(successes) || isNaN(attempts)) {
+                    throw error(400)
+                }
+                const failures = attempts - successes
+                const score = successes - failures
+                return {
+                    time: solves[i],
+                    score: score,
+                    total_attempts: attempts
+                }
+            })
+            const res = calulateMbldAverage(round.format, mbld_data)
+            saveData.value = res!.time
+            saveData.mbld_score = res!.score
+            saveData.mbld_total = res!.total_attempts
+        } else {
+            saveData.value = calculateAverage(round.format, solves)
         }
 
         await prisma.round.update({
