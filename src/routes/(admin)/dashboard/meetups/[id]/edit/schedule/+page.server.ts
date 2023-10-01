@@ -4,6 +4,8 @@ import type { PageServerLoad } from './$types';
 import puzzles from '$lib/data/puzzles';
 import { populateRounds } from '$lib/utilsServer';
 import { getRoundName } from "$lib/utils";
+import { db } from '$lib/db';
+import { jsonArrayFrom } from 'kysely/helpers/postgres';
 
 export const load = (async ({ params }) => {
     const id = Number(params.id)
@@ -12,31 +14,34 @@ export const load = (async ({ params }) => {
         throw error(404, 'not found');
     }
 
-    const meetup = await prisma.meetup.findUnique({
-        where: { id: Number(params.id) },
-        select: {
-            date: true,
-            name: true,
-            id: true,
-            rounds: {
-                select: {
-                    id: true,
-                    end_date: true,
-                    start_date: true,
-                    puzzle: true,
-                    format: true,
-                    proceed_number: true,
-                    _count: true
-                },
-                orderBy: {
-                    // TODO: check consistency.
-                    // Just dont have overlapping rounds please.
-                    start_date: "asc"
-                }
-            }
-        ,
-        }
-    })
+    const meetup = await db.selectFrom('meetup')
+        .where('meetup.id', '=', id)
+        .select((eb) => [
+            'date',
+            'name',
+            'meetup.id',
+            jsonArrayFrom(
+                eb.selectFrom('round')
+                    .leftJoin('result', 'round.id', 'result.round_id')
+                    .select((eb) => [
+                            'round.id',
+                            'end_date',
+                            'start_date',
+                            'puzzle',
+                            'format',
+                            'proceed_number',
+                            eb.fn.count('result.id').as('result_count')
+                        ]
+                    )
+                    .orderBy('round.start_date asc')
+                    .where('round.meetup_id', '=', id)
+                    .groupBy(['round.id'])
+            )
+            .as('rounds')
+        ])
+        .groupBy(['meetup.date', 'meetup.name', 'meetup.id'])
+        .executeTakeFirst()
+
 
     if (!meetup)
         throw error(404, 'not found')
@@ -48,7 +53,7 @@ export const load = (async ({ params }) => {
         start: round.start_date,
         end: round.end_date,
         title: getRoundName(puzzles[round.puzzle].name, round.number, maxRounds[round.puzzle]),
-        editable: round._count.results == 0, // Only editable if no results
+        editable: round.result_count == 0, // Only editable if no results
         extendedProps: {
             puzzleType: round.puzzle,
             formatType: round.format,

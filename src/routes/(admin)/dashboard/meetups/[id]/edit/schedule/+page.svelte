@@ -45,6 +45,7 @@
 
     let hasUnsavedChanges = false
     let saveFetch: Promise<Response> | null = null
+    let deletedIds: string[] = []
 
     let unselectCancel = true
 
@@ -57,13 +58,16 @@
         // TODO cancel promise and stuff
         saveFetch = fetch("./schedule/save", {
             method: "POST",
-            body: JSON.stringify(eventCalendar.getEvents()),
+            body: JSON.stringify({update: eventCalendar.getEvents(), delete: deletedIds}),
             headers: {
                 "Content-Type": "application/json"
             }
         }) 
         saveFetch.then((res) => {
-            if (res.ok) { hasUnsavedChanges = false }
+            if (res.ok) {
+                hasUnsavedChanges = false
+                deletedIds = []
+            }
             saveFetch = null
         })
     }
@@ -87,8 +91,23 @@
                 center: "",
                 end: ""
             },
+            eventClick: function(info) {
+                if (info.event.display === 'auto') {
+                    let btn = info.el.querySelector('button');
+                    if (info.jsEvent.target === btn) {
+                        eventCalendar.removeEventById(info.event.id);
+                        deletedIds.push(info.event.id)
+                        hasUnsavedChanges = true
+                    }
+                }
+            },
             titleFormat: {day: 'numeric', month: 'short'},
             eventClassNames: "testclass",
+            eventContent: (info) => info.event.display === 'auto'
+            ? {html: '<div class="ec-event-time">' + info.timeText + '</div>' +
+            (info.event.editable ? '<button>Delete</button>' : '') +
+              '<div class="ec-event-title">' + info.event.title + '</div>'}
+            : '',
             select: (info) => {
                 displayingUUID = crypto.randomUUID()
                 eventCalendar.addEvent({
@@ -114,6 +133,7 @@
                     const event = eventCalendar.getEventById(displayingUUID)
                     eventCalendar.updateEvent({
                         ...event,
+                        editable: true,
                         extendedProps: {
                             puzzleType: selectedPuzzle,
                             formatType: selectedFormat,
@@ -142,32 +162,46 @@
     }
 </script>
 
-<svelte:window 
+<svelte:window
     on:beforeunload={(e) => {
         if (hasUnsavedChanges) {
-            e.preventDefault()
+            e.preventDefault();
         }
     }}
-></svelte:window>
+/>
 
-<Breadcrumb paths={[
-    {name: "Meetups", href: "/dashboard/meetups"},
-    {name: data.meetup.name, href: `/dashboard/meetups/${data.meetup.id}/`},
-    {name: "Edit Schedule", href: `/dashboard/meetups/${data.meetup.id}/edit/schedule`}
-]} />
+<Breadcrumb
+    paths={[
+        { name: "Meetups", href: "/dashboard/meetups" },
+        {
+            name: data.meetup.name,
+            href: `/dashboard/meetups/${data.meetup.id}/`,
+        },
+        {
+            name: "Edit Schedule",
+            href: `/dashboard/meetups/${data.meetup.id}/edit/schedule`,
+        },
+    ]}
+/>
 
 <Calendar bind:this={eventCalendar} {plugins} {options} />
 
 <div bind:this={addEventCard} class="add-event-card">
-    <Card width={300} clickable={false}> 
-        <div style:padding=12px>
-            <p class="fsize-title2" style:font-weight=500 style:margin-bottom=32px> Add Event </p>
+    <Card width={300} clickable={false}>
+        <div style:padding="12px">
+            <p
+                class="fsize-title2"
+                style:font-weight="500"
+                style:margin-bottom="32px"
+            >
+                Add Event
+            </p>
 
             <div class="label-group">
                 <p class="label">Event</p>
 
                 <Select name="event" bind:value={selectedPuzzle}>
-                    <option disabled selected value>Select an event</option>
+                    <option disabled selected value={undefined}>Select an event</option>
 
                     {#each Object.entries(puzzles) as [type, { name }]}
                         <option value={type}>{name}</option>
@@ -175,13 +209,13 @@
                 </Select>
             </div>
 
-
-
-            <div class="label-group" style:padding-top=16px>
+            <div class="label-group" style:padding-top="16px">
                 <p class="label">Format</p>
 
                 <Select name="format" bind:value={selectedFormat}>
-                    <option disabled selected value>Select a round format</option>
+                    <option disabled selected value={undefined}
+                        >Select a round format</option
+                    >
 
                     {#each allowedFormats as format}
                         <option value={format}>{formats[format].name}</option>
@@ -189,38 +223,70 @@
                 </Select>
             </div>
 
-            <div class="label-group" style:padding-top=16px style:padding-bottom=32px>
-                <p class="label"> Number to Proceed </p>
+            <div
+                class="label-group"
+                style:padding-top="16px"
+                style:padding-bottom="32px"
+            >
+                <p class="label">Number to Proceed</p>
 
-                <input required name="numberProceed" bind:value={proceed_number} />
+                <input
+                    required
+                    name="numberProceed"
+                    bind:value={proceed_number}
+                />
             </div>
 
-            <div style:display=flex style:gap=8px style:justify-content=flex-end>
-                <button on:click={() => {
-                        unselectCancel = true
-                        eventCalendar.unselect()
-                    }}>
+            <div
+                style:display="flex"
+                style:gap="8px"
+                style:justify-content="flex-end"
+            >
+                <button
+                    on:click={() => {
+                        unselectCancel = true;
+                        eventCalendar.unselect();
+                    }}
+                >
                     <Button>
-                        <div style:display=flex style:align-items=center style:gap=4px>
-                            <span class="material-symbols-outlined" style:margin-left=-4px style:font-size=24px>cancel</span>
+                        <div
+                            style:display="flex"
+                            style:align-items="center"
+                            style:gap="4px"
+                        >
+                            <span
+                                class="material-symbols-outlined"
+                                style:margin-left="-4px"
+                                style:font-size="24px">cancel</span
+                            >
 
                             <p>Cancel</p>
                         </div>
                     </Button>
                 </button>
 
-                <button  on:click={() => {
-                        unselectCancel = false
-                        eventCalendar.unselect()
-                        }}
-                        disabled={!selectedPuzzle || !selectedFormat}
+                {@debug selectedPuzzle, selectedFormat}
 
-                        >
+                <button
+                    on:click={() => {
+                        unselectCancel = false;
+                        eventCalendar.unselect();
+                    }}
+                    disabled={!selectedPuzzle || !selectedFormat}
+                >
                     <Button>
-                        <div style:display=flex style:align-items=center style:gap=4px>
-                            <span class="material-symbols-outlined" style:margin-left=-4px style:font-size=24px>done</span>
+                        <div
+                            style:display="flex"
+                            style:align-items="center"
+                            style:gap="4px"
+                        >
+                            <span
+                                class="material-symbols-outlined"
+                                style:margin-left="-4px"
+                                style:font-size="24px">done</span
+                            >
 
-                            <p> Add Event </p>
+                            <p>Add Event</p>
                         </div>
                     </Button>
                 </button>
@@ -230,14 +296,14 @@
 </div>
 
 {#if hasUnsavedChanges || saveFetch}
-    <Toast> 
+    <Toast>
         {#if hasUnsavedChanges}
-        <p>Unsaved Changes!</p>
-        <button on:click={saveChanges}>
-            <Button type={ButtonType.TextOnly} size={ButtonSize.Regular}>
-                Save
-            </Button>
-        </button>
+            <p>Unsaved Changes!</p>
+            <button on:click={saveChanges}>
+                <Button type={ButtonType.TextOnly} size={ButtonSize.Regular}>
+                    Save
+                </Button>
+            </button>
         {/if}
         {#await saveFetch}
             Saving your changes...
@@ -251,8 +317,6 @@
     </Toast>
 {/if}
 
-
-
 <style>
     .add-event-card {
         position: absolute;
@@ -260,8 +324,8 @@
         z-index: 2000;
     }
 
-
-    :global(.ec-time), :global(.ec-line) {
-        height: 48px;  /* override this value */
+    :global(.ec-time),
+    :global(.ec-line) {
+        height: 48px; /* override this value */
     }
 </style>
