@@ -10,7 +10,8 @@
         Bordered="bordered",
         Simple="simple",
         Coloured="coloured",
-        TextOnly="textonly"
+        TextOnly="textonly",
+        Disabled="disabled"
     }
 
     export enum ButtonSize {
@@ -69,6 +70,11 @@
         color: var(--c-a);
         background: none;
         box-shadow: none;
+    }
+
+    .button-disabled {
+        border: var(--c-lg1) 1px solid;
+        color: var(--c-g);
     }
 
 

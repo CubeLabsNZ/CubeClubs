@@ -25,6 +25,8 @@
 
     let options, eventCalendar, addEventCard;
 
+    let deleteButton;
+        
     let displayingUUID: string | null = null
 
     // TODO: figureout figure out key in puzle
@@ -37,8 +39,9 @@
         for (const event of filteredEvents) {
             eventCalendar.updateEvent({
                 ...event,
-                title: getRoundName(puzzles[event.extendedProps.puzzleType].name, roundNum, filteredEvents.length),
+                title: getRoundName(puzzles[event.extendedProps.puzzleType].name, roundNum, filteredEvents.length) + (roundNum == filteredEvents.length ? "" : ` [Proceed: ${event.extendedProps.proceed_number ?? 0}]`)
             })
+
             roundNum++;
         }
     }
@@ -103,11 +106,22 @@
             },
             titleFormat: {day: 'numeric', month: 'short'},
             eventClassNames: "testclass",
-            eventContent: (info) => info.event.display === 'auto'
-            ? {html: '<div class="ec-event-time">' + info.timeText + '</div>' +
-            (info.event.editable ? '<button>Delete</button>' : '') +
-              '<div class="ec-event-title">' + info.event.title + '</div>'}
-            : '',
+            eventBackgroundColor: "var(--c-la2)",
+            eventTextColor: "var(--c-a)",
+            eventMouseEnter: (info) => {
+                let elRect = info.el.getBoundingClientRect();
+                deleteButton.style.top = `${elRect.y + elRect.height + info.el.scrollTop}px`;
+                deleteButton.style.right = "0px";
+                deleteButton.style.display = "block";
+            },
+            eventMouseLeave: (info) => {
+                deleteButton.style.display = "none";
+            },
+            // eventContent: (info) => info.event.display === 'auto'
+            // ? {html: '<div class="ec-event-time">' + info.timeText + '</div>' +
+            // (info.event.editable ? '<button>Delete</button>' : '') +
+            //   '<div class="ec-event-title">' + info.event.title + '</div>'}
+            // : '',
             select: (info) => {
                 displayingUUID = crypto.randomUUID()
                 eventCalendar.addEvent({
@@ -257,7 +271,7 @@
                             <span
                                 class="material-symbols-outlined"
                                 style:margin-left="-4px"
-                                style:font-size="24px">cancel</span
+                                style:font-size="20px">cancel</span
                             >
 
                             <p>Cancel</p>
@@ -274,7 +288,7 @@
                     }}
                     disabled={!selectedPuzzle || !selectedFormat}
                 >
-                    <Button>
+                    <Button type={!selectedPuzzle || !selectedFormat ? ButtonType.Disabled : ButtonType.Bordered}>
                         <div
                             style:display="flex"
                             style:align-items="center"
@@ -317,15 +331,28 @@
     </Toast>
 {/if}
 
+<div bind:this={deleteButton} class="delete-button">delete</div>
+
 <style>
     .add-event-card {
         position: absolute;
         display: none;
+        z-index: 2000;
+        box-shadow: 0px 1px 6px 0px #10151B29; /* cdg3, 16% */
+    }
+
+    .delete-button {
+        position: absolute;
         z-index: 2000;
     }
 
     :global(.ec-time),
     :global(.ec-line) {
         height: 48px; /* override this value */
+    }
+
+    :global(.ec-event-title) {
+        font-size: 14px;
+        font-weight: 500
     }
 </style>

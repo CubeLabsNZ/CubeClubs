@@ -22,7 +22,7 @@
 <style>
     .container {
         border-bottom: 1px solid var(--c-lg1);
-        height: 34px;
+        height: 28px;
 
         display: flex;
         flex-direction: row;
@@ -42,7 +42,7 @@
     }
 
     button {
-        height: 34px;
+        height: 28px;
 
         display: grid;
         align-items: grid-end;

@@ -38,7 +38,7 @@
 
 <div class="content">
     <Breadcrumb paths={[
-        {name: "Back to Schedule", href: `/meetups/${data.meetupId}/schedule`}
+        {name: "Schedule", href: `/meetups/${data.meetupId}/schedule`}
     ]} />
 
     <h3 class="fsize-title2" style:font-weight=500 style:margin-top=8px style:margin-bottom=8px>{getRoundName(puzzles[currentRound.puzzle].name, currentRound.number, data.maxRounds[currentRound.puzzle])} Results</h3>

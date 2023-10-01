@@ -1,5 +1,4 @@
 <script lang="ts">
-    import PageContent from "$lib/components/global/PageContent.svelte";
     import MeetupBar from "$lib/components/global/card/MeetupBar.svelte";
     import Button from "$lib/components/global/Button.svelte";
 

@@ -9,6 +9,10 @@
     export let form: ActionData;
 </script>
 
+<svelte:head>
+    <title>Sign up to CubeClubs NZ</title>
+</svelte:head>
+
 <AuthCard title="Sign up to CubeClubs NZ" subtitle="Create your CubeClubs account to register for meetups and be notified of upcoming events."> 
     <Form name="Sign up">
         <div>

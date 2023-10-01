@@ -55,6 +55,7 @@
         display: grid;
         align-items: center;
         justify-items: center;
+        position: relative;
     }
 
     .medal-container * {
