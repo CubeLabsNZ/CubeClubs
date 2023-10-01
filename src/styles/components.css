@@ -109,10 +109,6 @@ table * {
     }
 }
 
-tr:nth-child(even) td {
-    background-color: var(--c-lgh);
-}
-
 th {
     color: var(--c-dg1);
     font-weight: 500;
@@ -129,14 +125,7 @@ td {
     min-width: max-content;
 }
 
-/* INFO: add border radius to the inner table */ 
-tr th:first-child { border-top-left-radius: 8px; }
-tr th:last-child { border-top-right-radius: 8px; }
-table tr:last-child td:first-child { border-bottom-left-radius: 8px; }
-table tr:last-child td:last-child { border-bottom-right-radius: 8px; }
-
-
-td:not(:first-child):not(:last-child), th:not(:first-child):not(:last-child) {
+td, th {
     /* = 24px gap total between columns */
     padding-left: 6px;
     padding-right: 6px;
@@ -146,18 +135,6 @@ td:not(:first-child):not(:last-child), th:not(:first-child):not(:last-child) {
     min-width: 0px;
     padding: 0 !important;
 }
-
-td:nth-last-child(2) {
-    border-top-right-radius: var(--v-border-radius-small);
-    border-bottom-right-radius: var(--v-border-radius-small);
-}
-
-td:nth-child(2) {
-    border-top-left-radius: var(--v-border-radius-small);
-    border-bottom-left-radius: var(--v-border-radius-small);
-}
-
-
 
 .td-dummy {
     height: 8px;
