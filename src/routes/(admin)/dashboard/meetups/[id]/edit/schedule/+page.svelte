@@ -37,8 +37,9 @@
         for (const event of filteredEvents) {
             eventCalendar.updateEvent({
                 ...event,
-                title: getRoundName(puzzles[event.extendedProps.puzzleType].name, roundNum, filteredEvents.length),
+                title: getRoundName(puzzles[event.extendedProps.puzzleType].name, roundNum, filteredEvents.length) + (roundNum == filteredEvents.length ? "" : ` [Proceed: ${event.extendedProps.proceed_number ?? 0}]`)
             })
+
             roundNum++;
         }
     }
@@ -103,11 +104,13 @@
             },
             titleFormat: {day: 'numeric', month: 'short'},
             eventClassNames: "testclass",
-            eventContent: (info) => info.event.display === 'auto'
-            ? {html: '<div class="ec-event-time">' + info.timeText + '</div>' +
-            (info.event.editable ? '<button>Delete</button>' : '') +
-              '<div class="ec-event-title">' + info.event.title + '</div>'}
-            : '',
+            eventBackgroundColor: "var(--c-la2)",
+            eventTextColor: "var(--c-a)",
+            // eventContent: (info) => info.event.display === 'auto'
+            // ? {html: '<div class="ec-event-time">' + info.timeText + '</div>' +
+            // (info.event.editable ? '<button>Delete</button>' : '') +
+            //   '<div class="ec-event-title">' + info.event.title + '</div>'}
+            // : '',
             select: (info) => {
                 displayingUUID = crypto.randomUUID()
                 eventCalendar.addEvent({
@@ -328,5 +331,10 @@
     :global(.ec-time),
     :global(.ec-line) {
         height: 48px; /* override this value */
+    }
+
+    :global(.ec-event-title) {
+        font-size: 14px;
+        font-weight: 500
     }
 </style>
