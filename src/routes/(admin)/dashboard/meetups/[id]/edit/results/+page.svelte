@@ -18,18 +18,18 @@
     export let data: PageData
     export let form: ActionData
 
-    // BUG: NOTHING FUCKING WORKS
-    // TODO: set the fucking event select to what it was previously
-    let roundId: number | undefined = form?.event ?? $page.url.searchParams.get("roundId") ?? data.meetup.rounds[0].id;
+    let roundId: number | undefined = form?.event ?? $page.url.searchParams.get("roundId") ?? data.meetup.rounds[0]?.id;
 
     let selectedRound;
     let selectedRoundPuzzleFormatCount;
 
     $: {
-        updateQuery(roundId);
+        if (roundId) {
+            updateQuery(roundId);
 
-        selectedRound = data.meetup.rounds.find(r => r.id === roundId);
-        selectedRoundPuzzleFormatCount = formats[selectedRound.format].count;
+            selectedRound = data.meetup.rounds.find(r => r.id === roundId);
+            selectedRoundPuzzleFormatCount = formats[selectedRound.format].count;
+        }
     }
 
     async function updateQuery(roundId: number) {
@@ -51,6 +51,7 @@
     {name: "Data Entry", href: `/dashboard/meetups/${data.meetup.id}/edit/results`}
 ]} />
 
+{#if roundId}
 <div class="parent-container">
     <div class="entry-container">
         <!-- TODO: fix the form button  -->
@@ -222,6 +223,9 @@
         {/if}
     </div>
 </div>
+{:else}
+    <p>No rounds! Add rounds in <a href="./schedule">the schedule</a> first.</p>
+{/if}
 
 
 <style>
