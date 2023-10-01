@@ -7,8 +7,11 @@
     export let form: ActionData;
 </script>
 
+<svelte:head>
+    <title>Login to CubeClubs NZ</title>
+</svelte:head>
 
-<AuthCard title="Login to CubeClubsNZ" subtitle="Login to your CubeClubs account to register for meetups."> 
+<AuthCard title="Login to CubeClubs NZ" subtitle="Login to your CubeClubs account to register for meetups."> 
     <Form name="Log in">
         <div>
             <label class="form-label"> 

@@ -124,7 +124,7 @@
 
     <div class="content">
         <div class="pr-section">
-            <h3 class="fsize-body" style:font-weight=500>Personal Records</h3>
+            <h3 class="fsize-body" style:font-weight=500 style:padding-bottom=4px>Personal Records</h3>
 
             <table style:width=100%>
                 <colgroup>

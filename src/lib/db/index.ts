@@ -5,9 +5,9 @@ import { Kysely, PostgresDialect } from 'kysely'
 // postgresql://root:foo@localhost:5432/db
 const dialect = new PostgresDialect({
   pool: new Pool({
-    database: 'db',
+    database: 'mydb',
     host: 'localhost',
-    user: 'root',
+    user: 'cubeclubs',
     port: 5432,
     max: 10,
   })
