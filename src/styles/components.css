@@ -109,11 +109,7 @@ table * {
     }
 }
 
-tr {
-    height: 30px;
-}
-
-tr:nth-child(odd):not(:first-child):not(:last-child) td:not(:first-child):not(:last-child) {
+tr:nth-child(even) td {
     background-color: var(--c-lgh);
 }
 

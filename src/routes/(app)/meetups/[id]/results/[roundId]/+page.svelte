@@ -47,7 +47,6 @@
         {@debug firstres}
         <table>
             <tr>
-                <th class="tc-dummy"></th>
 
                 <th class="tc-ranking"></th>
                 <th class="tc-name">Name</th>
@@ -59,28 +58,11 @@
                     <th class="tc-solves">{i + 1}</th>
                 {/each}
 
-                <th class="tc-dummy"></th>
-            </tr>
-
-            <tr class="td-dummy">
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-
-                {#each Array(formats[currentRound.format].count) as _}
-                    <td></td>
-                {/each}
-
-                <td></td>
             </tr>
 
 
             {#each currentRound.results as { value, solves, user_id, user_name, user_region }, rank}
                 <tr>
-                    <td class="tc-dummy"></td>
 
                     <!-- if final round -->
                     {#if currentRound.number === data.maxRounds[currentRound.puzzle]}
@@ -110,24 +92,8 @@
                         <td class="tc-solves">{formatTime(time)}</td>
                     {/each}
 
-                    <td class="tc-dummy"></td>
                 </tr>
             {/each}
-
-            <tr class="td-dummy">
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-
-                {#each Array(formats[currentRound.format].count) as _, i}
-                    <td></td>
-                {/each}
-
-                <td></td>
-            </tr>
         </table>
     {:else}
         <p>No results yet - check back later!</p>
@@ -137,6 +103,28 @@
 <style>
     .content {
         margin-top: 16px;
+    }
+
+    /* Use border instead of padding: padding will use background color */
+    tr:nth-child(2) td {
+        border-top: solid 8px white;
+    }
+
+    tr:last-child td {
+        border-bottom: solid 8px white;
+    }
+
+    td:first-child, th:first-child {
+        border-left: solid 6px white;
+    }
+
+    td:last-child, th:last-child {
+        border-right: solid 6px white;
+    }
+
+    td, th {
+        padding-top: 5px;
+        padding-bottom: 4px;
     }
 
     .tc-name, .tc-region, .tc-solves {

@@ -6,7 +6,7 @@
         {#if typeof window !== "undefined" && window.history.length > 1}
             <button on:click={() => window.history.back()} class="material-symbols-outlined container2" style:margin-right=4px style:font-size=18px>arrow_left_alt</button>
         {:else}
-            <a href={paths.at(-2).href} class="material-symbols-outlined container2" style:margin-right=4px style:font-size=18px>arrow_left_alt</a>
+            <a href={paths.at(-2)?.href} class="material-symbols-outlined container2" style:margin-right=4px style:font-size=18px>arrow_left_alt</a>
         {/if}
     {#each paths as { name, href }, i}
             <a {href} class="container2">
