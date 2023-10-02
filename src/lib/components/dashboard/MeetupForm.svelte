@@ -18,7 +18,7 @@
     let meetup = data.meetup;
     export let addedOrganisers = meetup ? meetup.organisers : [];
 
-    let externalRegistration: boolean = meetup ? meetup.external_registration_link != null : false;
+    let externalRegistration: boolean = meetup ? meetup.external_registration_link != null : true;
 
     export let organisersError = false;
 </script>
@@ -123,8 +123,8 @@
             Registration Handling
 
             <Select name="usingExternalRegistration" bind:value={externalRegistration}>
-                <option selected value={false}>Internal Registration</option>
-                <option value={true}>External Registration</option>
+                <option disabled value={false}>Internal Registration</option>
+                <option selected value={true}>External Registration</option>
             </Select>
         </label>
 
