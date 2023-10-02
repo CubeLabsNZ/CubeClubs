@@ -18,6 +18,7 @@
     import type { PageData } from "./$types"
     import puzzles from "$lib/data/puzzles";
     import formats from "$lib/data/formats";
+    import Table, { DisplayType } from "$lib/components/global/Table.svelte";
 
     export let data: PageData
 
@@ -100,123 +101,20 @@
         </div>
     </div>
 
-
-    <table style:margin-top=16px>
-        <colgroup>
-            <col span=1 style:width=8px>
-
-            <col span=1 style:width=50px>
-            <col span=1 style:width=160px>
-            <col span=1 style:width=80px>
-            <col span=1 style:width=80px>
-            <col span=1 style:width=auto>
-
-            {#if formatIndex}
-                <col span=1 style:width=auto>
-            {/if}
-
-            <col span=1 style:width=8px>
-        </colgroup>
-
-        <tbody>
-            <tr>
-                <th class="tc-dummy"></th>
-
-                <th class="tc-ranking"></th>
-                <th class="tc-name">Name</th>
-                <th class="tc-result">Average</th>
-                <th class="tc-region">Region</th>
-                <th class="tc-meetup">Meetup</th>
-
-                {#if formatIndex}
-                    <th class="tc-solves">Solves</th>
-                {/if}
-
-                <th class="tc-dummy"></th>
-            </tr>
-
-            <tr class="td-dummy">
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-
-                {#if formatIndex}
-                    <td></td>
-                {/if}
-
-                <td></td>
-            </tr>
-
-
-            {#if data.results}
-                {#each data.results as result, i}
-                    {@const time = data.isSingle ? result.time : result.value}
-                    {@const isTie = data.results[i-1]?.time == time}
-                    <tr>
-                        <td class="tc-dummy"></td>
-
-                        <td class="tc-ranking">{isTie ? "-" : i + 1}</td>
-                        <td class="tc-name"><a class="regular-link" href={`/user/${result.user_id}`}>{result.user_name}</a></td>
-                        <td class="tc-result">{formatTime(time)}</td>
-                        <td class="tc-region">{regionToString(result.user_region)}</td>
-                        <td class="tc-meetup"><a class="regular-link" href={`/meetups/${result.meetup_id}`}>{result.meetup_name}</a></td>
-
-                        {#if !data.isSingle}
-                            <td class="tc-solves">{result.solves.map(s => formatTime(s)).join(", ")}</td>
-                        {/if}
-
-                        <td class="tc-dummy"></td>
-                    </tr>
-                    
-                {/each}
-            {/if}
-
-
-            <tr class="td-dummy">
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-
-                {#if formatIndex}
-                    <td></td>
-                {/if}
-
-                <td></td>
-            </tr>
-        </tbody>
-
-
-
-    </table>
-
+    <Table
+        list={data.results}
+            displayType={data.isSingle ? DisplayType.SINGLE : DisplayType.AVERAGE}
+            hasMeetup={true}
+            hasSolves={!data.isSingle}
+            displayRank={true}
+            widths={["50px", "160px", "80px", "80px", "auto"]}
+    />
 
 </PageContent>
 
 
 
 <style>
-    .tc-name, .tc-region, .tc-meetup, .tc-solves {
-        text-align: left;
-    }
-
-    .tc-result, .tc-name {
-        font-weight: 500;
-    }
-
-    .tc-result, .tc-ranking {
-        text-align: right;
-    }
-
-    .tc-ranking {
-        color: var(--c-dg1);
-    }
-
     .filter-bar {
         padding-bottom: 8px;
     }

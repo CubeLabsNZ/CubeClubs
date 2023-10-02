@@ -1,4 +1,5 @@
 <script lang="ts">
+
     import { browser } from "$app/environment";
     import { page } from "$app/stores";
     import { goto } from "$app/navigation";
@@ -8,7 +9,7 @@
     import regions, { regionToString } from "$lib/data/regions";
     import puzzles from "$lib/data/puzzles";
 
-    import type { Region } from "@prisma/client";
+    import type { region } from "@prisma/client";
 
     import Select from "$lib/components/global/Select.svelte";
     import PageContent from "$lib/components/global/PageContent.svelte";
@@ -17,6 +18,7 @@
 
 
     import type { PageData } from "./$types"
+    import Table, { DisplayType } from "$lib/components/global/Table.svelte";
 
 
     let regionSelected: string, displayType: number;
@@ -95,113 +97,12 @@
                 <h3 class="fsize-title2">{name}</h3>
             </div>
 
-            <!-- BUG: i hate tables, extends out of page... before being set to block display? -->
-            <table>
-                <colgroup>
-                    <col span=1 style:width=8px>
-
-                    <col span=1 style:width=50px>
-                    <col span=1 style:width=160px>
-                    <col span=1 style:width=80px>
-                    <col span=1 style:width=160px>
-                    <col span=1 style:width=270px>
-                    <col span=1 style:width=auto>
-
-                    <col span=1 style:width=8px>
-                </colgroup>
-
-                <tbody>
-                    <tr>
-                        <th class="tc-dummy"></th>
-
-                        <th class="tc-type">Format</th>
-                        <th class="tc-name">Name</th>
-                        <th class="tc-result">Result</th>
-                        <th class="tc-region">Region</th>
-                        <th class="tc-meetup">Meetup</th>
-                        <th class="tc-solves">Solves</th>
-
-                        <th class="tc-dummy"></th>
-                    </tr>
-
-
-                    <tr class="td-dummy">
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-
-                    <!-- INFO: single -->
-                {#if single}
-                    {@debug single}
-                    <tr>
-                        <td class="tc-dummy"></td>
-
-                        <td class="tc-type">Single</td>
-
-                        <td class="tc-name"><a class="regular-link" href={`/user/${single.user_id}`}>{single.user_name}</a></td>
-
-                        <td class="tc-result">{formatTime(single.time)}</td>
-                        <td class="tc-region">{regionToString(single.user_region)}</td>
-                        <td class="tc-meetup"><a class="regular-link" href={`/meetups/${single.meetup_id}`}>{single.meetup_name}</a></td>
-                        <td class="tc-solves"></td>
-
-                        <td class="tc-dummy"></td>
-                    </tr>
-                {:else}
-                    <tr>
-                        <td class="tc-dummy"></td>
-
-                    <td class="tc-placeholder" align=center colspan=6>no results yet</td>
-                    <td class="tc-dummy"></td>
-                    </tr>
-                {/if}
-
-
-                <!-- INFO: average-->
-                {#if average}
-                    {@debug average}
-                    <tr>
-                        <td class="tc-dummy"></td>
-
-                        <td class="tc-type">Average</td>
-
-                        <td class="tc-name"><a class="regular-link" href={`/user/${average.user_id}`}>{average.user_name}</a></td>
-
-                        <td class="tc-result">{formatTime(average.value)}</td>
-                        <td class="tc-region">{regionToString(average.user_region)}</td>
-                        <td class="tc-meetup"><a class="regular-link" href={`/meetups/${average.meetup_id}`}>{average.meetup_name}</a></td>
-                        <td class="tc-solves">{average.solves}</td>
-
-                        <td class="tc-dummy"></td>
-                    </tr>
-                {:else}
-                    <tr>
-                        <td class="tc-dummy"></td>
-                        <td class="tc-placeholder" align=center colspan=6>no results yet</td>
-                        <td class="tc-dummy"></td>
-                    </tr>
-                {/if}
-
-
-                <tr class="td-dummy">
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                </tr>
-                </tbody>
-
-            </table>
+            <Table
+            list={[single, average]}
+                    displayType={DisplayType.MIX}
+                    hasMeetup={true}
+                    widths={["50px", "160px", "80px", "160px", "270px", "auto"]}
+                />
         {/each}
     {:else}
         {#each Object.entries(puzzles) as [puzzle, { name, icon }], i}

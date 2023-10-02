@@ -11,7 +11,7 @@
     import TabBar from '$lib/components/global/TabBar.svelte';
     import Breadcrumb from '$lib/components/global/Breadcrumb.svelte';
     import Medal, { PodiumPlace } from '$lib/components/user/Medal.svelte';
-    import Table from '$lib/components/global/Table.svelte';
+    import Table, { DisplayType } from '$lib/components/global/Table.svelte';
     export let data;
 
     let locations = ["info", "competitors", "results"]
@@ -53,6 +53,8 @@
                 displayRank={true}
                 displayMedals={currentRound.number === data.maxRounds[currentRound.puzzle]}
                 proceedNum={currentRound.proceed_number}
+                showBest={true}
+                displayType={DisplayType.AVERAGE}
             />
     {:else}
         <p>No results yet - check back later!</p>

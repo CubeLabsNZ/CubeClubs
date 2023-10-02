@@ -19,6 +19,7 @@
 
     import puzzles from "$lib/data/puzzles"
     import { puzzle } from '$lib/db/enums';
+    import Table, { DisplayType } from '$lib/components/global/Table.svelte';
 
     let resultsEventIndex: number = 0;
     $: resultsEvent = Object.keys(puzzle)[resultsEventIndex]
@@ -254,6 +255,13 @@
                         <img src={puzzles[resultsEvent].icon} alt="" height=28/>
                         <p class="fsize-body">{puzzles[resultsEvent].name} Results (index = {resultsEventIndex})</p>
                     </div>
+
+                    <Table
+                        list={data.results[resultsEvent]}
+                        showUser={false}
+                        displayType={DisplayType.AVERAGE}
+                        showBest={true}
+                    />
 
                     <table style:width=100%>
                         <tr>
