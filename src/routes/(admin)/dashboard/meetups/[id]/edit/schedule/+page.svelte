@@ -83,7 +83,7 @@
             date: data.meetup.date,
             allDaySlot: false,
             slotMinTime: '08:00:00',
-            slotMaxTime: '18:00:00',
+            slotMaxTime: '19:00:00',
             slotHeight: 48,
             flexibleSlotTimeLimits: true,
             slotDuration: {
