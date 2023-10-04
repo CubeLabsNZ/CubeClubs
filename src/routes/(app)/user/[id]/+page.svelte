@@ -19,7 +19,7 @@
 
     import puzzles from "$lib/data/puzzles"
     import { puzzle } from '$lib/db/enums';
-    import Table, { DisplayType } from '$lib/components/global/Table.svelte';
+    import Table, { DisplayType, MixDisplayMethod } from '$lib/components/global/Table.svelte';
 
     let resultsEventIndex: number = 0;
     $: resultsEvent = Object.keys(puzzle)[resultsEventIndex]
@@ -257,71 +257,38 @@
                     </div>
 
                     <Table
-                        list={data.results[resultsEvent]}
+                        list={data.results[resultsEvent] ?? [undefined]}
                         showUser={false}
                         displayType={DisplayType.AVERAGE}
                         showBest={true}
+                        width="100%"
+                        meetupAndRoundLeft={true}
+                        showPlace={true}
                     />
 
-                    <table style:width=100%>
-                        <tr>
-                            <th class="tc-dummy"></th>
-
-                            <th class="tc-meetup">Meetup</th>
-                            <th class="tc-round">Round</th>
-                            <th class="tc-place">Place</th>
-                            <th class="tc-single">Single</th>
-                            <th class="tc-average">Average</th>
-                            <th class="tc-solves">Solves</th>
-
-
-                            <th class="tc-dummy"></th>
-                        </tr>
-
-                        <!-- NOTE: td-dummy is entirely invisible to provide padding to the top and bottom of the table -->
-                        <tr class="td-dummy">
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-
-
-                        {#each data.results[resultsEvent] as result, i}
-                            {@const showMeetup = result.meetup_name != data.results[resultsEvent][i-1]?.meetup_name}
-                            <tr>
-                                <td class="tc-dummy"></td>
-
-                                <td class="tc-meetup"><a class="regular-link" href={`/meetups/${result.meetup_id}/info`}>{ showMeetup ? result.meetup_name : "" }</a></td>
-                                <td class="tc-round"><a class="regular-link" href={`/meetups/${result.meetup_id}/results/${result.round_id}`}>{ getRoundName(puzzles[result.puzzle].name, result.round_number + 1, result.round_maximum) }</a></td>
-                                <td class="tc-place">{ result.rank + 1 }</td>
-                                <td class="tc-single">{ result.single }</td>
-                                <td class="tc-average">{ result.value }</td>
-                                <td class="tc-solves">{result.solves.join(', ')}</td>
-
-                                <td class="tc-dummy"></td>
-                            </tr>
-                        {/each}
-
-
-                        <tr class="td-dummy">
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                    </table>
                 </div>
             {:else}
                 <div class="records-history">
+                    {#each Object.entries(puzzles) as [puzzle, { name, icon }], i}
+                        {@const historicalPuzzleRankings = data.historicalRecords[puzzle]}
+                        {@debug historicalPuzzleRankings}
+                        <div class={"group-label group-label-" + i}>
+                            <img src={icon} alt="" />
+
+                            <h3 class="fsize-title2">{name} History</h3>
+                        </div>
+
+                        <Table
+                            list={historicalPuzzleRankings ?? [undefined]}
+                            displayType={DisplayType.MIX}
+                            hasMeetup={true}
+                            displayRank={false}
+                            showDate={true}
+                            mixDisplayMethod={MixDisplayMethod.SeparateAverageAndSingle}
+                            showUser={false}
+                            width="100%"
+                        />
+                    {/each}
                     <!-- INFO: for each event that HAS a record, either single or average -->
 
                     <table style:width=100%>
@@ -380,6 +347,23 @@
 
 
 <style>
+    .group-label {
+        height: 28px;
+        display: flex;
+        flex-direction: row;
+        column-gap: 8px;
+
+        margin-bottom: 4px;
+        margin-top: 48px;
+    }
+
+    .group-label-0 {
+        margin-top: 0;
+    }
+
+    .group-label h3 {
+        font-weight: 500;
+    }
     .section-column, .card-column, .data-row {
         display: flex;
     }

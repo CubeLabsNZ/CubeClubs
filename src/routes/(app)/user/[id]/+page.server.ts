@@ -43,10 +43,105 @@ export const load = (async ({ params }) => {
     if (!user) {
         throw error(404, 'not found');
     }
-    
+
+
+
+    // Don't even talk to me right now.
+    const getHistoricalRecords = async () => {
+        const recordsHistory = {}
+
+        const historicalAverages = await db.with('ungrouped', eb =>
+            eb.selectFrom('result')
+                .distinctOn('cum_min')
+                .innerJoin('round', 'round.id', 'result.round_id')
+                .innerJoin('meetup', 'meetup.id', 'round.meetup_id')
+                .innerJoin('user', 'user.id', 'result.user_id')
+                .leftJoin("solve", 'result.id', 'solve.result_id')
+                .where('user.id', '=', user.id)
+                .select(({ fn, selectFrom }) => [
+                    fn.min('result.value').over(ob => ob.orderBy('round.end_date', 'asc').partitionBy(['round.puzzle'])).as('cum_min'),
+                    'meetup.id as meetup_id',
+                    'meetup.name as meetup_name',
+                    'round.end_date as date',
+                    selectFrom('round as round_inner')
+                        .whereRef('round_inner.puzzle', '=', 'round.puzzle')
+                        .whereRef('round_inner.meetup_id', '=', 'meetup.id')
+                        .whereRef('round_inner.start_date', '<', 'round.start_date')
+                        .select((eb) => [eb.fn.coalesce(eb.fn.count('id'), eb.lit(0)).as('round_number')])
+                        .limit(1).as('round_number'),
+                    // TODO: merge with above select and do FILTER WHERE or OVER WHERE
+                    selectFrom('round as round_inner')
+                        .whereRef('round_inner.puzzle', '=', 'round.puzzle')
+                        .whereRef('round_inner.meetup_id', '=', 'meetup.id')
+                        .select((eb) => [eb.fn.coalesce(eb.fn.count('id'), eb.lit(0)).as('round_maximum')])
+                        .limit(1).as('round_maximum'),
+                    // TODO: check order
+                    fn.agg<string[]>('array_agg', ['solve.time']).as('solves'),
+
+                    'round.puzzle',
+                ])
+                .groupBy(['result.value', 'user.name', 'user.id', 'round.puzzle', 'round.end_date', 'meetup.id', 'round.start_date'])
+                // Must order by time so distinct on picks correct value
+                .orderBy(['cum_min asc', 'value asc'])
+        )
+            .selectFrom('ungrouped')
+            .select((eb) => [
+                eb.fn('json_build_object', ['puzzle', eb.fn('json_agg', 'ungrouped')]).as('obj')
+            ])
+            .groupBy('ungrouped.puzzle')
+            .execute()
+
+        const historicalSingles = await db.with('ungrouped', eb =>
+            eb.selectFrom('solve')
+                .distinctOn('cum_min')
+                .innerJoin('result', 'result.id', 'solve.result_id')
+                .innerJoin('round', 'round.id', 'result.round_id')
+                .innerJoin('user', 'user.id', 'result.user_id')
+                .innerJoin('meetup', 'meetup.id', 'round.meetup_id')
+                .where('user.id', '=', user.id)
+                .select(({ fn }) => [
+                    fn.min('solve.time').over(ob => ob.orderBy('round.end_date', 'asc').partitionBy(['round.puzzle'])).as('cum_min'),
+                    'meetup.id as meetup_id',
+                    'meetup.name as meetup_name',
+                    'round.end_date as date',
+                    // TODO: check order
+
+                    'round.puzzle',
+                    'solve.time'
+
+                ])
+                .groupBy(['solve.time', 'user.name', 'user.id', 'round.puzzle', 'round.end_date', 'meetup.id'])
+                .orderBy(['cum_min asc', 'time asc'])
+        )
+            .selectFrom('ungrouped')
+            .select((eb) => [
+                eb.fn('json_build_object', ['puzzle', eb.fn('json_agg', 'ungrouped')]).as('obj')
+            ])
+            .groupBy('ungrouped.puzzle')
+            .execute()
+
+
+        const toEntries = (x) => {
+            const puzzle = Object.keys(x.obj)[0]
+            return [puzzle, x.obj[puzzle]]
+        }
+
+        const historicalRecords = Object.fromEntries(historicalSingles.map(toEntries))
+
+        for (const x of historicalAverages) {
+            const puzzle = Object.keys(x.obj)[0]
+            historicalRecords[puzzle] = (historicalRecords[puzzle] ?? []).concat(x.obj[puzzle])
+        }
+
+        return historicalRecords
+    }
+
+    const historicalRecords = getHistoricalRecords()
+
+
     //const completedSolves = user.results.reduce((x, y) => x + y.solves.length, 0)
     const solvesQuery = db.selectFrom('solve')
-        .select(({fn}) => [fn.countAll().as('completedSolves')])
+        .select(({ fn }) => [fn.countAll().as('completedSolves')])
         .innerJoin('result', 'result.id', 'solve.result_id')
         .where('result.user_id', '=', user.id)
         .where('solve.time', '!=', Infinity)
@@ -118,6 +213,7 @@ export const load = (async ({ params }) => {
             .innerJoin('round', 'result.round_id', 'round.id')
             .where('result.user_id', '=', user.id)
             .where('round.puzzle', '=', key)
+            .orderBy('time asc')
             .executeTakeFirst()
 
         if (!single) continue;
@@ -127,6 +223,7 @@ export const load = (async ({ params }) => {
             .innerJoin('round', 'result.round_id', 'round.id')
             .where('result.user_id', '=', user.id)
             .where('round.puzzle', '=', key)
+            .orderBy('value asc')
             .executeTakeFirst()
 
         if (!average) continue; // Should never happen
@@ -219,49 +316,124 @@ export const load = (async ({ params }) => {
 
     }
 
-    let results = await db.with('temp', (eb) => eb.selectFrom('result')
-        .innerJoin('round', 'round.id', 'result.round_id')
-        .innerJoin('meetup', 'meetup.id', 'round.meetup_id')
-        .leftJoin("solve", 'result.id', 'solve.result_id')
-        .select(({ fn, selectFrom }) => [
-            'meetup.name as meetup_name',
-            'meetup.id as meetup_id',
-            'round.puzzle as puzzle',
-            'round.id as round_id',
-            'result.value as value',
-            'round.end_date as round_end',
-            selectFrom('round as round_inner')
-                .whereRef('round_inner.puzzle', '=', 'round.puzzle')
-                .whereRef('round_inner.meetup_id', '=', 'round.meetup_id')
-                .whereRef('round_inner.start_date', '<', 'round.start_date')
-                // Cant figure out coalesce, it makes things :(
-                .select([sql`COALESCE(COUNT(*),0) AS round_number`])
-                .limit(1),
-            // TODO: merge with above select and do FILTER WHERE
-            selectFrom('round as round_inner')
-                .whereRef('round_inner.puzzle', '=', 'round.puzzle')
-                .whereRef('round_inner.meetup_id', '=', 'round.meetup_id')
-                // Cant figure out coalesce, it makes things :(
-                .select([sql`COALESCE(COUNT(*),0) AS round_maximum`])
-                .limit(1),
-            selectFrom('round as round_inner')
-                .innerJoin('result as result_inner', 'result_inner.round_id', 'round_inner.id')
-                .whereRef('round_inner.id', '=', 'round.id')
-                .whereRef('result_inner.value', '<', 'result.value')
-                .select((eb2) => [eb2.fn.countAll().as('better_result_cnt')])
-                .limit(1)
-                .as('rank'),
-            fn.min('solve.time').as('single'),
-            fn.agg<string[]>('array_agg', ['solve.time']).as('solves'),
-        ])
-        .groupBy(['round.puzzle', 'result.value', 'meetup_name', 'meetup.id', 'round.id'])
-        .where('result.user_id', '=', user.id)
+    // WITh allresults select value, region
+    let results = await db.with(
+        'temp',
+        (eb) => eb.selectFrom('result')
+            .innerJoin('round', 'round.id', 'result.round_id')
+            .innerJoin('meetup', 'meetup.id', 'round.meetup_id')
+            .leftJoin("solve", 'result.id', 'solve.result_id')
+            /*
+            .leftJoinLateral(
+                (eb) => eb.selectFrom('result as prev_results')
+                    .innerJoin('user as user_inner', 'user_inner.id', 'result.user_id')
+                    .innerJoin('round as round_inner', 'round_inner.id', 'result.round_id')
+                    .select(['prev_results.id', 'value', 'user_inner.region', 'round_inner.puzzle', 'round_inner.end_date as date'])
+                    .whereRef('round_inner.end_date', '<=', 'round.end_date')
+                    .whereRef('round_inner.puzzle', '=', 'round.puzzle')
+                    .whereRef('prev_results.value', '<', 'result.value')
+                    .as('prev_results')
+                    ,
+                join => (join.onTrue())
+            )
+            */
+            .select((eb) => {
+                const subq_avg = eb.selectFrom('result as result_inner')
+                    .innerJoin('user as user_inner', 'user_inner.id', 'result_inner.user_id')
+                    .innerJoin('round as round_inner', 'round_inner.id', 'result_inner.round_id')
+                    .whereRef('round_inner.puzzle', '=', 'round.puzzle')
+                    .whereRef('round_inner.end_date', '<=', 'round.end_date')
+                    .whereRef('result_inner.value', '<', 'result.value')
+                    .select((eb) => [eb.fn.countAll()])
+
+                const subq_single = eb.selectFrom('solve as solve_inner')
+                    .innerJoin('result as result_inner', 'result_inner.id', 'solve_inner.result_id')
+                    .innerJoin('user as user_inner', 'user_inner.id', 'result_inner.user_id')
+                    .innerJoin('round as round_inner', 'round_inner.id', 'result_inner.round_id')
+                    .whereRef('round_inner.puzzle', '=', 'round.puzzle')
+                    .whereRef('round_inner.end_date', '<=', 'round.end_date')
+                    .whereRef('solve_inner.time', '<', eb.fn.min('solve.time'))
+                    .select((eb) => [eb.fn.countAll()])
+
+                const is0 = (x) => (eb(x, '=', eb.lit(0)))
+                return [
+                    'meetup.name as meetup_name',
+                    'meetup.id as meetup_id',
+                    'round.puzzle as puzzle',
+                    'round.id as round_id',
+                    'result.value as value',
+                    'round.end_date as round_end',
+
+
+
+                    is0(subq_avg)
+                        .as('is_average_icr'),
+
+                    is0(subq_avg.where('user_inner.region', '=', user.region))
+                        .as('is_average_rr'),
+
+                    is0(subq_avg.where('user_inner.region', 'in', islandRegions(user.region)))
+                        .as('is_average_ir'),
+
+
+                    is0(subq_single)
+                        .as('is_single_icr'),
+
+                    is0(subq_single.where('user_inner.region', '=', user.region))
+                        .as('is_single_rr'),
+
+                    is0(subq_single.where('user_inner.region', 'in', islandRegions(user.region)))
+                        .as('is_single_ir'),
+
+
+
+                    // TODO: make these window functions
+                    eb.selectFrom('round as round_inner')
+                        .whereRef('round_inner.puzzle', '=', 'round.puzzle')
+                        .whereRef('round_inner.meetup_id', '=', 'round.meetup_id')
+                        .whereRef('round_inner.start_date', '<', 'round.start_date')
+                        .select((eb) => [eb.fn.coalesce(eb.fn.count('id'), eb.lit(0)).as('round_number')])
+                        .limit(1).as('round_number'),
+                    // TODO: merge with above select and do FILTER WHERE
+                    eb.selectFrom('round as round_inner')
+                        .whereRef('round_inner.puzzle', '=', 'round.puzzle')
+                        .whereRef('round_inner.meetup_id', '=', 'round.meetup_id')
+                        .select((eb) => [eb.fn.coalesce(eb.fn.count('id'), eb.lit(0)).as('round_maximum')])
+                        .limit(1).as('round_maximum'),
+                    eb.selectFrom('round as round_inner')
+                        .innerJoin('result as result_inner', 'result_inner.round_id', 'round_inner.id')
+                        .whereRef('round_inner.id', '=', 'round.id')
+                        .whereRef('result_inner.value', '<', 'result.value')
+                        .select((eb2) => [eb2.fn.countAll().as('better_result_cnt')])
+                        .limit(1)
+                        .as('rank'),
+
+
+
+                    //eb(eb.selectFrom('all_results').select(eb => eb.fn.count('id')).whereRef('all_results.puzzle', '=', 'round.puzzle').whereRef('all_results.value', '<', 'result.value').whereRef('all_results.date', '<', 'round.end_date').limit(1), '=', 0).as('icr'),
+
+                    // all_results.puzzle has to be in group by which makes things explode
+                    //eb.fn.min<number>('prev_results.value').over(ob => ob.partitionBy('round.puzzle').orderBy('round.end_date asc')).as('foo'),
+                    //eb(eb.fn.count('prev_results.id').filterWhere('prev_results.region', '=', user.region), '=', 0).as('is_average_rr'),
+                    //eb(eb.fn.count('prev_results.id'), '=', 0).as('is_average_icr'),
+
+                    eb(eb.fn.min<number>(eb.fn.min('solve.time')).over(ob => ob.partitionBy('round.puzzle').orderBy('round.end_date asc')), '=', eb.fn.min('solve.time')).as('is_single_pr'),
+                    eb(eb.fn.min<number>('result.value').over(ob => ob.partitionBy('round.puzzle').orderBy('round.end_date asc')), '=', eb.ref('result.value')).as('is_average_pr'),
+
+                    eb.fn.min('solve.time').as('single'),
+                    eb.fn.agg<string[]>('array_agg', ['solve.time']).as('solves'),
+
+                    //eb.fn.agg('row_number').over(ob => ob.partitionBy('result.id')).as('foo')
+                ]
+            })
+            .groupBy(['round.puzzle', 'result.value', 'meetup_name', 'meetup.id', 'round.id', 'result.id'])
+            .where('result.user_id', '=', user.id)
     )
         .selectFrom('temp')
         .groupBy(['puzzle'])
         // TODO try this better
-        .select(({ fn }) => ['puzzle',
-            sql<any>`json_agg(temp ORDER BY round_end DESC) as values`
+        .select((eb) => ['puzzle',
+            sql`json_agg(temp ORDER BY round_end DESC) as values`
         ])
         .execute()
 
@@ -282,6 +454,7 @@ export const load = (async ({ params }) => {
         medals,
         results,
         PRs,
-        records
+        records,
+        historicalRecords: await historicalRecords
     }
 }) satisfies PageServerLoad

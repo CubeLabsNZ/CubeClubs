@@ -4,39 +4,60 @@
         SINGLE,
         MIX,
     }
+
+    export enum MixDisplayMethod {
+        FormatColumn,
+        SeparateAverageAndSingle,
+    }
 </script>
 
 <script lang="ts">
     import type { region } from "$lib/db/enums";
     import Medal from "$lib/components/user/Medal.svelte";
-    import { formatTime } from "$lib/utils";
+    import { formatTime, getRoundName } from "$lib/utils";
     import { regionToString } from "$lib/data/regions";
+    import puzzles from "$lib/data/puzzles";
 
     export let list: {
         value: number | undefined;
         time: number | undefined;
         solves: number[] | undefined;
+        meetup_id: number | undefined;
+        meetup_name: string | undefined;
         user_id: number | undefined;
         user_name: string | undefined;
         user_region: region | undefined;
+        cum_min: number | undefined;
+        date: Date | undefined;
+
+        is_average_pr: boolean | undefined;
+        is_average_icr: boolean | undefined;
+        is_average_ir: boolean | undefined;
+        is_average_rr: boolean | undefined;
     }[];
     export let solveCount: number | undefined = undefined;
 
-    export let displayRank: boolean;
+    export let displayRank: boolean = false;
     export let displayMedals: boolean = false;
     export let proceedNum: number = 0;
     export let showBest: boolean = false;
     export let hasSolves: boolean = true;
     export let hasMeetup: boolean = false;
     export let showUser: boolean = true;
-    export let meetupAndRoundLeft: boolean = false
+    export let meetupAndRoundLeft: boolean = false;
+    export let showDate: boolean = false;
+    export let showPlace: boolean = false;
+
+    export let mixDisplayMethod: MixDisplayMethod =
+        MixDisplayMethod.FormatColumn;
 
     export let displayType: DisplayType;
 
-    export let widths: string[] | undefined;
+    export let width: string | undefined = undefined;
+    export let widths: string[] | undefined = undefined;
 </script>
 
-<table>
+<table style:width>
     {#if widths}
         <colgroup>
             {#each widths as width}
@@ -45,8 +66,18 @@
         </colgroup>
     {/if}
     <tr>
-        {#if displayType == DisplayType.MIX}
+        {#if meetupAndRoundLeft}
+            <th class="tc-meetup-primary">Meetup</th>
+            <th class="tc-round">Round</th>
+        {/if}
+        {#if displayType == DisplayType.MIX && mixDisplayMethod == MixDisplayMethod.FormatColumn}
             <th class="tc-type">Format</th>
+        {/if}
+        {#if showPlace}
+            <th class="tc-place">Place</th>
+        {/if}
+        {#if showDate}
+            <th class="tc-date">Date</th>
         {/if}
         {#if displayRank}
             <th class="tc-ranking" />
@@ -54,18 +85,23 @@
         {#if showUser}
             <th class="tc-name">Name</th>
         {/if}
-        <th class="tc-result"
-            >{(() => {
-                switch (displayType) {
-                    case DisplayType.AVERAGE:
-                        return "Average";
-                    case DisplayType.SINGLE:
-                        return "Time";
-                    case DisplayType.MIX:
-                        return "Result";
-                }
-            })()}</th
-        >
+        {#if displayType != DisplayType.MIX || mixDisplayMethod == MixDisplayMethod.FormatColumn}
+            <th class="tc-result"
+                >{(() => {
+                    switch (displayType) {
+                        case DisplayType.AVERAGE:
+                            return "Average";
+                        case DisplayType.SINGLE:
+                            return "Time";
+                        case DisplayType.MIX:
+                            return "Result";
+                    }
+                })()}</th
+            >
+        {:else}
+            <th class="tc-mix-single">Single</th>
+            <th class="tc-mix-average">Average</th>
+        {/if}
         {#if showBest}
             <th class="tc-best">Best</th>
         {/if}
@@ -93,8 +129,13 @@
     {#each list as list_item, rank}
         <tr>
             {#if typeof list_item === "undefined"}
-                <td class="tc-placeholder" align="center" colspan="6"
-                    >no results yet</td
+                <td
+                    class="tc-placeholder"
+                    align="center"
+                    colspan={mixDisplayMethod ==
+                    MixDisplayMethod.SeparateAverageAndSingle
+                        ? 7
+                        : 6}>no results yet</td
                 >
             {:else}
                 {@const {
@@ -106,10 +147,51 @@
                     user_id,
                     user_name,
                     user_region,
+                    cum_min,
+                    date,
+
+                    puzzle,
+                    round_number,
+                    round_maximum,
+                    round_id,
                 } = list_item}
-                {#if displayType == DisplayType.MIX}
+                {#if meetupAndRoundLeft}
+                    {@const showMeetup = meetup_id != list[rank - 1]?.meetup_id}
+                    <td class="tc-meetup-primary"
+                        ><a
+                            class="regular-link"
+                            href={`/meetups/${meetup_id}/info`}
+                            >{showMeetup ? meetup_name : ""}</a
+                        ></td
+                    >
+                    <td class="tc-round"
+                        ><a
+                            class="regular-link"
+                            href={`/meetups/${meetup_id}/results/${round_id}`}
+                            >{getRoundName(
+                                puzzles[puzzle].name,
+                                round_number + 1,
+                                round_maximum
+                            )}</a
+                        ></td
+                    >
+                {/if}
+                {#if displayType == DisplayType.MIX && mixDisplayMethod == MixDisplayMethod.FormatColumn}
                     <td class="tc-type">{solves ? "Average" : "Single"}</td>
                 {/if}
+                {#if showPlace}
+                    <td class="tc-place">{list_item.rank + 1}</td>
+                {/if}
+                {#if showDate}
+                    <td class="tc-date"
+                        >{new Date(date).toLocaleDateString("en-nz", {
+                            year: "numeric",
+                            month: "short",
+                            day: "numeric",
+                        })}</td
+                    >
+                {/if}
+
                 {#if displayRank}
                     {@const t = value ?? time}
                     {@const prevT =
@@ -142,15 +224,49 @@
                 {/if}
 
                 {#if showUser}
-                <td class="tc-name"
-                    ><a class="regular-link" href={`/user/${user_id}`}
-                        >{user_name}</a
-                    ></td
-                >
+                    <td class="tc-name"
+                        ><a class="regular-link" href={`/user/${user_id}`}
+                            >{user_name}</a
+                        ></td
+                    >
                 {/if}
-                <td class="tc-result">{formatTime(value ? value : time)}</td>
+                {#if displayType != DisplayType.MIX || mixDisplayMethod == MixDisplayMethod.FormatColumn}
+                    {@const {
+                        is_average_pr,
+                        is_average_icr,
+                        is_average_rr,
+                        is_average_ir,
+                    } = list_item}
+                    <td
+                        class="tc-result"
+                        data-pr={is_average_pr}
+                        data-icr={is_average_icr}
+                        data-ir={is_average_ir}
+                        data-rr={is_average_rr}
+                        >{formatTime(value ? value : time)}</td
+                    >
+                {:else}
+                    <td class="tc-mix-single"
+                        >{!solves ? formatTime(cum_min) : ""}</td
+                    >
+                    <td class="tc-mix-average" data-pr={list_item.is_average_pr}
+                        >{solves ? formatTime(cum_min) : ""}</td
+                    >
+                {/if}
                 {#if showBest}
-                    <td class="tc-best">{formatTime(Math.min(...solves))}</td>
+                    {@const {
+                        is_single_pr,
+                        is_single_icr,
+                        is_single_rr,
+                        is_single_ir,
+                    } = list_item}
+                    <td class="tc-best"
+                        data-pr={is_single_pr}
+                        data-icr={is_single_icr}
+                        data-ir={is_single_ir}
+                        data-rr={is_single_rr}
+                        >{formatTime(Math.min(...solves))}</td
+                    >
                 {/if}
                 {#if showUser}
                     <td class="tc-region">{regionToString(user_region)}</td>
@@ -187,86 +303,39 @@
 </table>
 
 <style>
-    /* TODO: if we ever do sass, this code is first to use the features */
     /* Top */
     tr:nth-of-type(2) td {
         padding-top: calc(8px + 5.75px);
-        clip-path: inset(8px 0 0 0);
+        --inset-top: 8px;
     }
-
     /* Bottom */
     tr:last-child td {
         padding-bottom: calc(8px + 5.75px);
-        clip-path: inset(0 0 8px 0);
-    }
-
-    /* Left */
-    th:first-child {
-        padding-left: calc(6px + 8.75px);
+        --inset-bottom: 8px;
     }
 
     td:first-child {
         padding-left: calc(6px + 8.75px);
-        clip-path: inset(
-            0 0 0 8.75px round var(--v-border-radius-small) 0 0
-                var(--v-border-radius-small)
-        );
+        --inset-left: 8.75px;
+        --br-left: var(--v-border-radius-small);
     }
-    /* Right */
+
     td:last-child {
         padding-right: calc(6px + 8.75px);
+        --inset-right: 8.75px;
+        --br-right: var(--v-border-radius-small);
+    }
+
+    td {
         clip-path: inset(
-            0 8.75px 0 0 round 0 var(--v-border-radius-small)
-                var(--v-border-radius-small) 0
+            var(--inset-top, 0) var(--inset-right, 0) var(--inset-bottom, 0)
+                var(--inset-left, 0) round var(--br-left, 0) var(--br-right, 0)
+                var(--br-right, 0) var(--br-left, 0)
         );
     }
 
-    /* Top Left */
-    tr:nth-of-type(2) td:first-child {
-        clip-path: inset(
-            8px 0 0 8.75px round var(--v-border-radius-small) 0 0
-                var(--v-border-radius-small)
-        );
-    }
-    /* Top Right */
-    tr:nth-of-type(2) td:last-child {
-        clip-path: inset(
-            8px 8.75px 0 0 round 0 var(--v-border-radius-small)
-                var(--v-border-radius-small) 0
-        );
-    }
-    /* Bottom Right */
-    tr:last-child td:last-child {
-        clip-path: inset(
-            0 8.75px 8px 0 round 0 var(--v-border-radius-small)
-                var(--v-border-radius-small) 0
-        );
-    }
-    /* Bottom Left */
-    tr:last-child td:first-child {
-        clip-path: inset(
-            0 0 8px 8.75px round var(--v-border-radius-small) 0 0
-                var(--v-border-radius-small)
-        );
-    }
-
-    /* Special cases: 1 element */
-    tr:nth-of-type(2):last-child td {
-        clip-path: inset(8px 0 8px 0);
-    }
-    /* Left side */
-    tr:nth-of-type(2):last-child td:first-child {
-        clip-path: inset(
-            8px 0 8px 8.75px round var(--v-border-radius-small) 0 0
-                var(--v-border-radius-small)
-        );
-    }
-    /* Right side */
-    tr:nth-of-type(2):last-child td:last-child {
-        clip-path: inset(
-            8px 8.75px 8px 0 round 0 var(--v-border-radius-small)
-                var(--v-border-radius-small) 0
-        );
+    th:first-child {
+        padding-left: calc(6px + 8.75px);
     }
 
     tr:nth-of-type(even) td {
@@ -283,6 +352,8 @@
     .tc-region,
     .tc-solves,
     .tc-meetup,
+    .tc-meetup-primary,
+    .tc-round,
     .tc-type {
         text-align: left;
     }
@@ -292,6 +363,9 @@
     }
 
     .tc-result,
+    .tc-mix-single,
+    .tc-mix-average,
+    .tc-meetup-primary,
     .tc-name {
         font-weight: 500;
     }
@@ -301,6 +375,8 @@
     }
 
     .tc-result,
+    .tc-mix-single,
+    .tc-mix-average,
     .tc-best,
     .tc-ranking {
         text-align: right;
@@ -313,5 +389,42 @@
     .tc-ranking[data-proceed="true"] {
         color: var(--c-green);
         font-weight: 600;
+    }
+
+    [data-pr="true"]:is(.tc-mix-average, .tc-result, .tc-best) {
+        color: var(--c-a);
+    }
+
+    :is([data-icr="true"], [data-ir="true"], [data-rr="true"]):is(
+            .tc-mix-average,
+            .tc-result,
+            .tc-best
+        )::before {
+        font-size: 10px;
+        font-weight: 600;
+        height: 16px;
+        padding-left: 6px;
+        padding-right: 6px;
+        border-radius: 4px;
+        margin-right: 8px;
+    }
+
+    /* do not change this order */
+    :is(.tc-mix-average, .tc-result, .tc-best)[data-rr="true"]::before {
+        content: "RR";
+        color: var(--c-green);
+        background-color: var(--c-lgreen);
+    }
+
+    :is(.tc-mix-average, .tc-result, .tc-best)[data-ir="true"]::before {
+        content: "IR";
+        color: var(--c-red);
+        background-color: var(--c-lred);
+    }
+
+    :is(.tc-mix-average, .tc-result, .tc-best)[data-icr="true"]::before {
+        content: "IcR";
+        color: var(--c-purple);
+        background-color: var(--c-lpurple);
     }
 </style>
