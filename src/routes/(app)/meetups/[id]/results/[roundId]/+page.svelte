@@ -45,7 +45,6 @@
 
     {#if currentRound.results.length}
         {@const firstres = currentRound.results[0]}
-        {@debug firstres}
 
         <Table
                 list={currentRound.results}

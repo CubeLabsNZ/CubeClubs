@@ -8,8 +8,6 @@
     import Badge, { BadgeSize } from "$lib/components/global/Badge.svelte";
 </script>
 
-{@debug record}
-
 <div title={`Single: ${record.single}
 Average: ${record.average}`}>
     <Badge size={BadgeSize.Small} {bg} {fg} label={shortname} />
