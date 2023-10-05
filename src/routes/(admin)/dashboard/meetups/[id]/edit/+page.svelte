@@ -5,7 +5,11 @@
 
     import type { PageData } from './$types';
     export let data: PageData;
-    let addedOrganisers, organisersError;
+    let addedOrganisers = data.meetup.organisers.map(x => {
+        let u = data.organisers.find(y => y.id == x.user_id)
+        return {name: u.name, id: u.id}
+    })
+    let organisersError;
     
 
     function handleForm({ formData, cancel }) {
@@ -13,6 +17,8 @@
         formData.set("organisers", addedOrganisers.reduce((acc, cur) => `${acc} ${cur.id}`, ""));
     }
 </script>
+
+{@debug addedOrganisers}
 
 <Breadcrumb paths={[
     {name: "Meetups", href: "/dashboard/meetups"},
