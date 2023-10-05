@@ -199,12 +199,6 @@ tr:nth-of-type(even) td {
     background-color: var(--c-lgh);
 }
 
-th {
-    padding-top: 5.75px;
-    padding-bottom: 5.75px;
-}
-
-
 td {
     line-height: 30px;
 }
