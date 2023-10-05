@@ -13,7 +13,13 @@ export async function getUserSession(cookies: Cookies): Promise<User | null | un
             id: sessionIdBuf
         },
         include: {
-            user: true
+            user: {
+                select: {
+                    name: true,
+                    id: true,
+                    is_club_organiser: true
+                }
+            }
         }
     })
 

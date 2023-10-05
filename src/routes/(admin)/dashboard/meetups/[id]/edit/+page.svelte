@@ -17,8 +17,6 @@
     }
 </script>
 
-{@debug data}
-
 <Breadcrumb paths={[
     {name: "Meetups", href: "/dashboard/meetups"},
     {name: data.meetup.name, href: `/dashboard/meetups/${data.meetup.id}/`},
