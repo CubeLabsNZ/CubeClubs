@@ -6,11 +6,10 @@
     import type { PageData } from './$types';
     export let data: PageData;
     let addedOrganisers = data.meetup.organisers.map(x => {
-        let u = data.organisers.find(y => y.id == x.user_id)
+        let u = data.organisers.find(y => y.id == x.user.id)
         return {name: u.name, id: u.id}
     })
     let organisersError;
-    
 
     function handleForm({ formData, cancel }) {
         if (addedOrganisers.length < 1) { cancel(); organisersError = true }
@@ -18,7 +17,7 @@
     }
 </script>
 
-{@debug addedOrganisers}
+{@debug data}
 
 <Breadcrumb paths={[
     {name: "Meetups", href: "/dashboard/meetups"},

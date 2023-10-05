@@ -18,7 +18,8 @@
     let meetup = data.meetup;
     export let addedOrganisers = meetup ? meetup.organisers : [];
 
-    let externalRegistration: boolean = meetup ? meetup.external_registration_link != null : true;
+    //let externalRegistration: boolean = meetup ? meetup.external_registration_link != null : true;
+    let externalRegistration: boolean = true;
 
     export let organisersError = false;
 </script>

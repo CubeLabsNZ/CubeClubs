@@ -19,7 +19,16 @@ export const load = (async ({ params }) => {
             name: true,
             venue: true,
             location: true,
-            organisers: true,
+            organisers: {
+                select: {
+                    user: {
+                        select: {
+                            name: true,
+                            id: true
+                        }
+                    }
+                }
+            },
             description: true,
             contact: true,
             competitor_limit: true,
@@ -35,7 +44,7 @@ export const load = (async ({ params }) => {
 
     return {
         clubs: await prisma.club.findMany(),
-        organisers: await prisma.user.findMany({ where: { is_club_organiser: true } }),
+        organisers: await prisma.user.findMany({ where: { is_club_organiser: true }, select: {name: true, id: true} }),
         meetup
     }
 }) satisfies PageServerLoad
@@ -69,7 +78,8 @@ export const actions = {
                     date: new Date(data.get("date") as string),
                     club_id: Number(data.get("club_id")),
 
-                    external_registration_link: data.get("using_external_registration") ? data.get("external_registration_link") as string : null,
+                    //external_registration_link: data.get("using_external_registration") ? data.get("external_registration_link") as string : null,
+                    external_registration_link: data.get("external_registration_link") as string,
                     registration_information: data.get("registration_information") ? data.get("registration_information") as string : undefined
                 })
                 .where('meetup.id', '=', id)
