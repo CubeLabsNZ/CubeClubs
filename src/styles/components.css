@@ -138,17 +138,6 @@ td, th {
     padding: 0 !important;
 }
 
-.td-dummy {
-    height: 8px;
-    background-color: red;
-}
-
-/* TODO: table widths can't be set? max-width doesn't work either....  */
-.tc-dummy {
-    min-width: 6px;
-    background-color: red;
-}
-
 
 .tc-placeholder {
     color: var(--c-lg2);
@@ -208,6 +197,17 @@ th {
 td {
     line-height: 30px;
 }
+
+
+
+
+
+
+
+
+
+
+
 
 /* INFO: FILTER BAR */
 .filter-bar {
