@@ -123,6 +123,8 @@ th {
 td {
     white-space: nowrap;
     min-width: max-content;
+    padding-bottom: 0;
+    padding-top: 0;
 }
 
 td, th {
@@ -138,13 +140,13 @@ td, th {
 
 .td-dummy {
     height: 8px;
-    background-color: white;
+    background-color: red;
 }
 
 /* TODO: table widths can't be set? max-width doesn't work either....  */
 .tc-dummy {
     min-width: 6px;
-    background-color: white;
+    background-color: red;
 }
 
 
@@ -152,6 +154,60 @@ td, th {
     color: var(--c-lg2);
 }
 
+
+
+/* Top */
+tr:nth-of-type(2) td {
+    padding-top: 8px;
+    --inset-top: 8px;
+}
+/* Bottom */
+tr:last-child td {
+    padding-bottom: 8px;
+    --inset-bottom: 8px;
+}
+
+td:first-child {
+    padding-left: calc(6px + 8.75px);
+    --inset-left: 8.75px;
+    --br-left: var(--v-border-radius-small);
+}
+
+td:last-child {
+    padding-right: calc(6px + 8.75px);
+    --inset-right: 8.75px;
+    --br-right: var(--v-border-radius-small);
+}
+
+td {
+    clip-path: inset(
+        var(--inset-top, 0) var(--inset-right, 0) var(--inset-bottom, 0)
+            var(--inset-left, 0) round var(--br-left, 0) var(--br-right, 0)
+            var(--br-right, 0) var(--br-left, 0)
+    );
+}
+
+th:first-child {
+    padding-left: calc(6px + 8.75px);
+}
+
+th:last-child {
+    padding-right: calc(6px + 8.75px);
+}
+
+tr:nth-of-type(even) td {
+    background-color: var(--c-lgh);
+}
+
+th {
+    padding-top: 5.75px;
+    padding-bottom: 5.75px;
+}
+
+
+td {
+    line-height: 30px;
+}
 
 /* INFO: FILTER BAR */
 .filter-bar {

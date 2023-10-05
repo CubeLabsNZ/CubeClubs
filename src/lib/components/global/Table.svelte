@@ -303,51 +303,6 @@
 </table>
 
 <style>
-    /* Top */
-    tr:nth-of-type(2) td {
-        padding-top: calc(8px + 5.75px);
-        --inset-top: 8px;
-    }
-    /* Bottom */
-    tr:last-child td {
-        padding-bottom: calc(8px + 5.75px);
-        --inset-bottom: 8px;
-    }
-
-    td:first-child {
-        padding-left: calc(6px + 8.75px);
-        --inset-left: 8.75px;
-        --br-left: var(--v-border-radius-small);
-    }
-
-    td:last-child {
-        padding-right: calc(6px + 8.75px);
-        --inset-right: 8.75px;
-        --br-right: var(--v-border-radius-small);
-    }
-
-    td {
-        clip-path: inset(
-            var(--inset-top, 0) var(--inset-right, 0) var(--inset-bottom, 0)
-                var(--inset-left, 0) round var(--br-left, 0) var(--br-right, 0)
-                var(--br-right, 0) var(--br-left, 0)
-        );
-    }
-
-    th:first-child {
-        padding-left: calc(6px + 8.75px);
-    }
-
-    tr:nth-of-type(even) td {
-        background-color: var(--c-lgh);
-    }
-
-    td,
-    th {
-        padding-top: 5.75px;
-        padding-bottom: 5.75px;
-    }
-
     .tc-name,
     .tc-region,
     .tc-solves,
@@ -366,6 +321,7 @@
     .tc-mix-single,
     .tc-mix-average,
     .tc-meetup-primary,
+    .tc-best,
     .tc-name {
         font-weight: 500;
     }
@@ -391,8 +347,14 @@
         font-weight: 600;
     }
 
-    [data-pr="true"]:is(.tc-mix-average, .tc-result, .tc-best) {
-        color: var(--c-a);
+
+
+    :is([data-pr="true"], [data-icr="true"], [data-ir="true"], [data-rr="true"]):is(.tc-mix-average, .tc-result, .tc-best) {
+        color: var(--c-rec);
+    }
+
+    :is([data-pr="true"]):is(.tc-mix-average, .tc-result, .tc-best) {
+        --c-rec: var(--c-a);
     }
 
     :is([data-icr="true"], [data-ir="true"], [data-rr="true"]):is(
@@ -407,24 +369,36 @@
         padding-right: 6px;
         border-radius: 4px;
         margin-right: 8px;
+
+        color: var(--c-rec);
+        background-color: var(--c-rec-bg);
     }
 
     /* do not change this order */
     :is(.tc-mix-average, .tc-result, .tc-best)[data-rr="true"]::before {
         content: "RR";
-        color: var(--c-green);
-        background-color: var(--c-lgreen);
+    }
+
+    :is(.tc-mix-average, .tc-result, .tc-best)[data-rr="true"] {
+        --c-rec: var(--c-green);
+        --c-rec-bg: var(--c-lgreen);
     }
 
     :is(.tc-mix-average, .tc-result, .tc-best)[data-ir="true"]::before {
         content: "IR";
-        color: var(--c-red);
-        background-color: var(--c-lred);
+    }
+
+    :is(.tc-mix-average, .tc-result, .tc-best)[data-ir="true"] {
+        --c-rec: var(--c-red);
+        --c-rec-bg: var(--c-lred);
     }
 
     :is(.tc-mix-average, .tc-result, .tc-best)[data-icr="true"]::before {
         content: "IcR";
-        color: var(--c-purple);
-        background-color: var(--c-lpurple);
+    }
+
+    :is(.tc-mix-average, .tc-result, .tc-best)[data-icr="true"] {
+        --c-rec: var(--c-purple);
+        --c-rec-bg: var(--c-lpurple);
     }
 </style>

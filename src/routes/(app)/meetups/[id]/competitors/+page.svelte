@@ -29,8 +29,6 @@
 {#if data.meetup.users.length > 0}
     <table style:margin-top=32px>
         <colgroup>
-            <col span=1 style:width=8px>
-
             <col span=1 style:width=175px>
             <col span=1 style:width=160px>
 
@@ -39,15 +37,11 @@
             {/each}
 
             <col span=1 style:width=auto>
-
-            <col span=1 style:width=8px>
         </colgroup>
 
 
         <tbody>
             <tr>
-                <th class="tc-dummy" />
-
                 <th class="tc-name">Name</th>
                 <th class="tc-region">Region</th>
 
@@ -58,34 +52,16 @@
                 {/each}
 
                 <th class="tc-empty" />
-
-                <th class="tc-dummy" />
             </tr>
-
-            <tr class="td-dummy">
-                <td />
-                <td />
-                <td />
-
-                {#each data.puzzles as puzzle}
-                    <td />
-                {/each}
-
-                <td />
-                <td />
-            </tr>
-
 
             {#each data.meetup.users as { user, registered_events } }
                 <tr>
-                    <td class="tc-dummy" />
                     <td class="tc-name">
                         <a class="regular-link" style:font-weight=500 href="/user/{user.id}"> {user.name} </a>
                     </td>
                     <td class="tc-region">{regionToString(user.region)}</td>
 
 
-                    <!-- WARN: this is actually working, but it seems data is not perfect, and those with no results in an event is registered? -->
                     {#each data.puzzles as puzzle}
                         <td class="tc-puzzle">
                             {#if registered_events.includes(puzzle)}
@@ -95,23 +71,8 @@
                     {/each}
 
                     <td class="tc-empty" />
-
-                    <td class="tc-dummy" />
                 </tr>
             {/each}
-
-            <tr class="td-dummy">
-                <td />
-                <td />
-                <td />
-
-                {#each data.puzzles as puzzle}
-                    <td />
-                {/each}
-
-                <td />
-                <td />
-            </tr>
         </tbody>
     </table>
 {:else}
@@ -134,6 +95,10 @@
 
     .tc-puzzle {
         width: 24px;
+    }
+
+    .tc-puzzle span.material-symbols-outlined { 
+        transform: translateY(calc(30px/2 - 24px/2));
     }
 
     tr:first-child .tc-puzzle img {

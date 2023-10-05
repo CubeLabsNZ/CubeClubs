@@ -140,11 +140,8 @@
             <p> {roundId} </p>
 
 
-            <!-- TODO: more duplicataion yay -->
             <table style:width=100%>
                 <colgroup>
-                    <col span=1 style:width=8px>
-
                     <col span=1 style:width=50px>
                     <col span=1 style:width=auto>
                     <col span=1 style:width=80px>
@@ -152,15 +149,11 @@
                     {#each Array(selectedRoundPuzzleFormatCount) as _}
                         <col span=1 style:width=80px>
                     {/each}
-
-                    <col span=1 style:width=8px>
                 </colgroup>
 
 
                 <tbody>
                     <tr>
-                        <th class="tc-dummy"></th>
-
                         <th class="tc-ranking"></th>
                         <th class="tc-name">Name</th>
                         <th class="tc-result">Average</th>
@@ -168,29 +161,11 @@
                         {#each Array(selectedRoundPuzzleFormatCount) as _, i}
                             <th class="tc-solves">{i + 1}</th>
                         {/each}
-
-                        <th class="tc-dummy"></th>
                     </tr>
-
-                    <tr class="td-dummy">
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-
-                        {#each Array(selectedRoundPuzzleFormatCount) as _, i}
-                            <td></td>
-                        {/each}
-
-                        <td></td>
-                    </tr>
-
 
                     {#each selectedRound.results as result,idx }
                         {#if result}
                         <tr>
-                            <td class="tc-dummy"></td>
-
                             <td class="tc-ranking">{idx+1}</td>
                             <td class="tc-name">{result.user_name}</td>
                             <td class="tc-result">{formatTime(result.value)}</td>
@@ -198,25 +173,9 @@
                             {#each result.solves as solve}
                                 <td class="tc-solves">{formatTime(solve.time)}</td>
                             {/each}
-
-                            <td class="tc-dummy"></td>
                         </tr>
                         {/if}
                     {/each}
-
-
-                    <tr class="td-dummy">
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-
-                        {#each Array(selectedRoundPuzzleFormatCount) as _, i}
-                            <td></td>
-                        {/each}
-
-                        <td></td>
-                    </tr>
                 </tbody>
             </table>
         {/if}

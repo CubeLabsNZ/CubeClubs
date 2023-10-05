@@ -129,8 +129,6 @@
 
             <table style:width=100%>
                 <colgroup>
-                    <col span=1 style:width=8px>
-
                     <col span=1 style:width=auto>
                     <col span=1 style:width=60px>
                     <col span=1 style:width=60px>
@@ -140,8 +138,6 @@
                     <col span=1 style:width=60px>
                     <col span=1 style:width=60px>
                     <col span=1 style:width=60px>
-
-                    <col span=1 style:width=8px>
                 </colgroup>
 
                 <tbody>
@@ -150,8 +146,6 @@
 
 
                 <tr>
-                    <th class="tc-dummy"></th>
-
                     <th class="tc-event">Event</th>
                     <th class="tc-rr">RR</th>
                     <th class="tc-ir">IR</th>
@@ -162,31 +156,11 @@
                     <th class="tc-icr">IcR</th>
                     <th class="tc-ir">IR</th>
                     <th class="tc-rr">RR</th>
-
-                    <th class="tc-dummy"></th>
                 </tr>
-
-                <!-- NOTE: td-dummy is entirely invisible to provide padding to the top and bottom of the table -->
-                <tr class="td-dummy">
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                </tr>
-
 
                 {#each Object.entries(data.PRs) as [puzzleType, {single, average}]}
                     {@const puzzle = puzzles[puzzleType]}
                     <tr>
-                        <td class="tc-dummy"></td>
-
                         <td class="tc-event">
                             <div style:display=flex style:align-items=center style:column-gap=12px>
                                 <img src={puzzle.icon} alt="" height=24>
@@ -202,25 +176,8 @@
                         <td class="tc-icr">{average.IcR}</td>
                         <td class="tc-ir">{average.IR}</td>
                         <td class="tc-rr">{average.RR}</td>
-
-                        <td class="tc-dummy"></td>
                     </tr>
                 {/each}
-
-
-                <tr class="td-dummy">
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                </tr>
             </table>
         </div>
 
@@ -289,56 +246,6 @@
                             width="100%"
                         />
                     {/each}
-                    <!-- INFO: for each event that HAS a record, either single or average -->
-
-                    <table style:width=100%>
-                        <tr>
-                            <th class="tc-dummy"></th>
-
-                            <th class="tc-single">Single</th>
-                            <th class="tc-average">Average</th>
-                            <th class="tc-meetup">Meetup</th>
-                            <th class="tc-round">Round</th>
-                            <th class="tc-solves">Solves</th>
-
-                            <th class="tc-dummy"></th>
-                        </tr>
-
-                        <!-- NOTE: td-dummy is entirely invisible to provide padding to the top and bottom of the table -->
-                        <tr class="td-dummy">
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-
-
-                        <tr>
-                            <td class="tc-dummy"></td>
-
-                            <td class="tc-single">Single</td>
-                            <td class="tc-average">Average</td>
-                            <td class="tc-meetup">Meetup</td>
-                            <td class="tc-round">Round</td>
-                            <td class="tc-solves">Solves</td>
-
-                            <td class="tc-dummy"></td>
-                        </tr>
-
-
-                        <tr class="td-dummy">
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                    </table>
                 </div>
             {/if}
         </div>

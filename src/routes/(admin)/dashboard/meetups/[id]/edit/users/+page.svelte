@@ -35,8 +35,6 @@
 {#if data.meetup.users.length > 0}
     <table>
         <colgroup>
-            <col span=1 style:width=8px>
-
             <col span=1 style:width=24px>
             <col span=1 style:width=24px>
 
@@ -48,15 +46,11 @@
                     {/each}
 
                 <col span=1 style:width=auto>
-
-                <col span=1 style:width=8px>
         </colgroup>
 
 
         <tbody>
             <tr>
-                <th class="tc-dummy" />
-
                 <th class="tc-delete" />
                 <th class="tc-edit" />
 
@@ -70,32 +64,10 @@
                 {/each}
 
                 <th class="tc-empty" />
-
-                <th class="tc-dummy" />
             </tr>
-
-
-            <tr class="td-dummy">
-                <td />
-                <td />
-                <td />
-                <td />
-                <td />
-
-                {#each data.meetup.puzzles as _}
-                    <td />
-                {/each}
-
-                <td />
-                <td />
-            </tr>
-
 
             {#each data.meetup.users as { user, registered_events } }
                 <tr>
-                    <td class="tc-dummy" />
-
-
                     <td class="tc-delete">
                         <button on:click={() => {
                             confirm(`Are you sure you want to delete ${user.name}?`);
@@ -135,25 +107,8 @@
                     {/each}
 
                     <td class="tc-empty" />
-
-                    <td class="tc-dummy" />
                 </tr>
             {/each}
-
-            <tr class="td-dummy">
-                <td />
-                <td />
-                <td />
-                <td />
-                <td />
-
-                {#each data.meetup.puzzles as _}
-                    <td />
-                {/each}
-
-                <td />
-                <td />
-            </tr>
         </tbody>
     </table>
 {:else}
@@ -194,6 +149,10 @@
 
     .tc-puzzle {
         width: 24px;
+    }
+
+    .tc-puzzle span.material-symbols-outlined { 
+        transform: translateY(calc(30px/2 - 24px/2));
     }
 
     tr:first-child .tc-puzzle img {
