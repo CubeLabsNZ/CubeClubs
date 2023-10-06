@@ -4,7 +4,7 @@ This repo contains the code that runs the new cubeclubs.nz. The site is not yet 
 
 
 ## Info
-- Built with SvelteKit and uses Prisma with PostgreSQL for the backend
+- Built with SvelteKit and uses Prisma + Kysely with PostgreSQL for the backend
 - The user interface and all components used are written from scratch. No templates are used.
 - This project addresses the countless issues with the original poorly written site, adds new features and improves the overall user experience.
 - The new schema has been completely rewritten: it stores around 70% less data compared to the original.
