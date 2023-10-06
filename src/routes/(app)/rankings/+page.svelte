@@ -5,8 +5,6 @@
 
     import regions, {regionToString} from "$lib/data/regions";
 
-    import { puzzle, region } from "@prisma/client";
-
     import MultiButton, { LabelType } from "$lib/components/global/MultiButton.svelte";
     import Select from "$lib/components/global/Select.svelte";
 

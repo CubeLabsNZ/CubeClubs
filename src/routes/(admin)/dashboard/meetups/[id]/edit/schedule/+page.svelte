@@ -25,8 +25,6 @@
 
     let options, eventCalendar, addEventCard;
 
-    let deleteButton;
-        
     let displayingUUID: string | null = null
 
     // TODO: figureout figure out key in puzle
@@ -75,6 +73,25 @@
         })
     }
 
+/*
+    let contextMenuCoords: [number, number] | undefined;
+
+    function openContextMenu(e: MouseEvent) {
+        console.log(e.target)
+        contextMenuCoords = [e.pageX, e.pageY]
+        console.log(contextMenuCoords)
+        e.preventDefault()
+        return false
+    }
+
+    function onMouseDown(e: MouseEvent) {
+        if (contextMenuCoords && e ) {
+            e.preventDefault()
+            contextMenuCoords = undefined;
+        }
+    }
+    */
+
     $: {
         // TODO: need to handle resize top when/if it becomes possible
         options = {
@@ -104,24 +121,19 @@
                     }
                 }
             },
+            eventContent: (info) => {
+                return info.event.display === 'auto' ? {
+                    html: `
+                        <div class="ec-event-time">${info.timeText}</div>
+                        <button>Delete</button>
+                        <div class="ec-event-title">${info.event.title}</div>
+                    `
+                } :''
+            },
             titleFormat: {day: 'numeric', month: 'short'},
             eventClassNames: "testclass",
             eventBackgroundColor: "var(--c-la2)",
             eventTextColor: "var(--c-a)",
-            eventMouseEnter: (info) => {
-                let elRect = info.el.getBoundingClientRect();
-                deleteButton.style.top = `${elRect.y + elRect.height + info.el.scrollTop}px`;
-                deleteButton.style.right = "0px";
-                deleteButton.style.display = "block";
-            },
-            eventMouseLeave: (info) => {
-                deleteButton.style.display = "none";
-            },
-            // eventContent: (info) => info.event.display === 'auto'
-            // ? {html: '<div class="ec-event-time">' + info.timeText + '</div>' +
-            // (info.event.editable ? '<button>Delete</button>' : '') +
-            //   '<div class="ec-event-title">' + info.event.title + '</div>'}
-            // : '',
             select: (info) => {
                 displayingUUID = crypto.randomUUID()
                 eventCalendar.addEvent({
@@ -183,6 +195,10 @@
         }
     }}
 />
+    <!--
+    on:contextmenu={openContextMenu}
+    on:mousedown={onMouseDown}
+    -->
 
 <Breadcrumb
     paths={[
@@ -199,6 +215,7 @@
 />
 
 <Calendar bind:this={eventCalendar} {plugins} {options} />
+
 
 <div bind:this={addEventCard} class="add-event-card">
     <Card width={300} clickable={false}>
@@ -331,7 +348,16 @@
     </Toast>
 {/if}
 
-<div bind:this={deleteButton} class="delete-button">delete</div>
+<!--
+<div class="context-menu" style={`${contextMenuCoords ? `--x: ${contextMenuCoords[0]}px; --y: ${contextMenuCoords[1]}px;` : "visibility: collapse;"}`}>
+    <ul>
+        <li><button>
+    <span class="material-symbols-outlined">delete_forever</span>
+    <div>Delete</div>
+            </button></li>
+    </ul>
+</div>
+-->
 
 <style>
     .add-event-card {
@@ -341,10 +367,48 @@
         box-shadow: 0px 1px 6px 0px #10151B29; /* cdg3, 16% */
     }
 
-    .delete-button {
-        position: absolute;
-        z-index: 2000;
+    /*
+    .context-menu button {
+        all: unset;
     }
+    .context-menu {
+        position: fixed;
+        top: var(--y);
+        left: var(--x);
+        z-index: 999999;
+        background: white;
+        box-shadow: 0px 2px 12px 0px #10151B29;
+        border-radius: 12px;
+        width: 240px;
+        overflow: hidden;
+    }
+
+    .context-menu ul {
+        padding: 0;
+        margin: 0;
+    }
+    .context-menu li {
+        list-style-type: none;
+    }
+    .context-menu button {
+        padding: 12px 16px 12px 16px;
+        display: flex;
+        flex-direction: row;
+        gap: 12px;
+        align-items: center;
+        font-weight: 500;
+        width: 100%;
+        cursor: pointer;
+    }
+    .context-menu button:focus {
+        background: var(--c-la2);
+    }
+
+    .context-menu button:hover {
+        background: var(--c-la1);
+    }
+    */
+
 
     :global(.ec-time),
     :global(.ec-line) {

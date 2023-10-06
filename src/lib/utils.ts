@@ -1,4 +1,4 @@
-import { format } from "@prisma/client";
+import { Format } from "@prisma/client";
 
 export function clickOutside(node: HTMLElement) {
     function handleClick(event) {
@@ -26,7 +26,7 @@ export function partition<T>(array: T[], filter: (e: T, idx: number, arr: T[]) =
 }
 
 export function getRoundName(puzzleName: string, roundNumber: number, maxRound: number) {
-    return `${puzzleName} — ${roundNumber == maxRound ? "Final Round" : `Round ${roundNumber}`}`
+    return `${puzzleName ? puzzleName + " — " : ""}${roundNumber == maxRound ? "Final Round" : `Round ${roundNumber}`}`
 }
 
 
@@ -45,8 +45,8 @@ export function formatTime(rawValue: number): string {
     }
 }
 
-export function calulateMbldAverage(fformat: format, data: {time: number, score: number, total_attempts: number}[]) {
-    switch (fformat) {
+export function calulateMbldAverage(format: Format, data: {time: number, score: number, total_attempts: number}[]) {
+    switch (format) {
         case format.BO3:
         case format.BO2:
             data.sort((a, z) => {
@@ -60,8 +60,8 @@ export function calulateMbldAverage(fformat: format, data: {time: number, score:
 }
 
 
-export function calculateAverage(fformat: format, data: number[]): number {
-    switch (fformat) {
+export function calculateAverage(format: Format, data: number[]): number {
+    switch (format) {
         case format.AO5: {
             const used = data.sort((t1, t2) => t1 - t2).slice(1, 4);
 

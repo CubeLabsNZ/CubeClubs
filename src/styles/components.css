@@ -188,20 +188,9 @@ tr:nth-of-type(even) td {
     background-color: var(--c-lgh);
 }
 
-td {
+td, th {
     line-height: 30px;
 }
-
-
-
-
-
-
-
-
-
-
-
 
 /* INFO: FILTER BAR */
 .filter-bar {

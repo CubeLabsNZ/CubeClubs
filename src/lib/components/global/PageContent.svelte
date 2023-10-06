@@ -5,7 +5,7 @@
 </script>
 
 
-<div class="content" data-isDashboard={isDashboard} style:margin-top={top}px style:padding-bottom=64px> 
+<div class="page-content" data-isDashboard={isDashboard} style:margin-top={top}px style:padding-bottom=64px> 
     <h1 class="fstyle-heading" style:padding-bottom=8px>{heading}</h1>
 
     {#if subheading != ""}
@@ -17,7 +17,7 @@
 
 
 <style>
-    .content {
+    .page-content {
         margin-left: auto;
         margin-right: auto;
 
@@ -25,7 +25,7 @@
     }
 
     @media(max-width: 1040px) {
-        .content {
+        .page-content {
             margin-left: 20px;
             margin-right: 20px;
             width: calc(100% - 40px);
@@ -33,7 +33,7 @@
     }
 
     @media(max-width: 1400px) {
-        .content[data-isDashboard=true] {
+        .page-content[data-isDashboard=true] {
             margin-left: 50px;
             margin-right: 50px;
             width: calc(100% - 100px);
@@ -41,7 +41,7 @@
     }
 
     @media(max-width: 550px) {
-        .content[data-isDashboard=true] {
+        .page-content[data-isDashboard=true] {
             margin-left: 20px;
             margin-right: 20px;
             width: calc(100% - 40px);

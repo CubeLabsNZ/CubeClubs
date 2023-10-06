@@ -12,7 +12,7 @@
 </script>
 
 <script lang="ts">
-    import type { region } from "$lib/db/enums";
+    import type { Region } from "$lib/db/enums";
     import Medal from "$lib/components/user/Medal.svelte";
     import { formatTime, getRoundName } from "$lib/utils";
     import { regionToString } from "$lib/data/regions";
@@ -26,7 +26,7 @@
         meetup_name: string | undefined;
         user_id: number | undefined;
         user_name: string | undefined;
-        user_region: region | undefined;
+        user_region: Region | undefined;
         cum_min: number | undefined;
         date: Date | undefined;
 
@@ -169,7 +169,7 @@
                             class="regular-link"
                             href={`/meetups/${meetup_id}/results/${round_id}`}
                             >{getRoundName(
-                                puzzles[puzzle].name,
+                                undefined,
                                 round_number + 1,
                                 round_maximum
                             )}</a

@@ -18,11 +18,11 @@
     import * as Icons from "$lib/assets/cube-icons/icons";
 
     import puzzles from "$lib/data/puzzles"
-    import { puzzle } from '$lib/db/enums';
+    import { Puzzle } from '$lib/db/enums';
     import Table, { DisplayType, MixDisplayMethod } from '$lib/components/global/Table.svelte';
 
     let resultsEventIndex: number = 0;
-    $: resultsEvent = Object.keys(puzzle)[resultsEventIndex]
+    $: resultsEvent = Object.keys(Puzzle)[resultsEventIndex]
 
     let historyIndex: number;
 
@@ -210,7 +210,7 @@
                 <div class="results-history">
                     <div class="results-history-header">
                         <img src={puzzles[resultsEvent].icon} alt="" height=28/>
-                        <p class="fsize-body">{puzzles[resultsEvent].name} Results (index = {resultsEventIndex})</p>
+                        <p class="fsize-body">{puzzles[resultsEvent].name} Results</p>
                     </div>
 
                     <Table
@@ -228,10 +228,9 @@
                 <div class="records-history">
                     {#each Object.entries(puzzles) as [puzzle, { name, icon }], i}
                         {@const historicalPuzzleRankings = data.historicalRecords[puzzle]}
-                        <div class={"group-label group-label-" + i}>
-                            <img src={icon} alt="" />
-
-                            <h3 class="fsize-title2">{name} History</h3>
+                        <div class="group-label records-history-header">
+                            <img src={puzzles[resultsEvent].icon} alt="" height=28/>
+                            <p class="fsize-body">{puzzles[resultsEvent].name} Results</p>
                         </div>
 
                         <Table
@@ -263,7 +262,7 @@
         margin-top: 48px;
     }
 
-    .group-label-0 {
+    .group-label:first-of-type {
         margin-top: 0;
     }
 
@@ -407,7 +406,7 @@
         font-weight: 500;
     }
 
-    .results-history-header {
+    .results-history-header, .records-history-header {
         display: flex;
         flex-direction: row;
         align-items: center;
@@ -417,7 +416,7 @@
         margin-bottom: 4px;
     }
 
-    .results-history-header * {
+    .results-history-header *, .records-history-header * {
         font-weight: 500;
     }
 </style>

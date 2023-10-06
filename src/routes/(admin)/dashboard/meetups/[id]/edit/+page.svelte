@@ -5,9 +5,9 @@
 
     import type { PageData } from './$types';
     export let data: PageData;
-    let addedOrganisers = data.meetup.organisers.map(x => {
+    let addedOrganisers = data.meetup.organisers.flatMap(x => {
         let u = data.organisers.find(y => y.id == x.user.id)
-        return {name: u.name, id: u.id}
+        return u? [{name: u.name, id: u.id}] : []
     })
     let organisersError;
 

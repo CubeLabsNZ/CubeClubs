@@ -8,7 +8,7 @@
     import regions, { regionToString } from "$lib/data/regions";
     import puzzles from "$lib/data/puzzles";
 
-    import type { region } from "@prisma/client";
+    import type { Region } from "@prisma/client";
 
     import Select from "$lib/components/global/Select.svelte";
     import PageContent from "$lib/components/global/PageContent.svelte";

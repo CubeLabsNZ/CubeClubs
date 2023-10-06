@@ -1,6 +1,6 @@
-import type { region } from '@prisma/client'
+import type { Region } from '@prisma/client'
 
-const regions: {[key in region]: {name: string, maori_name?: string}} = {
+const regions: {[key in Region]: {name: string, maori_name?: string}} = {
 	NORTHLAND: { name: "Northland", maori_name: "Te Tai Tokerau" },
 	AUCKLAND: { name: "Auckland", maori_name: "Tāmaki-makau-rau" },
 	WAIKATO: { name: "Waikato" },

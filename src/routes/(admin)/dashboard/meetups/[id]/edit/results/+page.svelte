@@ -13,7 +13,7 @@
     import formats from "$lib/data/formats"
 
     import type { PageData, ActionData } from "./$types";
-    import { puzzle } from "@prisma/client";
+    import { Puzzle } from "@prisma/client";
 
     export let data: PageData
     export let form: ActionData

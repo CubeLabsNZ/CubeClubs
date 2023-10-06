@@ -28,7 +28,7 @@ model user {
   // pass hash can be null when migrating
   pass_hash       String?
   name            String
-  region          region
+  region          Region
   is_club_organiser Boolean @default(false)
 
   sessions session[]
@@ -54,7 +54,7 @@ model user_in_meetup {
   meetup   meetup @relation(fields: [meetup_id], references: [id])
   meetup_id Int
 
-  registered_events puzzle[]
+  registered_events Puzzle[]
 
   @@id([user_id, meetup_id])
 }
@@ -99,8 +99,8 @@ model round {
 
   start_date DateTime
   end_date   DateTime
-  puzzle    puzzle
-  format    format
+  puzzle    Puzzle
+  format    Format
   proceed_number Int
   results   result[]
 
@@ -138,7 +138,7 @@ model solve {
   @@id([result_id, index])
 }
 
-enum region {
+enum Region {
   NORTHLAND
   AUCKLAND
   WAIKATO
@@ -159,7 +159,7 @@ enum region {
   VISITOR
 }
 
-enum puzzle {
+enum Puzzle {
   THREE
   TWO
   FOUR
@@ -181,7 +181,7 @@ enum puzzle {
   FIVEBLD
 }
 
-enum format {
+enum Format {
   BO3
   BO2
   BO1
