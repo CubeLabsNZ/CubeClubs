@@ -11,6 +11,8 @@
     --c-lg0: #FAFBFC;
 
     --c-lgh: #D1D3D640;
+    /* hardcoded lgh for white bg */
+    --c-lgh-whitebg: #f4f4f5;
 
     --c-lg1: #D1D3D6;
     --c-lg2: #AFB1B4;

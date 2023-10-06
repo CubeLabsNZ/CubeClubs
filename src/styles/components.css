@@ -185,7 +185,30 @@ th:last-child {
 }
 
 tr:nth-of-type(even) td {
-    background-color: var(--c-lgh);
+    background-color: var(--c-lgh-whitebg);
+}
+
+@keyframes shine-lines {
+    0% {
+        background-position: -400px;
+    }
+
+    70%,
+    100% {
+        background-position: 1200px;
+    }
+}
+tr.loading:nth-of-type(even) td {
+    background-color: var(--c-lgh-whitebg);
+    background-image: linear-gradient(
+        90deg,
+        var(--c-lgh-whitebg) 0px,
+        var(--c-lg0) 80px,
+        var(--c-lgh-whitebg) 160px
+    );
+    background-size: 1200px;
+    background-repeat: no-repeat;
+    animation: shine-lines 2.5s infinite linear;
 }
 
 td, th {

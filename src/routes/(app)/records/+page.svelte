@@ -122,8 +122,6 @@
                 <h3 class="fsize-title2">{name} History</h3>
             </div>
 
-            <div>mbld: {ismbld}</div>
-
             {#if ismbld}
             <Table
                 list={[historicalPuzzleRankings[1]] ?? [undefined]}
@@ -131,6 +129,7 @@
                 hasMeetup={true}
                 displayRank={false}
                 showDate={true}
+                ismbld={true}
             />
             {:else}
             <Table

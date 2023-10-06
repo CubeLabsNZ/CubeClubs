@@ -229,8 +229,8 @@
                     {#each Object.entries(puzzles) as [puzzle, { name, icon }], i}
                         {@const historicalPuzzleRankings = data.historicalRecords[puzzle]}
                         <div class="group-label records-history-header">
-                            <img src={puzzles[resultsEvent].icon} alt="" height=28/>
-                            <p class="fsize-body">{puzzles[resultsEvent].name} Results</p>
+                            <img src={puzzles[puzzle].icon} alt="" height=28/>
+                            <p class="fsize-body">{puzzles[puzzle].name} Results</p>
                         </div>
 
                         <Table

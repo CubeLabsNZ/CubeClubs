@@ -53,7 +53,9 @@ export const load = (async ({ url }) => {
         query = query.where('user_region', '=', filterRegion)
     }
 
-    const results = await query.execute()
-
-    return { results, isSingle }
+    return {
+        streamed: {
+            results: query.execute()
+        }, isSingle
+    }
 }) satisfies PageServerLoad
