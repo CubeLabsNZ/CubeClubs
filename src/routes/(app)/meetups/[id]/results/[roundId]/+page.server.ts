@@ -27,9 +27,11 @@ export const load = (async ({ params }) => {
                                 .select((eb) => [
                                     'value',
                                     'user.id as user_id', 'user.name as user_name', 'user.region as user_region',
+                                    'result.mbld_score', 'result.mbld_total',
                                     eb.fn.agg<string[]>('array_agg', ['solve.time']).as('solves')
                                 ])
-                                .groupBy(['value', 'user.id', 'user.name', 'user.region'])
+                                .orderBy(['result.mbld_score desc', 'value asc'])
+                                .groupBy(['value', 'user.id', 'user.name', 'user.region', 'result.mbld_score', 'result.mbld_total'])
                                 .innerJoin('user', 'user.id', 'result.user_id')
                                 .leftJoin("solve", 'result.id', 'solve.result_id')
                                 .whereRef('result.round_id', '=', 'round.id')

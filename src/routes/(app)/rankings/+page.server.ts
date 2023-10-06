@@ -11,8 +11,9 @@ export const load = (async ({ url }) => {
     let query
 
     const isSingle = filterFormat === "single"
+    const isMbld = filterEvent === "MULTIBLD"
 
-    if (isSingle) {
+    if (isSingle && !isMbld) {
         query = db.with('temp', (eb) => eb.selectFrom('solve')
             .innerJoin('result', 'result.id', 'solve.result_id')
             .innerJoin('round', 'round.id', 'result.round_id')
@@ -35,9 +36,9 @@ export const load = (async ({ url }) => {
             .leftJoin("solve", 'result.id', 'solve.result_id')
             .where('round.puzzle', '=', filterEvent)
             .distinctOn('user.id')
-            .groupBy(['value', 'user.name', 'user.region', 'user.id', 'meetup.id', 'meetup.name', 'result.mbld_score'])
+            .groupBy(['value', 'user.name', 'user.region', 'user.id', 'meetup.id', 'meetup.name', 'result.mbld_score', 'result.mbld_total'])
             .select(({ fn }) => [
-                'value', 'user.name as user_name', 'user.region as user_region', 'user.id as user_id', 'meetup.id as meetup_id', 'meetup.name as meetup_name', 'result.mbld_score', 'result.mbld_total'
+                'value', 'user.name as user_name', 'user.region as user_region', 'user.id as user_id', 'meetup.id as meetup_id', 'meetup.name as meetup_name', 'result.mbld_score', 'result.mbld_total',
                 // TODO: check order
                 fn.agg<string[]>('array_agg', ['solve.time']).as('solves')
             ])

@@ -45,6 +45,7 @@
 
     {#if currentRound.results.length}
         {@const firstres = currentRound.results[0]}
+        {@const ismbld = Boolean(firstres.mbld_score)}
 
         <Table
                 list={currentRound.results}
@@ -53,7 +54,9 @@
                 displayMedals={currentRound.number === data.maxRounds[currentRound.puzzle]}
                 proceedNum={currentRound.proceed_number}
                 showBest={true}
-                displayType={DisplayType.AVERAGE}
+                hasSolves={!ismbld}
+                displayType={ismbld ? DisplayType.SINGLE : DisplayType.AVERAGE}
+                widths={["48px"]}
             />
     {:else}
         <p>No results yet - check back later!</p>

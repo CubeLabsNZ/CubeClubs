@@ -29,6 +29,7 @@
     // TODO: make stupid multibutton more fleible than just stupid index stupid
     let eventIndex = $page.url.searchParams.has("event") ? Object.keys(puzzles).indexOf($page.url.searchParams.get("event")) : 0
 
+    $: ismbld = Object.keys(puzzles)[eventIndex] == "MULTIBLD"
 
 // TODO: make this good and all backend 
     $: {
@@ -81,6 +82,7 @@
             </Select>
         </div>
 
+        {#if !ismbld}
         <div class="label-group">
             <p class="label">Format</p>
 
@@ -89,6 +91,7 @@
                 {type: LabelType.Text, data: "Average"}
             ]} /> 
         </div>
+        {/if}
     </div>
 
     <div class="filter-bar">
@@ -101,9 +104,9 @@
 
     <Table
         list={data.results}
-            displayType={data.isSingle ? DisplayType.SINGLE : DisplayType.AVERAGE}
+            displayType={!ismbld ? (data.isSingle ? DisplayType.SINGLE : DisplayType.AVERAGE) : DisplayType.SINGLE}
             hasMeetup={true}
-            hasSolves={!data.isSingle}
+            hasSolves={!data.isSingle && !ismbld}
             displayRank={true}
             widths={["50px", "160px", "80px", "80px", "auto"]}
     />

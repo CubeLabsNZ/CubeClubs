@@ -92,7 +92,7 @@
                         case DisplayType.AVERAGE:
                             return "Average";
                         case DisplayType.SINGLE:
-                            return "Time";
+                            return list[0].mbld_score ? "Score" : "Time";
                         case DisplayType.MIX:
                             return "Result";
                     }
@@ -149,6 +149,8 @@
                     user_region,
                     cum_min,
                     date,
+                    mbld_score,
+                    mbld_total,
 
                     puzzle,
                     round_number,
@@ -243,7 +245,7 @@
                         data-icr={is_average_icr}
                         data-ir={is_average_ir}
                         data-rr={is_average_rr}
-                        >{formatTime(value ? value : time)}</td
+                        >{formatTime(value ? value : time, mbld_score, mbld_total)}</td
                     >
                 {:else}
                     <td class="tc-mix-single"

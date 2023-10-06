@@ -37,7 +37,6 @@ export const load = (async ({ url }) => {
 
         const single = await singleQuery.executeTakeFirst()
 
-        // TODO: if mbld return single only
         if (!single) continue;
 
         let averageQuery = db.selectFrom('result')
@@ -52,12 +51,14 @@ export const load = (async ({ url }) => {
                 'user.region as user_region',
                 'meetup.id as meetup_id',
                 'meetup.name as meetup_name',
+                'result.mbld_score',
+                'result.mbld_total',
                 // TODO: check order
                 eb.fn.agg<number[]>('array_agg', ['solve.time']).as('solves')
             ])
             .where('round.puzzle', '=', key)
-            .groupBy(['result.value', 'user.id', 'user.name', 'user.region', 'meetup.id', 'meetup.name'])
-            .orderBy('value asc')
+            .groupBy(['result.value', 'user.id', 'user.name', 'user.region', 'meetup.id', 'meetup.name', 'result.mbld_score', 'result.mbld_total'])
+            .orderBy(['result.mbld_score desc', 'value asc'])
 
         if (!(filterRegion === undefined || filterRegion === null || filterRegion === "undefined")) {
             averageQuery = averageQuery
