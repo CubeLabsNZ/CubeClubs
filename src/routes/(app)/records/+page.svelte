@@ -110,7 +110,6 @@
     {:else}
         {#each Object.entries(puzzles) as [puzzle, { name, icon }], i}
             {@const historicalPuzzleRankings = data.historicalRecords[puzzle]}
-            {@debug historicalPuzzleRankings}
             <div class={"group-label group-label-" + i}>
                 <img src={icon} alt="" />
 
