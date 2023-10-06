@@ -91,6 +91,8 @@
     {#if displayType == 0}
         <!-- current -->
         {#each Object.entries(puzzles) as [puzzle, { name, icon }], i}
+            {@const ismbld = puzzle == "MULTIBLD"}
+                                                  {@debug ismbld}
             {@const single = data.records[puzzle]?.single}
             {@const average = data.records[puzzle]?.average}
             <div class={"group-label group-label-" + i}>
@@ -100,15 +102,19 @@
             </div>
 
             <Table
-                list={[single, average]}
-                displayType={DisplayType.MIX}
+                list={ismbld ? [average] : [single, average]}
+                displayType={ismbld ? DisplayType.SINGLE : DisplayType.MIX}
                 hasMeetup={true}
-                widths={["50px", "160px", "80px", "160px", "270px", "auto"]}
+                hasSolves={!ismbld}
+                widths={ ismbld ? ["210px", "80px", "160px", "auto"] : ["50px", "160px", "80px", "160px", "270px", "auto"]}
                 displayRank={false}
             />
         {/each}
     {:else}
         {#each Object.entries(puzzles) as [puzzle, { name, icon }], i}
+            {@const ismbld = puzzle == "MULTIBLD"}
+                                                  {@debug ismbld}
+            {@debug ismbld}
             {@const historicalPuzzleRankings = data.historicalRecords[puzzle]}
             <div class={"group-label group-label-" + i}>
                 <img src={icon} alt="" />
@@ -116,6 +122,17 @@
                 <h3 class="fsize-title2">{name} History</h3>
             </div>
 
+            <div>mbld: {ismbld}</div>
+
+            {#if ismbld}
+            <Table
+                list={[historicalPuzzleRankings[1]] ?? [undefined]}
+                displayType={DisplayType.SINGLE}
+                hasMeetup={true}
+                displayRank={false}
+                showDate={true}
+            />
+            {:else}
             <Table
                 list={historicalPuzzleRankings ?? [undefined]}
                 displayType={DisplayType.MIX}
@@ -124,6 +141,7 @@
                 showDate={true}
                 mixDisplayMethod={MixDisplayMethod.SeparateAverageAndSingle}
             />
+            {/if}
         {/each}
     {/if}
 </PageContent>

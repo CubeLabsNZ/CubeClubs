@@ -30,7 +30,10 @@ export function getRoundName(puzzleName: string, roundNumber: number, maxRound: 
 }
 
 
-export function formatTime(rawValue: number): string {
+export function formatTime(rawValue: number, mbld_score: number | undefined, mbld_total: number | undefined): string {
+    if (mbld_score && mbld_total) {
+        return `${(mbld_score+mbld_total)/2}/${mbld_total}`
+    }
     if (rawValue === Infinity || rawValue === "Infinity") {
         return "DNF"
     }
