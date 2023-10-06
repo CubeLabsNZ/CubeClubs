@@ -24,6 +24,10 @@
     let plugins = [TimeGrid, Interaction];
 
     let options, eventCalendar, addEventCard;
+    let deletedIds: string[] = []
+
+    $: globalThis.eventCalendar = eventCalendar;
+    $: globalThis.deletedIds = deletedIds;
 
     let displayingUUID: string | null = null
 
@@ -46,7 +50,6 @@
 
     let hasUnsavedChanges = false
     let saveFetch: Promise<Response> | null = null
-    let deletedIds: string[] = []
 
     let unselectCancel = true
 
@@ -113,22 +116,18 @@
                 center: "",
                 end: ""
             },
-            eventClick: function(info) {
-                if (info.event.display === 'auto') {
-                    let btn = info.el.querySelector('button');
-                    if (info.jsEvent.target === btn) {
-                        eventCalendar.removeEventById(info.event.id);
-                        deletedIds.push(info.event.id)
-                        hasUnsavedChanges = true
-                    }
-                }
-            },
             eventContent: (info) => {
                 return info.event.display === 'auto' ? {
                     html: `
                         <div class="ec-event-time">${info.timeText}</div>
-                        <button>Delete</button>
                         <div class="ec-event-title">${info.event.title}</div>
+
+                        <button onclick="(() => {
+                            globalThis.eventCalendar.removeEventById('${info.event.id}');
+                            globalThis.deletedIds.push('${info.event.id}');
+                        })()">
+                            <span style="float: right; transform: translateY(-20px); font-size: 18px; color: var(--c-red)" class="material-symbols-outlined" style:margin-right=4px style:font-size=18px>delete</span>
+                        </button>
                     `
                 } :''
             },
@@ -298,8 +297,6 @@
                         </div>
                     </Button>
                 </button>
-
-                {@debug selectedPuzzle, selectedFormat}
 
                 <button
                     on:click={() => {
