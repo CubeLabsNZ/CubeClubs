@@ -81,3 +81,18 @@ export function calculateAverage(fformat: format, data: number[]): number {
         }
     }
 }
+
+export function replaceMaoriCharacters(x: string): string {
+    return x
+        .replace("ā", "a")
+        .replace("ē", "e")
+        .replace("ī", "i")
+        .replace("ō", "o")
+        .replace("ū", "u")
+
+        .replace("Ā", "A")
+        .replace("Ē", "E")
+        .replace("Ī", "I")
+        .replace("Ō", "O")
+        .replace("Ū", "U")
+}
