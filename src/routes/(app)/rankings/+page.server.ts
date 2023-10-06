@@ -35,13 +35,13 @@ export const load = (async ({ url }) => {
             .leftJoin("solve", 'result.id', 'solve.result_id')
             .where('round.puzzle', '=', filterEvent)
             .distinctOn('user.id')
-            .groupBy(['value', 'user.name', 'user.region', 'user.id', 'meetup.id', 'meetup.name'])
+            .groupBy(['value', 'user.name', 'user.region', 'user.id', 'meetup.id', 'meetup.name', 'result.mbld_score'])
             .select(({ fn }) => [
-                'value', 'user.name as user_name', 'user.region as user_region', 'user.id as user_id', 'meetup.id as meetup_id', 'meetup.name as meetup_name',
+                'value', 'user.name as user_name', 'user.region as user_region', 'user.id as user_id', 'meetup.id as meetup_id', 'meetup.name as meetup_name', 'result.mbld_score', 'result.mbld_total'
                 // TODO: check order
                 fn.agg<string[]>('array_agg', ['solve.time']).as('solves')
             ])
-            .orderBy(['user.id asc', 'value asc'])
+            .orderBy(['user.id asc', 'result.mbld_score desc', 'value asc'])
         )
             .selectFrom('temp')
             .orderBy('value', 'asc')
