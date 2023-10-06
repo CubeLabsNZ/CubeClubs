@@ -62,6 +62,18 @@
         margin-top: 32px;
     }
 
+    @media(max-width: 1040px) {
+        .schedule-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+
+    @media(max-width: 700px) {
+        .schedule-grid {
+            grid-template-columns: repeat(1, 1fr);
+        }
+    }
+
     .schedule-item {
         display: flex;
         align-items: center;

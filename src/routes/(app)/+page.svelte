@@ -64,7 +64,7 @@
         z-index: -1;
         position: fixed;
 
-        --_clubs-width: max(min(1800px, 85vw), 75vh);
+        --_clubs-width: max(min(1800px, calc(150px + 0.9*85vw)), calc(100px + 0.9*75vh));
 
         bottom: calc(-0.1 * var(--_clubs-width));
         right: calc(-0.1 * var(--_clubs-width));
@@ -117,7 +117,7 @@
     }
 
     #landing-content {
-        margin-left: min(110px, 8.8vw);
+        margin-left: max(20px, min(110px, 8.8vw - 40px));
         margin-top: min(220px, 22vh);
 
         z-index: 2;
@@ -178,7 +178,7 @@
         height: 24px;
         
         z-index: 10;
-        margin-left: min(110px, 8.8vw);
+        margin-left: max(20px, min(110px, 8.8vw - 40px));
     }
 
     .footer * {

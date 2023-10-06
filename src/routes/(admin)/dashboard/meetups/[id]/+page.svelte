@@ -204,8 +204,7 @@
 </div>
 
 
-
-<h3 class="fsize-title2" style:font-weight=500 style:margin-top=48px style:margin-bottom=16px>Schedule</h3>
+<!-- <h3 class="fsize-title2" style:font-weight=500 style:margin-top=48px style:margin-bottom=16px>Schedule</h3> -->
 
 {#if showPublishMessage}
     <Toast> 

@@ -55,6 +55,8 @@
     $: allowedFormats = selectedPuzzle ? puzzles[selectedPuzzle].allowedFormats : []
     let proceed_number: number | undefined
 
+    $: proceed_number = isNaN(Number(proceed_number)) || Number(proceed_number) < 0 ? undefined : Number(proceed_number)
+
     function saveChanges() {
         // TODO cancel promise and stuff
         saveFetch = fetch("./schedule/save", {
@@ -264,6 +266,7 @@
                 <input
                     required
                     name="numberProceed"
+                    type="number"
                     bind:value={proceed_number}
                 />
             </div>

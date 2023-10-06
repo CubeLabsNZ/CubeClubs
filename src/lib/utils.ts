@@ -26,7 +26,7 @@ export function partition<T>(array: T[], filter: (e: T, idx: number, arr: T[]) =
 }
 
 export function getRoundName(puzzleName: string, roundNumber: number, maxRound: number) {
-    return `${puzzleName ? puzzleName + " — " : ""}${roundNumber == maxRound ? "Final Round" : `Round ${roundNumber}`}`
+    return `${puzzleName ? puzzleName + ": " : ""}${roundNumber == maxRound ? "Final Round" : `Round ${roundNumber}`}`
 }
 
 
@@ -80,4 +80,19 @@ export function calculateAverage(format: Format, data: number[]): number {
             return Math.min(...data as number[]);
         }
     }
+}
+
+export function replaceMaoriCharacters(x: string): string {
+    return x
+        .replace("ā", "a")
+        .replace("ē", "e")
+        .replace("ī", "i")
+        .replace("ō", "o")
+        .replace("ū", "u")
+
+        .replace("Ā", "A")
+        .replace("Ē", "E")
+        .replace("Ī", "I")
+        .replace("Ō", "O")
+        .replace("Ū", "U")
 }
