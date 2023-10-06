@@ -101,13 +101,24 @@
 <style>
     /* INFO: info tab */
     .info-grid {
-        display: grid;
         grid-auto-columns: 1fr;
         grid-auto-flow: column;
 
         column-gap: 16px;
 
         margin-top: 32px;
+    }
+
+    @media (min-width: 701px) {
+        .info-grid {
+            display: grid;
+        }
+    }
+
+    @media (max-width: 700px) {
+        .info-right {
+            margin-top: 24px;
+        }
     }
 
     .info-left {

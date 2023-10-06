@@ -331,8 +331,8 @@
         .container-grid {
             width: calc(100% - 40px);
 
-            margin-left: 20px;
-            margin-right: 20px;
+            padding-left: 20px;
+            padding-right: 20px;
         }
 
     }
@@ -345,11 +345,11 @@
         }
 
         .user-container {
-            width: calc(100% - 40px);
+            width: 100%;
         }
 
         .content {
-            width: calc(100% - 40px);
+            width: 100%;
         }
 
         .pr-section {
