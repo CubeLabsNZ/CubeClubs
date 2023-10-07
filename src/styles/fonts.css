@@ -1,43 +1,50 @@
 @font-face {
 	font-family: "IBMPlexSans";
-	src: url("../fonts/IBMPlexSans-Bold.ttf") format("truetype");
+	src: url("/fonts/IBMPlexSans-Bold.woff2") format("woff2");
 	font-weight: 700;
+	font-display: swap;
 }
 
 @font-face {
 	font-family: "IBMPlexSans";
-	src: url("../fonts/IBMPlexSans-SemiBold.ttf") format("truetype");
+	src: url("/fonts/IBMPlexSans-SemiBold.woff2") format("woff2");
 	font-weight: 600;
+	font-display: swap;
 }
 
 @font-face {
 	font-family: "IBMPlexSans";
-	src: url("../fonts/IBMPlexSans-Medium.ttf") format("truetype");
+	src: url("/fonts/IBMPlexSans-Medium.woff2") format("woff2");
 	font-weight: 500;
+	font-display: swap;
 }
 
 @font-face {
 	font-family: "IBMPlexSans";
-	src: url("../fonts/IBMPlexSans-Regular.ttf") format("truetype");
+	src: url("/fonts/IBMPlexSans-Regular.woff2") format("woff2");
 	font-weight: 400;
+	font-display: swap;
 }
 
 @font-face {
 	font-family: "IBMPlexSans";
-	src: url("../fonts/IBMPlexSans-Light.ttf") format("truetype");
+	src: url("/fonts/IBMPlexSans-Light.woff2") format("woff2");
 	font-weight: 300;
+	font-display: swap;
 }
 
 @font-face {
 	font-family: "IBMPlexSans";
-	src: url("../fonts/IBMPlexSans-ExtraLight.ttf") format("truetype");
+	src: url("/fonts/IBMPlexSans-ExtraLight.woff2") format("woff2");
 	font-weight: 200;
+	font-display: swap;
 }
 
 @font-face {
 	font-family: "IBMPlexSans";
-	src: url("../fonts/IBMPlexSans-Thin.ttf") format("truetype");
+	src: url("/fonts/IBMPlexSans-Thin.woff2") format("woff2");
 	font-weight: 100;
+	font-display: swap;
 }
 
 
@@ -45,5 +52,6 @@
 /* TW CEN MT */
 @font-face {
 	font-family: "TwCenMt";
-	src: url("../fonts/TwCenMTStd-SemiMedium.otf");
+	src: url("/fonts/TwCenMTStd-SemiMedium.woff2") format("woff2");
+	font-display: swap;
 }

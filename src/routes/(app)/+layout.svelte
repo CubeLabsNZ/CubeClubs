@@ -24,8 +24,8 @@
 
 <div id="navbar">
     <div id="navbar-left"> 
-        <a class="image-link" href="/">
-            <img src={logo} alt="" height=30>
+        <a class="image-link" aria-label="Home Page" href="/">
+            <img src={logo} alt="" height=30 width=30>
         </a>
 
         <a class="regular-link navbar-full" href="/meetups">Meetups</a>

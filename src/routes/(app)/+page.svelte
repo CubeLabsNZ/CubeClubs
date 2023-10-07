@@ -38,8 +38,7 @@
     <img id="landing-clubs" src="/landing/clubs.webp" alt="">
 
     <div class="footer">
-        <!-- TODO: link github when public -->
-        <a href="https://github.com/CubeClubsNZ/app" target="_blank" class="hoverable-link" style:height=18px style:fill=var(--c-lg1)>
+        <a href="https://github.com/CubeClubsNZ/app" aria-label="CubeClubs source code (GitHub)" target="_blank" class="hoverable-link" style:height=18px style:fill=var(--c-lg1)>
             <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" viewBox="0 0 28 28" height=18px style:height=18px >
                 <path class="st0" d="M14,0.2C6.3,0.2,0,6.5,0,14.3c0,6.2,4,11.5,9.6,13.4c0.7,0.1,1-0.3,1-0.7c0-0.3,0-1.4,0-2.6
                     c-3.9,0.8-4.7-1.7-4.7-1.7c-0.6-1.6-1.6-2.1-1.6-2.1c-1.3-0.9,0.1-0.9,0.1-0.9c1.4,0.1,2.2,1.4,2.2,1.4c1.3,2.1,3.3,1.5,4.1,1.2
