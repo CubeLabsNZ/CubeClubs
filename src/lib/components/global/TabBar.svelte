@@ -22,7 +22,7 @@
 <style>
     .container {
         border-bottom: 1px solid var(--c-lg1);
-        height: 34px;
+        height: 28px;
 
         display: flex;
         flex-direction: row;
@@ -42,7 +42,7 @@
     }
 
     button {
-        height: 34px;
+        height: 28px;
 
         display: grid;
         align-items: grid-end;
@@ -59,11 +59,13 @@
         transition: color var(--v-animation-delay) ease-in-out;
     }
 
+    button[data-current=true] {
+        border-bottom: 2px solid var(--c-a);
+    }
+
     button[data-current=true] * {
         font-weight: 500;
         color: var(--c-a);
-
-        border-bottom: 2px solid var(--c-a);
     }
 
 

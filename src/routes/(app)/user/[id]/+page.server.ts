@@ -5,6 +5,8 @@ import { Puzzle } from '@prisma/client';
 
 import puzzles from '$lib/data/puzzles'
 import { islandRegions } from '$lib/data/regions';
+import { db } from '$lib/db';
+import { sql } from 'kysely';
 
 export const load = (async ({ params }) => {
 
@@ -12,17 +14,29 @@ export const load = (async ({ params }) => {
     if (isNaN(id)) {
         throw error(404, 'not found');
     }
+
     const user = await prisma.user.findUnique({
-        where: { id: Number(params.id) },
+        where: {
+            id: Number(params.id),
+        },
         select: {
             name: true,
             id: true,
             region: true,
-            results: {
-                include: {
-                    solves: true,
+            is_club_organiser: true,
+            _count: {
+                select: {
+                    competing_in: {
+                        where: {
+                            meetup: {
+                                date: {
+                                    lt: new Date()
+                                }
+                            }
+                        }
+                    }
                 }
-            },
+            }
         }
     })
 
@@ -30,60 +44,144 @@ export const load = (async ({ params }) => {
         throw error(404, 'not found');
     }
 
-    const completedSolves = user.results.reduce((x,y) => x + y.solves.length, 0)
-    // TODO: somehow include this in the first findUnique call?
-    // TODO: maybe limit only to previous comps somehow?
-    const meetupsAttended = prisma.userInMeetup.count({
-        where: {
-            userId: user.id,
+
+
+    // Don't even talk to me right now.
+    const getHistoricalRecords = async () => {
+        const recordsHistory = {}
+
+        const historicalAverages = await db.with('ungrouped', eb =>
+            eb.selectFrom('result')
+                .distinctOn('cum_min')
+                .innerJoin('round', 'round.id', 'result.round_id')
+                .innerJoin('meetup', 'meetup.id', 'round.meetup_id')
+                .innerJoin('user', 'user.id', 'result.user_id')
+                .leftJoin("solve", 'result.id', 'solve.result_id')
+                .where('user.id', '=', user.id)
+                .select(({ fn, selectFrom }) => [
+                    fn.min('result.value').over(ob => ob.orderBy('round.end_date', 'asc').partitionBy(['round.puzzle'])).as('cum_min'),
+                    'meetup.id as meetup_id',
+                    'meetup.name as meetup_name',
+                    'round.end_date as date',
+                    selectFrom('round as round_inner')
+                        .whereRef('round_inner.puzzle', '=', 'round.puzzle')
+                        .whereRef('round_inner.meetup_id', '=', 'meetup.id')
+                        .whereRef('round_inner.start_date', '<', 'round.start_date')
+                        .select((eb) => [eb.fn.coalesce(eb.fn.count('id'), eb.lit(0)).as('round_number')])
+                        .limit(1).as('round_number'),
+                    // TODO: merge with above select and do FILTER WHERE or OVER WHERE
+                    selectFrom('round as round_inner')
+                        .whereRef('round_inner.puzzle', '=', 'round.puzzle')
+                        .whereRef('round_inner.meetup_id', '=', 'meetup.id')
+                        .select((eb) => [eb.fn.coalesce(eb.fn.count('id'), eb.lit(0)).as('round_maximum')])
+                        .limit(1).as('round_maximum'),
+                    // TODO: check order
+                    fn.agg<string[]>('array_agg', ['solve.time']).as('solves'),
+
+                    'round.puzzle',
+                ])
+                .groupBy(['result.value', 'user.name', 'user.id', 'round.puzzle', 'round.end_date', 'meetup.id', 'round.start_date'])
+                // Must order by time so distinct on picks correct value
+                .orderBy(['cum_min asc', 'value asc'])
+        )
+            .selectFrom('ungrouped')
+            .select((eb) => [
+                eb.fn('json_build_object', ['puzzle', eb.fn('json_agg', 'ungrouped')]).as('obj')
+            ])
+            .groupBy('ungrouped.puzzle')
+            .execute()
+
+        const historicalSingles = await db.with('ungrouped', eb =>
+            eb.selectFrom('solve')
+                .distinctOn('cum_min')
+                .innerJoin('result', 'result.id', 'solve.result_id')
+                .innerJoin('round', 'round.id', 'result.round_id')
+                .innerJoin('user', 'user.id', 'result.user_id')
+                .innerJoin('meetup', 'meetup.id', 'round.meetup_id')
+                .where('user.id', '=', user.id)
+                .select(({ fn }) => [
+                    fn.min('solve.time').over(ob => ob.orderBy('round.end_date', 'asc').partitionBy(['round.puzzle'])).as('cum_min'),
+                    'meetup.id as meetup_id',
+                    'meetup.name as meetup_name',
+                    'round.end_date as date',
+                    // TODO: check order
+
+                    'round.puzzle',
+                    'solve.time'
+
+                ])
+                .groupBy(['solve.time', 'user.name', 'user.id', 'round.puzzle', 'round.end_date', 'meetup.id'])
+                .orderBy(['cum_min asc', 'time asc'])
+        )
+            .selectFrom('ungrouped')
+            .select((eb) => [
+                eb.fn('json_build_object', ['puzzle', eb.fn('json_agg', 'ungrouped')]).as('obj')
+            ])
+            .groupBy('ungrouped.puzzle')
+            .execute()
+
+
+        const toEntries = (x) => {
+            const puzzle = Object.keys(x.obj)[0]
+            return [puzzle, x.obj[puzzle]]
         }
-    });
 
+        const historicalRecords = Object.fromEntries(historicalSingles.map(toEntries))
 
-    // TODO: you have to make it to the last round for a medal right ?
-    // TODO: make this groupBy round.groupBy?? need docs
-    const meetupsTop3Solves = await prisma.meetup.findMany({
-        select: {
-            rounds: {
-                orderBy: {
-                    endDate: 'desc'
-                },
-                distinct: 'puzzle',
-                select: {
-                    results: {
-                        orderBy: {
-                            average: 'asc'
-                        },
-                        take: 3,
-                        select: {
-                            userId: true,
-                            average: true
-                        }
-                    }
-                }
-            },
+        for (const x of historicalAverages) {
+            const puzzle = Object.keys(x.obj)[0]
+            historicalRecords[puzzle] = (historicalRecords[puzzle] ?? []).concat(x.obj[puzzle])
         }
-    });
 
-    console.log(JSON.stringify(meetupsTop3Solves))
-    // TODO: this is embarrassing,.. how to range?
-    // TODO: is medal based on average or single?
-    const medals = [0,1,2].map((medalIdx) => {
-        // TODO: is there better function for count where X?
-        let count = 0
-        for (const meetup of meetupsTop3Solves) {
-            for (const round of meetup.rounds) {
-                if (round.results[medalIdx]?.userId == user.id) {
-                    count++
-                }
-            }
-        }
-        return count
-    })
+        return historicalRecords
+    }
 
-    console.log("AAA")
-    console.log(meetupsTop3Solves[0].rounds[0])
-    
+    const historicalRecords = getHistoricalRecords()
+
+
+    //const completedSolves = user.results.reduce((x, y) => x + y.solves.length, 0)
+    const solvesQuery = db.selectFrom('solve')
+        .select(({ fn }) => [fn.countAll().as('completedSolves')])
+        .innerJoin('result', 'result.id', 'solve.result_id')
+        .where('result.user_id', '=', user.id)
+        .where('solve.time', '!=', Infinity)
+        .executeTakeFirst()
+
+
+
+    // TODO: try make this an array right away
+    const medalsTempPromise = db.with('last_rounds', (eb) =>
+        eb.selectFrom('round')
+            .select(['id', 'end_date'])
+            .distinctOn(['puzzle', 'meetup_id'])
+            .orderBy(['puzzle', 'meetup_id', 'end_date desc'])
+    )
+        .selectFrom('last_rounds')
+        .select((eb) => [
+            eb.fn.count('result.id').filterWhere('rank', '=', '1').as('gold'),
+            eb.fn.count('result.id').filterWhere('rank', '=', '2').as('silver'),
+            eb.fn.count('result.id').filterWhere('rank', '=', '3').as('bronze')
+        ])
+        .innerJoinLateral(
+            (eb) => eb.selectFrom('result')
+                .select((fb) => [
+                    'result.id as id', 'value', 'user.id as user_id',
+                    fb.fn.agg<number>('row_number').over(ob => ob.orderBy('result.value', 'asc')).as('rank')
+                ])
+                .innerJoin('user', 'user.id', 'result.user_id')
+                .whereRef('result.round_id', '=', 'last_rounds.id')
+                .orderBy('result.value asc')
+                .limit(3)
+                .as('result'),
+            (join) => join.onTrue()
+        )
+        .where('user_id', '=', user.id)
+        .where('value', '!=', Infinity)
+        .executeTakeFirst()
+
+
+
+
     // TODO: figure out a way to get PRs with groupBy and min or discrete or smth
     //
     type PRInfo = {
@@ -98,93 +196,265 @@ export const load = (async ({ params }) => {
         average: number
     }
 
-    const records: {regional: RInfo, island: RInfo} = {
-        regional: {single: 0, average: 0},
-        island: {single: 0, average: 0}
+    const records: { regional: RInfo, island: RInfo, interclub: RInfo } = {
+        regional: { single: 0, average: 0 },
+        island: { single: 0, average: 0 },
+        interclub: { single: 0, average: 0 }
     }
-    
-    const PRs: {[key in Puzzle]: {single: PRInfo, average: PRInfo}} = {}
 
+    const PRs: { [key in Puzzle]: { single: PRInfo, average: PRInfo } } = {}
+
+    // TODO: partition by puzzle instead of foreach
     for (const [key, puzzle] of Object.entries(puzzles)) {
         // TODO: plusTwo - consult - maybe DNF = inf
-        const single = await prisma.solve.findFirst({
-            where: {
-                result: {
-                    userId: user.id,
-                    round: {
-                        puzzle: key
-                    }
-                },
-            },
-            orderBy: {
-                time: 'asc'
-            }
-        })
+        const single = await db.selectFrom('solve')
+            .selectAll()
+            .innerJoin('result', 'solve.result_id', 'result.id')
+            .innerJoin('round', 'result.round_id', 'round.id')
+            .where('result.user_id', '=', user.id)
+            .where('round.puzzle', '=', key)
+            .orderBy('time asc')
+            .executeTakeFirst()
 
         if (!single) continue;
 
-        const average = await prisma.result.findFirst({
-            where: {
-                userId: user.id
-            },
-            orderBy: {
-                average: 'asc'
-            }
-        })
+        const average = await db.selectFrom('result')
+            .selectAll()
+            .innerJoin('round', 'result.round_id', 'round.id')
+            .where('result.user_id', '=', user.id)
+            .where('round.puzzle', '=', key)
+            .orderBy('value asc')
+            .executeTakeFirst()
 
         if (!average) continue; // Should never happen
 
-        const countRRSingle = await prisma.solve.count({where: {time: {lt: single.time}, result: {user: {region: user.region}}}});
-        const countIRSingle = await prisma.solve.count({where: {time: {lt: single.time}, result: {user: {region: {in: islandRegions(user.region)}}}}});
+        // PERSONAL RECORDS / RANKINGS
 
-        if (countRRSingle == 0) records.regional.single++;
-        if (countIRSingle == 0) records.island.single++;
+        const countSingleBaseQuery = db.selectFrom('solve')
+            .innerJoin('result', 'result.id', 'solve.result_id')
+            .innerJoin('round', 'round.id', 'result.round_id')
+            .innerJoin('user', 'user.id', 'result.user_id')
+            .where('time', '<', single.time)
+            .where('round.puzzle', '=', key)
+            .select(({ fn }) => [fn.count<number>('result.user_id').distinct().as("count")])
 
-        const countRRAverage = await prisma.result.count({where: {average: {lt: average.average}, user: {region: user.region}}})
-        const countIRAverage = await prisma.result.count({where: {average: {lt: average.average}, user: {region: {in: islandRegions(user.region)}}}}) + 1
+        const countRRSingle = Number((await countSingleBaseQuery.where('user.region', '=', user.region).executeTakeFirst())?.count)
+        const countIRSingle = Number((await countSingleBaseQuery.where('user.region', 'in', islandRegions(user.region)).executeTakeFirst())?.count)
+        const countIcRSingle = Number((await countSingleBaseQuery.executeTakeFirst())?.count)
 
+        const countAverageBaseQuery = db.selectFrom('result')
+            .innerJoin('round', 'round.id', 'result.round_id')
+            .innerJoin('user', 'user.id', 'result.user_id')
+            .where('value', '<', average.value)
+            .where('round.puzzle', '=', key)
+            .select(({ fn }) => [fn.count('result.user_id').distinct().as("count")])
 
-        PRs[key] = {single: {
-            time: single.time,
-            // TODO: IMPORTANT: Should meetups have a region? Or is it based on people for that region?
-            RR: countRRSingle + 1,
-            IR: countIRSingle + 1
-        }, average: {
-            time: average.average,
-            RR: countRRAverage + 1,
-            IR: countIRAverage + 1,
-        }}
-    }
-    
+        const countRRAverage = Number((await countAverageBaseQuery.where('user.region', '=', user.region).executeTakeFirst())?.count)
+        const countIRAverage = Number((await countAverageBaseQuery.where('user.region', 'in', islandRegions(user.region)).executeTakeFirst())?.count)
+        const countIcRAverage = Number((await countAverageBaseQuery.executeTakeFirst())?.count)
 
-    const THREEresults = await prisma.result.findMany({
-        take: 10, // TODO: before push: change to 50
-        where: {
-            round: {
-                puzzle: Puzzle.THREE
-            },
-            userId: user.id
-        },
-        orderBy: {
-            // TODO: order by time or date?
-            round: {
-                endDate: 'desc'
+        PRs[key] = {
+            single: {
+                time: single.time,
+                RR: countRRSingle + 1,
+                IR: countIRSingle + 1,
+                IcR: countIcRSingle + 1,
+            }, average: {
+                time: average.value,
+                RR: countRRAverage + 1,
+                IR: countIRAverage + 1,
+                IcR: countIcRAverage + 1
             }
         }
-    })
 
-    // TODO: ask about records 
-    //  - historical or current?
-    //  - what is interclub
-    //
+        // NUMBER OF RECORDS
+
+
+        // TODO: can this be 1 query?
+        const getNumRecordsSingle = async (regionPredicate: any) => Number((await db.with('all_records', (eb) => (
+            eb.selectFrom('solve')
+                .innerJoin('result', 'result.id', 'solve.result_id')
+                .innerJoin('round', 'round.id', 'result.round_id')
+                .innerJoin('user', 'user.id', 'result.user_id')
+                .where('round.puzzle', '=', key)
+                .where(...regionPredicate)
+                .select(({ fn }) => [fn.min('time').over(ob => ob.orderBy('round.end_date', 'asc')).as('cum_min'), 'user.id as user_id'])
+                .distinctOn('cum_min')
+                // Must order by time so distinct on picks correct value
+                .orderBy(['cum_min asc', 'time asc'])
+        ))
+            .selectFrom('all_records')
+            .where('all_records.user_id', '=', user.id)
+            .select(({ fn }) => [fn.count('all_records.cum_min').as("count")])
+            .executeTakeFirstOrThrow()).count)
+
+        records.regional.single += await getNumRecordsSingle(['user.region', '=', user.region])
+        records.island.single += await getNumRecordsSingle(['user.region', 'in', islandRegions(user.region)])
+        records.interclub.single += await getNumRecordsSingle([true])
+
+
+
+        const getNumRecordsAverage = async (regionPredicate: any) => Number((await db.with('all_records', (eb) => (
+            eb.selectFrom('result')
+                .innerJoin('round', 'round.id', 'result.round_id')
+                .innerJoin('user', 'user.id', 'result.user_id')
+                .where('round.puzzle', '=', key)
+                .where(...regionPredicate)
+                .select(({ fn }) => [fn.min('value').over(ob => ob.orderBy('round.end_date', 'asc')).as('cum_min'), 'user.id as user_id'])
+                .distinctOn('cum_min')
+                // Must order by time so distinct on picks correct value
+                .orderBy(['cum_min asc', 'value asc'])
+        ))
+            .selectFrom('all_records')
+            .where('all_records.user_id', '=', user.id)
+            .select(({ fn }) => [fn.count('all_records.cum_min').as("count")])
+            .executeTakeFirstOrThrow()).count)
+
+        records.regional.average += await getNumRecordsAverage(['user.region', '=', user.region])
+        records.island.average += await getNumRecordsAverage(['user.region', 'in', islandRegions(user.region)])
+        records.interclub.average += await getNumRecordsAverage([true])
+
+    }
+
+    // WITh allresults select value, region
+    let results = await db.with(
+        'temp',
+        (eb) => eb.selectFrom('result')
+            .innerJoin('round', 'round.id', 'result.round_id')
+            .innerJoin('meetup', 'meetup.id', 'round.meetup_id')
+            .leftJoin("solve", 'result.id', 'solve.result_id')
+            /*
+            .leftJoinLateral(
+                (eb) => eb.selectFrom('result as prev_results')
+                    .innerJoin('user as user_inner', 'user_inner.id', 'result.user_id')
+                    .innerJoin('round as round_inner', 'round_inner.id', 'result.round_id')
+                    .select(['prev_results.id', 'value', 'user_inner.region', 'round_inner.puzzle', 'round_inner.end_date as date'])
+                    .whereRef('round_inner.end_date', '<=', 'round.end_date')
+                    .whereRef('round_inner.puzzle', '=', 'round.puzzle')
+                    .whereRef('prev_results.value', '<', 'result.value')
+                    .as('prev_results')
+                    ,
+                join => (join.onTrue())
+            )
+            */
+            .select((eb) => {
+                const subq_avg = eb.selectFrom('result as result_inner')
+                    .innerJoin('user as user_inner', 'user_inner.id', 'result_inner.user_id')
+                    .innerJoin('round as round_inner', 'round_inner.id', 'result_inner.round_id')
+                    .whereRef('round_inner.puzzle', '=', 'round.puzzle')
+                    .whereRef('round_inner.end_date', '<=', 'round.end_date')
+                    .whereRef('result_inner.value', '<', 'result.value')
+                    .select((eb) => [eb.fn.countAll()])
+
+                const subq_single = eb.selectFrom('solve as solve_inner')
+                    .innerJoin('result as result_inner', 'result_inner.id', 'solve_inner.result_id')
+                    .innerJoin('user as user_inner', 'user_inner.id', 'result_inner.user_id')
+                    .innerJoin('round as round_inner', 'round_inner.id', 'result_inner.round_id')
+                    .whereRef('round_inner.puzzle', '=', 'round.puzzle')
+                    .whereRef('round_inner.end_date', '<=', 'round.end_date')
+                    .whereRef('solve_inner.time', '<', eb.fn.min('solve.time'))
+                    .select((eb) => [eb.fn.countAll()])
+
+                const is0 = (x) => (eb(x, '=', eb.lit(0)))
+                return [
+                    'meetup.name as meetup_name',
+                    'meetup.id as meetup_id',
+                    'round.puzzle as puzzle',
+                    'round.id as round_id',
+                    'result.value as value',
+                    'round.end_date as round_end',
+
+
+
+                    is0(subq_avg)
+                        .as('is_average_icr'),
+
+                    is0(subq_avg.where('user_inner.region', '=', user.region))
+                        .as('is_average_rr'),
+
+                    is0(subq_avg.where('user_inner.region', 'in', islandRegions(user.region)))
+                        .as('is_average_ir'),
+
+
+                    is0(subq_single)
+                        .as('is_single_icr'),
+
+                    is0(subq_single.where('user_inner.region', '=', user.region))
+                        .as('is_single_rr'),
+
+                    is0(subq_single.where('user_inner.region', 'in', islandRegions(user.region)))
+                        .as('is_single_ir'),
+
+
+
+                    // TODO: make these window functions
+                    eb.selectFrom('round as round_inner')
+                        .whereRef('round_inner.puzzle', '=', 'round.puzzle')
+                        .whereRef('round_inner.meetup_id', '=', 'round.meetup_id')
+                        .whereRef('round_inner.start_date', '<', 'round.start_date')
+                        .select((eb) => [eb.fn.coalesce(eb.fn.count('id'), eb.lit(0)).as('round_number')])
+                        .limit(1).as('round_number'),
+                    // TODO: merge with above select and do FILTER WHERE
+                    eb.selectFrom('round as round_inner')
+                        .whereRef('round_inner.puzzle', '=', 'round.puzzle')
+                        .whereRef('round_inner.meetup_id', '=', 'round.meetup_id')
+                        .select((eb) => [eb.fn.coalesce(eb.fn.count('id'), eb.lit(0)).as('round_maximum')])
+                        .limit(1).as('round_maximum'),
+                    eb.selectFrom('round as round_inner')
+                        .innerJoin('result as result_inner', 'result_inner.round_id', 'round_inner.id')
+                        .whereRef('round_inner.id', '=', 'round.id')
+                        .whereRef('result_inner.value', '<', 'result.value')
+                        .select((eb2) => [eb2.fn.countAll().as('better_result_cnt')])
+                        .limit(1)
+                        .as('rank'),
+
+
+
+                    //eb(eb.selectFrom('all_results').select(eb => eb.fn.count('id')).whereRef('all_results.puzzle', '=', 'round.puzzle').whereRef('all_results.value', '<', 'result.value').whereRef('all_results.date', '<', 'round.end_date').limit(1), '=', 0).as('icr'),
+
+                    // all_results.puzzle has to be in group by which makes things explode
+                    //eb.fn.min<number>('prev_results.value').over(ob => ob.partitionBy('round.puzzle').orderBy('round.end_date asc')).as('foo'),
+                    //eb(eb.fn.count('prev_results.id').filterWhere('prev_results.region', '=', user.region), '=', 0).as('is_average_rr'),
+                    //eb(eb.fn.count('prev_results.id'), '=', 0).as('is_average_icr'),
+
+                    eb(eb.fn.min<number>(eb.fn.min('solve.time')).over(ob => ob.partitionBy('round.puzzle').orderBy('round.end_date asc')), '=', eb.fn.min('solve.time')).as('is_single_pr'),
+                    eb(eb.fn.min<number>('result.value').over(ob => ob.partitionBy('round.puzzle').orderBy('round.end_date asc')), '=', eb.ref('result.value')).as('is_average_pr'),
+
+                    eb.fn.min('solve.time').as('single'),
+                    eb.fn.agg<string[]>('array_agg', ['solve.time']).as('solves'),
+
+                    //eb.fn.agg('row_number').over(ob => ob.partitionBy('result.id')).as('foo')
+                ]
+            })
+            .groupBy(['round.puzzle', 'result.value', 'meetup_name', 'meetup.id', 'round.id', 'result.id'])
+            .where('result.user_id', '=', user.id)
+    )
+        .selectFrom('temp')
+        .groupBy(['puzzle'])
+        // TODO try this better
+        .select((eb) => ['puzzle',
+            sql`json_agg(temp ORDER BY round_end DESC) as values`
+        ])
+        .execute()
+
+    // TODO: figure out how to sort in the query
+    //results.sort((a, z) => z.round_end - a.round_end)
+    results = Object.fromEntries(results.map(x => [x.puzzle, x.values]))
+
+
+
+    const completedSolves = (await solvesQuery)?.completedSolves ?? 0
+    const medalsTemp = (await medalsTempPromise)!
+    const medals = [medalsTemp.gold, medalsTemp.silver, medalsTemp.bronze]
+
 
     return {
         user,
         completedSolves,
-        meetupsAttended,
         medals,
-        results: {THREE: THREEresults},
+        results,
         PRs,
-        records
+        records,
+        historicalRecords: await historicalRecords
     }
 }) satisfies PageServerLoad

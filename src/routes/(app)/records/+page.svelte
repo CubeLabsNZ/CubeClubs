@@ -3,41 +3,44 @@
     import { page } from "$app/stores";
     import { goto } from "$app/navigation";
 
-    import regions from "$lib/data/regions";
+    import { formatTime } from "$lib/utils";
+
+    import regions, { regionToString } from "$lib/data/regions";
     import puzzles from "$lib/data/puzzles";
 
-    import { Region } from "@prisma/client";
+    import type { Region } from "@prisma/client";
 
     import Select from "$lib/components/global/Select.svelte";
     import PageContent from "$lib/components/global/PageContent.svelte";
 
-    import MultiButton, { LabelType } from "$lib/components/global/MultiButton.svelte";
+    import MultiButton, {
+        LabelType,
+    } from "$lib/components/global/MultiButton.svelte";
 
+    import type { PageData } from "./$types";
+    import Table, { DisplayType, MixDisplayMethod } from "$lib/components/global/Table.svelte";
 
     let regionSelected: string, displayType: number;
 
     $: updateQuery(regionSelected, displayType);
 
     function updateQuery(selectedRegion: string, displayType: number) {
-        if (!browser) { return }
+        if (!browser) {
+            return;
+        }
 
         let query = new URLSearchParams($page.url.searchParams.toString());
 
         if (selectedRegion == "") {
-            query.delete("region")
+            query.delete("region");
         } else {
             query.set("region", selectedRegion);
         }
 
-
         query.set("displayType", displayType ? "history" : "current");
-
 
         goto(`?${query.toString()}`);
     }
-
-
-
 
     interface Result {
         name: string;
@@ -47,31 +50,27 @@
         data: any;
     }
 
-    let results: Result[] = [
-        { name: "John Doe", result: 1.67, region: Region.AUCKLAND, meetupName: "ASC Meetup April 2023", data: "" },
-        { name: "Joe Bloggs", result: 1.78, region: Region.OTAGO, meetupName: "Christchurch Meetups", data: "1.54, 1.64, 1.45, 1.90, 1.24" }
-    ];
+    export let data: PageData;
 
+    // TODO: if this page is slow, current/history can be goto() instead.
 </script>
-
 
 <svelte:head>
     <title>Records</title>
 </svelte:head>
 
-
 <PageContent
     heading="Records"
-    subheading="Records shown are for all records broken at meetups and are not grouped by age or gender.">
-
+    subheading="Records shown are for all records broken at meetups and are not grouped by age or gender."
+>
     <div class="filter-bar">
         <div class="label-group">
             <p class="label">Region</p>
 
             <Select name="region" bind:value={regionSelected}>
                 <option selected value>All Regions</option>
-                {#each Object.entries(regions) as [value, {name, maori_name}] }
-                    <option value={value}>{name} {maori_name !== undefined ? `(${maori_name})` : ""}</option>
+                {#each Object.keys(regions) as value}
+                    <option {value}>{regionToString(value)}</option>
                 {/each}
             </Select>
         </div>
@@ -79,166 +78,72 @@
         <div class="label-group">
             <p class="label">Show</p>
 
-            <MultiButton bind:selectedIndex={displayType} labels={[
-                {type: LabelType.Text, data: "Current"},
-                {type: LabelType.Text, data: "History"}
-            ]} /> 
+            <MultiButton
+                bind:selectedIndex={displayType}
+                labels={[
+                    { type: LabelType.Text, data: "Current" },
+                    { type: LabelType.Text, data: "History" },
+                ]}
+            />
         </div>
     </div>
 
-    {#if displayType == 0} <!-- current -->
+    {#if displayType == 0}
+        <!-- current -->
         {#each Object.entries(puzzles) as [puzzle, { name, icon }], i}
+            {@const ismbld = puzzle == "MULTIBLD"}
+                                                  {@debug ismbld}
+            {@const single = data.records[puzzle]?.single}
+            {@const average = data.records[puzzle]?.average}
             <div class={"group-label group-label-" + i}>
-                <img src={icon} alt="">
+                <img src={icon} alt="" />
 
                 <h3 class="fsize-title2">{name}</h3>
             </div>
 
-
-            <table>
-                <!-- NOTE: tc-dummy is entirely invisible to provide padding to either side of the table -->
-                <tr>
-                    <th class="tc-dummy"></th>
-
-                    <th class="tc-type">Format</th>
-                    <th class="tc-name">Name</th>
-                    <th class="tc-result">Average</th>
-                    <th class="tc-region">Region</th>
-                    <th class="tc-meetup">Meetup</th>
-                    <th class="tc-solves">Solves</th>
-
-                    <th class="tc-dummy"></th>
-                </tr>
-
-                <!-- NOTE: td-dummy is entirely invisible to provide padding to the top and bottom of the table -->
-                <tr class="td-dummy">
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                </tr>
-
-                <!-- INFO: single -->
-                <tr>
-                    <td class="tc-dummy"></td>
-
-                    <td class="tc-type">Single</td>
-                    <td class="tc-name">{results[0].name}</td>
-                    <td class="tc-result">{results[0].result}</td>
-                    <td class="tc-region">{results[0].region}</td>
-                    <td class="tc-meetup">{results[0].meetupName}</td>
-                    <td class="tc-solves">{results[0].data}</td>
-
-                    <td class="tc-dummy"></td>
-                </tr>
-
-
-                <!-- INFO: average-->
-                <tr>
-                    <td class="tc-dummy"></td>
-
-                    <td class="tc-type">Average</td>
-                    <td class="tc-name">{results[1].name}</td>
-                    <td class="tc-result">{results[1].result}</td>
-                    <td class="tc-region">{results[1].region}</td>
-                    <td class="tc-meetup">{results[1].meetupName}</td>
-                    <td class="tc-solves">{results[1].data}</td>
-
-                    <td class="tc-dummy"></td>
-                </tr>
-
-
-
-                <tr class="td-dummy">
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                </tr>
-            </table>
+            <Table
+                list={ismbld ? [average] : [single, average]}
+                displayType={ismbld ? DisplayType.SINGLE : DisplayType.MIX}
+                hasMeetup={true}
+                hasSolves={!ismbld}
+                widths={ ismbld ? ["210px", "80px", "160px", "auto"] : ["50px", "160px", "80px", "160px", "270px", "auto"]}
+                displayRank={false}
+            />
         {/each}
     {:else}
         {#each Object.entries(puzzles) as [puzzle, { name, icon }], i}
+            {@const ismbld = puzzle == "MULTIBLD"}
+                                                  {@debug ismbld}
+            {@debug ismbld}
+            {@const historicalPuzzleRankings = data.historicalRecords[puzzle]}
             <div class={"group-label group-label-" + i}>
-                <img src={icon} alt="">
+                <img src={icon} alt="" />
 
                 <h3 class="fsize-title2">{name} History</h3>
             </div>
 
-
-            <table>
-                <!-- NOTE: tc-dummy is entirely invisible to provide padding to either side of the table -->
-                <tr>
-                    <th class="tc-dummy"></th>
-
-                    <th class="tc-type">Date</th>
-                    <th class="tc-name">Name</th>
-                    <th class="tc-result">Single</th>
-                    <th class="tc-result">Average</th>
-                    <th class="tc-region">Region</th>
-                    <th class="tc-meetup">Meetup</th>
-                    <th class="tc-solves">Solves</th>
-
-                    <th class="tc-dummy"></th>
-                </tr>
-
-                <!-- NOTE: td-dummy is entirely invisible to provide padding to the top and bottom of the table -->
-                <tr class="td-dummy">
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                </tr>
-
-
-                <tr>
-                    <td class="tc-dummy"></td>
-
-                    <td class="tc-type">Date</td>
-                    <td class="tc-name">Name</td>
-                    <td class="tc-result">Single</td>
-                    <td class="tc-result">Average</td>
-                    <td class="tc-region">Region</td>
-                    <td class="tc-meetup">Meetup</td>
-                    <td class="tc-solves">Solves</td>
-
-                    <td class="tc-dummy"></td>
-                </tr>
-
-
-
-                <tr class="td-dummy">
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                </tr>
-            </table>
+            {#if ismbld}
+            <Table
+                list={[historicalPuzzleRankings[1]] ?? [undefined]}
+                displayType={DisplayType.SINGLE}
+                hasMeetup={true}
+                displayRank={false}
+                showDate={true}
+                ismbld={true}
+            />
+            {:else}
+            <Table
+                list={historicalPuzzleRankings ?? [undefined]}
+                displayType={DisplayType.MIX}
+                hasMeetup={true}
+                displayRank={false}
+                showDate={true}
+                mixDisplayMethod={MixDisplayMethod.SeparateAverageAndSingle}
+            />
+            {/if}
         {/each}
-
-
     {/if}
-
 </PageContent>
-
 
 <style>
     .group-label {
@@ -258,24 +163,18 @@
     .group-label h3 {
         font-weight: 500;
     }
-    
 
-
-    .tc-name, .tc-region, .tc-meetup, .tc-solves, .tc-type {
+    .tc-name,
+    .tc-region,
+    .tc-meetup,
+    .tc-solves,
+    .tc-type {
         text-align: left;
     }
 
+    .tc-result,
     .tc-name {
-        min-width: 200px;
-    }
-
-    .tc-result, .tc-name {
         font-weight: 500;
-    }
-
-    tr:not(:first-child) .tc-name,
-    tr:not(:first-child) .tc-meetup {
-        color: var(--c-a);
     }
 
     .tc-result {

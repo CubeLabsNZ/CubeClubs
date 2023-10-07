@@ -9,20 +9,19 @@
         <slot/>
     </select>
 
-    <span class="material-symbols-outlined">expand_more</span>
+    <span class="material-symbols-outlined select-icon">expand_more</span>
 </div>
 
 
 <style>
-    div {
-        display: grid;
-    }
-
     select {
         grid-area: 1/1;
+
+        padding-right: 32px;
     }
 
-    span {
+    .select-icon {
+        font-size: 20px;
         align-self: center;
         justify-self: flex-end;
         padding-right: 4px;

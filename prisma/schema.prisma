@@ -1,132 +1,141 @@
+generator kysely {
+  provider = "prisma-kysely"
+
+  output = "../src/lib/db"
+  fileName = "types.ts"
+  // Optionally generate runtime enums to a separate file
+  enumFileName = "enums.ts"
+}
+
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider ="postgres"
-  url      =env("DATABASE_URL")
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
-model Club {
-  id        Int           @id @default(autoincrement())
-  name      String
-  meetups Meetup[]
+model club {
+  id      Int      @id @default(autoincrement())
+  name    String
+  meetups meetup[]
 }
 
-
-model User {
+model user {
   id              Int     @id @default(autoincrement())
-  email           String  @unique
-  passHash        String
+  email           String?  @unique
+  // pass hash can be null when migrating
+  pass_hash       String?
   name            String
   region          Region
-  gender          Gender
-  isClubOrganiser Boolean @default(false)
+  is_club_organiser Boolean @default(false)
 
-  sessions Session[]
+  sessions session[]
 
-  organiserFor Meetup[]
-  competingIn  UserInMeetup[]
-  results Result[]
+  organiser_for organiser_in_meetup[]
+  competing_in  user_in_meetup[]
+  results      result[]
 }
 
 // INFO: using session authentication instead of token
-model Session {
-  id                Bytes @id
-  ip    String
+model session {
+  id Bytes  @id
+  ip String
 
-  user User @relation(fields: [userId], references: [id])
-  userId Int
+  user   user @relation(fields: [user_id], references: [id])
+  user_id Int
 }
 
-model UserInMeetup {
-  user   User @relation(fields: [userId], references: [id])
-  userId Int
+model user_in_meetup {
+  user   user @relation(fields: [user_id], references: [id])
+  user_id Int
 
-  meetup   Meetup @relation(fields: [meetupId], references: [id])
-  meetupId Int
+  meetup   meetup @relation(fields: [meetup_id], references: [id])
+  meetup_id Int
 
-  registeredEvents Puzzle[]
+  registered_events Puzzle[]
 
-  @@id([userId, meetupId])
+  @@id([user_id, meetup_id])
 }
 
-model Meetup {
+model organiser_in_meetup {
+  user   user @relation(fields: [user_id], references: [id])
+  user_id Int
+
+  meetup   meetup @relation(fields: [meetup_id], references: [id])
+  meetup_id Int
+
+  @@id([user_id, meetup_id])
+}
+
+model meetup {
   id              Int    @id @default(autoincrement())
   name            String
   venue           String
   location        String
-  organisers      User[] // TODO: check relation?
+  organisers      organiser_in_meetup[] // TODO: check relation?
   description     String
   contact         String
-  competitorLimit Int
+  competitor_limit Int?
 
-  date            DateTime @db.Date
+  external_registration_link String?
+  registration_information  String  @default("")
 
-  isPublished     Boolean @default(false)
+  date DateTime @db.Date
 
-  users UserInMeetup[]
+  is_published Boolean @default(false)
 
-  club   Club @relation(fields: [clubId], references: [id])
-  clubId Int
+  users user_in_meetup[]
 
-  rounds Round[]
+  club   club @relation(fields: [club_id], references: [id])
+  club_id Int
+
+  rounds round[]
 }
 
+model round {
+  id        String @db.Uuid @id @default(uuid())
 
-model Round {
-  id            Int          @id @default(autoincrement())
-  startDate     DateTime
-  endDate       DateTime
-  puzzle        Puzzle
-  format        Format
-  results       Result[]
+  start_date DateTime
+  end_date   DateTime
+  puzzle    Puzzle
+  format    Format
+  proceed_number Int
+  results   result[]
 
-  proceedNumber   Int
 
-  meetup   Meetup @relation(fields: [meetupId], references: [id])
-  meetupId Int
+  meetup   meetup @relation(fields: [meetup_id], references: [id])
+  meetup_id Int
 }
 
-model Result {
-  id Int @id @default(autoincrement())
-  round     Round @relation(fields: [roundId], references: [id])
-  roundId   Int
+model result {
+  id      Int   @id @default(autoincrement())
 
-  user      User @relation(fields: [userId], references: [id])
-  userId Int
-  solves    Solve[]
+  solves solve[]
+  value Float
 
-  average   Float
+  mbld_score Int?
+  mbld_total Int?
+
+  user   user    @relation(fields: [user_id], references: [id])
+  user_id Int
+
+  round   round @relation(fields: [round_id], references: [id])
+  round_id String @db.Uuid
 }
 
-
-model Solve {
+model solve {
   index Int
-  time    Int
-  penalty Penalty
+  time  Float
 
-  result Result @relation(fields: [resultId], references: [id])
-  resultId Int
+  mbld_score Int?
+  mbld_total Int?
 
-  @@id([resultId, index])
+  result   result @relation(fields: [result_id], references: [id], onDelete: Cascade)
+  result_id Int
 
-
-}
-
-enum Penalty {
-  NONE
-  PLUSTWO
-  DNF
-}
-
-
-
-// INFO: ENUMS
-enum Gender {
-  MALE
-  FEMALE
-  OTHER
+  @@id([result_id, index])
 }
 
 enum Region {
@@ -137,15 +146,17 @@ enum Region {
   GISBORNE
   HAWKES_BAY
   TARANAKI
-  MANGAWATU_WHANGANUI
+  MANAWATU_WHANGANUI
   WELLINGTON
   TASMAN
   NELSON
-  MALBOROUGH
+  MARLBOROUGH
   WEST_COAST
   CANTERBURY
   OTAGO
   SOUTHLAND
+
+  VISITOR
 }
 
 enum Puzzle {
@@ -172,7 +183,9 @@ enum Puzzle {
 
 enum Format {
   BO3
+  BO2
   BO1
   MO3
   AO5
 }
+

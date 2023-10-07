@@ -10,6 +10,9 @@ export const load = (async () => {
         include: {
             club: true,
             rounds: true,
+        },
+        orderBy: {
+            date: 'desc',
         }
     })
 
@@ -18,7 +21,7 @@ export const load = (async () => {
         delete meetup.schedule;
     }
 
-    const [publishedMeetups, draftMeetups] = partition(meetups, meetup => meetup.isPublished)
+    const [publishedMeetups, draftMeetups] = partition(meetups, meetup => meetup.is_published)
 
     return {
         publishedMeetups,

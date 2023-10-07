@@ -5,23 +5,32 @@
     import TabBar from '$lib/components/global/TabBar.svelte';
     import MultiButton, { LabelType } from '$lib/components/global/MultiButton.svelte';
 
+    import Medal, { PodiumPlace } from '$lib/components/user/Medal.svelte';
+
     import RecordRow from '$lib/components/user/RecordRow.svelte'
 
-    import regions from '$lib/data/regions'
+    import {regionToString} from '$lib/data/regions'
 
     import type { PageData } from './$types'
+
+    import { formatTime, getRoundName } from "$lib/utils"
 
     import * as Icons from "$lib/assets/cube-icons/icons";
 
     import puzzles from "$lib/data/puzzles"
+    import { Puzzle } from '$lib/db/enums';
+    import Table, { DisplayType, MixDisplayMethod } from '$lib/components/global/Table.svelte';
 
-    let resultsEventIndex: number;
+    let resultsEventIndex: number = 0;
+    $: resultsEvent = Object.keys(Puzzle)[resultsEventIndex]
 
     let historyIndex: number;
 
     export let data: PageData;
-    const regionInfo = regions[data.user.region]
+    let innerWidth = 1000;
 </script>
+
+<svelte:window bind:innerWidth/>
 
 <svelte:head>
     <title>{data.user.name}</title>
@@ -29,28 +38,32 @@
 
 <div class="container-grid">
     <div class="user-container">
-        <Card width={240} clickable={false}>
+        <Card width={innerWidth > 700 ? 240 : null} clickable={false}>
             <div style:padding=16px>
                 <div class="section-column">
                     <h3 style:font-weight=500 class="fsize-title2">{data.user.name}</h3>
+                    <div class="section-row">
+                        <Badge 
+                            size={BadgeSize.Regular} 
+                            fg=var(--c-g)
+                            bg=var(--c-lgh)
+                            label={regionToString(data.user.region)}/>
 
-                    <Badge 
-                        size={BadgeSize.Regular} 
-                        fg=var(--c-g)
-                        bg=var(--c-lgh)
-                        label={`${regionInfo.name} (${regionInfo.maori_name})`}/>
+                        {#if data.user.is_club_organiser}
+                            <Badge 
+                                size={BadgeSize.Regular} 
+                                fg=var(--c-a)
+                                bg=var(--c-la1)
+                                label="Club Organiser"/>
+                        {/if}
 
-                    <Badge 
-                        size={BadgeSize.Regular} 
-                        fg=var(--c-a)
-                        bg=var(--c-la1)
-                        label="ASC Club Organiser"/>
+                    </div>
                 </div>
 
                 <div class="card-column" style:margin-top=32px>
                     <div class="section-column">
                         <div class="data-row">
-                            <p style:font-weight=500>{data.meetupsAttended}</p>
+                            <p style:font-weight=500>{data.user._count.competing_in}</p>
                             <p> Meetups Attended </p>
                         </div>
 
@@ -63,43 +76,22 @@
                     <hr>
 
                     <div class="section-column">
-                        <!-- INFO: gold -->
                         <div class="data-row">
-                            <div class="medal-container">
-                                <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" height=16 stroke-width=1.5 fill=#F9D953 stroke=#EFCC3A>
-                                    <circle cx="8" cy="8" r="6.75" />
-                                </svg>
-
-                                <p class="medal-text">1</p>
-                            </div>
+                            <Medal place={PodiumPlace.Gold}/>
 
                             <p style:font-weight=500>{data.medals[0]}</p>
                             <p> Gold Medals </p>
                         </div>
 
-                        <!-- INFO: silver -->
                         <div class="data-row">
-                            <div class="medal-container">
-                                <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" height=16 stroke-width=1.5 fill=#D3D3D3 stroke=#C4C4C4>
-                                    <circle cx="8" cy="8" r="6.75" />
-                                </svg>
-
-                                <p class="medal-text">2</p>
-                            </div>
+                            <Medal place={PodiumPlace.Silver}/>
 
                             <p style:font-weight=500>{data.medals[1]}</p>
                             <p> Silver Medals </p>
                         </div>
 
-                        <!-- INFO: bronze -->
                         <div class="data-row">
-                            <div class="medal-container">
-                                <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" height=16 stroke-width=1.5 fill=#F89656 stroke=#E47D43>
-                                    <circle cx="8" cy="8" r="6.75" />
-                                </svg>
-
-                                <p class="medal-text">3</p>
-                            </div>
+                            <Medal place={PodiumPlace.Bronze}/>
 
                             <p style:font-weight=500>{data.medals[2]}</p>
                             <p> Bronze Medals </p>
@@ -108,42 +100,52 @@
 
                     <hr>
 
+
                     <div class="section-column">
-                        <div class="data-row">
-                            <RecordRow
-                                record={data.records.regional}
-                                name="Regional Records" shortname=RR
-                                bg=var(--c-lgreen) fg=var(--c-green)/>
-                        </div>
+                        <RecordRow
+                            record={data.records.regional}
+                            name="Regional Records" shortname=RR
+                            bg=var(--c-lgreen) fg=var(--c-green)/>
 
-                        <div class="data-row">
-                            <RecordRow
-                                record={data.records.island}
-                                name="Island Records" shortname=IR
-                                bg=var(--c-lred) fg=var(--c-red)/>
-                        </div>
+                        <RecordRow
+                            record={data.records.island}
+                            name="Island Records" shortname=IR
+                            bg=var(--c-lred) fg=var(--c-red)/>
 
 
-                        <div class="data-row">
-                            <RecordRow
-                                record={{single: "?", average: "?"}}
-                                name="Interclub Records" shortname=IcR
-                                bg=var(--c-lpurple) fg=var(--c-purple)/>
-                        </div>
+                        <RecordRow
+                            record={data.records.interclub}
+                            name="Interclub Records" shortname=IcR
+                            bg=var(--c-lpurple) fg=var(--c-purple)/>
                     </div>
                 </div>
             </div>
         </Card>
     </div>
 
-    <div class="content">
+    <div class="content" style:margin-bottom=64px>
         <div class="pr-section">
-            <h3 class="fsize-body" style:font-weight=500>Personal Records</h3>
+            <h3 class="fsize-body" style:font-weight=500 style:padding-bottom=4px>Personal Records</h3>
 
             <table style:width=100%>
-                <tr>
-                    <th class="tc-dummy"></th>
+                <colgroup>
+                    <col span=1 style:width=auto>
+                    <col span=1 style:width=60px>
+                    <col span=1 style:width=60px>
+                    <col span=1 style:width=60px>
+                    <col span=1 style:width=80px>
+                    <col span=1 style:width=80px>
+                    <col span=1 style:width=60px>
+                    <col span=1 style:width=60px>
+                    <col span=1 style:width=60px>
+                </colgroup>
 
+                <tbody>
+
+                </tbody>
+
+
+                <tr>
                     <th class="tc-event">Event</th>
                     <th class="tc-rr">RR</th>
                     <th class="tc-ir">IR</th>
@@ -154,69 +156,36 @@
                     <th class="tc-icr">IcR</th>
                     <th class="tc-ir">IR</th>
                     <th class="tc-rr">RR</th>
-
-                    <th class="tc-dummy"></th>
                 </tr>
-
-                <!-- NOTE: td-dummy is entirely invisible to provide padding to the top and bottom of the table -->
-                <tr class="td-dummy">
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                </tr>
-
 
                 {#each Object.entries(data.PRs) as [puzzleType, {single, average}]}
-                {@const puzzle = puzzles[puzzleType]}
-                <tr>
-                    <td class="tc-dummy"></td>
+                    {@const puzzle = puzzles[puzzleType]}
+                    <tr>
+                        <td class="tc-event">
+                            <div style:display=flex style:align-items=center style:column-gap=12px>
+                                <img src={puzzle.icon} alt="" height=24>
+                                {puzzle.name}
+                            </div>
+                        </td>
+                        <td class="tc-rr">{single.RR}</td>
+                        <td class="tc-ir">{single.IR}</td>
+                        <td class="tc-icr">{single.IcR}</td>
+                        <td class="tc-result">{formatTime(single.time)}</td>
 
-                    <td class="tc-event">{puzzle.name}</td>
-                    <td class="tc-rr">{single.RR}</td>
-                    <td class="tc-ir">{single.IR}</td>
-                    <td class="tc-icr">IcR</td>
-                    <td class="tc-result">{single.time}</td>
-
-                    <td class="tc-result">{average.time}</td>
-                    <td class="tc-icr">IcR</td>
-                    <td class="tc-ir">{average.IR}</td>
-                    <td class="tc-rr">{average.RR}</td>
-
-                    <td class="tc-dummy"></td>
-                </tr>
+                        <td class="tc-result">{formatTime(average.time)}</td>
+                        <td class="tc-icr">{average.IcR}</td>
+                        <td class="tc-ir">{average.IR}</td>
+                        <td class="tc-rr">{average.RR}</td>
+                    </tr>
                 {/each}
-
-
-                <tr class="td-dummy">
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                </tr>
             </table>
         </div>
-
 
         <div class="history-section">
             <TabBar labels={["Results History", "Records History"]} bind:selectedIndex={historyIndex} />
 
             {#if historyIndex == 0}
-                <MultiButton bind:selectedIndex={resultsEventIndex} padding={4} labels={[
+                <MultiButton bind:selectedIndex={resultsEventIndex} padding={4} fixedHeight={false} labels={[
                     {type: LabelType.Image, data: Icons.Icon3},
                     {type: LabelType.Image, data: Icons.Icon2},
                     {type: LabelType.Image, data: Icons.Icon4},
@@ -236,131 +205,70 @@
                     {type: LabelType.Image, data: Icons.IconMbld},
                     {type: LabelType.Image, data: Icons.Icon4bld},
                     {type: LabelType.Image, data: Icons.Icon5bld},
-                    ]} />
+                ]} />
 
                 <div class="results-history">
                     <div class="results-history-header">
-                        <img src={Icons.Icon3} alt="" height=28/>
-                        <p class="fsize-body">3x3 Results (index = {resultsEventIndex})</p>
+                        <img src={puzzles[resultsEvent].icon} alt="" height=28/>
+                        <p class="fsize-body">{puzzles[resultsEvent].name} Results</p>
                     </div>
 
-                    <table style:width=100%>
-                        <tr>
-                            <th class="tc-dummy"></th>
+                    <Table
+                        list={data.results[resultsEvent] ?? [undefined]}
+                        showUser={false}
+                        displayType={DisplayType.AVERAGE}
+                        showBest={true}
+                        width="100%"
+                        meetupAndRoundLeft={true}
+                        showPlace={true}
+                    />
 
-                            <th class="tc-meetup">Meetup</th>
-                            <th class="tc-round">Round</th>
-                            <th class="tc-place">Place</th>
-                            <th class="tc-single">Single</th>
-                            <th class="tc-average">Average</th>
-                            <th class="tc-solves">Solves</th>
-
-
-                            <th class="tc-dummy"></th>
-                        </tr>
-
-                        <!-- NOTE: td-dummy is entirely invisible to provide padding to the top and bottom of the table -->
-                        <tr class="td-dummy">
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-
-
-                        <tr>
-                            <td class="tc-dummy"></td>
-
-                            <td class="tc-meetup">Meetup</td>
-                            <td class="tc-round">Round</td>
-                            <td class="tc-place">Place</td>
-                            <td class="tc-single">Single</td>
-                            <td class="tc-average">Average</td>
-                            <td class="tc-solves">Solves</td>
-
-                            <td class="tc-dummy"></td>
-                        </tr>
-
-
-                        <tr class="td-dummy">
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                    </table>
                 </div>
             {:else}
                 <div class="records-history">
-                    <!-- INFO: for each event that HAS a record, either single or average -->
+                    {#each Object.entries(puzzles) as [puzzle, { name, icon }], i}
+                        {@const historicalPuzzleRankings = data.historicalRecords[puzzle]}
+                        <div class="group-label records-history-header">
+                            <img src={puzzles[puzzle].icon} alt="" height=28/>
+                            <p class="fsize-body">{puzzles[puzzle].name} Results</p>
+                        </div>
 
-                    <table style:width=100%>
-                        <tr>
-                            <th class="tc-dummy"></th>
-
-                            <th class="tc-single">Single</th>
-                            <th class="tc-average">Average</th>
-                            <th class="tc-meetup">Meetup</th>
-                            <th class="tc-round">Round</th>
-                            <th class="tc-solves">Solves</th>
-
-                            <th class="tc-dummy"></th>
-                        </tr>
-
-                        <!-- NOTE: td-dummy is entirely invisible to provide padding to the top and bottom of the table -->
-                        <tr class="td-dummy">
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-
-
-                        <tr>
-                            <td class="tc-dummy"></td>
-
-                            <td class="tc-single">Single</td>
-                            <td class="tc-average">Average</td>
-                            <td class="tc-meetup">Meetup</td>
-                            <td class="tc-round">Round</td>
-                            <td class="tc-solves">Solves</td>
-
-                            <td class="tc-dummy"></td>
-                        </tr>
-
-
-                        <tr class="td-dummy">
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                    </table>
+                        <Table
+                            list={historicalPuzzleRankings ?? [undefined]}
+                            displayType={DisplayType.MIX}
+                            hasMeetup={true}
+                            displayRank={false}
+                            showDate={true}
+                            mixDisplayMethod={MixDisplayMethod.SeparateAverageAndSingle}
+                            showUser={false}
+                            width="100%"
+                        />
+                    {/each}
                 </div>
             {/if}
-
-
-
         </div>
     </div>
 </div>
 
 
 <style>
+    .group-label {
+        height: 28px;
+        display: flex;
+        flex-direction: row;
+        column-gap: 8px;
+
+        margin-bottom: 4px;
+        margin-top: 48px;
+    }
+
+    .group-label:first-of-type {
+        margin-top: 0;
+    }
+
+    .group-label h3 {
+        font-weight: 500;
+    }
     .section-column, .card-column, .data-row {
         display: flex;
     }
@@ -368,6 +276,13 @@
     .section-column {
         flex-direction: column;
         row-gap: 4px;
+    }
+
+    .section-row {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 4px;
     }
 
     .card-column {
@@ -381,22 +296,6 @@
         column-gap: 12px;
     }
 
-
-    .medal-container {
-        display: grid;
-        align-items: center;
-        justify-items: center;
-    }
-
-    .medal-text {
-        grid-area: 1/1;
-        position: absolute;
-        z-index: 2;
-        font-weight: 600;
-        font-size: 10px;
-        color: white;
-    }
-
     hr {
         border: none;
         border-bottom: 1.5px solid var(--c-lg1);
@@ -407,30 +306,56 @@
 
 
     .container-grid {
-        display: grid;
+        display: flex;
         width: 1000px;
         margin-left: auto;
         margin-right: auto;
 
         margin-top: 126px; /* tab bar + 32px either side */
-        grid-template-columns: 240px 1fr;
 
         column-gap: 16px;
     }
 
-
     .user-container {
-        grid-column: 1;
+        width: 240px;
     }
 
     .content {
-        grid-column: 2;
-
+        width: 100%;
         display: flex;
         flex-direction: column;
         row-gap: 48px;
     }
 
+    @media(max-width: 1040px) {
+        .container-grid {
+            width: calc(100% - 40px);
+
+            padding-left: 20px;
+            padding-right: 20px;
+        }
+
+    }
+
+    @media(max-width: 700px) {
+        .container-grid {
+            width: 100%;
+
+            flex-direction: column;
+        }
+
+        .user-container {
+            width: 100%;
+        }
+
+        .content {
+            width: 100%;
+        }
+
+        .pr-section {
+            margin-top: 16px;
+        }
+    }
 
 
     /* INFO: personal records table */
@@ -481,7 +406,7 @@
         font-weight: 500;
     }
 
-    .results-history-header {
+    .results-history-header, .records-history-header {
         display: flex;
         flex-direction: row;
         align-items: center;
@@ -491,7 +416,7 @@
         margin-bottom: 4px;
     }
 
-    .results-history-header * {
+    .results-history-header *, .records-history-header * {
         font-weight: 500;
     }
 </style>

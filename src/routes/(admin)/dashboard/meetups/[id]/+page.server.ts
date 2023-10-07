@@ -16,7 +16,12 @@ export const load = (async ({ cookies, params }) => {
             club: true,
             organisers: {
                 select: {
-                    name: true,
+                    user: {
+                        select: {
+                            name: true,
+                            id: true
+                        }
+                    }
                 }
             },
             users: {

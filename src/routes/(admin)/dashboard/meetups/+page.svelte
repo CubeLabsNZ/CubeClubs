@@ -1,5 +1,4 @@
 <script lang="ts">
-    import PageContent from "$lib/components/global/PageContent.svelte";
     import MeetupBar from "$lib/components/global/card/MeetupBar.svelte";
     import Button from "$lib/components/global/Button.svelte";
 
@@ -12,13 +11,12 @@
 
 <a href="/dashboard/meetups/new">
     <Button>
-        <div style:display=flex style:align-items=center>
-            <span class="material-symbols-outlined" style:color=var(--c-dg2)>add</span>
+        <div class="button-inner">
+            <span class="material-symbols-outlined">add</span>
             <p> New Meetup </p>
         </div>
     </Button>
 </a>
-
 
 
 {#if data.draftMeetups.length > 0}
@@ -47,5 +45,15 @@
         flex-direction: column;
 
         row-gap: 16px;
+    }
+
+    .button-inner {
+        display: flex;
+        align-items: center;
+        column-gap: 8px;
+    }
+
+    .button-inner span {
+        font-size: 20px;
     }
 </style>

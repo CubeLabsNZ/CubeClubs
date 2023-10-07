@@ -16,7 +16,7 @@
 
     let currentPage: string;
 
-    /* NOTE: IMPORTANT: this is REALLY BAD code but cannot be bothered writing a store
+    /* WARN: IMPORTANT: this is REALLY BAD code but cannot be bothered writing a store
      * the value 19 is based off of "/(admin)/dashboard/"
      * AND WILL BREAK if the route is modified.
      */
@@ -40,7 +40,7 @@
         <SidebarTab iconName=exit_to_app label="Return to CubeClubs" perform={() => { goto("/") }} />
     </div>
 
-    <div class="content">
+    <div class="content" style:position=relative>
         <slot/>
     </div>
 </div>
@@ -49,11 +49,10 @@
 <style>
     .container {
         display: grid;
-        grid-template-columns: 364px 1fr;
+        grid-template-columns: 300px 1fr;
         height: 100dvh;
         overflow-y: hidden;
     }
-
 
     .sidebar {
         grid-column: 1;
@@ -82,5 +81,16 @@
     .content {
         grid-column: 2;
         overflow-y: scroll;
+    }
+
+
+    @media(max-width: 1040px) {
+        .container {
+            grid-template-columns: 0px 1fr;
+        }
+
+        .sidebar {
+            display: none
+        }
     }
 </style>

@@ -1,6 +1,10 @@
-import prisma from '$lib/prisma';
-import { error } from '@sveltejs/kit';
+import { redirect } from "@sveltejs/kit";
 import type { PageServerLoad } from './$types';
+
+// WARN: currently disabled as register feature not anticipated...
+
+/* import prisma from '$lib/prisma';
+import { error } from '@sveltejs/kit';
 import { getUserSessionOrThrow } from '$lib/utilsServer';
 
 export const load = (async ({ params, cookies }) => {
@@ -35,4 +39,8 @@ export const load = (async ({ params, cookies }) => {
     return {
         
     }
-}) satisfies PageServerLoad
+}) satisfies PageServerLoad */
+
+export const load = (async () => {
+    throw redirect(300, "/meetups");
+}) satisfies PageServerLoad;

@@ -3,19 +3,19 @@
 </script>
 
 <div class="container">
-    {#each paths as { name, href }, i}
-        <div class="box">
-            <a {href} class="container">
-                {#if i == 0}
-                    <span class="material-symbols-outlined" style:margin-right=4px style:font-size=18px>arrow_left_alt</span>
-                {/if}
+    {#if typeof window !== "undefined" && window.history.length > 1}
+        <button on:click={() => window.history.back()} class="material-symbols-outlined container2" style:margin-right=4px style:font-size=18px>arrow_left_alt</button>
+    {:else}
+        <a href={paths.at(-2)?.href} class="material-symbols-outlined container2" style:margin-right=4px style:font-size=18px>arrow_left_alt</a>
+    {/if}
 
-                {name}
-            </a>
-        </div>
+    {#each paths as { name, href }, i}
+        <a {href} class="container2">
+            {name}
+        </a>
 
         {#if i != paths.length - 1}
-            <p>/</p>
+            <div class="slash">/</div>
         {/if}
     {/each}
 </div>
@@ -25,34 +25,31 @@
     .container {
         display: flex;
         flex-direction: row;
+        flex-wrap: wrap;
+    }
+
+    .container2 {
         height: 24px;
+        line-height: 24px;
 
-        align-items: center;
-    }
-
-    .container *  {
-        color: var(--c-dg1);
-        font-size: 14px;
-        font-weight: 500;
-    }
-
-    .box {
         border-radius: var(--v-border-radius-small);
         padding-left: 3px;
         padding-right: 3px;
 
         transition: background-color var(--v-animation-delay) ease-in-out;
+        color: var(--c-dg1);
+        font-size: 14px;
+        font-weight: 500;
     }
 
-    .box:hover {
+
+    .container2:hover {
+        color: var(--c-dg2);
         background-color: var(--c-lgh);
+        cursor: pointer;
     }
 
-    .box:hover * {
-        color: var(--c-dg2)
-    }
-
-    p {
+    .slash {
         margin-left: 1px;
         margin-right: 1px;
     }

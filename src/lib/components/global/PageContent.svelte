@@ -1,10 +1,11 @@
 <script lang="ts">
     export let heading: string, subheading = "";
     export let top = 126; /* tab bar + 32px either side */
+    export let isDashboard = false;
 </script>
 
 
-<div class="content" style:margin-top={top}px> 
+<div class="page-content" data-isDashboard={isDashboard} style:margin-top={top}px style:padding-bottom=64px> 
     <h1 class="fstyle-heading" style:padding-bottom=8px>{heading}</h1>
 
     {#if subheading != ""}
@@ -16,10 +17,34 @@
 
 
 <style>
-    .content {
+    .page-content {
         margin-left: auto;
         margin-right: auto;
 
         width: 1000px;
+    }
+
+    @media(max-width: 1040px) {
+        .page-content {
+            margin-left: 20px;
+            margin-right: 20px;
+            width: calc(100% - 40px);
+        }
+    }
+
+    @media(max-width: 1400px) {
+        .page-content[data-isDashboard=true] {
+            margin-left: 50px;
+            margin-right: 50px;
+            width: calc(100% - 100px);
+        }
+    }
+
+    @media(max-width: 550px) {
+        .page-content[data-isDashboard=true] {
+            margin-left: 20px;
+            margin-right: 20px;
+            width: calc(100% - 40px);
+        }
     }
 </style>

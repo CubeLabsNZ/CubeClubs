@@ -1,4 +1,4 @@
-import adapter from '@sveltejs/adapter-auto';
+import adapter from '@sveltejs/adapter-node';
 import { vitePreprocess } from '@sveltejs/kit/vite';
 
 /** @type {import('@sveltejs/kit').Config} */
@@ -15,7 +15,16 @@ const config = {
 
 		alias: {
 			$styles: "./src/styles/"
-		}
+		},
+		csp: {
+			directives: {
+				'default-src': ['self'],
+				// https://github.com/sveltejs/kit/issues/5215 :/
+				'style-src': ['self', 'fonts.googleapis.com', 'unsafe-inline'],
+				'font-src': ['self', 'fonts.gstatic.com'],
+			},
+			mode: 'auto'
+		},
 	},
 };
 

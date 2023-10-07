@@ -1,5 +1,5 @@
 import type { Actions } from "./$types";
-import type { Region, Gender } from "@prisma/client";
+import type { Region } from "@prisma/client";
 
 import { fail, redirect } from "@sveltejs/kit";
 
@@ -27,7 +27,7 @@ export const actions = {
         const password = data.get("password");
         const confirmPassword = data.get("confirmPassword");
         const region = data.get("region");
-        const fullName = data.get("fullName");
+        const fullName = (data.get("fullName") as string).trim().split(" ").filter(c => c).map(s => s.length > 1 ? s[0].toUpperCase() + s.slice(1, s.length) : s[0].toUpperCase()).join(" ");
 
 
         const userExists = await prisma.user.count({
@@ -55,10 +55,9 @@ export const actions = {
         const user = await prisma.user.create({
             data: {
                 email: email as string,
-                passHash: hash,
+                pass_hash: hash,
                 name: fullName as string,
-                region: region as Region,
-                gender: "MALE"
+                region: region as Region
             }
         });
 

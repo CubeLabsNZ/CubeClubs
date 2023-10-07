@@ -1,13 +1,48 @@
 <script lang="ts">
+    import { browser } from "$app/environment";
+    import { goto, invalidate, invalidateAll } from "$app/navigation";
+    import { page } from "$app/stores";
+
+    import { formatTime, getRoundName } from "$lib/utils";
+
     import Breadcrumb from "$lib/components/global/Breadcrumb.svelte";
     import Form from "$lib/components/global/Form.svelte";
     import Select from "$lib/components/global/Select.svelte";
 
     import puzzles from "$lib/data/puzzles"
+    import formats from "$lib/data/formats"
 
-    import type { PageData } from "./$types";
+    import type { PageData, ActionData } from "./$types";
+    import { Puzzle } from "@prisma/client";
 
     export let data: PageData
+    export let form: ActionData
+
+    let roundId: number | undefined = form?.event ?? $page.url.searchParams.get("roundId") ?? data.meetup.rounds[0]?.id;
+
+    let selectedRound;
+    let selectedRoundPuzzleFormatCount;
+
+    $: {
+        if (roundId) {
+            updateQuery(roundId);
+
+            selectedRound = data.meetup.rounds.find(r => r.id === roundId);
+            selectedRoundPuzzleFormatCount = formats[selectedRound.format].count;
+        }
+    }
+
+    async function updateQuery(roundId: number) {
+        if (!browser) { return }
+
+        let query = new URLSearchParams($page.url.searchParams.toString());
+
+        query.set("roundId", roundId);
+
+        goto(`?${query.toString()}`);
+    }
+
+    let inputError = -1;
 </script>
 
 <Breadcrumb paths={[
@@ -16,39 +51,80 @@
     {name: "Data Entry", href: `/dashboard/meetups/${data.meetup.id}/edit/results`}
 ]} />
 
+{#if roundId}
 <div class="parent-container">
     <div class="entry-container">
         <!-- TODO: fix the form button  -->
-        <Form name="Add Solve">
+        <Form name="Add Solve" run={({ formData, cancel }) => {
+            let i = -2;
+
+            for (const value of formData.values()) {
+                if (i < 0) { i++; continue; }
+
+                if (value.toLowerCase() === "dnf") {
+                    formData.set(`solve-${i}`, Infinity);
+                    i++;
+                    continue;
+                }
+
+                if (isNaN(value)) {
+                    cancel();
+                    inputError = i;
+                }
+
+                i++
+            }
+
+            formData.set("roundFormat", selectedRound.format);
+
+            return async ({ result, update }) => {
+                update();
+                inputError = -1;
+            }
+        }}>
             <label class="form-label">
                 Event
+                <div style:display=grid>
+                    <!-- FIXME: this is this the Select component inlined! Select component for some reason doesnt bind correctly -->
+                    <select required name="event" bind:value={roundId}>
+                        <option disabled selected value>Select an event</option>
+                        {#each data.meetup.rounds as round}
+                            {@const puzzle = puzzles[round.puzzle]}
+                            <option value={round.id}>{getRoundName(puzzle.name, round.number, round.maxRounds)}</option>
+                        {/each}
+                    </select>
 
-                <Select name="event">
-                    <option disabled selected value>Select an event</option>
-                    {#each data.meetup.rounds as round}
-                        {@const puzzle = puzzles[round.puzzle]}
-                        <option value={round.id}>{puzzle.name} - Round {round.number}</option>
-                    {/each}
-                </Select>
+                    <span class="material-symbols-outlined select-icon">expand_more</span>
+                </div>
             </label>
 
             <label class="form-label">
                 Competitor Name
                 <Select name="competitor">
                     <option disabled selected value>Select a competitor</option>
-                    {#each data.meetup.users as {user}}
-                        <option value={user.id}>{user.name}</option>
+                    {#each selectedRound.users as {user_id, user_name}}
+                        <option value={user_id}>{user_name}</option>
                     {/each}
                 </Select>
             </label>
 
 
-            <!-- TODO: as many as the format of the round it (eg ao5 = 5, mo3 = 3, bld = 1?) -->
-            {#each Array(5) as _, i}
+            {#each Array(selectedRoundPuzzleFormatCount) as _, i}
                 <label class="form-label">
                     Solve {i+1}
-                    <input required name={`solve-${i}`} />
+                    <input required name={`solve-${i}`} autocomplete=off data-error={inputError} />
+                    {#if selectedRound.puzzle == puzzle.MULTIBLD}
+                        Successes {i+1}
+                        <input required name={`successes-${i}`} autocomplete=off data-error={inputError} />
+                        Attempts {i+1}
+                        <input required name={`attempts-${i}`} autocomplete=off data-error={inputError} />
+                    {/if}
+
+                    {#if inputError === i}
+                        <p class="fsize-subhead" style:color=var(--c-red)>please enter a valid value</p>
+                    {/if}
                 </label>
+
             {/each}
         </Form>
     </div>
@@ -58,78 +134,62 @@
             Live Results
         </p>
 
-        <!-- TODO: more duplicataion yay -->
-        <table style:width=100%>
-            <!-- NOTE: tc-dummy is entirely invisible to provide padding to either side of the table -->
-            <tr>
-                <th class="tc-dummy"></th>
-
-                <th class="tc-ranking"></th>
-                <th class="tc-name">Name</th>
-                <th class="tc-result">Average</th>
-                <!-- TODO: as many solves as the round has -->
-                <th class="tc-solves">S1</th>
-                <th class="tc-solves">S2</th>
-                <th class="tc-solves">S3</th>
-                <th class="tc-solves">S4</th>
-                <th class="tc-solves">S5</th>
-
-                <th class="tc-dummy"></th>
-            </tr>
-
-            <!-- NOTE: td-dummy is entirely invisible to provide padding to the top and bottom of the table -->
-            <tr class="td-dummy">
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
+        {#if roundId === undefined}
+            <p> No events added for this meetup. </p>
+        {:else}
+            <p> {roundId} </p>
 
 
-            <tr>
-                <td class="tc-dummy"></td>
+            <table style:width=100%>
+                <colgroup>
+                    <col span=1 style:width=50px>
+                    <col span=1 style:width=auto>
+                    <col span=1 style:width=80px>
 
-                <td class="tc-ranking"></td>
-                <td class="tc-name">Name</td>
-                <td class="tc-result">Average</td>
-                <!-- TODO: as many solves as the round has -->
-                <td class="tc-solves">S1</td>
-                <td class="tc-solves">S2</td>
-                <td class="tc-solves">S3</td>
-                <td class="tc-solves">S4</td>
-                <td class="tc-solves">S5</td>
-
-                <td class="tc-dummy"></td>
-            </tr>
+                    {#each Array(selectedRoundPuzzleFormatCount) as _}
+                        <col span=1 style:width=80px>
+                    {/each}
+                </colgroup>
 
 
-            <tr class="td-dummy">
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-        </table>
+                <tbody>
+                    <tr>
+                        <th class="tc-ranking"></th>
+                        <th class="tc-name">Name</th>
+                        <th class="tc-result">Average</th>
+
+                        {#each Array(selectedRoundPuzzleFormatCount) as _, i}
+                            <th class="tc-solves">{i + 1}</th>
+                        {/each}
+                    </tr>
+
+                    {#each selectedRound.results as result,idx }
+                        {#if result}
+                        <tr>
+                            <td class="tc-ranking">{idx+1}</td>
+                            <td class="tc-name">{result.user_name}</td>
+                            <td class="tc-result">{formatTime(result.value)}</td>
+
+                            {#each result.solves as solve}
+                                <td class="tc-solves">{formatTime(solve.time)}</td>
+                            {/each}
+                        </tr>
+                        {/if}
+                    {/each}
+                </tbody>
+            </table>
+        {/if}
     </div>
 </div>
+{:else}
+    <p>No rounds! Add rounds in <a href="./schedule">the schedule</a> first.</p>
+{/if}
 
 
 <style>
     .parent-container {
         display: flex;
-        column-gap: 96px;
+        column-gap: 64px;
 
         margin-top: 48px;
     }
@@ -138,10 +198,43 @@
         display: flex;
         flex-direction: column;
         row-gap: 16px;
-        width: 300px;
+        width: 400px;
     }
 
     .live-results {
         width: 100%;
+    }
+
+
+    /* INFO: ranking table */
+    .tc-name {
+        text-align: left;
+    }
+
+    .tc-result, .tc-name {
+        font-weight: 500;
+    }
+
+    .tc-result, .tc-ranking, .tc-solves {
+        text-align: right;
+    }
+
+    .tc-ranking {
+        color: var(--c-dg1);
+    }
+
+    select {
+        grid-area: 1/1;
+
+        padding-right: 32px;
+    }
+
+    .select-icon {
+        font-size: 20px;
+        align-self: center;
+        justify-self: flex-end;
+        padding-right: 4px;
+        grid-area: 1/1;
+        pointer-events: none;
     }
 </style>

@@ -8,15 +8,17 @@ const regions: {[key in Region]: {name: string, maori_name?: string}} = {
 	GISBORNE: { name: "Gisborne", maori_name: "Te Tairāwhiti" },
 	HAWKES_BAY: { name: "Hawke's Bay", maori_name: "Te Matau-a-Māui" },
 	TARANAKI: { name: "Taranaki" },
-	MANGAWATU_WHANGANUI: { name: "Manawatū-Whanganui" },
+	MANAWATU_WHANGANUI: { name: "Manawatū" },
 	WELLINGTON: { name: "Wellington", maori_name: "Te Whanga-nui-a-Tara" },
 	TASMAN: { name: "Tasman", maori_name: "Te Tai-o-Aorere" },
 	NELSON: { name: "Nelson", maori_name: "Whakatū" },
-	MALBOROUGH: { name: "Marlborough", maori_name: "Te Tauihu-o-te-waka" },
+	MARLBOROUGH: { name: "Marlborough", maori_name: "Te Tauihu-o-te-waka" },
 	WEST_COAST: { name: "West Coast", maori_name: "Te Tai Poutini" },
 	CANTERBURY: { name: "Canterbury", maori_name: "Waitaha" },
 	OTAGO: { name: "Otago", maori_name: "Ōtākou" },
 	SOUTHLAND: { name: "Southland", maori_name: "Murihiku" },
+
+	VISITOR: { name: "Visitor" }
 }
 
 const regionKeys = Object.keys(regions)
@@ -28,6 +30,15 @@ export const southIslandRegions = regionKeys.slice(9);
 export function islandRegions(region: string) {
 	if (northIslandRegions.indexOf(region) != -1) return northIslandRegions
 	if (southIslandRegions.indexOf(region) != -1) return southIslandRegions
+}
+
+export function regionToString(region: string) {
+	let str = regions[region].name
+	// const maori_name = regions[region].maori_name
+	// if (maori_name) {
+	// 	str += " (" + maori_name + ")"
+	// }
+	return str
 }
 
 export default regions
