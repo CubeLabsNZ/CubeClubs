@@ -6,21 +6,22 @@
     export let clubInnerDiv;
 </script>
 
-<a {href}> 
-    <div class="card" style:transform bind:this={clubInnerDiv}>
-        <img src={clubLogo} alt="" style:flex-grow=10 style:width=100% style:object-fit=cover>
+<div class="card" style:transform bind:this={clubInnerDiv}>
+    <img src={clubLogo} alt="" style:flex-grow=10 style:width=100% style:object-fit=cover>
 
-        <div style:display=inherit style:flex-direction=inherit style:align-items=flex-begin style:width=100%>
-            <p class="fsize-title2 club-name"> {clubName} </p>
-            <p class="fsize-subhead club-location"> {clubLocation} </p>
-        </div>
+    <div style:display=inherit style:flex-direction=inherit style:align-items=flex-begin style:width=100%>
+        <p class="fsize-title2 club-name"> {clubName} </p>
+        <p class="fsize-subhead club-location"> {clubLocation} </p>
     </div>
-</a>
+</div>
 
 <style>
     .card {
-        width: 250px;
-        height: 350px;
+        max-width: 250px;
+        max-height: 350px;
+
+        /* If we do need to shrink, dont distort! */
+        aspect-ratio: 250 / 350;
 
         background-color: white;
         border-radius: 12px;
@@ -35,6 +36,15 @@
 
         transition: box-shadow var(--v-animation-delay) ease-in-out;
 
+        grid-row: span 2;
+    }
+
+    .card:hover {
+        transform: perspective(1000px) translateZ(48px);
+    }
+
+    .card:first-child {
+        grid-row: 2 /  span 2;
     }
 
     .club-name {

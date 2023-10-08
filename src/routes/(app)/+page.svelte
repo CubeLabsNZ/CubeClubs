@@ -1,48 +1,28 @@
-<script>
+<script lang="ts">
     import Button, { ButtonSize, ButtonType } from "$lib/components/global/Button.svelte";
 
     import ClubCard from "$lib/components/landing/ClubCard.svelte";
 
-    import iconASC from "$lib/assets/club-icons/ICON-ASC.png";
-    import iconCHCH from "$lib/assets/club-icons/ICON-CHCH.png";
-    import iconDUN from "$lib/assets/club-icons/ICON-DUN.png";
-    import iconKAP from "$lib/assets/club-icons/ICON-KAP.png";
-    import iconMAN from "$lib/assets/club-icons/ICON-MAN.png";
-    import iconTAR from "$lib/assets/club-icons/ICON-TAR.png";
+    import iconASC from "$lib/assets/club-icons/ICON-ASC.webp";
+    import iconCHCH from "$lib/assets/club-icons/ICON-CHCH.webp";
+    import iconDUN from "$lib/assets/club-icons/ICON-DUN.webp";
+    import iconKAP from "$lib/assets/club-icons/ICON-KAP.webp";
+    import iconMAN from "$lib/assets/club-icons/ICON-MAN.webp";
+    import iconTAR from "$lib/assets/club-icons/ICON-TAR.webp";
 
 
 
 
-    let constrain = 250;
-
-    let perspectiveContainer;
-
-    function perspectiveTransform(x, y, div) {
-        let box = div.getBoundingClientRect();
-        let calcX = -(y - box.y - (box.height / 2)) / constrain;
-        let calcY = (x - box.x - (box.width / 2)) / constrain;
-
-        return `perspective(300px) rotateX(${calcX}deg) rotateY(${calcY}deg)`;
-    }
-
+    let perspectiveContainer: HTMLDivElement
     let transforms = [];
-    let innerDivs = [];
-
-    let animate = (e) => {
-        window.requestAnimationFrame(() => { 
-            for (let i = 0; i < 6; i++) {
-                let position = [e.clientX, e.clientY].concat([innerDivs[i]]);
-                transforms[i] = perspectiveTransform.apply(null, position);
-            }
-        })
-    }
+    let innerDivs: HTMLDivElement[] = [];
 </script>
 
 <svelte:head>
     <title>CubeClubs NZ</title>
 </svelte:head>
 
-<div id="landing-main" bind:this={perspectiveContainer} on:mousemove={animate} aria-hidden>
+<div id="landing-main" bind:this={perspectiveContainer} aria-hidden>
     <div id="landing-bg">
         <img id="landing-b-1" src="/landing/blob-blue.webp" alt="">
         <img id="landing-b-2" src="/landing/blob-green.webp" alt="">
@@ -71,7 +51,6 @@
         </a>
     </div>
 
-    <div id="landing-clubs">
         <div id="landing-clubs-grid">
             <ClubCard
                 clubName="Dunedin Speedcubers"
@@ -122,10 +101,10 @@
                 bind:clubInnerDiv={innerDivs[5]} />
 
         </div>
-    </div>
 
     <!-- <img id="landing-clubs" src="/landing/clubs.webp" alt=""> -->
 
+<!--
     <div class="footer">
         <a href="https://github.com/CubeClubsNZ/app" aria-label="CubeClubs source code (GitHub)" target="_blank" class="hoverable-link" style:height=18px style:fill=var(--c-lg1)>
             <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" viewBox="0 0 28 28" height=18px style:height=18px >
@@ -142,6 +121,7 @@
 
         <p> © 2023 <a href="https://tim-xie.com" target="_blank" class="hoverable-link">Tim Xie</a>, CubeClubs NZ.</p>
     </div>
+    -->
 </div>
 
 
@@ -166,17 +146,23 @@
     #landing-clubs-grid {
         display: grid;
         grid-template-columns: 1fr 1fr;
-        grid-template-rows: 1fr 1fr 1fr;
+        grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+
+        margin-left: 2%;
+        margin-right: 25%;
+        margin-top: -24%;
+        margin-bottom: -14%;
+        align-self: flex-end;
+        transform: rotateX(55deg) rotateY(0deg) rotateZ(37deg);
 
         gap: 48px;
+
+        flex-shrink: 1;
     }
 
-    #landing-clubs {
-        /* transform: rotateX(31deg) rotateY(-10deg) rotateZ(23deg); */
+    #landing-clubs-grid {
         z-index: 2;
-        position: fixed;
-        top: 100px;
-        right: 100px;
+        align-self: bottom;
     }
 
     #landing-button {
@@ -232,7 +218,7 @@
 
         z-index: 2;
 
-        grid-area: 1/1;
+        flex-shrink: 0;
     }
 
 
@@ -277,9 +263,10 @@
     }
 
     #landing-main {
-        display: grid;
+        display: flex;
+        flex-direction: row;
 
-        grid-template-rows: 1fr 110px;
+        justify-content: space-between;
 
         height: 100dvh;
         overflow: hidden;
