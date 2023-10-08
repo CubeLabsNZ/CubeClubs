@@ -265,7 +265,7 @@
                                     value ? value : time,
                                     mbld_score,
                                     mbld_total
-                                )}</td
+                                    )}</td
                             >
                         {:else}
                             <td class="tc-mix-single"
