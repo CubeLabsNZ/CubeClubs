@@ -15,8 +15,8 @@
 
     <div id="landing-content">
         <div id="landing-title">
-            <h2>Welcome to</h2>
-            <h1><span style:color=var(--c-a)>CubeClubs</span> NZ</h1>
+            <h1 class="title-b">Welcome to</h1>
+            <h1 class="title-a"><span style:color=var(--c-a)>CubeClubs</span> NZ</h1>
         </div>
 
         <div id="landing-subtitle">
@@ -76,13 +76,13 @@
         align-items: center;
     }
 
-    h1 {
+    .title-a {
         font-size: 72px;
         font-family: "TwCenMt";
         font-weight: 600;
     }
 
-    h2 {
+    .title-b {
         font-size: 48px;
         font-weight: 600;
     }

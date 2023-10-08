@@ -45,6 +45,8 @@ export const load = (async ({ params }) => {
     }
 
 
+    const userIslandRegions = islandRegions(user.region)
+
 
     // Don't even talk to me right now.
     const getHistoricalRecords = async () => {
@@ -150,34 +152,37 @@ export const load = (async ({ params }) => {
 
 
     // TODO: try make this an array right away
-    const medalsTempPromise = db.with('last_rounds', (eb) =>
-        eb.selectFrom('round')
-            .select(['id', 'end_date'])
-            .distinctOn(['puzzle', 'meetup_id'])
-            .orderBy(['puzzle', 'meetup_id', 'end_date desc'])
-    )
-        .selectFrom('last_rounds')
-        .select((eb) => [
-            eb.fn.count('result.id').filterWhere('rank', '=', '1').as('gold'),
-            eb.fn.count('result.id').filterWhere('rank', '=', '2').as('silver'),
-            eb.fn.count('result.id').filterWhere('rank', '=', '3').as('bronze')
-        ])
-        .innerJoinLateral(
-            (eb) => eb.selectFrom('result')
-                .select((fb) => [
-                    'result.id as id', 'value', 'user.id as user_id',
-                    fb.fn.agg<number>('row_number').over(ob => ob.orderBy('result.value', 'asc')).as('rank')
-                ])
-                .innerJoin('user', 'user.id', 'result.user_id')
-                .whereRef('result.round_id', '=', 'last_rounds.id')
-                .orderBy('result.value asc')
-                .limit(3)
-                .as('result'),
-            (join) => join.onTrue()
+    const medals = (async () => {
+        const medalsTemp = await db.with('last_rounds', (eb) =>
+            eb.selectFrom('round')
+                .select(['id', 'end_date'])
+                .distinctOn(['puzzle', 'meetup_id'])
+                .orderBy(['puzzle', 'meetup_id', 'end_date desc'])
         )
-        .where('user_id', '=', user.id)
-        .where('value', '!=', Infinity)
-        .executeTakeFirst()
+            .selectFrom('last_rounds')
+            .select((eb) => [
+                eb.fn.count('result.id').filterWhere('rank', '=', '1').as('gold'),
+                eb.fn.count('result.id').filterWhere('rank', '=', '2').as('silver'),
+                eb.fn.count('result.id').filterWhere('rank', '=', '3').as('bronze')
+            ])
+            .innerJoinLateral(
+                (eb) => eb.selectFrom('result')
+                    .select((fb) => [
+                        'result.id as id', 'value', 'user.id as user_id',
+                        fb.fn.agg<number>('row_number').over(ob => ob.orderBy('result.value', 'asc')).as('rank')
+                    ])
+                    .innerJoin('user', 'user.id', 'result.user_id')
+                    .whereRef('result.round_id', '=', 'last_rounds.id')
+                    .orderBy('result.value asc')
+                    .limit(3)
+                    .as('result'),
+                (join) => join.onTrue()
+            )
+            .where('user_id', '=', user.id)
+            .where('value', '!=', Infinity)
+            .executeTakeFirst()
+        return [medalsTemp.gold, medalsTemp.silver, medalsTemp.bronze]
+    })()
 
 
 
@@ -204,19 +209,8 @@ export const load = (async ({ params }) => {
 
     const PRs: { [key in Puzzle]: { single: PRInfo, average: PRInfo } } = {}
 
-    // TODO: partition by puzzle instead of foreach
+    // TODO: partition by puzzle instead of foreach, or at least subquery
     for (const [key, puzzle] of Object.entries(puzzles)) {
-        // TODO: plusTwo - consult - maybe DNF = inf
-        const single = await db.selectFrom('solve')
-            .selectAll()
-            .innerJoin('result', 'solve.result_id', 'result.id')
-            .innerJoin('round', 'result.round_id', 'round.id')
-            .where('result.user_id', '=', user.id)
-            .where('round.puzzle', '=', key)
-            .orderBy('time asc')
-            .executeTakeFirst()
-
-        if (!single) continue;
 
         const average = await db.selectFrom('result')
             .selectAll()
@@ -230,47 +224,44 @@ export const load = (async ({ params }) => {
 
         // PERSONAL RECORDS / RANKINGS
 
-        const countSingleBaseQuery = db.selectFrom('solve')
+        const countSingle = await db.selectFrom('solve')
             .innerJoin('result', 'result.id', 'solve.result_id')
             .innerJoin('round', 'round.id', 'result.round_id')
             .innerJoin('user', 'user.id', 'result.user_id')
-            .where('time', '<', single.time)
+            .innerJoinLateral(eb => eb.selectFrom('solve as best_solve').selectAll().innerJoin('result as re2', 'best_solve.result_id', 're2.id').innerJoin('round as ro2', 're2.round_id', 'ro2.id').where('ro2.puzzle', '=', key).where('re2.user_id', '=', user.id).orderBy(['best_solve.mbld_score desc', 'best_solve.time asc']).limit(1).as('best_solve'), join => join.onTrue())
+            .whereRef('solve.time', '<=', 'best_solve.time')
             .where('round.puzzle', '=', key)
-            .select(({ fn }) => [fn.count<number>('result.user_id').distinct().as("count")])
+            .select((eb) => [
+                eb.fn.count<number>('result.user_id').distinct().as("IcR"),
+                eb.fn.count<number>('result.user_id').filterWhere('user.region', '=', user.region).distinct().as("RR"),
+                eb.fn.count<number>('result.user_id').filterWhere('user.region', 'in', userIslandRegions).distinct().as("IR"),
+                'best_solve.time as time'
+            ])
+            .groupBy('best_solve.time')
+            .executeTakeFirst()
 
-        const countRRSingle = Number((await countSingleBaseQuery.where('user.region', '=', user.region).executeTakeFirst())?.count)
-        const countIRSingle = Number((await countSingleBaseQuery.where('user.region', 'in', islandRegions(user.region)).executeTakeFirst())?.count)
-        const countIcRSingle = Number((await countSingleBaseQuery.executeTakeFirst())?.count)
-
-        const countAverageBaseQuery = db.selectFrom('result')
+        const countAverage = await db.selectFrom('result')
             .innerJoin('round', 'round.id', 'result.round_id')
             .innerJoin('user', 'user.id', 'result.user_id')
-            .where('value', '<', average.value)
+            .innerJoinLateral(eb => eb.selectFrom('result as best_result').selectAll().innerJoin('round as ro2', 'best_result.round_id', 'ro2.id').where('ro2.puzzle', '=', key).where('best_result.user_id', '=', user.id).orderBy(['best_result.mbld_score desc', 'best_result.value asc']).limit(1).as('best_result'), join => join.onTrue())
+            .whereRef('result.value', '<=', 'best_result.value')
             .where('round.puzzle', '=', key)
-            .select(({ fn }) => [fn.count('result.user_id').distinct().as("count")])
-
-        const countRRAverage = Number((await countAverageBaseQuery.where('user.region', '=', user.region).executeTakeFirst())?.count)
-        const countIRAverage = Number((await countAverageBaseQuery.where('user.region', 'in', islandRegions(user.region)).executeTakeFirst())?.count)
-        const countIcRAverage = Number((await countAverageBaseQuery.executeTakeFirst())?.count)
+            .select((eb) => [
+                eb.fn.count<number>('result.user_id').distinct().as("IcR"),
+                eb.fn.count<number>('result.user_id').filterWhere('user.region', '=', user.region).distinct().as("RR"),
+                eb.fn.count<number>('result.user_id').filterWhere('user.region', 'in', userIslandRegions).distinct().as("IR"),
+                'best_result.value as time'
+            ])
+            .groupBy('best_result.value')
+            .executeTakeFirst()
 
         PRs[key] = {
-            single: {
-                time: single.time,
-                RR: countRRSingle + 1,
-                IR: countIRSingle + 1,
-                IcR: countIcRSingle + 1,
-            }, average: {
-                time: average.value,
-                RR: countRRAverage + 1,
-                IR: countIRAverage + 1,
-                IcR: countIcRAverage + 1
-            }
+            single: countSingle, average: countAverage
         }
 
         // NUMBER OF RECORDS
 
 
-        // TODO: can this be 1 query?
         const getNumRecordsSingle = async (regionPredicate: any) => Number((await db.with('all_records', (eb) => (
             eb.selectFrom('solve')
                 .innerJoin('result', 'result.id', 'solve.result_id')
@@ -433,7 +424,7 @@ export const load = (async ({ params }) => {
         .groupBy(['puzzle'])
         // TODO try this better
         .select((eb) => ['puzzle',
-            sql`json_agg(temp ORDER BY round_end DESC) as values`
+            sql<any>`json_agg(temp ORDER BY round_end DESC) as values`
         ])
         .execute()
 
@@ -444,14 +435,14 @@ export const load = (async ({ params }) => {
 
 
     const completedSolves = (await solvesQuery)?.completedSolves ?? 0
-    const medalsTemp = (await medalsTempPromise)!
-    const medals = [medalsTemp.gold, medalsTemp.silver, medalsTemp.bronze]
 
 
     return {
         user,
-        completedSolves,
-        medals,
+        streamed: {
+            medals,
+            completedSolves
+        },
         results,
         PRs,
         records,
