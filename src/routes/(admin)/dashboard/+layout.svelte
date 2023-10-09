@@ -12,6 +12,7 @@
 
     import SidebarTab from "$lib/components/dashboard/SidebarTab.svelte";
     import { page } from "$app/stores";
+    import { Box, DoorOpen, Users } from "lucide-svelte";
 
 
     let currentPage: string;
@@ -32,12 +33,12 @@
     <div class="sidebar">
         <img src={logo} alt="" style:height=36px style:margin-bottom=48px />
 
-        <SidebarTab iconName=deployed_code label=Meetups isActive={currentPage === "m"} perform={() => { goto("/dashboard/meetups") }} />
-        <SidebarTab iconName=group label=Users isActive={currentPage === "u"} perform={() => { goto("/dashboard/users") }} />
+        <SidebarTab iconCompontent={Box} label=Meetups isActive={currentPage === "m"} perform={() => { goto("/dashboard/meetups") }} />
+        <SidebarTab iconCompontent={Users} label=Users isActive={currentPage === "u"} perform={() => { goto("/dashboard/users") }} />
 
         <div class="sidebar-dummy" style:flex-grow=10></div>
 
-        <SidebarTab iconName=exit_to_app label="Return to CubeClubs" perform={() => { goto("/") }} />
+        <SidebarTab iconCompontent={DoorOpen} label="Return to CubeClubs" perform={() => { goto("/") }} />
     </div>
 
     <div class="content" style:position=relative>

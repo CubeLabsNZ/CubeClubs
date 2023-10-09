@@ -11,6 +11,8 @@
 
     export let data: PageData;
 
+    import { CalendarPlus, Check, FormInput, Pencil, Trash, Trash2, UserCog } from 'lucide-svelte';
+
     let isPublished = data.meetup.is_published
     let meetupFetch: Promise<Response> | undefined
 
@@ -50,7 +52,6 @@
 ]} />
 
 <div class="button-bar">
-    <!-- <span class="material-symbols-outlined">done</span> -->
     <!-- TODO: disable when loading -->
     <button on:click={togglePublish}>
         <Button>
@@ -71,7 +72,7 @@
         <a href={$page.url + "/edit/results"}>
             <Button>
                 <div class="button-inner">
-                    <span class="material-symbols-outlined"> pin </span>
+                    <FormInput size="14"/>
                     <p> Enter Results </p>
                 </div>
             </Button>
@@ -83,7 +84,7 @@
     <a href={$page.url + "/edit"}>
         <Button>
             <div class="button-inner">
-                <span class="material-symbols-outlined"> edit </span>
+                <Pencil size="14"/>
                 <p> Edit Details </p>
             </div>
         </Button>
@@ -93,7 +94,7 @@
     <a href={$page.url + "/edit/schedule"}>
         <Button>
             <div class="button-inner">
-                <span class="material-symbols-outlined"> edit_calendar </span>
+                <CalendarPlus size="14"/>
                 <p> Edit Schedule </p>
             </div>
         </Button>
@@ -103,7 +104,7 @@
     <a href={$page.url + "/edit/users"}>
         <Button>
             <div class="button-inner">
-                <span class="material-symbols-outlined"> manage_accounts </span>
+                <UserCog size="14"/>
                 <p> Edit Competitors </p>
             </div>
         </Button>
@@ -118,7 +119,7 @@
         }}}>
         <Button>
             <div class="button-inner" style:color=var(--c-red)>
-                <span class="material-symbols-outlined"> delete </span>
+                <Trash2 size="14"/>
                 <p> Delete Meetup </p>
             </div>
         </Button>
@@ -208,7 +209,7 @@
 
 {#if showPublishMessage}
     <Toast> 
-        <span class="material-symbols-outlined" style:color={isPublished ? "var(--c-green)" : "var(--c-dg2)"}> check </span>
+        <Check size="16" color={isPublished ? "var(--c-green)" : "var(--c-dg2)"}/>
         <p style:font-weight=500 style:color={isPublished ? "var(--c-green)" : "var(--c-dg2)"}> {isPublished ? "Published!" : "Reverted to Draft"} </p>
     </Toast>
 {/if}

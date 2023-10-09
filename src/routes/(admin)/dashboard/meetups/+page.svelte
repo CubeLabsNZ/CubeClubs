@@ -4,6 +4,8 @@
 
     import type { PageData } from './$types';
 
+    import { Plus } from "lucide-svelte";
+
     export let data: PageData
 </script>
 
@@ -12,7 +14,7 @@
 <a href="/dashboard/meetups/new">
     <Button>
         <div class="button-inner">
-            <span class="material-symbols-outlined">add</span>
+            <Plus size="16" />
             <p> New Meetup </p>
         </div>
     </Button>

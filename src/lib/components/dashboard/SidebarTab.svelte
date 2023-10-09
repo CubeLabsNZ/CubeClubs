@@ -1,7 +1,10 @@
 <script lang="ts">
+    import type { IconEvents, IconProps } from "lucide-svelte";
+    import type { ComponentType, SvelteComponent } from "svelte";
+
     export let isActive = false;
 
-    export let iconName: string, label: string;
+    export let iconCompontent: ComponentType<SvelteComponent<IconProps, IconEvents, {}>>, label: string;
 
     export let perform: () => void = () => {};
 </script>
@@ -9,7 +12,8 @@
 
 <button on:click={perform}>
     <div class="container" data-active={isActive}>
-        <span class="material-symbols-outlined">{iconName}</span>
+        <svelte:component this={iconCompontent} size="20px" />
+
         <p class="fsize-body"> {label} </p>
     </div>
 </button>

@@ -113,7 +113,7 @@
                 <label class="form-label">
                     Solve {i+1}
                     <input required name={`solve-${i}`} autocomplete=off data-error={inputError} />
-                    {#if selectedRound.puzzle == puzzle.MULTIBLD}
+                    {#if selectedRound.puzzle == Puzzle.MULTIBLD}
                         Successes {i+1}
                         <input required name={`successes-${i}`} autocomplete=off data-error={inputError} />
                         Attempts {i+1}
@@ -137,9 +137,6 @@
         {#if roundId === undefined}
             <p> No events added for this meetup. </p>
         {:else}
-            <p> {roundId} </p>
-
-
             <table style:width=100%>
                 <colgroup>
                     <col span=1 style:width=50px>
