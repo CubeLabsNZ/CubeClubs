@@ -26,7 +26,7 @@ export function partition<T>(array: T[], filter: (e: T, idx: number, arr: T[]) =
 }
 
 export function getRoundName(puzzleName: string, roundNumber: number, maxRound: number) {
-    return `${puzzleName ? puzzleName + ": " : ""}${roundNumber == maxRound ? "Final" : `Round ${roundNumber}`}`
+    return `${puzzleName ? puzzleName + " " : ""}${roundNumber == maxRound ? "Final" : `Round ${roundNumber}`}`
 }
 
 

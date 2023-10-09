@@ -202,7 +202,7 @@
             width: calc(100% - 40px);
             margin-left: 20px;
             margin-right: 20px;
-            gap: 32px;
+            gap: 16px;
         }
 
         .navbar-full {

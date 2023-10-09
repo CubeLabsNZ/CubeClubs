@@ -62,15 +62,22 @@
             for (const value of formData.values()) {
                 if (i < 0) { i++; continue; }
 
+                console.log(i, value)
+
                 if (value.toLowerCase() === "dnf") {
+                    if (selectedRound.puzzle == Puzzle.MULTIBLD) {
+                        inputError = i;
+                        cancel();
+                    }
+
                     formData.set(`solve-${i}`, Infinity);
                     i++;
                     continue;
                 }
 
                 if (isNaN(value)) {
-                    cancel();
                     inputError = i;
+                    cancel();
                 }
 
                 i++
@@ -111,21 +118,44 @@
 
 
             {#each Array(selectedRoundPuzzleFormatCount) as _, i}
-                <label class="form-label">
-                    Solve {i+1}
-                    <input required name={`solve-${i}`} autocomplete=off data-error={inputError} />
-                    {#if selectedRound.puzzle == Puzzle.MULTIBLD}
+                {#if selectedRound.puzzle == Puzzle.MULTIBLD}
+                    <label class="form-label">
+                        Solve Time {i + 1}
+                        <input required name={`solve-${i}`} autocomplete=off data-error={inputError} />
+                        {#if inputError === 3*i}
+                            <p class="fsize-subhead" style:color=var(--c-red)>please enter a valid value</p>
+                        {/if}
+                    </label>
+
+                    <label class="form-label">
                         Successes {i+1}
                         <input required name={`successes-${i}`} autocomplete=off data-error={inputError} />
+
+                        {#if inputError === 3*i + 1}
+                            <p class="fsize-subhead" style:color=var(--c-red)>please enter a valid value</p>
+                        {/if}
+                    </label>
+
+                    <label class="form-label">
                         Attempts {i+1}
                         <input required name={`attempts-${i}`} autocomplete=off data-error={inputError} />
-                    {/if}
+                        {#if inputError === 3*i + 2}
+                            <p class="fsize-subhead" style:color=var(--c-red)>please enter a valid value</p>
+                        {/if}
+                    </label>
 
-                    {#if inputError === i}
-                        <p class="fsize-subhead" style:color=var(--c-red)>please enter a valid value</p>
+                    {#if i + 1 != Array(selectedRoundPuzzleFormatCount).length }
+                        <hr class="line" style:width=100% />
                     {/if}
-                </label>
-
+                {:else}
+                    <label class="form-label">
+                            Solve {i + 1}
+                        <input required name={`solve-${i}`} autocomplete=off data-error={inputError} />
+                        {#if inputError === i}
+                            <p class="fsize-subhead" style:color=var(--c-red)>please enter a valid value</p>
+                        {/if}
+                    </label>
+                {/if}
             {/each}
         </Form>
     </div>
@@ -138,44 +168,48 @@
         {#if roundId === undefined}
             <p> No events added for this meetup. </p>
         {:else}
-            <table style:width=100%>
-                <colgroup>
-                    <col span=1 style:width=50px>
-                    <col span=1 style:width=auto>
-                    <col span=1 style:width=80px>
-
-                    {#each Array(selectedRoundPuzzleFormatCount) as _}
+            {#if selectedRound.results.length == 0 || selectedRound.results[0] === null}
+                <p style:color=var(--c-g)> No results entered for this round yet. </p>
+            {:else}
+                <table style:width=100%>
+                    <colgroup>
+                        <col span=1 style:width=50px>
+                        <col span=1 style:width=auto>
                         <col span=1 style:width=80px>
-                    {/each}
-                </colgroup>
 
-
-                <tbody>
-                    <tr>
-                        <th class="tc-ranking"></th>
-                        <th class="tc-name">Name</th>
-                        <th class="tc-result">Average</th>
-
-                        {#each Array(selectedRoundPuzzleFormatCount) as _, i}
-                            <th class="tc-solves">{i + 1}</th>
+                        {#each Array(selectedRoundPuzzleFormatCount) as _}
+                            <col span=1 style:width=80px>
                         {/each}
-                    </tr>
+                    </colgroup>
 
-                    {#each selectedRound.results as result,idx }
-                        {#if result}
+
+                    <tbody>
                         <tr>
-                            <td class="tc-ranking">{idx+1}</td>
-                            <td class="tc-name">{result.user_name}</td>
-                            <td class="tc-result">{formatTime(result.value)}</td>
+                            <th class="tc-ranking"></th>
+                            <th class="tc-name">Name</th>
+                            <th class="tc-result">Average</th>
 
-                            {#each result.solves as solve}
-                                <td class="tc-solves">{formatTime(solve.time)}</td>
+                            {#each Array(selectedRoundPuzzleFormatCount) as _, i}
+                                <th class="tc-solves">{i + 1}</th>
                             {/each}
                         </tr>
-                        {/if}
-                    {/each}
-                </tbody>
-            </table>
+
+                        {#each selectedRound.results as result,idx }
+                            {#if result}
+                            <tr>
+                                <td class="tc-ranking">{idx+1}</td>
+                                <td class="tc-name">{result.user_name}</td>
+                                <td class="tc-result">{formatTime(result.value)}</td>
+
+                                {#each result.solves as solve}
+                                    <td class="tc-solves">{formatTime(solve.time)}</td>
+                                {/each}
+                            </tr>
+                            {/if}
+                        {/each}
+                    </tbody>
+                </table>
+            {/if}
         {/if}
     </div>
 </div>
@@ -234,5 +268,15 @@
         padding-right: 4px;
         grid-area: 1/1;
         pointer-events: none;
+    }
+
+    .line {
+        border: none;
+        border-top: 1.5px solid var(--c-lg1);
+
+        height: 1.75px;
+        width: 100%;
+
+        scale: 0.85;
     }
 </style>
