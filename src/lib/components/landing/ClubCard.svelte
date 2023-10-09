@@ -15,8 +15,9 @@
 
 <style>
     .card {
-        width: 250px;
-        height: 350px;
+        user-select: none;
+
+        width: min(250px, 16vw);
 
         /* If we do need to shrink, dont distort! */
         aspect-ratio: 250 / 350;
@@ -43,12 +44,13 @@
     }
 
     .club-name {
-        font-size: 19px;
+        font-size: min(19px, 1.08vw);
         font-weight: 600;
         color: var(--c-dg2);
     }
 
     .club-location {
+        font-size: min(16px, 0.85vw);
         margin-top: 4px;
         color: var(--c-a);
     }

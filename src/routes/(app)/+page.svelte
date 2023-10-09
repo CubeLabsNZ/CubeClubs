@@ -32,11 +32,6 @@
             clubLogo={iconDUN}
         />
 
-        <ClubCard
-            clubName="Manawatū Cubers"
-            clubLocation="Palmerston North, Manawatū"
-            clubLogo={iconMAN}
-        />
 
         <ClubCard
             clubName="Auckland Speedcubing Club"
@@ -44,11 +39,6 @@
             clubLogo={iconASC}
         />
 
-        <ClubCard
-            clubName="Taranaki Cubers"
-            clubLocation="New Plymouth, Taranaki"
-            clubLogo={iconTAR}
-        />
 
         <ClubCard
             clubName="Christchurch Speedcubers"
@@ -57,9 +47,21 @@
         />
 
         <ClubCard
+            clubName="Manawatū Cubers"
+            clubLocation="Palmerston North, Manawatū"
+            clubLogo={iconMAN}
+        />
+
+        <ClubCard
             clubName="Kāpiti Cubers"
             clubLocation="Kāpiti Coast, Wellington"
             clubLogo={iconKAP}
+        />
+
+        <ClubCard
+            clubName="Taranaki Cubers"
+            clubLocation="New Plymouth, Taranaki"
+            clubLogo={iconTAR}
         />
     </div>
 
@@ -166,6 +168,8 @@
         padding-right: max(20px, min(80px, 8.8vw - 40px));
 
         flex-shrink: 0;
+
+        z-index: 4;
     }
 
     .expand-dummy {
@@ -191,9 +195,9 @@
 
         position: fixed;
         right: -100px;
-        bottom: -200px;
+        bottom: -150px;
 
-        z-index: -1;
+        z-index: 1;
     }
 
     #landing-button {
@@ -256,14 +260,18 @@
 
     .text-wrapper > *:not(#text-background) {
         position: relative;
-        z-index: 1;
+        z-index: 2;
     }
 
     @supports (-webkit-mask-composite: source-in) or (mask-composite: source-in) {
         #text-background {
+            z-index: 1;
             --sz: 160px;
-            background-color: #ffffff60;
+            background-color: #ffffff80;
+
             backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+
             position: absolute;
             inset: calc(var(--sz)*-1) calc(var(--sz)*-1) calc(var(--sz)*-1) calc(var(--sz)*-1);
 
@@ -307,7 +315,7 @@
         height: 100dvh;
 
         position: fixed;
-        z-index: -2;
+        z-index: -1;
 
         grid-area: 1/1;
     }
