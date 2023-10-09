@@ -283,6 +283,23 @@
             -webkit-mask-position: center;
             -webkit-mask-repeat: no-repeat;
             -webkit-mask-composite: source-in;
+
+            mask: linear-gradient(
+                    to top,
+                    transparent 0,
+                    #fff var(--sz) calc(100% - var(--sz)),
+                    transparent 100%
+                ),
+                linear-gradient(
+                    to left,
+                    transparent 0,
+                    #fff var(--sz) calc(100% - var(--sz)),
+                    transparent 100%
+                );
+            mask-size: 100% 100%;
+            mask-position: center;
+            mask-repeat: no-repeat;
+            mask-composite: source-in;
         }
     }
 
