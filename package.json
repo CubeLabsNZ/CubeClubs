@@ -37,6 +37,7 @@
 		"argon2": "^0.31.1",
 		"dotenv": "^16.3.1",
 		"kysely": "^0.26.3",
+		"lucide-svelte": "^0.284.0",
 		"pg": "^8.11.3",
 		"prisma-kysely": "^1.7.1"
 	}
