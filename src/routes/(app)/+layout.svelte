@@ -5,7 +5,6 @@
     import "$styles/globals.css";
     import "$styles/components.css";
 
-    import { goto } from "$app/navigation";
     import { fade } from "svelte/transition";
     import { clickOutside } from "$lib/utils";
 
@@ -24,7 +23,7 @@
 
 <div id="navbar">
     <div id="navbar-left"> 
-        <a class="image-link" aria-label="Home Page" href="/">
+        <a class="image-link" aria-label="Home Page" href="/" style:user-select=none>
             <img src={logo} alt="" height=30 width=30>
         </a>
 
@@ -107,9 +106,7 @@
     {/if}
 </div>
 
-<div id="main-content"> 
-    <slot/>
-</div>
+<slot/>
 
 
 <style> 
@@ -199,7 +196,7 @@
         z-index: 30;
     }
 
-    @media(max-width: 550px) {
+    @media(max-width: 600px) {
         #navbar {
             width: calc(100% - 40px);
             margin-left: 20px;
@@ -322,7 +319,7 @@
         height: 1px;
     }
 
-    @media(min-width: 550px) {
+    @media(min-width: 601px) {
         #navbar-showmore {
             display: none;
         }

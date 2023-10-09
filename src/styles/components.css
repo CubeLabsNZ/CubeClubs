@@ -120,7 +120,6 @@ th {
 
     /* TODO: add sticky header, tried but cannot think of a good method with the floating tab bar - maybe hide tab bar? do not have it always in top position? */
     /* position: sticky; */
-    /* top: 126px; */
 }
 
 td {

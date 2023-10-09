@@ -337,7 +337,7 @@
         margin-left: auto;
         margin-right: auto;
 
-        margin-top: 126px; /* tab bar + 32px either side */
+        padding-top: 100px;
 
         column-gap: 16px;
     }

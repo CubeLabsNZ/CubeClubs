@@ -189,7 +189,7 @@
         transform-style: preserve-3d;
         transform: rotateX(55deg) rotateZ(37deg);
 
-        gap: 48px;
+        gap: min(48px, 2.5vw);
 
         flex-shrink: 1;
 
@@ -224,7 +224,7 @@
     #landing-title h1 {
         line-height: 0.8;
 
-        font-size: min(72px, 15vw);
+        font-size: min(72px, 14vw);
         font-family: "TwCenMt";
         font-weight: 600;
     }
@@ -232,7 +232,7 @@
     #landing-title h2 {
         line-height: 1.4;
 
-        font-size: min(48px, 10vw);
+        font-size: min(48px, 9.4vw);
         font-weight: 600;
     }
 
@@ -328,6 +328,7 @@
     #landing-b-2,
     #landing-b-3 {
         position: fixed;
+        user-select: none;
     }
 
     #landing-b-1 {
@@ -359,8 +360,8 @@
 
         z-index: 12;
 
-        bottom: 48px;
-        margin-left: max(20px, min(110px, 8.8vw - 40px));
+        bottom: calc(16px + 6vw);
+        margin-left: max(20px, min(80px, 8.8vw - 40px));
     }
 
     /* INFO: footer */
@@ -403,13 +404,21 @@
         }
     }
 
-    @media (max-width: 550px) {
+    @media (max-width: 600px) {
         #landing-subtitle {
             width: 100%;
         }
+
+        .text-wrapper {
+            padding: 0;
+        }
+
+        .footer {
+            bottom: 20px;
+        }
     }
 
-    @media (max-height: 550px) {
+    @media (max-height: 600px) {
         .footer {
             display: none;
         }

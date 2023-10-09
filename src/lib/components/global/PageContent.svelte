@@ -5,7 +5,7 @@
 </script>
 
 
-<div class="page-content" data-isDashboard={isDashboard} style:margin-top={top}px style:padding-bottom=64px> 
+<div class="page-content" data-isDashboard={isDashboard} style:padding-top={top}px style:padding-bottom=64px> 
     <h1 class="fstyle-heading" style:padding-bottom=8px>{heading}</h1>
 
     {#if subheading != ""}

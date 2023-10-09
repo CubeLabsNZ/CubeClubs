@@ -49,6 +49,8 @@
         justify-content: center;
 
         cursor: pointer;
+
+        user-select: none;
     }
 
     
