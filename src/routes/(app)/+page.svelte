@@ -9,20 +9,13 @@
     import iconKAP from "$lib/assets/club-icons/ICON-KAP.webp";
     import iconMAN from "$lib/assets/club-icons/ICON-MAN.webp";
     import iconTAR from "$lib/assets/club-icons/ICON-TAR.webp";
-
-
-
-
-    let perspectiveContainer: HTMLDivElement
-    let transforms = [];
-    let innerDivs: HTMLDivElement[] = [];
 </script>
 
 <svelte:head>
     <title>CubeClubs NZ</title>
 </svelte:head>
 
-<div id="landing-main" bind:this={perspectiveContainer} aria-hidden>
+<div id="landing-main" aria-hidden>
     <div id="landing-bg">
         <img id="landing-b-1" src="/landing/blob-blue.webp" alt="">
         <img id="landing-b-2" src="/landing/blob-green.webp" alt="">
@@ -44,67 +37,51 @@
             <Button type={ButtonType.Coloured} size={ButtonSize.Regular}>
                 <div id="landing-button" style:margin=0 style:padding=0>
                     <p>Explore our meetups</p>
-    
+
                     <span class="material-symbols-outlined" style:font-size=20px>chevron_right</span>
                 </div>
             </Button>
         </a>
     </div>
 
-        <div id="landing-clubs-grid">
-            <ClubCard
-                clubName="Dunedin Speedcubers"
-                clubLocation="Dunedin, Otago"
-                clubLogo={iconDUN}
-                transform={transforms[0]}
-                bind:clubInnerDiv={innerDivs[0]} />
+    <div id="landing-clubs-grid">
+        <ClubCard
+            clubName="Dunedin Speedcubers"
+            clubLocation="Dunedin, Otago"
+            clubLogo={iconDUN} />
 
 
-            <ClubCard
-                clubName="Manawatū Cubers"
-                clubLocation="Palmerston North, Manawatū"
-                clubLogo={iconMAN}
-                transform={transforms[1]}
-                bind:clubInnerDiv={innerDivs[1]} />
+        <ClubCard
+            clubName="Manawatū Cubers"
+            clubLocation="Palmerston North, Manawatū"
+            clubLogo={iconMAN} />
 
 
-            <ClubCard
-                clubName="Auckland Speedcubing Club"
-                clubLocation="Auckland"
-                clubLogo={iconASC}
-                transform={transforms[2]}
-                bind:clubInnerDiv={innerDivs[2]} />
+        <ClubCard
+            clubName="Auckland Speedcubing Club"
+            clubLocation="Auckland"
+            clubLogo={iconASC} />
 
 
-            <ClubCard
-                clubName="Taranaki Cubers"
-                clubLocation="New Plymouth, Taranaki"
-                clubLogo={iconTAR}
-                transform={transforms[3]}
-                bind:clubInnerDiv={innerDivs[3]} />
+        <ClubCard
+            clubName="Taranaki Cubers"
+            clubLocation="New Plymouth, Taranaki"
+            clubLogo={iconTAR} />
 
 
-            <ClubCard
-                clubName="Christchurch Speedcubers"
-                clubLocation="Christchurch, Canterbury"
-                clubLogo={iconCHCH}
-                transform={transforms[4]}
-                bind:clubInnerDiv={innerDivs[4]} />
+        <ClubCard
+            clubName="Christchurch Speedcubers"
+            clubLocation="Christchurch, Canterbury"
+            clubLogo={iconCHCH} />
 
 
+        <ClubCard
+            clubName="Kāpiti Cubers"
+            clubLocation="Kāpiti Coast, Wellington"
+            clubLogo={iconKAP} />
+    </div>
 
-            <ClubCard
-                clubName="Kāpiti Cubers"
-                clubLocation="Kāpiti Coast, Wellington"
-                clubLogo={iconKAP}
-                transform={transforms[5]}
-                bind:clubInnerDiv={innerDivs[5]} />
 
-        </div>
-
-    <!-- <img id="landing-clubs" src="/landing/clubs.webp" alt=""> -->
-
-<!--
     <div class="footer">
         <a href="https://github.com/CubeClubsNZ/app" aria-label="CubeClubs source code (GitHub)" target="_blank" class="hoverable-link" style:height=18px style:fill=var(--c-lg1)>
             <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" viewBox="0 0 28 28" height=18px style:height=18px >
@@ -121,28 +98,11 @@
 
         <p> © 2023 <a href="https://tim-xie.com" target="_blank" class="hoverable-link">Tim Xie</a>, CubeClubs NZ.</p>
     </div>
-    -->
 </div>
 
 
 
-
 <style>
-    /* INFO: old */
-    /*
-    #landing-clubs {
-        z-index: -1;
-        position: fixed;
-
-        --_clubs-width: max(min(1800px, calc(150px + 0.9*85vw)), calc(100px + 0.9*75vh));
-
-        bottom: calc(-0.1 * var(--_clubs-width));
-        right: calc(-0.1 * var(--_clubs-width));
-        width: var(--_clubs-width);
-    }
-    */
-
-
     #landing-clubs-grid {
         display: grid;
         grid-template-columns: 1fr 1fr;
@@ -153,16 +113,19 @@
         margin-top: -24%;
         margin-bottom: -14%;
         align-self: flex-end;
-        transform: rotateX(55deg) rotateY(0deg) rotateZ(37deg);
+
+        transform-style: preserve-3d;
+        transform: rotateX(55deg) rotateZ(37deg);
 
         gap: 48px;
 
         flex-shrink: 1;
-    }
 
-    #landing-clubs-grid {
         z-index: 2;
-        align-self: bottom;
+
+        position: fixed;
+        right: -100px;
+        bottom: -100px;
     }
 
     #landing-button {
@@ -240,7 +203,7 @@
     #landing-b-3 {
         position: fixed;
     }
-    
+
     #landing-b-1 {
         width: 800px;
 
@@ -277,7 +240,7 @@
         align-items: center;
 
         height: 24px;
-        
+
         z-index: 10;
         margin-left: max(20px, min(110px, 8.8vw - 40px));
     }
