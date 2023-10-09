@@ -32,8 +32,8 @@
 
         box-shadow: 64px 64px 48px 0px #10151B15;
 
-        transition: box-shadow var(--v-animation-delay) ease-in-out,
-                    transform var(--v-animation-delay) ease-in-out;
+        transition: box-shadow 200ms ease-in-out,
+                    transform 200ms ease-in-out;
 
         grid-row: span 2;
     }
