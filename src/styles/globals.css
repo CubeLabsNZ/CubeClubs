@@ -4,6 +4,8 @@
     -webkit-text-size-adjust: 100%;
 }
 
+input, select, textarea, button{font-family:inherit;}
+
 a {
     -webkit-tap-highlight-color: rgba(0,0,0,0);
 }
