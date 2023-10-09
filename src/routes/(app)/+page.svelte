@@ -259,44 +259,46 @@
         z-index: 1;
     }
 
-    #text-background {
-        backdrop-filter: blur(10px);
-        position: absolute;
-        inset: 0 0 0 0;
+    @supports (-webkit-mask-composite: source-in) or (mask-composite: source-in) {
+        #text-background {
+            backdrop-filter: blur(10px);
+            position: absolute;
+            inset: 0 0 0 0;
 
-        -webkit-mask: linear-gradient(
-                to top,
-                transparent 10%,
-                #fff 15% 90%,
-                transparent 95%
-            ),
-            linear-gradient(
-                to left,
-                transparent 10%,
-                #fff 15% 90%,
-                transparent 95%
-            );
-        -webkit-mask-size: 110% 110%;
-        -webkit-mask-position: center;
-        -webkit-mask-repeat: no-repeat;
-        -webkit-mask-composite: source-in;
+            -webkit-mask: linear-gradient(
+                    to top,
+                    transparent 10%,
+                    #fff 15% 90%,
+                    transparent 95%
+                ),
+                linear-gradient(
+                    to left,
+                    transparent 10%,
+                    #fff 15% 90%,
+                    transparent 95%
+                );
+            -webkit-mask-size: 110% 110%;
+            -webkit-mask-position: center;
+            -webkit-mask-repeat: no-repeat;
+            -webkit-mask-composite: source-in;
 
-        mask: linear-gradient(
-                to top,
-                transparent 10%,
-                #fff 15% 90%,
-                transparent 95%
-            ),
-            linear-gradient(
-                to left,
-                transparent 10%,
-                #fff 15% 90%,
-                transparent 95%
-            );
-        mask-size: 110% 110%;
-        mask-position: center;
-        mask-repeat: no-repeat;
-        mask-composite: source-in;
+            mask: linear-gradient(
+                    to top,
+                    transparent 10%,
+                    #fff 15% 90%,
+                    transparent 95%
+                ),
+                linear-gradient(
+                    to left,
+                    transparent 10%,
+                    #fff 15% 90%,
+                    transparent 95%
+                );
+            mask-size: 110% 110%;
+            mask-position: center;
+            mask-repeat: no-repeat;
+            mask-composite: source-in;
+        }
     }
 
     #landing-bg {
