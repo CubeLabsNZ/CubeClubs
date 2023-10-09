@@ -7,6 +7,7 @@
     import {regionToString} from "$lib/data/regions";
 
     import type { PageData } from "./$types";
+    import { Check } from "lucide-svelte";
     export let data: PageData;
 
     let locations = ["info", "competitors", "schedule"]
@@ -65,7 +66,7 @@
                     {#each data.puzzles as puzzle}
                         <td class="tc-puzzle">
                             {#if registered_events.includes(puzzle)}
-                                <span class="material-symbols-outlined">check</span>
+                                <Check size="18px"/>
                             {/if}
                         </td>
                     {/each}
@@ -97,7 +98,7 @@
         width: 24px;
     }
 
-    .tc-puzzle span.material-symbols-outlined { 
+    :global(.lucide-check) { 
         transform: translateY(calc(30px/2 - 24px/2));
     }
 

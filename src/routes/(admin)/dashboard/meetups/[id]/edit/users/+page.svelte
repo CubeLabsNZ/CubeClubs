@@ -5,6 +5,7 @@
 
     import puzzles from "$lib/data/puzzles";
     import { regionToString } from '$lib/data/regions';
+    import { Check, PenIcon, PencilIcon, Plus, Trash2 } from 'lucide-svelte';
 
     import type { PageData } from './$types';
     export let data: PageData;
@@ -23,7 +24,7 @@
 <a href="/dashboard/meetups/{data.meetup.id}/edit/users/add">
     <Button>
         <div class="button-inner">
-            <span class="material-symbols-outlined">add</span>
+            <Plus size="16"/>
             <p> Add Competitor </p>
         </div>
     </Button>
@@ -69,7 +70,7 @@
             {#each data.meetup.users as { user, registered_events } }
                 <tr>
                     <td class="tc-delete">
-                        <button on:click={() => {
+                        <button style:padding-right="2px" on:click={() => {
                             confirm(`Are you sure you want to delete ${user.name}?`);
 
                             fetch(`/dashboard/meetups/${data.meetup.id}/edit/users/${user.id}/delete`, {
@@ -79,15 +80,16 @@
                                     invalidateAll()
                                 })
                         }}>
-                            <span class="material-symbols-outlined" style:margin-right=4px style:font-size=18px>delete</span>
+                            <Trash2 size="15px" />
                         </button>
                     </td>
 
                     <td class="tc-edit">
-                        <button on:click={() => {
+                        <button style:padding-left="2px" style:padding-right="4px" on:click={() => {
                             goto(`/dashboard/meetups/${data.meetup.id}/edit/users/${user.id}`);
                         }}>
-                            <span class="material-symbols-outlined" style:margin-right=4px style:font-size=18px>edit</span>
+                        <PencilIcon
+                            size="15px" />
                         </button>
                     </td>
 
@@ -97,11 +99,10 @@
                     <td class="tc-region">{regionToString(user.region)}</td>
 
 
-                    <!-- WARN: this is actually working, but it seems data is not perfect, and those with no results in an event is registered? -->
                     {#each data.meetup.puzzles as puzzle}
-                        <td class="tc-puzzle">
+                        <td class="tc-puzzle" style:vertical-align="bottom">
                             {#if registered_events.includes(puzzle)}
-                                <span class="material-symbols-outlined">check</span>
+                                <Check size="18px"/>
                             {/if}
                         </td>
                     {/each}
@@ -151,10 +152,6 @@
         width: 24px;
     }
 
-    .tc-puzzle span.material-symbols-outlined { 
-        transform: translateY(calc(30px/2 - 24px/2));
-    }
-
     tr:first-child .tc-puzzle img {
         filter: invert(30%) sepia(7%) saturate(500%) hue-rotate(164deg) brightness(94%) contrast(89%);
         transform: translateY(2px);
@@ -169,6 +166,10 @@
         display: flex;
         align-items: center;
         column-gap: 8px;
+    }
+
+    :global(.lucide-check) {
+        transform: translateY(calc(30px/2 - 24px/2));
     }
 
     .button-inner span {

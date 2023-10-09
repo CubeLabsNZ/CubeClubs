@@ -133,18 +133,18 @@
 
                     <div class="section-column">
                         <RecordRow
-                            record={data.records.regional}
+                            record={(async () => (await data.streamed.recordsCount).regional)()}
                             name="Regional Records" shortname=RR
                             bg=var(--c-lgreen) fg=var(--c-green)/>
 
                         <RecordRow
-                            record={data.records.island}
+                            record={(async () => (await data.streamed.recordsCount).island)()}
                             name="Island Records" shortname=IR
                             bg=var(--c-lred) fg=var(--c-red)/>
 
 
                         <RecordRow
-                            record={data.records.interclub}
+                            record={(async () => (await data.streamed.recordsCount).interclub)()}
                             name="Interclub Records" shortname=IcR
                             bg=var(--c-lpurple) fg=var(--c-purple)/>
                     </div>
@@ -188,26 +188,32 @@
                     <th class="tc-rr">RR</th>
                 </tr>
 
-                {#each Object.entries(data.PRs) as [puzzleType, {single, average}]}
-                    {@const puzzle = puzzles[puzzleType]}
-                    <tr>
-                        <td class="tc-event">
-                            <div style:display=flex style:align-items=center style:column-gap=12px>
-                                <img src={puzzle.icon} alt="" height=24>
-                                {puzzle.name}
-                            </div>
-                        </td>
-                        <td class="tc-rr">{single?.RR}</td>
-                        <td class="tc-ir">{single?.IR}</td>
-                        <td class="tc-icr">{single?.IcR}</td>
-                        <td class="tc-result">{formatTime(single?.time)}</td>
+                {#await data.streamed.PRs}
+                    {#each Array(10).fill(0) as _}
+                        <tr class="loading"><td colspan="999">&nbsp;</td></tr>
+                    {/each}
+                {:then PRs}
+                    {#each Object.entries(PRs) as [puzzleType, {single, average}]}
+                        {@const puzzle = puzzles[puzzleType]}
+                        <tr>
+                            <td class="tc-event">
+                                <div style:display=flex style:align-items=center style:column-gap=12px>
+                                    <img src={puzzle.icon} alt="" height=24>
+                                    {puzzle.name}
+                                </div>
+                            </td>
+                            <td class="tc-rr">{single?.RR}</td>
+                            <td class="tc-ir">{single?.IR}</td>
+                            <td class="tc-icr">{single?.IcR}</td>
+                            <td class="tc-result">{formatTime(single?.time)}</td>
 
-                        <td class="tc-result">{formatTime(average.time)}</td>
-                        <td class="tc-icr">{average.IcR}</td>
-                        <td class="tc-ir">{average.IR}</td>
-                        <td class="tc-rr">{average.RR}</td>
-                    </tr>
-                {/each}
+                            <td class="tc-result">{formatTime(average.time)}</td>
+                            <td class="tc-icr">{average.IcR}</td>
+                            <td class="tc-ir">{average.IR}</td>
+                            <td class="tc-rr">{average.RR}</td>
+                        </tr>
+                    {/each}
+                {/await}
             </table>
         </div>
 
@@ -244,7 +250,8 @@
                     </div>
 
                     <Table
-                        list={data.results[resultsEvent] ?? [undefined]}
+                        list={data.streamed.results}
+                        k={resultsEvent}
                         showUser={false}
                         displayType={DisplayType.AVERAGE}
                         showBest={true}
@@ -256,14 +263,14 @@
             {:else}
                 <div class="records-history">
                     {#each Object.entries(puzzles) as [puzzle, { name, icon }], i}
-                        {@const historicalPuzzleRankings = data.historicalRecords[puzzle]}
                         <div class="group-label records-history-header">
                             <img src={puzzles[puzzle].icon} alt="" height=28/>
                             <p class="fsize-body">{puzzles[puzzle].name} Results</p>
                         </div>
 
                         <Table
-                            list={historicalPuzzleRankings ?? [undefined]}
+                            list={data.streamed.historicalRecords}
+                            k={puzzle}
                             displayType={DisplayType.MIX}
                             hasMeetup={true}
                             displayRank={false}

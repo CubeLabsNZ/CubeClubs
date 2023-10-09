@@ -1,11 +1,1 @@
-<svg id="_3x3" data-name="3x3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-  <rect x="4" y="4" width="4.8" height="4.8" rx="1.2" ry="1.2"/>
-  <rect x="9.59" y="4" width="4.8" height="4.8" rx="1.2" ry="1.2"/>
-  <rect x="15.17" y="4" width="4.8" height="4.8" rx="1.2" ry="1.2"/>
-  <rect x="4.02" y="9.6" width="4.8" height="4.8" rx="1.2" ry="1.2"/>
-  <rect x="9.6" y="9.6" width="4.8" height="4.8" rx="1.2" ry="1.2"/>
-  <rect x="15.19" y="9.6" width="4.8" height="4.8" rx="1.2" ry="1.2"/>
-  <rect x="4.03" y="15.2" width="4.8" height="4.8" rx="1.2" ry="1.2"/>
-  <rect x="9.61" y="15.2" width="4.8" height="4.8" rx="1.2" ry="1.2"/>
-  <rect x="15.2" y="15.2" width="4.8" height="4.8" rx="1.2" ry="1.2"/>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" data-name="3x3" viewBox="0 0 24 24"><rect width="4.8" height="4.8" x="4" y="4" rx="1.2" ry="1.2"/><rect width="4.8" height="4.8" x="9.59" y="4" rx="1.2" ry="1.2"/><rect width="4.8" height="4.8" x="15.17" y="4" rx="1.2" ry="1.2"/><rect width="4.8" height="4.8" x="4.02" y="9.6" rx="1.2" ry="1.2"/><rect width="4.8" height="4.8" x="9.6" y="9.6" rx="1.2" ry="1.2"/><rect width="4.8" height="4.8" x="15.19" y="9.6" rx="1.2" ry="1.2"/><rect width="4.8" height="4.8" x="4.03" y="15.2" rx="1.2" ry="1.2"/><rect width="4.8" height="4.8" x="9.61" y="15.2" rx="1.2" ry="1.2"/><rect width="4.8" height="4.8" x="15.2" y="15.2" rx="1.2" ry="1.2"/></svg>

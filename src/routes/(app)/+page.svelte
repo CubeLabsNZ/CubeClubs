@@ -12,6 +12,7 @@
     import iconKAP from "$lib/assets/club-icons/ICON-KAP.webp";
     import iconMAN from "$lib/assets/club-icons/ICON-MAN.webp";
     import iconTAR from "$lib/assets/club-icons/ICON-TAR.webp";
+    import { ChevronRight } from "lucide-svelte";
 </script>
 
 <svelte:head>

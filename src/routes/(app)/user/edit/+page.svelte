@@ -2,6 +2,7 @@
     import AuthCard from "$lib/components/auth/AuthCard.svelte";
     import Button from "$lib/components/global/Button.svelte";
     import Breadcrumb from "$lib/components/global/Breadcrumb.svelte";
+    import { ChevronRight, KeyRound, Mail, SquareAsterisk } from "lucide-svelte";
 
     export let data;
 </script>
@@ -18,14 +19,13 @@
         <div style:display=flex style:flex-direction=column style:row-gap=16px>
             <a href="/user/edit/password">
                 <Button fillWidth={true}>
-                    <div class="button-inner">
-                        <span class="material-symbols-outlined" style:font-size=16px style:font-weight=600 style:padding-right=8px>key</span>
-
-                        <p>Update Password</p>
+                    <div class="button-inner" style:padding-right=8px>
+                        <KeyRound size="16px" />
+                        <p style:margin-left=8px>Update Password</p>
 
                         <div style:flex-grow=10></div>
 
-                        <span class="material-symbols-outlined" style:font-size=16px style:font-weight=600 style:padding-right=8px>chevron_right</span>
+                        <ChevronRight size="14px" />
                     </div>
                 </Button>
             </a>
@@ -33,14 +33,14 @@
 
             <a href="/user/edit/email">
                 <Button fillWidth={true}>
-                    <div class="button-inner">
-                        <span class="material-symbols-outlined" style:font-size=16px style:font-weight=600 style:padding-right=8px>email</span>
+                    <div class="button-inner" style:padding-right=8px>
+                        <Mail size="16px" />
 
-                        <p>Update Email</p>
+                        <p style:margin-left=8px>Update Email</p>
 
                         <div style:flex-grow=10></div>
 
-                        <span class="material-symbols-outlined" style:font-size=16px style:font-weight=600 style:padding-right=8px>chevron_right</span>
+                        <ChevronRight size="14px" />
                     </div>
                 </Button>
             </a>

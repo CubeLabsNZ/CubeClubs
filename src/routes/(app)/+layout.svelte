@@ -17,6 +17,7 @@
     let showMore = false;
 
     import Button, { ButtonType, ButtonSize } from "$lib/components/global/Button.svelte";
+    import { ArrowRight, ArrowRightCircle, Menu, UserCircle, UserCircle2, X, XIcon } from "lucide-svelte";
 
     export let data: LayoutData;
 </script>
@@ -45,7 +46,7 @@
             <button on:click={() => { showDropdown = !showDropdown; showMore = false }}>
                 <Button type={ButtonType.Simple} size={ButtonSize.Small} padding={8}>
                     <div style:display=flex style:align-items=center style:column-gap=8px>
-                        <span class="material-symbols-outlined" style:font-size=20px>account_circle</span>
+                        <UserCircle size="18px" />
 
                         <p style:font-weight=500 style:padding-right=6px style:height=20px style:transform=translateY(1px)>{data.user.name.split(" ")[0]}</p>
                     </div>
@@ -53,11 +54,11 @@
             </button>
         {/if}
 
-        <button on:click={() => { showMore = !showMore; showDropdown = false }} class="navbar-small" style:height=20px>
+        <button on:click={() => { showMore = !showMore; showDropdown = false }} class="navbar-small show-more-button" style:height=20px>
             {#if !showMore}
-                <span class="material-symbols-outlined show-more-button" >menu</span>
+                <Menu size="18px" />
             {:else}
-                <span class="material-symbols-outlined show-more-button" >close</span>
+                <X size="18px" />
             {/if}
         </button>
     </div>
@@ -91,7 +92,7 @@
                         <div class="dashboard-link">
                             <p> Admin Dashboard </p>
 
-                            <span class="material-symbols-outlined arrow">arrow_right_alt</span>
+                            <ArrowRight size="16px" />
                         </div>
                     </a>
                 </div>

@@ -1,7 +1,1 @@
-<svg id="_4bld" data-name="4bld" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-  <rect x="3.5" y="3" width="4" height="4" rx="1" ry="1"/>
-  <rect x="3.5" y="7.67" width="4" height="4" rx="1" ry="1"/>
-  <rect x="3.5" y="12.33" width="4" height="4" rx="1" ry="1"/>
-  <rect x="3.5" y="17" width="4" height="4" rx="1" ry="1"/>
-  <path d="M19.44,12c.23-3.63,3.5-9-2.78-9-5.26,0-5.61,4.55-5.61,9,0,4.02,.19,8.83,5.04,9,6.76,.24,3.61-4.97,3.35-9Z"/>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" data-name="4bld" viewBox="0 0 24 24"><rect width="4" height="4" x="3.5" y="3" rx="1" ry="1"/><rect width="4" height="4" x="3.5" y="7.67" rx="1" ry="1"/><rect width="4" height="4" x="3.5" y="12.33" rx="1" ry="1"/><rect width="4" height="4" x="3.5" y="17" rx="1" ry="1"/><path d="M19.44 12c.23-3.63 3.5-9-2.78-9-5.26 0-5.61 4.55-5.61 9 0 4.02.19 8.83 5.04 9 6.76.24 3.61-4.97 3.35-9Z"/></svg>

@@ -1,6 +1,1 @@
-<svg id="_2x2" data-name="2x2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-  <rect x="5" y="5" width="6.4" height="6.4" rx="1.2" ry="1.2"/>
-  <rect x="12.6" y="5" width="6.4" height="6.4" rx="1.2" ry="1.2"/>
-  <rect x="12.6" y="12.6" width="6.4" height="6.4" rx="1.2" ry="1.2"/>
-  <rect x="5" y="12.6" width="6.4" height="6.4" rx="1.2" ry="1.2"/>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" data-name="2x2" viewBox="0 0 24 24"><rect width="6.4" height="6.4" x="5" y="5" rx="1.2" ry="1.2"/><rect width="6.4" height="6.4" x="12.6" y="5" rx="1.2" ry="1.2"/><rect width="6.4" height="6.4" x="12.6" y="12.6" rx="1.2" ry="1.2"/><rect width="6.4" height="6.4" x="5" y="12.6" rx="1.2" ry="1.2"/></svg>
