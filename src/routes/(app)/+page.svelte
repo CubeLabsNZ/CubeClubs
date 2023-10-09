@@ -273,27 +273,9 @@
             background-color: #ffffff80;
 
             backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
 
             position: absolute;
             inset: calc(var(--sz)*-1) calc(var(--sz)*-1) calc(var(--sz)*-1) calc(var(--sz)*-1);
-
-            -webkit-mask: linear-gradient(
-                    to top,
-                    transparent 0,
-                    #fff var(--sz) calc(100% - var(--sz)),
-                    transparent 100%
-                ),
-                linear-gradient(
-                    to left,
-                    transparent 0,
-                    #fff var(--sz) calc(100% - var(--sz)),
-                    transparent 100%
-                );
-            -webkit-mask-size: 100% 100%;
-            -webkit-mask-position: center;
-            -webkit-mask-repeat: no-repeat;
-            -webkit-mask-composite: source-in;
 
             mask: linear-gradient(
                     to top,
@@ -311,6 +293,25 @@
             mask-position: center;
             mask-repeat: no-repeat;
             mask-composite: source-in;
+
+
+            -webkit-backdrop-filter: blur(12px);
+            -webkit-mask: linear-gradient(
+                    to top,
+                    transparent 0,
+                    #fff var(--sz) calc(100% - var(--sz)),
+                    transparent 100%
+                ),
+                linear-gradient(
+                    to left,
+                    transparent 0,
+                    #fff var(--sz) calc(100% - var(--sz)),
+                    transparent 100%
+                );
+            -webkit-mask-size: 100% 100%;
+            -webkit-mask-position: center;
+            -webkit-mask-repeat: no-repeat;
+            -webkit-mask-composite: source-in;
         }
     }
 
