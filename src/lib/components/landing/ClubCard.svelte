@@ -29,12 +29,12 @@
         flex-direction: column;
         align-items: center;
 
-        padding: 24px;
+        padding: min(24px, 1.35vw);
 
         box-shadow: 64px 64px 48px 0px #10151B15;
 
         transition: box-shadow 200ms ease-in-out,
-                    transform 200ms ease-in-out;
+                    transform 200ms ease-out;
 
         grid-row: span 2;
     }
@@ -59,12 +59,13 @@
         transition: color var(--v-animation-delay) ease-in-out;
     }
 
+    /* NOTE: re-enable when club pages added */
+    /*
     .card:hover {
         transform: rotateZ(-37deg) rotateX(-55deg) translateY(-150px);
-
-        /* box-shadow: 88px 88px 64px 0px #10151B18; */
         box-shadow: 0px 16px 32px 0px #10151B18;
     }
+    */
 
     .card:hover .club-name {
         color: var(--c-dg3);

@@ -239,7 +239,7 @@
     #landing-subtitle {
         gap: 16px;
         margin-bottom: 30px; /* 32px adjusted for font descenders */
-        width: min(550px, 40vw);
+        width: 550px;
     }
 
     #landing-title *,
@@ -254,7 +254,10 @@
     }
 
     .text-wrapper {
-        padding: 20px;
+        padding-top: 20px;
+        padding-right: 20px;
+        padding-bottom: 20px;
+
         border-radius: 8px;
     }
 
@@ -353,7 +356,9 @@
 
         position: fixed;
 
-        bottom: 32px;
+        z-index: 12;
+
+        bottom: 48px;
         margin-left: max(20px, min(110px, 8.8vw - 40px));
     }
 
