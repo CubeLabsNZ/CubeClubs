@@ -261,43 +261,28 @@
 
     @supports (-webkit-mask-composite: source-in) or (mask-composite: source-in) {
         #text-background {
-            backdrop-filter: blur(10px);
+            --sz: 160px;
+            background-color: #ffffff60;
+            backdrop-filter: blur(12px);
             position: absolute;
-            inset: 0 0 0 0;
+            inset: calc(var(--sz)*-1) calc(var(--sz)*-1) calc(var(--sz)*-1) calc(var(--sz)*-1);
 
             -webkit-mask: linear-gradient(
                     to top,
-                    transparent 10%,
-                    #fff 15% 90%,
-                    transparent 95%
+                    transparent 0,
+                    #fff var(--sz) calc(100% - var(--sz)),
+                    transparent 100%
                 ),
                 linear-gradient(
                     to left,
-                    transparent 10%,
-                    #fff 15% 90%,
-                    transparent 95%
+                    transparent 0,
+                    #fff var(--sz) calc(100% - var(--sz)),
+                    transparent 100%
                 );
-            -webkit-mask-size: 110% 110%;
+            -webkit-mask-size: 100% 100%;
             -webkit-mask-position: center;
             -webkit-mask-repeat: no-repeat;
             -webkit-mask-composite: source-in;
-
-            mask: linear-gradient(
-                    to top,
-                    transparent 10%,
-                    #fff 15% 90%,
-                    transparent 95%
-                ),
-                linear-gradient(
-                    to left,
-                    transparent 10%,
-                    #fff 15% 90%,
-                    transparent 95%
-                );
-            mask-size: 110% 110%;
-            mask-position: center;
-            mask-repeat: no-repeat;
-            mask-composite: source-in;
         }
     }
 
