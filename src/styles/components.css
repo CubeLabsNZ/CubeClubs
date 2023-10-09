@@ -227,6 +227,10 @@ tr.loading:nth-of-type(even) td {
     border-radius: 4px;
 }
 
+.users-entry-x-icon {
+    margin-right: 8px;
+}
+
 td, th {
     line-height: 30px;
 }

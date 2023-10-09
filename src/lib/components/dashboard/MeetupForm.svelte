@@ -4,6 +4,7 @@
     import Select from "$lib/components/global/Select.svelte";
 
     import { clickOutside } from "$lib/utils";
+    import { X } from "lucide-svelte";
 
     import { fade } from "svelte/transition";
 
@@ -99,7 +100,7 @@
                 {#each addedOrganisers as { name, id }}
                     <button class="organiser-button" bind:clientWidth={sizes[id]} on:click|preventDefault={() => {addedOrganisers = addedOrganisers.filter(org => org.id != id)}}>
                         <Badge size={BadgeSize.Large} fg=var(--c-a) bg=var(--c-la1) label={` ${name}`}>
-                            <span class="material-symbols-outlined" style:color=var(--c-a) style:font-size=16px style:font-weight=600 style:padding-right=8px>close</span>
+                            <X class="users-entry-x-icon" size="14px" color=var(--c-a)/>
                         </Badge>
                     </button>
                 {/each}

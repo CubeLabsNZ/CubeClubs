@@ -7,6 +7,8 @@
     import { clickOutside } from "$lib/utils";
     import { fade } from "svelte/transition";
 
+    import { X } from "lucide-svelte"
+
     import puzzles from "$lib/data/puzzles";
 
     let searchString = "";
@@ -95,7 +97,7 @@
         {#if selectedCompetitor}
             <button class="organiser-button" on:click|preventDefault={() => {selectedCompetitor = undefined}}>
                 <Badge size={BadgeSize.Large} fg=var(--c-a) bg=var(--c-la1) label={ `${selectedCompetitor.name}`}>
-                    <span class="material-symbols-outlined" style:color=var(--c-a) style:font-size=16px style:font-weight=600 style:padding-right=8px>close</span>
+                    <X class="users-entry-x-icon" size="14px" color=var(--c-a)/>
                 </Badge>
             </button>
         {/if}

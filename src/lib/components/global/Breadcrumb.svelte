@@ -1,12 +1,14 @@
 <script lang="ts">
+    import { ArrowLeft } from "lucide-svelte";
+
     export let paths: { name: string, href: string }[];
 </script>
 
 <div class="container">
     {#if typeof window !== "undefined" && window.history.length > 1}
-        <button on:click={() => window.history.back()} class="material-symbols-outlined container2" style:margin-right=4px style:font-size=18px>arrow_left_alt</button>
+        <button on:click={() => window.history.back()} class="container2" style:margin-right=4px style:font-size=18px><ArrowLeft size="16px"/></button>
     {:else}
-        <a href={paths.at(-2)?.href} class="material-symbols-outlined container2" style:margin-right=4px style:font-size=18px>arrow_left_alt</a>
+        <a href={paths.at(-2)?.href} class="container2" style:margin-right=4px style:font-size=18px><ArrowLeft size="16px"/></a>
     {/if}
 
     {#each paths as { name, href }, i}
@@ -40,6 +42,10 @@
         color: var(--c-dg1);
         font-size: 14px;
         font-weight: 500;
+    }
+
+    .container2 > :global(svg) {
+        transform: translate(0, 1px);
     }
 
 

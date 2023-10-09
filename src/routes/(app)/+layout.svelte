@@ -255,14 +255,6 @@
         height: 1px;
     }
 
-    .arrow {
-        font-size: 20px;
-
-        font-variation-settings: 
-            'wght' 300;
-    }
-
-
     .show-more-button {
         color: var(--c-lg0);
         font-size: 20px;

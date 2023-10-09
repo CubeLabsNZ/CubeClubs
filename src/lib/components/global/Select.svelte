@@ -1,4 +1,6 @@
 <script lang="ts">
+    import { ChevronDown } from "lucide-svelte";
+
     export let name: string;
     export let value: string | number | undefined = undefined;
 </script>
@@ -9,7 +11,7 @@
         <slot/>
     </select>
 
-    <span class="material-symbols-outlined select-icon">expand_more</span>
+    <ChevronDown class="select-icon"/>
 </div>
 
 
@@ -20,8 +22,8 @@
         padding-right: 32px;
     }
 
-    .select-icon {
-        font-size: 20px;
+    :global(.select-icon) {
+        font-size: 18px;
         align-self: center;
         justify-self: flex-end;
         padding-right: 4px;

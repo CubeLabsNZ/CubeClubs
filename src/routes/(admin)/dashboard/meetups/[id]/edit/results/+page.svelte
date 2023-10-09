@@ -14,6 +14,7 @@
 
     import type { PageData, ActionData } from "./$types";
     import { Puzzle } from "@prisma/client";
+    import { ChevronDown } from "lucide-svelte";
 
     export let data: PageData
     export let form: ActionData
@@ -94,7 +95,7 @@
                         {/each}
                     </select>
 
-                    <span class="material-symbols-outlined select-icon">expand_more</span>
+                    <ChevronDown class="select-icon"/>
                 </div>
             </label>
 
@@ -226,7 +227,7 @@
         padding-right: 32px;
     }
 
-    .select-icon {
+    :global(.select-icon) {
         font-size: 20px;
         align-self: center;
         justify-self: flex-end;

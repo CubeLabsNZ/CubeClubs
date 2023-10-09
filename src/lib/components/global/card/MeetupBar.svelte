@@ -3,6 +3,7 @@
     import type { Meetup } from "@prisma/client";
 
     import puzzles from "$lib/data/puzzles";
+    import { ArrowRight, ChevronRight } from "lucide-svelte";
 
     export let href: string;
 
@@ -36,7 +37,7 @@
             </div>
 
             <div class="arrow">
-                <span class="material-symbols-outlined">chevron_right</span>
+                <ChevronRight size=22px/>
             </div>
         </div>
     </Card>

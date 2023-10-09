@@ -91,10 +91,7 @@
                     <div id="landing-button" style:margin="0" style:padding="0">
                         <p>Explore our meetups</p>
 
-                        <span
-                            class="material-symbols-outlined"
-                            style:font-size="20px">chevron_right</span
-                        >
+                        <ChevronRight size="18px" />
                     </div>
                 </Button>
             </a>
