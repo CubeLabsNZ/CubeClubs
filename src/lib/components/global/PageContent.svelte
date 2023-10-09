@@ -1,6 +1,6 @@
 <script lang="ts">
     export let heading: string, subheading = "";
-    export let top = 126; /* tab bar + 32px either side */
+    export let top = 100; /* tab bar + enough to make it look good */
     export let isDashboard = false;
 </script>
 

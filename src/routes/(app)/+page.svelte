@@ -22,28 +22,6 @@
         <img id="landing-b-3" src="/landing/blob-orange.webp" alt="">
     </div>
 
-    <div id="landing-content">
-        <div id="landing-title">
-            <h2>Welcome to</h2>
-            <h1><span style:color=var(--c-a)>CubeClubs</span> NZ</h1>
-        </div>
-
-        <div id="landing-subtitle">
-            <h4 class="fsize-title2">We’re Aotearoa’s non-profit speedcubing clubs, comprised of six clubs throughout the country.</h4>
-            <h4 class="fsize-title2">Our clubs host regular meetups for all ages and all skill levels, come join us at one of our meetups!</h4>
-        </div>
-
-        <a href="/meetups" style:display=block style:width=fit-content>
-            <Button type={ButtonType.Coloured} size={ButtonSize.Regular}>
-                <div id="landing-button" style:margin=0 style:padding=0>
-                    <p>Explore our meetups</p>
-
-                    <span class="material-symbols-outlined" style:font-size=20px>chevron_right</span>
-                </div>
-            </Button>
-        </a>
-    </div>
-
     <div id="landing-clubs-grid">
         <ClubCard
             clubName="Dunedin Speedcubers"
@@ -81,6 +59,34 @@
             clubLogo={iconKAP} />
     </div>
 
+    <div id="landing-content">
+        <div class="expand-dummy" />
+
+        <div class="text-wrapper">
+            <div id="landing-title">
+                <h2>Welcome to</h2>
+                <h1><span style:color=var(--c-a)>CubeClubs</span> NZ</h1>
+            </div>
+
+            <div id="landing-subtitle">
+                <h4 class="fsize-title2">We’re Aotearoa’s non-profit speedcubing clubs, comprised of six clubs throughout the country.</h4>
+                <h4 class="fsize-title2">Our clubs host regular meetups for all ages and all skill levels, come join us at one of our meetups!</h4>
+            </div>
+
+            <a href="/meetups" style:display=block style:width=fit-content>
+                <Button type={ButtonType.Coloured} size={ButtonSize.Regular}>
+                    <div id="landing-button" style:margin=0 style:padding=0>
+                        <p>Explore our meetups</p>
+
+                        <span class="material-symbols-outlined" style:font-size=20px>chevron_right</span>
+                    </div>
+                </Button>
+            </a>
+        </div>
+
+        <div class="expand-dummy" />
+    </div>
+
 
     <div class="footer">
         <a href="https://github.com/CubeClubsNZ/app" aria-label="CubeClubs source code (GitHub)" target="_blank" class="hoverable-link" style:height=18px style:fill=var(--c-lg1)>
@@ -103,6 +109,36 @@
 
 
 <style>
+    #landing-main {
+        height: 100dvh;
+        overflow: hidden;
+        position: relative;
+    }
+
+    #landing-content {
+        position: absolute;
+
+        display: flex;
+        flex-direction: column;
+
+        width: fit-content;
+        box-sizing: border-box;
+
+        height: 100%;
+
+        padding-top: 100px;
+        padding-bottom: 100px;
+        padding-left: max(20px, min(80px, 8.8vw - 40px));
+        padding-right: max(20px, min(80px, 8.8vw - 40px));
+
+        flex-shrink: 0;
+    }
+
+    .expand-dummy {
+        flex-grow: 1;
+    }
+
+
     #landing-clubs-grid {
         display: grid;
         grid-template-columns: 1fr 1fr;
@@ -112,7 +148,6 @@
         margin-right: 25%;
         margin-top: -24%;
         margin-bottom: -14%;
-        align-self: flex-end;
 
         transform-style: preserve-3d;
         transform: rotateX(55deg) rotateZ(37deg);
@@ -121,11 +156,11 @@
 
         flex-shrink: 1;
 
-        z-index: 2;
-
         position: fixed;
         right: -100px;
-        bottom: -100px;
+        bottom: -200px;
+
+        z-index: -1;
     }
 
     #landing-button {
@@ -134,16 +169,6 @@
         align-items: center;
     }
 
-    h1 {
-        font-size: 72px;
-        font-family: "TwCenMt";
-        font-weight: 600;
-    }
-
-    h2 {
-        font-size: 48px;
-        font-weight: 600;
-    }
 
     #landing-title,
     #landing-subtitle {
@@ -153,7 +178,23 @@
 
     #landing-title {
         gap: 4px;
-        margin-bottom: 60px;  /* 64px adjusted for font descenders */
+        display: block;
+        margin-bottom: max(min(60px, 4vh), 20px);  /* 64px adjusted for font descenders */
+    }
+
+    #landing-title h1 {
+        line-height: 0.8;
+
+        font-size: min(72px, 15vw);
+        font-family: "TwCenMt";
+        font-weight: 600;
+    }
+
+    #landing-title h2 {
+        line-height: 1.4;
+
+        font-size: min(48px, 10vw);
+        font-weight: 600;
     }
 
     #landing-subtitle {
@@ -173,17 +214,12 @@
         color: var(--c-dg1);
     }
 
-    #landing-content {
-        margin-left: max(20px, min(110px, 8.8vw - 40px));
-        margin-top: min(220px, 22vh);
 
-        width: fit-content;
-
-        z-index: 2;
-
-        flex-shrink: 0;
+    .text-wrapper {
+        padding: 20px;
+        border-radius: 8px;
+        backdrop-filter: blur(10px);
     }
-
 
 
 
@@ -198,9 +234,7 @@
         grid-area: 1/1;
     }
 
-    #landing-b-1,
-    #landing-b-2,
-    #landing-b-3 {
+    #landing-b-1, #landing-b-2, #landing-b-3 {
         position: fixed;
     }
 
@@ -225,26 +259,18 @@
         right: -200px;
     }
 
-    #landing-main {
-        display: flex;
-        flex-direction: row;
-
-        justify-content: space-between;
-
-        height: 100dvh;
-        overflow: hidden;
-    }
-
     .footer {
         display: flex;
         align-items: center;
 
-        height: 24px;
+        position: fixed;
 
-        z-index: 10;
+        bottom: 32px;
         margin-left: max(20px, min(110px, 8.8vw - 40px));
     }
 
+
+    /* INFO: footer */
     .footer * {
         font-size: 14px;
         color: var(--c-lg1);
@@ -280,28 +306,21 @@
 
 
 
+    @media(max-width: 1000px) {
+        #landing-clubs-grid {
+            display: none;
+        }
+    }
 
     @media(max-width: 550px) {
-        #landing-content {
-            margin-left: 20px;
-            margin-right: 20px;
-            margin-top: 20vh;
-        }
-
         #landing-subtitle {
             width: 100%;
         }
+    }
 
+    @media(max-height: 550px) {
         .footer {
-            margin-left: 20px;
-        }
-
-        #landing-clubs {
             display: none;
-        }
-
-        #landing-main {
-            grid-template-rows: 1fr 64px;
         }
     }
 </style>
