@@ -1,5 +1,8 @@
 <script lang="ts">
-    import Button, { ButtonSize, ButtonType } from "$lib/components/global/Button.svelte";
+    import Button, {
+        ButtonSize,
+        ButtonType,
+    } from "$lib/components/global/Button.svelte";
 
     import ClubCard from "$lib/components/landing/ClubCard.svelte";
 
@@ -17,81 +20,108 @@
 
 <div id="landing-main" aria-hidden>
     <div id="landing-bg">
-        <img id="landing-b-1" src="/landing/blob-blue.webp" alt="">
-        <img id="landing-b-2" src="/landing/blob-green.webp" alt="">
-        <img id="landing-b-3" src="/landing/blob-orange.webp" alt="">
+        <img id="landing-b-1" src="/landing/blob-blue.webp" alt="" />
+        <img id="landing-b-2" src="/landing/blob-green.webp" alt="" />
+        <img id="landing-b-3" src="/landing/blob-orange.webp" alt="" />
     </div>
 
     <div id="landing-clubs-grid">
         <ClubCard
             clubName="Dunedin Speedcubers"
             clubLocation="Dunedin, Otago"
-            clubLogo={iconDUN} />
-
+            clubLogo={iconDUN}
+        />
 
         <ClubCard
             clubName="Manawatū Cubers"
             clubLocation="Palmerston North, Manawatū"
-            clubLogo={iconMAN} />
-
+            clubLogo={iconMAN}
+        />
 
         <ClubCard
             clubName="Auckland Speedcubing Club"
             clubLocation="Auckland"
-            clubLogo={iconASC} />
-
+            clubLogo={iconASC}
+        />
 
         <ClubCard
             clubName="Taranaki Cubers"
             clubLocation="New Plymouth, Taranaki"
-            clubLogo={iconTAR} />
-
+            clubLogo={iconTAR}
+        />
 
         <ClubCard
             clubName="Christchurch Speedcubers"
             clubLocation="Christchurch, Canterbury"
-            clubLogo={iconCHCH} />
-
+            clubLogo={iconCHCH}
+        />
 
         <ClubCard
             clubName="Kāpiti Cubers"
             clubLocation="Kāpiti Coast, Wellington"
-            clubLogo={iconKAP} />
+            clubLogo={iconKAP}
+        />
     </div>
 
     <div id="landing-content">
         <div class="expand-dummy" />
 
-        <div class="text-wrapper">
+        <div class="text-wrapper" style:position="relative">
             <div id="landing-title">
                 <h2>Welcome to</h2>
-                <h1><span style:color=var(--c-a)>CubeClubs</span> NZ</h1>
+                <h1><span style:color="var(--c-a)">CubeClubs</span> NZ</h1>
             </div>
 
             <div id="landing-subtitle">
-                <h4 class="fsize-title2">We’re Aotearoa’s non-profit speedcubing clubs, comprised of six clubs throughout the country.</h4>
-                <h4 class="fsize-title2">Our clubs host regular meetups for all ages and all skill levels, come join us at one of our meetups!</h4>
+                <h4 class="fsize-title2">
+                    We’re Aotearoa’s non-profit speedcubing clubs, comprised of
+                    six clubs throughout the country.
+                </h4>
+                <h4 class="fsize-title2">
+                    Our clubs host regular meetups for all ages and all skill
+                    levels, come join us at one of our meetups!
+                </h4>
             </div>
 
-            <a href="/meetups" style:display=block style:width=fit-content>
+            <a href="/meetups" style:display="block" style:width="fit-content">
                 <Button type={ButtonType.Coloured} size={ButtonSize.Regular}>
-                    <div id="landing-button" style:margin=0 style:padding=0>
+                    <div id="landing-button" style:margin="0" style:padding="0">
                         <p>Explore our meetups</p>
 
-                        <span class="material-symbols-outlined" style:font-size=20px>chevron_right</span>
+                        <span
+                            class="material-symbols-outlined"
+                            style:font-size="20px">chevron_right</span
+                        >
                     </div>
                 </Button>
             </a>
+
+            <div id="text-background" />
         </div>
 
         <div class="expand-dummy" />
     </div>
 
-
     <div class="footer">
-        <a href="https://github.com/CubeClubsNZ/app" aria-label="CubeClubs source code (GitHub)" target="_blank" class="hoverable-link" style:height=18px style:fill=var(--c-lg1)>
-            <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" viewBox="0 0 28 28" height=18px style:height=18px >
-                <path class="st0" d="M14,0.2C6.3,0.2,0,6.5,0,14.3c0,6.2,4,11.5,9.6,13.4c0.7,0.1,1-0.3,1-0.7c0-0.3,0-1.4,0-2.6
+        <a
+            href="https://github.com/CubeClubsNZ/app"
+            aria-label="CubeClubs source code (GitHub)"
+            target="_blank"
+            class="hoverable-link"
+            style:height="18px"
+            style:fill="var(--c-lg1)"
+        >
+            <svg
+                xmlns="http://www.w3.org/2000/svg"
+                x="0px"
+                y="0px"
+                viewBox="0 0 28 28"
+                height="18px"
+                style:height="18px"
+            >
+                <path
+                    class="st0"
+                    d="M14,0.2C6.3,0.2,0,6.5,0,14.3c0,6.2,4,11.5,9.6,13.4c0.7,0.1,1-0.3,1-0.7c0-0.3,0-1.4,0-2.6
                     c-3.9,0.8-4.7-1.7-4.7-1.7c-0.6-1.6-1.6-2.1-1.6-2.1c-1.3-0.9,0.1-0.9,0.1-0.9c1.4,0.1,2.2,1.4,2.2,1.4c1.3,2.1,3.3,1.5,4.1,1.2
                     c0.1-0.9,0.5-1.5,0.9-1.9c-3.1-0.3-6.4-1.5-6.4-7c0-1.5,0.6-2.8,1.4-3.8C6.4,9.5,5.9,8,6.7,6.1c0,0,1.2-0.4,3.9,1.4
                     c1.1-0.3,2.3-0.5,3.5-0.5c1.2,0,2.4,0.2,3.5,0.5c2.7-1.8,3.9-1.4,3.9-1.4c0.8,1.9,0.3,3.4,0.1,3.7c0.9,1,1.4,2.2,1.4,3.8
@@ -100,13 +130,17 @@
             </svg>
         </a>
 
-        <hr>
+        <hr />
 
-        <p> © 2023 <a href="https://tim-xie.com" target="_blank" class="hoverable-link">Tim Xie</a>, CubeClubs NZ.</p>
+        <p>
+            © 2023 <a
+                href="https://tim-xie.com"
+                target="_blank"
+                class="hoverable-link">Tim Xie</a
+            >, CubeClubs NZ.
+        </p>
     </div>
 </div>
-
-
 
 <style>
     #landing-main {
@@ -138,7 +172,6 @@
         flex-grow: 1;
     }
 
-
     #landing-clubs-grid {
         display: grid;
         grid-template-columns: 1fr 1fr;
@@ -169,7 +202,6 @@
         align-items: center;
     }
 
-
     #landing-title,
     #landing-subtitle {
         display: flex;
@@ -179,7 +211,10 @@
     #landing-title {
         gap: 4px;
         display: block;
-        margin-bottom: max(min(60px, 4vh), 20px);  /* 64px adjusted for font descenders */
+        margin-bottom: max(
+            min(60px, 4vh),
+            20px
+        ); /* 64px adjusted for font descenders */
     }
 
     #landing-title h1 {
@@ -214,16 +249,55 @@
         color: var(--c-dg1);
     }
 
-
     .text-wrapper {
         padding: 20px;
         border-radius: 8px;
-        backdrop-filter: blur(10px);
     }
 
+    .text-wrapper > *:not(#text-background) {
+        position: relative;
+        z-index: 1;
+    }
 
+    #text-background {
+        backdrop-filter: blur(10px);
+        position: absolute;
+        inset: 0 0 0 0;
 
+        -webkit-mask: linear-gradient(
+                to top,
+                transparent 10%,
+                #fff 15% 90%,
+                transparent 95%
+            ),
+            linear-gradient(
+                to left,
+                transparent 10%,
+                #fff 15% 90%,
+                transparent 95%
+            );
+        -webkit-mask-size: 110% 110%;
+        -webkit-mask-position: center;
+        -webkit-mask-repeat: no-repeat;
+        -webkit-mask-composite: source-in;
 
+        mask: linear-gradient(
+                to top,
+                transparent 10%,
+                #fff 15% 90%,
+                transparent 95%
+            ),
+            linear-gradient(
+                to left,
+                transparent 10%,
+                #fff 15% 90%,
+                transparent 95%
+            );
+        mask-size: 110% 110%;
+        mask-position: center;
+        mask-repeat: no-repeat;
+        mask-composite: source-in;
+    }
 
     #landing-bg {
         height: 100dvh;
@@ -234,7 +308,9 @@
         grid-area: 1/1;
     }
 
-    #landing-b-1, #landing-b-2, #landing-b-3 {
+    #landing-b-1,
+    #landing-b-2,
+    #landing-b-3 {
         position: fixed;
     }
 
@@ -268,7 +344,6 @@
         bottom: 32px;
         margin-left: max(20px, min(110px, 8.8vw - 40px));
     }
-
 
     /* INFO: footer */
     .footer * {
@@ -304,21 +379,19 @@
         fill: var(--c-lg2);
     }
 
-
-
-    @media(max-width: 1000px) {
+    @media (max-width: 1000px) {
         #landing-clubs-grid {
             display: none;
         }
     }
 
-    @media(max-width: 550px) {
+    @media (max-width: 550px) {
         #landing-subtitle {
             width: 100%;
         }
     }
 
-    @media(max-height: 550px) {
+    @media (max-height: 550px) {
         .footer {
             display: none;
         }
