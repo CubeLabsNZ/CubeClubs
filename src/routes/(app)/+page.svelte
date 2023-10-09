@@ -102,24 +102,7 @@
             <div id="text-background" />
         </div>
 
-<<<<<<< HEAD
         <div class="expand-dummy" />
-=======
-        <div id="landing-subtitle">
-            <h4 class="fsize-title2">We’re Aotearoa’s non-profit speedcubing clubs, comprised of six clubs throughout the country.</h4>
-            <h4 class="fsize-title2">Our clubs host regular meetups for all ages and all skill levels, come join us at one of our meetups!</h4>
-        </div>
-
-        <a href="/meetups" style:display=block style:width=fit-content>
-            <Button type={ButtonType.Coloured} size={ButtonSize.Regular}>
-                <div id="landing-button" style:margin=0 style:padding=0>
-                    <p>Explore our meetups</p>
-    
-                    <ChevronRight size="18px" />
-                </div>
-            </Button>
-        </a>
->>>>>>> f01815c (start switching to lucide)
     </div>
 
     <div class="footer">
