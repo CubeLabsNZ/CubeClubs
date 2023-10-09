@@ -1,18 +1,1 @@
-<svg id="_4x4" data-name="4x4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-  <rect x="3" y="3" width="4" height="4" rx="1" ry="1"/>
-  <rect x="7.67" y="3" width="4" height="4" rx="1" ry="1"/>
-  <rect x="12.33" y="3" width="4" height="4" rx="1" ry="1"/>
-  <rect x="17" y="3" width="4" height="4" rx="1" ry="1"/>
-  <rect x="3" y="7.67" width="4" height="4" rx="1" ry="1"/>
-  <rect x="7.67" y="7.67" width="4" height="4" rx="1" ry="1"/>
-  <rect x="12.33" y="7.67" width="4" height="4" rx="1" ry="1"/>
-  <rect x="17" y="7.67" width="4" height="4" rx="1" ry="1"/>
-  <rect x="3" y="12.33" width="4" height="4" rx="1" ry="1"/>
-  <rect x="7.67" y="12.33" width="4" height="4" rx="1" ry="1"/>
-  <rect x="12.33" y="12.33" width="4" height="4" rx="1" ry="1"/>
-  <rect x="17" y="12.33" width="4" height="4" rx="1" ry="1"/>
-  <rect x="3" y="17" width="4" height="4" rx="1" ry="1"/>
-  <rect x="7.67" y="17" width="4" height="4" rx="1" ry="1"/>
-  <rect x="12.33" y="17" width="4" height="4" rx="1" ry="1"/>
-  <rect x="17" y="17" width="4" height="4" rx="1" ry="1"/>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" data-name="4x4" viewBox="0 0 24 24"><rect width="4" height="4" x="3" y="3" rx="1" ry="1"/><rect width="4" height="4" x="7.67" y="3" rx="1" ry="1"/><rect width="4" height="4" x="12.33" y="3" rx="1" ry="1"/><rect width="4" height="4" x="17" y="3" rx="1" ry="1"/><rect width="4" height="4" x="3" y="7.67" rx="1" ry="1"/><rect width="4" height="4" x="7.67" y="7.67" rx="1" ry="1"/><rect width="4" height="4" x="12.33" y="7.67" rx="1" ry="1"/><rect width="4" height="4" x="17" y="7.67" rx="1" ry="1"/><rect width="4" height="4" x="3" y="12.33" rx="1" ry="1"/><rect width="4" height="4" x="7.67" y="12.33" rx="1" ry="1"/><rect width="4" height="4" x="12.33" y="12.33" rx="1" ry="1"/><rect width="4" height="4" x="17" y="12.33" rx="1" ry="1"/><rect width="4" height="4" x="3" y="17" rx="1" ry="1"/><rect width="4" height="4" x="7.67" y="17" rx="1" ry="1"/><rect width="4" height="4" x="12.33" y="17" rx="1" ry="1"/><rect width="4" height="4" x="17" y="17" rx="1" ry="1"/></svg>
