@@ -1,5 +1,6 @@
 <script lang="ts">
-    export let record: { single: number; average: number };
+    type Rec = { single: number; average: number }
+    export let record: Rec | Promise<Rec>;
     export let name: string;
     export let shortname: string;
     export let bg: string;
@@ -8,13 +9,22 @@
     import Badge, { BadgeSize } from "$lib/components/global/Badge.svelte";
 </script>
 
-<div title={`Single: ${record.single}
-Average: ${record.average}`}>
+{#await record}
+<div>
     <Badge size={BadgeSize.Small} {bg} {fg} label={shortname} />
 
-    <p style:font-weight="500">{record.single + record.average}</p>
+    <p class="shimmering">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
     <p>{name}</p>
 </div>
+{:then rec}
+<div title={`Single: ${rec.single}
+Average: ${rec.average}`}>
+    <Badge size={BadgeSize.Small} {bg} {fg} label={shortname} />
+
+    <p style:font-weight="500">{rec.single + rec.average}</p>
+    <p>{name}</p>
+</div>
+{/await}
 
 <style>
     div {
