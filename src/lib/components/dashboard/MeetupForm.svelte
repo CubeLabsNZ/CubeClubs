@@ -11,6 +11,8 @@
 
     export let handleForm;
 
+    export let name: string;
+
     let searchString = "";
 
     let sizes = [];
@@ -25,7 +27,7 @@
 </script>
 
 
-<Form name="Create meetup" run={handleForm}>
+<Form {name} run={handleForm}>
     <div class="form-inner">
         <label class="form-label regular">
             Meetup Name

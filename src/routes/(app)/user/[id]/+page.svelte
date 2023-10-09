@@ -68,35 +68,65 @@
                         </div>
 
                         <div class="data-row">
-                            <p style:font-weight=500>{data.completedSolves}</p>
+                            {#await data.streamed.completedSolves}
+                                <p class="shimmering">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</p>
+                            {:then completedSolves}
+                                <p style:font-weight=500>{completedSolves}</p>
+                            {/await}
                             <p> Completed Solves </p>
                         </div>
                     </div>
 
                     <hr>
 
+                    <!-- TODO: reduce duplication ? -->
+                    {#await data.streamed.medals}
+                        <div class="section-column">
+                            <div class="data-row">
+                                <Medal place={PodiumPlace.Gold}/>
+
+                                <p class="shimmering">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</p>
+                                <p> Gold Medals </p>
+                            </div>
+
+                            <div class="data-row">
+                                <Medal place={PodiumPlace.Silver}/>
+
+                                <p class="shimmering">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</p>
+                                <p> Silver Medals </p>
+                            </div>
+
+                            <div class="data-row">
+                                <Medal place={PodiumPlace.Bronze}/>
+
+                                <p class="shimmering">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</p>
+                                <p> Bronze Medals </p>
+                            </div>
+                        </div>
+                    {:then medals}
                     <div class="section-column">
                         <div class="data-row">
                             <Medal place={PodiumPlace.Gold}/>
 
-                            <p style:font-weight=500>{data.medals[0]}</p>
+                            <p style:font-weight=500>{medals[0]}</p>
                             <p> Gold Medals </p>
                         </div>
 
                         <div class="data-row">
                             <Medal place={PodiumPlace.Silver}/>
 
-                            <p style:font-weight=500>{data.medals[1]}</p>
+                            <p style:font-weight=500>{medals[1]}</p>
                             <p> Silver Medals </p>
                         </div>
 
                         <div class="data-row">
                             <Medal place={PodiumPlace.Bronze}/>
 
-                            <p style:font-weight=500>{data.medals[2]}</p>
+                            <p style:font-weight=500>{medals[2]}</p>
                             <p> Bronze Medals </p>
                         </div>
                     </div>
+                    {/await}
 
                     <hr>
 
@@ -167,10 +197,10 @@
                                 {puzzle.name}
                             </div>
                         </td>
-                        <td class="tc-rr">{single.RR}</td>
-                        <td class="tc-ir">{single.IR}</td>
-                        <td class="tc-icr">{single.IcR}</td>
-                        <td class="tc-result">{formatTime(single.time)}</td>
+                        <td class="tc-rr">{single?.RR}</td>
+                        <td class="tc-ir">{single?.IR}</td>
+                        <td class="tc-icr">{single?.IcR}</td>
+                        <td class="tc-result">{formatTime(single?.time)}</td>
 
                         <td class="tc-result">{formatTime(average.time)}</td>
                         <td class="tc-icr">{average.IcR}</td>
@@ -218,7 +248,6 @@
                         showUser={false}
                         displayType={DisplayType.AVERAGE}
                         showBest={true}
-                        width="100%"
                         meetupAndRoundLeft={true}
                         showPlace={true}
                     />
@@ -266,9 +295,6 @@
         margin-top: 0;
     }
 
-    .group-label h3 {
-        font-weight: 500;
-    }
     .section-column, .card-column, .data-row {
         display: flex;
     }
@@ -396,14 +422,6 @@
         display: flex;
         flex-direction: column;
         row-gap: 16px;
-    }
-
-    .tc-meetup, .tc-round, .tc-place, .tc-solves {
-        text-align: left;
-    }
-
-    .tc-meetup, .tc-single, .tc-average {
-        font-weight: 500;
     }
 
     .results-history-header, .records-history-header {

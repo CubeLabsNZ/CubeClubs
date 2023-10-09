@@ -84,13 +84,16 @@ select, input[type="date"] {
 /* INFO: table */
 table {
     width: 1000px;
-    border-radius: var(--v-border-radius);
-    border: 1px var(--c-lg1) solid;
-    background-color: white;
 
     border-spacing: 0;
 
     overflow-x: scroll;
+}
+
+table:not(.table-has-scroller), .table-scroller {
+    border-radius: var(--v-border-radius);
+    border: 1px var(--c-lg1) solid;
+    background-color: white;
 }
 
 table * {
@@ -209,6 +212,20 @@ tr.loading:nth-of-type(even) td {
     background-size: 1200px;
     background-repeat: no-repeat;
     animation: shine-lines 2.5s infinite linear;
+}
+
+.shimmering {
+    background-color: var(--c-lgh-whitebg);
+    background-image: linear-gradient(
+        90deg,
+        var(--c-lgh-whitebg) 0px,
+        var(--c-lg0) 80px,
+        var(--c-lgh-whitebg) 160px
+    );
+    background-size: 1200px;
+    background-repeat: no-repeat;
+    animation: shine-lines 2.5s infinite linear;
+    border-radius: 4px;
 }
 
 td, th {

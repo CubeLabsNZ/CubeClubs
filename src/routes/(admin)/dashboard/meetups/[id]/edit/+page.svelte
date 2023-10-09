@@ -25,4 +25,4 @@
 
 <div style:height="16px" />
 
-<MeetupForm {data} {handleForm} bind:addedOrganisers bind:organisersError />
+<MeetupForm name="Save Changes" {data} {handleForm} bind:addedOrganisers bind:organisersError />

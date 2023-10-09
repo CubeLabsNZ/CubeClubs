@@ -204,11 +204,15 @@
             width: calc(100% - 40px);
             margin-left: 20px;
             margin-right: 20px;
-            gap: 64px;
+            gap: 32px;
         }
 
         .navbar-full {
             display: none;
+        }
+
+        #navbar-right {
+            gap: 16px;
         }
     }
 
