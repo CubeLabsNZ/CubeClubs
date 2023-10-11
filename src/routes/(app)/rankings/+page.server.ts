@@ -20,6 +20,7 @@ export const load = (async ({ url }) => {
             .innerJoin('meetup', 'meetup.id', 'round.meetup_id')
             .innerJoin('user', 'user.id', 'result.user_id')
             .where('round.puzzle', '=', filterEvent)
+            .where('solve.time', '!=', Infinity)
             .distinctOn('user.id')
             .select(['time', 'user.name as user_name', 'user.region as user_region', 'user.id as user_id', 'meetup.id as meetup_id', 'meetup.name as meetup_name'])
         )
@@ -34,6 +35,7 @@ export const load = (async ({ url }) => {
             .innerJoin('user', 'user.id', 'result.user_id')
             .leftJoin("solve", 'result.id', 'solve.result_id')
             .where('round.puzzle', '=', filterEvent)
+            .where('result.value', '!=', Infinity)
             .distinctOn('user.id')
             .groupBy(['value', 'user.name', 'user.region', 'user.id', 'meetup.id', 'meetup.name', 'result.mbld_score', 'result.mbld_total'])
             .select(({ fn }) => [
