@@ -86,19 +86,21 @@ export const load = (async ({ url }) => {
             .innerJoin('user', 'user.id', 'result.user_id')
             .leftJoin("solve", 'result.id', 'solve.result_id')
             .select(({ fn }) => [
-                fn.min('result.value').over(ob => ob.orderBy('round.end_date', 'asc').partitionBy(['round.puzzle'])).as('cum_min'),
+                fn.min('result.value').over(ob => ob.orderBy(         'round.end_date asc').orderBy('result.mbld_score').partitionBy(['round.puzzle'])).as('cum_min'),
                 'user.name as user_name',
                 'user.id as user_id',
                 'user.region as user_region',
                 'meetup.id as meetup_id',
                 'meetup.name as meetup_name',
                 'round.end_date as date',
+                'result.mbld_score',
+                'result.mbld_total',
                 // TODO: check order
                 fn.agg<string[]>('array_agg', ['solve.time']).as('solves'),
 
                 'round.puzzle',
             ])
-            .groupBy(['result.value', 'user.name', 'user.id', 'round.puzzle', 'round.end_date', 'meetup.id'])
+            .groupBy(['result.value', 'user.name', 'user.id', 'round.puzzle', 'round.end_date', 'meetup.id', 'result.mbld_score', 'result.mbld_total'])
             // Must order by time so distinct on picks correct value
             // solves desc is so null solves are at the top - which means a single
             .orderBy(['cum_min asc', 'value asc'])
