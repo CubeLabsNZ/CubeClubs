@@ -120,7 +120,7 @@
     </div>
 
     <Table
-            list={data.streamed.results.length > 0 ? data.streamed.results : undefined}
+        list={data.streamed.results}
         displayType={!ismbld
             ? data.isSingle
                 ? DisplayType.SINGLE

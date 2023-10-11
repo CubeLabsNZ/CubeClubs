@@ -145,7 +145,7 @@
             {/each}
         {:then ll}
             {@const l = typeof k === "undefined" ? ll : ll[k]}
-            {#if typeof l === "undefined"}
+            {#if typeof l === "undefined" || l.length == 0}
                 <tr>
                 <td
                     class="tc-placeholder"
