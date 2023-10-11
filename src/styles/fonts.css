@@ -1,53 +1,24 @@
 @font-face {
-	font-family: "IBMPlexSans";
-	src: url("/fonts/IBMPlexSans-Bold.woff2") format("woff2");
-	font-weight: 700;
-	font-display: swap;
-}
-
-@font-face {
-	font-family: "IBMPlexSans";
-	src: url("/fonts/IBMPlexSans-SemiBold.woff2") format("woff2");
-	font-weight: 600;
-	font-display: swap;
-}
-
-@font-face {
-	font-family: "IBMPlexSans";
-	src: url("/fonts/IBMPlexSans-Medium.woff2") format("woff2");
-	font-weight: 500;
-	font-display: swap;
-}
-
-@font-face {
-	font-family: "IBMPlexSans";
-	src: url("/fonts/IBMPlexSans-Regular.woff2") format("woff2");
+	font-family: 'IBMPlexSans';
 	font-weight: 400;
+	font-variation-settings: "wght" 400;
+	src: local("IBM Plex Sans Var Regular"), local("IBMPlexSansVar-Regular"), url("/fonts/IBMPlexSans.woff2") format("woff2");
 	font-display: swap;
 }
-
 @font-face {
-	font-family: "IBMPlexSans";
-	src: url("/fonts/IBMPlexSans-Light.woff2") format("woff2");
-	font-weight: 300;
+	font-family: 'IBMPlexSans';
+	font-weight: 500;
+	font-variation-settings: "wght" 500;
+	src: local("IBM Plex Sans Var Regular"), local("IBMPlexSansVar-Regular"), url("/fonts/IBMPlexSans.woff2") format("woff2");
 	font-display: swap;
 }
-
 @font-face {
-	font-family: "IBMPlexSans";
-	src: url("/fonts/IBMPlexSans-ExtraLight.woff2") format("woff2");
-	font-weight: 200;
+	font-family: 'IBMPlexSans';
+	font-weight: 600;
+	font-variation-settings: "wght" 600;
+	src: local("IBM Plex Sans Var Regular"), local("IBMPlexSansVar-Regular"), url("/fonts/IBMPlexSans.woff2") format("woff2");
 	font-display: swap;
 }
-
-@font-face {
-	font-family: "IBMPlexSans";
-	src: url("/fonts/IBMPlexSans-Thin.woff2") format("woff2");
-	font-weight: 100;
-	font-display: swap;
-}
-
-
 
 /* TW CEN MT */
 @font-face {

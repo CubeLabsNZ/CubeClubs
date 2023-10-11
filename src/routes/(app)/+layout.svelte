@@ -138,8 +138,6 @@
         justify-content: space-between;
         gap: 96px;
 
-        font-family: "IBMPlexSans";
-
         padding: 8px;
         box-sizing: border-box;
 
@@ -280,8 +278,6 @@
         flex-direction: column;
         align-items: flex-start;
         justify-content: center;
-
-        font-family: "IBMPlexSans";
 
         padding: 12px 16px 12px 16px;
 

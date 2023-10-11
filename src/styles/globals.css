@@ -11,7 +11,7 @@ a {
 }
 
 :root {
-    font-family: "IBMPlexSans";
+    font-family: "IBMPlexSans", system-ui, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue" ,sans-serif;
 
 
     /* INFO: COLOURS */
