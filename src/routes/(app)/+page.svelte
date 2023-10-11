@@ -17,6 +17,7 @@
 
 <svelte:head>
     <title>CubeClubs NZ</title>
+    <meta name="description" content="CubeClubs NZ — the website that unites all six speedcubing clubs in Aotearoa.">
 </svelte:head>
 
 <div id="landing-main" aria-hidden>
