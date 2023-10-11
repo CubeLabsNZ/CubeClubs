@@ -2,11 +2,16 @@ import { db } from '$lib/db';
 import prisma from '$lib/prisma';
 import type { PageServerLoad } from './$types';
 import { Puzzle } from "$lib/db/enums"
+import { redirect } from '@sveltejs/kit';
 
 export const load = (async ({ url }) => {
     const filterRegion = url.searchParams.has("region") ? url.searchParams.get("region")! : undefined;
-    const filterEvent = url.searchParams.has("event") ? url.searchParams.get("event")! : Puzzle.THREE;
-    const filterFormat = url.searchParams.has("format") ? url.searchParams.get("format")! : "single";
+    const filterEvent = url.searchParams.get("event");
+    const filterFormat = url.searchParams.get("format");
+
+    if (!filterEvent || !filterFormat) {
+        throw redirect(303, '/rankings?format=single&event=THREE')
+    }
 
     let query
 
