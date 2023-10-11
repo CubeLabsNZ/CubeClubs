@@ -1,0 +1,20 @@
+# Use this file like:
+# pyftsubset IBMPlexSans.woff2 --flavor="woff2" --output-file=out.woff2 --unicodes-file=../../contrib/font-unicodes-keep.txt --verbose
+
+#ASCII
+U+0000-007F
+
+#Characters with macrons
+U+0101
+U+0113
+U+012b
+U+014d
+U+016b
+U+0100
+U+0112
+U+012a
+U+014c
+U+016a
+
+#Special apostraphe
+U+2019
