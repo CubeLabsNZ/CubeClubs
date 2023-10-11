@@ -27,6 +27,7 @@ export const load = (async ({ url }) => {
             ])
             .where('round.puzzle', '=', key)
             .orderBy('time asc')
+            .where('solve.time', '!=', Infinity)
 
 
         if (!(filterRegion === undefined || filterRegion === null || filterRegion === "undefined")) {
@@ -57,6 +58,7 @@ export const load = (async ({ url }) => {
                 eb.fn.agg<number[]>('array_agg', ['solve.time']).as('solves')
             ])
             .where('round.puzzle', '=', key)
+            .where('result.value', '!=', Infinity)
             .groupBy(['result.value', 'user.id', 'user.name', 'user.region', 'meetup.id', 'meetup.name', 'result.mbld_score', 'result.mbld_total'])
             .orderBy(['result.mbld_score desc', 'value asc'])
 
@@ -101,6 +103,7 @@ export const load = (async ({ url }) => {
                 'round.puzzle',
             ])
             .groupBy(['result.value', 'user.name', 'user.id', 'round.puzzle', 'round.end_date', 'meetup.id', 'result.mbld_score', 'result.mbld_total'])
+            .where('result.value', '!=', Infinity)
             // Must order by time so distinct on picks correct value
             // solves desc is so null solves are at the top - which means a single
             .orderBy(['cum_min asc', 'value asc'])
@@ -135,6 +138,7 @@ export const load = (async ({ url }) => {
             ])
             .groupBy(['solve.time', 'user.name', 'user.id', 'round.puzzle', 'round.end_date', 'meetup.id'])
             .orderBy(['cum_min asc', 'time asc'])
+            .where('solve.time', '!=', Infinity)
     )
         .selectFrom('ungrouped')
         .select((eb) => [
