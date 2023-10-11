@@ -277,7 +277,6 @@
                             showDate={true}
                             mixDisplayMethod={MixDisplayMethod.SeparateAverageAndSingle}
                             showUser={false}
-                            width="100%"
                         />
                     {/each}
                 </div>
