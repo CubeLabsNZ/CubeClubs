@@ -251,8 +251,10 @@ export const load = (async ({ params }) => {
                 .groupBy('best_result.value')
                 .executeTakeFirst()
 
-            PRs[key] = {
-                single: countSingle, average: countAverage
+            if (countSingle.time != Infinity || countAverage.time != Infinity) {
+                PRs[key] = {
+                    single: countSingle, average: countAverage
+                }
             }
 
         }

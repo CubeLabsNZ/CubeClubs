@@ -202,15 +202,23 @@
                                     {puzzle.name}
                                 </div>
                             </td>
-                            <td class="tc-rr">{single?.RR}</td>
-                            <td class="tc-ir">{single?.IR}</td>
-                            <td class="tc-icr">{single?.IcR}</td>
-                            <td class="tc-result">{formatTime(single?.time)}</td>
+                            {#if single?.time != Infinity}
+                                <td class="tc-rr">{single?.RR}</td>
+                                <td class="tc-ir">{single?.IR}</td>
+                                <td class="tc-icr">{single?.IcR}</td>
+                                <td class="tc-result">{formatTime(single?.time)}</td>
+                            {:else}
+                                <td/><td/><td/><td/>
+                            {/if}
 
-                            <td class="tc-result">{formatTime(average.time)}</td>
-                            <td class="tc-icr">{average.IcR}</td>
-                            <td class="tc-ir">{average.IR}</td>
-                            <td class="tc-rr">{average.RR}</td>
+                            {#if average.time != Infinity}
+                                <td class="tc-result">{formatTime(average.time)}</td>
+                                <td class="tc-icr">{average.IcR}</td>
+                                <td class="tc-ir">{average.IR}</td>
+                                <td class="tc-rr">{average.RR}</td>
+                            {:else}
+                                <td/><td/><td/><td/>
+                            {/if}
                         </tr>
                     {/each}
                 {/await}
