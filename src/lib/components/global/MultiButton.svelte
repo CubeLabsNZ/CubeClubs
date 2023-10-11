@@ -3,7 +3,7 @@
 
     export let padding = 12;
 
-    export let labels: Label[];
+    export let labels: (Label | undefined)[];
 
     export let fixedHeight = true;
 </script>
@@ -22,16 +22,19 @@
 
 
 <div class="container" style:--p={padding}px style:height={fixedHeight ? "34px" : "auto"} style:flex-wrap={fixedHeight ? "nowrap" : "wrap"}>
-    {#each labels as { type, data, }, i}
-        <button on:click|preventDefault = { () => { 
-            selectedIndex = i
-        }} data-current={i == selectedIndex}>
-            {#if type == LabelType.Text}
-                <p class="inner">{data}</p>
-            {:else}
-                <img class="inner" src={data} alt={data} height=28px/>
-            {/if}
-        </button>
+    {#each labels as label, i}
+        {#if label != undefined}
+            {@const {type, data} = label}
+            <button on:click|preventDefault = { () => { 
+                selectedIndex = i
+            }} data-current={i == selectedIndex}>
+                {#if type == LabelType.Text}
+                    <p class="inner">{data}</p>
+                {:else}
+                    <img class="inner" src={data} alt={data} height=28px/>
+                {/if}
+            </button>
+        {/if}
     {/each}
 
     <slot/>

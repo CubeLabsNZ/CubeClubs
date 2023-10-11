@@ -28,6 +28,13 @@
 
     export let data: PageData;
     let innerWidth = 1000;
+    
+
+    let resultsHistoryPuzzles = undefined
+
+    data.streamed.results.then((results) => {
+        resultsHistoryPuzzles = Object.keys(results)
+    })
 </script>
 
 <svelte:window bind:innerWidth/>
@@ -229,27 +236,10 @@
             <TabBar labels={["Results History", "Records History"]} bind:selectedIndex={historyIndex} />
 
             {#if historyIndex == 0}
-                <MultiButton bind:selectedIndex={resultsEventIndex} padding={4} fixedHeight={false} labels={[
-                    {type: LabelType.Image, data: Icons.Icon3},
-                    {type: LabelType.Image, data: Icons.Icon2},
-                    {type: LabelType.Image, data: Icons.Icon4},
-                    {type: LabelType.Image, data: Icons.Icon5},
-                    {type: LabelType.Image, data: Icons.Icon6},
-                    {type: LabelType.Image, data: Icons.Icon7},
-
-                    {type: LabelType.Image, data: Icons.IconSq1},
-                    {type: LabelType.Image, data: Icons.IconSkewb},
-                    {type: LabelType.Image, data: Icons.IconPyra},
-                    {type: LabelType.Image, data: Icons.IconMega},
-                    {type: LabelType.Image, data: Icons.IconOH},
-                    {type: LabelType.Image, data: Icons.IconClock},
-
-                    {type: LabelType.Image, data: Icons.IconFMC},
-                    {type: LabelType.Image, data: Icons.Icon3bld},
-                    {type: LabelType.Image, data: Icons.IconMbld},
-                    {type: LabelType.Image, data: Icons.Icon4bld},
-                    {type: LabelType.Image, data: Icons.Icon5bld},
-                ]} />
+                <MultiButton bind:selectedIndex={resultsEventIndex} padding={4} fixedHeight={false} labels={
+                Object.entries(puzzles).map( ([puzzle, info]) => (
+                (resultsHistoryPuzzles ?? Object.keys(puzzles)).includes(puzzle) ? {type: LabelType.Image, data: info.icon} : undefined
+                ))} />
 
                 <div class="results-history">
                     <div class="results-history-header">
