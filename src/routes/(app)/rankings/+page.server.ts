@@ -28,6 +28,7 @@ export const load = (async ({ url }) => {
             .where('solve.time', '!=', Infinity)
             .distinctOn('user.id')
             .select(['time', 'user.name as user_name', 'user.region as user_region', 'user.id as user_id', 'meetup.id as meetup_id', 'meetup.name as meetup_name'])
+            .orderBy(     ['user.id asc', 'time asc'])
         )
             .selectFrom('temp')
             .orderBy('time', 'asc')
