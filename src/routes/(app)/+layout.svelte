@@ -43,7 +43,7 @@
                 </Button>
             </a>
         {:else}
-            <button on:click={() => { showDropdown = !showDropdown; showMore = false }}>
+            <button on:click={() => { showDropdown = !showDropdown; showMore = false }} aria-expanded={showDropdown} aria-controls="navbar-dropdown">
                 <Button type={ButtonType.Simple} size={ButtonSize.Small} padding={8}>
                     <div style:display=flex style:align-items=center style:column-gap=8px>
                         <UserCircle size="18px" />
@@ -54,7 +54,7 @@
             </button>
         {/if}
 
-        <button on:click={() => { showMore = !showMore; showDropdown = false }} class="navbar-small show-more-button" style:height=20px>
+        <button on:click={() => { showMore = !showMore; showDropdown = false }} class="navbar-small show-more-button" style:height=20px aria-expanded={showMore} aria-label={`${showMore ? "Hide" : "Show"} navigation menu menu.`} aria-controls="navbar-showmore">
             {#if !showMore}
                 <Menu size="18px" />
             {:else}
@@ -63,48 +63,44 @@
         </button>
     </div>
 
-    {#if showMore}
-        <div id="navbar-showmore" class="navbar-small" transition:fade={{ duration: 150 }}>
-            <a class="regular-link" href="/meetups">Meetups</a>
+    <div id="navbar-showmore" class="navbar-small dropdown" hidden={!showMore}>
+        <a class="regular-link" href="/meetups">Meetups</a>
 
-            <hr class="showmore-hr">
+        <hr class="showmore-hr">
 
-            <a class="regular-link" href="/records">Records</a>
+        <a class="regular-link" href="/records">Records</a>
 
-            <hr class="showmore-hr">
+        <hr class="showmore-hr">
 
-            <a class="regular-link" href="/rankings">Rankings</a>
+        <a class="regular-link" href="/rankings">Rankings</a>
+    </div>
+
+    <div id="navbar-dropdown" class="dropdown" hidden={!showDropdown}>
+        <div class="dropdown-inner">
+            <a class="dropdown-link" href={`/user/${data.user.id}`}>My Profile</a>
+            <a class="dropdown-link" href="/user/edit">Edit Account</a>
         </div>
-    {/if}
 
-    {#if showDropdown}
-        <div id="navbar-dropdown" transition:fade={{ duration: 150 }}>
-            <div class="dropdown-inner">
-                <a class="dropdown-link" href={`/user/${data.user.id}`}>My Profile</a>
-                <a class="dropdown-link" href="/user/edit">Edit Account</a>
-            </div>
-
-            {#if data.user?.is_club_organiser}
-                <hr class="dropdown-hr">
-
-                <div class="dropdown-inner">
-                    <a class="dropdown-link" href="/dashboard/meetups">
-                        <div class="dashboard-link">
-                            <p> Admin Dashboard </p>
-
-                            <ArrowRight size="16px" />
-                        </div>
-                    </a>
-                </div>
-            {/if}
-
+        {#if data.user?.is_club_organiser}
             <hr class="dropdown-hr">
 
             <div class="dropdown-inner">
-                <a on:mousedown={() => { showDropdown = false }} data-sveltekit-preload-data="tap" class="dropdown-link" href="/logout">Log out</a>
+                <a class="dropdown-link" href="/dashboard/meetups">
+                    <div class="dashboard-link">
+                        <p> Admin Dashboard </p>
+
+                        <ArrowRight size="16px" />
+                    </div>
+                </a>
             </div>
+        {/if}
+
+        <hr class="dropdown-hr">
+
+        <div class="dropdown-inner">
+            <a on:mousedown={() => { showDropdown = false }} data-sveltekit-preload-data="tap" class="dropdown-link" href="/logout">Log out</a>
         </div>
-    {/if}
+    </div>
 </div>
 
 <slot/>
@@ -185,7 +181,6 @@
 
         height: fit-content;
 
-        display: flex;
         flex-direction: column;
 
         padding-top: 10px;
@@ -193,6 +188,44 @@
 
 
         z-index: 30;
+    }
+
+    #navbar-showmore {
+        box-sizing: border-box;
+
+        background-color: var(--c-dg2);
+        border-radius: 12px;
+
+        box-shadow: 0px 4px 16px 0px #292E333D;
+        width: calc(100% - 40px);
+
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: center;
+
+        padding: 12px 16px 12px 16px;
+
+        position: fixed;
+        top: 70px;
+        left: 20px;
+
+        z-index: 20;
+
+        font-weight: 500;
+    }
+
+    .dropdown {
+        display: flex;
+
+        visibility: hidden;
+        opacity: 0;
+        transition: visibility 0s linear 150ms, opacity 150ms linear;
+    }
+
+    .dropdown:not([hidden]) {
+        visibility: visible;
+        opacity: 1;
+        transition-delay: 0s;
     }
 
     @media(max-width: 600px) {
@@ -263,31 +296,6 @@
 
     .show-more-button:hover {
         color: var(--c-lg1);
-    }
-
-    #navbar-showmore {
-        box-sizing: border-box;
-
-        background-color: var(--c-dg2);
-        border-radius: 12px;
-
-        box-shadow: 0px 4px 16px 0px #292E333D;
-        width: calc(100% - 40px);
-
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-        justify-content: center;
-
-        padding: 12px 16px 12px 16px;
-
-        position: fixed;
-        top: 70px;
-        left: 20px;
-
-        z-index: 20;
-
-        font-weight: 500;
     }
 
     #navbar-showmore > a {

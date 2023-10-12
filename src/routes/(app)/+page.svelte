@@ -72,19 +72,19 @@
 
         <div class="text-wrapper" style:position="relative">
             <div id="landing-title">
-                <h2>Welcome to</h2>
-                <h1><span style:color="var(--c-a)">CubeClubs</span> NZ</h1>
+                <h1 class="welcome-to">Welcome to</h1>
+                <h1 class="main-title"><span style:color="var(--c-a)">CubeClubs</span> NZ</h1>
             </div>
 
             <div id="landing-subtitle">
-                <h4 class="fsize-title2">
+                <p class="fsize-title2">
                     We’re Aotearoa’s non-profit speedcubing clubs, comprised of
                     six clubs throughout the country.
-                </h4>
-                <h4 class="fsize-title2">
+                </p>
+                <p class="fsize-title2">
                     Our clubs host regular meetups for all ages and all skill
                     levels, come join us at one of our meetups!
-                </h4>
+                </p>
             </div>
 
             <a href="/meetups" style:display="block" style:width="fit-content">
@@ -220,7 +220,7 @@
         ); /* 64px adjusted for font descenders */
     }
 
-    #landing-title h1 {
+    .main-title {
         line-height: 0.8;
 
         font-size: min(72px, 14vw);
@@ -228,7 +228,7 @@
         font-weight: 600;
     }
 
-    #landing-title h2 {
+    .welcome-to {
         line-height: 1.4;
 
         font-size: min(48px, 9.4vw);
@@ -247,7 +247,7 @@
         margin: 0;
     }
 
-    h4 {
+    .fsize-title2 {
         font-weight: 400;
         color: var(--c-dg1);
     }
