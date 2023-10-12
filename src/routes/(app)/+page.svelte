@@ -226,6 +226,10 @@
         font-size: min(72px, 14vw);
         font-family: "TwCenMt", var(--system-fonts);
         font-weight: 600;
+
+        /* font size matches display, but this prevents CLS before the font is loaded */
+        white-space: nowrap;
+        overflow-x: hidden;
     }
 
     .welcome-to {
