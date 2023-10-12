@@ -229,7 +229,6 @@
 
         /* font size matches display, but this prevents CLS before the font is loaded */
         white-space: nowrap;
-        overflow-x: hidden;
     }
 
     .welcome-to {
