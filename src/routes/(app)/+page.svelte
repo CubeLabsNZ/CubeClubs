@@ -22,9 +22,9 @@
 
 <div id="landing-main" aria-hidden>
     <div id="landing-bg">
-        <img id="landing-b-1" src="/landing/blob-blue.webp" alt="" />
-        <img id="landing-b-2" src="/landing/blob-green.webp" alt="" />
-        <img id="landing-b-3" src="/landing/blob-orange.webp" alt="" />
+        <div id="landing-b-1" />
+        <div id="landing-b-2" />
+        <div id="landing-b-3" />
     </div>
 
     <div id="landing-clubs-grid">
@@ -328,27 +328,46 @@
     #landing-b-3 {
         position: fixed;
         user-select: none;
+        width: var(--s);
+        height: var(--s);
     }
 
     #landing-b-1 {
-        width: 800px;
+        --s: 400px;
 
-        top: -350px;
-        left: -100px;
+        top: -150px;
+        left: 100px;
+    }
+
+    #landing-b-1 {
+        background-color: var(--c-a);
+        opacity: 0.12;
+        border-radius: 50%;
+        filter: blur(100px);
     }
 
     #landing-b-2 {
-        width: 700px;
+        --s: 350px;
 
-        left: 25vw;
+        background-color: var(--c-green);
+        opacity: 0.19;
+        border-radius: 50%;
+        filter: blur(100px);
 
-        bottom: -300px;
+        left: calc(25vw + 350px/2);
+        bottom: -150px;
     }
 
     #landing-b-3 {
-        width: 600px;
+        top: 150px;
+        --s: 300px;
 
-        right: -200px;
+        background-color: #ffb300;
+        opacity: 0.14;
+        border-radius: 50%;
+        filter: blur(100px);
+
+        right: -50px;
     }
 
     .footer {
