@@ -77,7 +77,7 @@
 
     <div id="navbar-dropdown" class="dropdown" hidden={!showDropdown}>
         <div class="dropdown-inner">
-            <a class="dropdown-link" href={`/user/${data.user.id}`}>My Profile</a>
+            <a class="dropdown-link" href={`/user/${data.user?.id}`}>My Profile</a>
             <a class="dropdown-link" href="/user/edit">Edit Account</a>
         </div>
 
