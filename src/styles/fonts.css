@@ -23,6 +23,6 @@
 /* TW CEN MT */
 @font-face {
 	font-family: "TwCenMt";
-	src: url("/fonts/TwCenMTStd-SemiMedium.woff2") format("woff2");
+	src: local("Tw Cen MT"), url("/fonts/TwCenMTStd-SemiMedium.woff2") format("woff2");
 	font-display: swap;
 }

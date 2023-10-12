@@ -11,7 +11,8 @@ a {
 }
 
 :root {
-    font-family: "IBMPlexSans", system-ui, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue" ,sans-serif;
+    --system-fonts: system-ui, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+    font-family: "IBMPlexSans", var(--system-fonts);
 
 
     /* INFO: COLOURS */
@@ -109,7 +110,7 @@ p {
 /* set fonts */
 .fstyle-heading {
     font-size: 32px;
-    font-family: "TwCenMt";
+    font-family: "TwCenMt", var(--system-fonts);
 
     font-weight: 600;
 }

@@ -224,7 +224,7 @@
         line-height: 0.8;
 
         font-size: min(72px, 14vw);
-        font-family: "TwCenMt";
+        font-family: "TwCenMt", var(--system-fonts);
         font-weight: 600;
     }
 
