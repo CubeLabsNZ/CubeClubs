@@ -1,6 +1,6 @@
 # CubeClubs NZ App
 
-This repo contains the code that runs the new cubeclubs.nz. The site is not yet public, but should be soon!
+This repo contains the code that runs the new cubeclubs.nz. You can view the site [here](https://www.cubeclubs.nz).
 
 
 ## Info
@@ -27,6 +27,8 @@ If you want to help out, please view our [contributing guide](contributing.md).
 <b>cubeclubs</b>
 ├── prisma
 │   └── schema.prisma 		<b> (the database schema) </b>
+├── scripts
+│   └── ... 		        <b> (some scripts to reduce size of fonts) </b>
 ├── src
 │   ├── app.d.ts
 │   ├── app.html
@@ -37,9 +39,11 @@ If you want to help out, please view our [contributing guide](contributing.md).
 │   │   │   ├── ...
 │   │   ├── data 		<b> (convenient data to work with backend) </b>
 │   │   │   ├── ...
+│   │   ├── db 		        <b> (Kysely configuration and files) </b>
+│   │   │   ├── ...
 │   │   ├── prisma.ts 		<b> (initialises the prisma client) </b>
-│   │   ├── utilsServer.ts 	<b> (server utility functions) </b>
-│   │   └── utils.ts 		<b> (universal utility functions) </b>
+│   │   ├── utils.ts 	        <b> (universal utility functions) </b>
+│   │   └── utilsServer.ts 	<b> (server utility functions) </b>
 │   ├── routes
 │   │   ├── (admin) 		<b> (protected admin routes, dashboard) </b>
 │   │   │   ├── dashboard
