@@ -253,6 +253,8 @@
     .fsize-title2 {
         font-weight: 400;
         color: var(--c-dg1);
+        /* Prevent CLS from font-display: swap */
+        line-height: 1.35em;
     }
 
     .text-wrapper {
