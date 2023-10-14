@@ -54,7 +54,7 @@ export const load = (async ({ params }) => {
                         .as('counts'), join => join.onTrue())
                     .whereRef('round.meetup_id', '=', 'meetup.id')
                     .select(eb => [
-                        sql`json_agg(json_build_object('puzzle', "round"."puzzle", 'start_date', "round"."start_date", 'end_date', "round"."end_date", 'round_number', "counts"."round_number", 'round_maximum', "counts"."round_maximum") ORDER BY "round"."start_date" ASC)`.as("rounds"),
+                        sql`json_agg(json_build_object('id', "round"."id", 'puzzle', "round"."puzzle", 'start_date', "round"."start_date", 'end_date', "round"."end_date", 'round_number', "counts"."round_number", 'round_maximum', "counts"."round_maximum") ORDER BY "round"."start_date" ASC)`.as("rounds"),
                         eb.fn.agg('json_agg', ['round.puzzle']).distinct().as('puzzles')])
                     .as('rounds'), join => join.onTrue()
         )
