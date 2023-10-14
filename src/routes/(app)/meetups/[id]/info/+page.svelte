@@ -4,8 +4,7 @@
 
     import TabBar from "$lib/components/global/TabBar.svelte";
 
-    import type { PageData } from "./$types";
-    export let data: PageData;
+    export let data;
 
     let locations = ["info", "competitors", "schedule"]
     let tabIndex = 0;
@@ -51,10 +50,10 @@
             <p class="label">Organisers</p>
 
             <p>
-                {#each data.meetup.organisers as { user, user_id }, i}
+                {#each data.meetup.organisers as { name, id }, i}
                     {@const maxIndex = data.meetup.organisers.length - 1}
                     <!-- if statement is deliberately on the same line to prevent whitespace! -->
-                    <a href="/user/{user_id}" class="regular-link">{user.name}</a>{#if i < maxIndex}
+                    <a href="/user/{id}" class="regular-link">{name}</a>{#if i < maxIndex}
                         {#if (i != maxIndex - 1)}
                             ,&nbsp;
                         {:else}

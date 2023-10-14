@@ -6,9 +6,8 @@
     import TabBar from "$lib/components/global/TabBar.svelte";
     import {regionToString} from "$lib/data/regions";
 
-    import type { PageData } from "./$types";
     import { Check } from "lucide-svelte";
-    export let data: PageData;
+    export let data;
 
     let locations = ["info", "competitors", "schedule"]
     let tabIndex = 1;
@@ -27,7 +26,7 @@
 </TabBar>
 
 
-{#if data.meetup.users.length > 0}
+{#if data.meetup.competitors.length > 0}
     <table style:margin-top=32px>
         <colgroup>
             <col span=1 style:width=175px>
@@ -55,12 +54,12 @@
                 <th class="tc-empty" />
             </tr>
 
-            {#each data.meetup.users as { user, registered_events } }
+            {#each data.meetup.competitors as { id, name, registered_events } }
                 <tr>
                     <td class="tc-name">
-                        <a class="regular-link" style:font-weight=500 href="/user/{user.id}"> {user.name} </a>
+                        <a class="regular-link" style:font-weight=500 href="/user/{id}"> {name} </a>
                     </td>
-                    <td class="tc-region">{regionToString(user.region)}</td>
+                    <td class="tc-region">{regionToString("BOP")}</td>
 
 
                     {#each data.puzzles as puzzle}
