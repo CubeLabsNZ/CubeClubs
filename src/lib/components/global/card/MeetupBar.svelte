@@ -1,13 +1,12 @@
 <script lang="ts">
     import Card from "$lib/components/global/card/Card.svelte";
-    import type { Meetup } from "@prisma/client";
 
     import puzzles from "$lib/data/puzzles";
     import { ArrowRight, ChevronRight } from "lucide-svelte";
 
     export let href: string;
 
-    export let meetup: Meetup
+    export let meetup
     export let current: boolean | undefined = undefined;
 </script>
 
@@ -16,10 +15,10 @@
         <div class="meetup-detail">
             <div class="date" data-current="{current}">
                 <p class="fsize-footnote" style:margin-bottom="-1px">
-                    {meetup.date.toLocaleString('en-us',{month:'short'}).toUpperCase()}
+                    {new Date(meetup.date).toLocaleString('en-us',{month:'short'}).toUpperCase()}
                 </p>
                 <p class="fsize-title2" style:margin-top="-2px">
-                    {meetup.date.getDate()}
+                    {new Date(meetup.date).getDate()}
                 </p>
             </div>
 
@@ -27,7 +26,7 @@
 
             <div class="title">
                 <p class="fsize-body">{meetup.name}</p>
-                <p class="fsize-subhead">{meetup.club.name}</p>
+                <p class="fsize-subhead">{meetup.club ? meetup.club.name : meetup.club_name}</p>
             </div>
 
             <div class="events">

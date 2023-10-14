@@ -1,42 +1,32 @@
 import type { PageServerLoad } from './$types';
 import prisma from '$lib/prisma';
-import type { Meetup, Round } from '@prisma/client';
+import type { meetup, round } from '@prisma/client';
 import { getMeetupPuzzles } from "$lib/utilsServer";
+import { db } from '$lib/db';
+import { sql } from 'kysely';
+import type { Puzzle } from '$lib/db/enums';
 
 export const load = (async () => {
-    const allMeetups: Meetup[] = await prisma.meetup.findMany({
-        where: {
-            is_published: true,
-        },
-        include: {
-            club: true,
-            rounds: true,
-        },
-        orderBy: {
-            date: "asc"
-        }
-    })
-
-    const meetups: { upcoming: Meetup[], ongoing: Meetup[], past: Meetup[] } = {
-        upcoming: [],
-        ongoing: [],
-        past: []
-    };
-
-    for (const meetup of allMeetups) {
-        meetup.puzzles = getMeetupPuzzles(meetup);
-        delete meetup.rounds;
-
-        if (meetup.date < new Date()) {
-            meetups.past.push(meetup)
-        } else if (meetup.date == new Date()){
-            meetups.ongoing.push(meetup)
-        } else {
-            meetups.upcoming.push(meetup)
-        }
-    }
-
-    meetups.past.sort((m1, m2) => m2.date.getTime() - m1.date.getTime());
-
+    const meetups = await db.with('all_meetups', eb => eb.selectFrom('meetup')
+        .where('is_published', '=', true)
+        .leftJoin('round', 'round.meetup_id', 'meetup.id')
+        .innerJoin('club', 'club.id', 'meetup.club_id')
+        .select(eb => [
+            eb.fn.coalesce( eb.fn.agg<Puzzle[]>('json_agg', ['round.puzzle']).filterWhere('round.puzzle', 'is not', null).distinct(), sql`'[]'`).as('puzzles'),
+            'meetup.id',
+            'meetup.name',
+            'club.name as club_name',
+            'meetup.date'
+        ])
+        .orderBy('date desc')
+        .groupBy(['meetup.id', 'club.name'])
+    )
+    .selectFrom('all_meetups')
+    .select( eb => [
+        eb.fn.coalesce(eb.fn.agg('json_agg', ['all_meetups']).filterWhere('all_meetups.date', '<', new Date()), sql`'[]'`).as('past'),
+        eb.fn.coalesce(eb.fn.agg('json_agg', ['all_meetups']).filterWhere('all_meetups.date', '=', new Date()), sql`'[]'`).as('ongoing'),
+        eb.fn.coalesce(eb.fn.agg('json_agg', ['all_meetups']).filterWhere('all_meetups.date', '>', new Date()), sql`'[]'`).as('upcoming'),
+    ])
+    .executeTakeFirst()
     return meetups;
 }) satisfies PageServerLoad;
