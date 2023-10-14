@@ -1,7 +1,6 @@
 import prisma from '$lib/prisma';
 import { redirect } from "@sveltejs/kit"
 import type { Actions } from './$types';
-import { invalidateAll } from '$app/navigation';
 
 export const actions = {
     default: async ({ request, params }) => {

@@ -1,6 +1,6 @@
 <script lang="ts">
     import { browser } from "$app/environment";
-    import { goto, invalidate, invalidateAll } from "$app/navigation";
+    import { goto } from "$app/navigation";
     import { page } from "$app/stores";
 
     import { formatTime, getRoundName } from "$lib/utils";
