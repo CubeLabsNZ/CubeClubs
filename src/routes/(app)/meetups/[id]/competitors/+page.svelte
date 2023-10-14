@@ -26,7 +26,7 @@
 </TabBar>
 
 
-{#if data.meetup.competitors.length > 0}
+{#if data.meetup.competitors?.length > 0}
     <table style:margin-top=32px>
         <colgroup>
             <col span=1 style:width=175px>
@@ -54,12 +54,12 @@
                 <th class="tc-empty" />
             </tr>
 
-            {#each data.meetup.competitors as { id, name, registered_events } }
+            {#each data.meetup.competitors as { id, name, region, registered_events } }
                 <tr>
                     <td class="tc-name">
                         <a class="regular-link" style:font-weight=500 href="/user/{id}"> {name} </a>
                     </td>
-                    <td class="tc-region">{regionToString("BOP")}</td>
+                    <td class="tc-region">{regionToString(region)}</td>
 
 
                     {#each data.puzzles as puzzle}

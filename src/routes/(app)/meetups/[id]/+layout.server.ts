@@ -35,6 +35,7 @@ export const load = (async ({ params }) => {
                     .select(eb => eb.fn.agg('json_agg', [eb.fn.agg('json_build_object', [
                         sql`'name'`, 'competitor.name',
                         sql`'id'`, 'competitor.id',
+                        sql`'region'`, 'competitor.region',
                         sql`'registered_events'`, 'registered_events'
                     ])]).as("competitors"))
                     .as('competitors'), join => join.onTrue()
