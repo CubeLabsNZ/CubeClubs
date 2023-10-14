@@ -76,10 +76,9 @@ export const actions = {
             }
         })
 
-        // TODO: set secure?
         cookies.set("sessionId", session.id.toString("base64url"), {
             path: "/",
-            httpOnly: false,
+            httpOnly: true,
             maxAge: 60 * 60 * 24 * 7 * 4,
             secure: process.env.NODE_ENV === "production"
         });
