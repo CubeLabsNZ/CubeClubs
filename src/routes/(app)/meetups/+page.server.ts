@@ -18,7 +18,7 @@ export const load = (async () => {
             'club.name as club_name',
             'meetup.date'
         ])
-        .orderBy('date desc')
+        .orderBy('date asc')
         .groupBy(['meetup.id', 'club.name'])
     )
     .selectFrom('all_meetups')
