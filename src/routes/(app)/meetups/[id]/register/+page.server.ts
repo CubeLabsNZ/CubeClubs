@@ -42,5 +42,5 @@ export const load = (async ({ params, cookies }) => {
 }) satisfies PageServerLoad */
 
 export const load = (async () => {
-    throw redirect(300, "/meetups");
+    throw redirect(303, "/meetups");
 }) satisfies PageServerLoad;

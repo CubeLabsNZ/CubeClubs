@@ -1,5 +1,5 @@
 import { redirect } from "@sveltejs/kit"
 
 export const load = (async ({ params }) => {
-    throw redirect(300, `/dashboard/meetups/`)
+    throw redirect(303, `/dashboard/meetups/`)
 })
