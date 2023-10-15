@@ -298,6 +298,10 @@
         color: var(--c-lg1);
     }
 
+    .show-more-button > :global(svg) {
+        margin-bottom: 1px;
+    }
+
     #navbar-showmore > a {
         width: 100%;
     }
