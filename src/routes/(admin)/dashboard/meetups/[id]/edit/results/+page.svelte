@@ -12,8 +12,9 @@
     import puzzles from "$lib/data/puzzles"
     import formats from "$lib/data/formats"
 
+    import { Puzzle } from "$lib/db/enums"
+
     import type { PageData, ActionData } from "./$types";
-    import { Puzzle } from "@prisma/client";
     import { ChevronDown } from "lucide-svelte";
 
     export let data: PageData
