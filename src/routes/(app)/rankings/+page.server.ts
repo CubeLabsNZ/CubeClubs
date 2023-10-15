@@ -49,6 +49,7 @@ export const load = (async ({ url }) => {
                 // TODO: check order
                 fn.agg<string[]>('array_agg', ['solve.time']).as('solves')
             ])
+            .orderBy(     ['user.id asc', 'value asc'])
         )
             .selectFrom('temp')
             .orderBy(['temp.mbld_score desc', 'value asc'])
