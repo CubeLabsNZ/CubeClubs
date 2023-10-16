@@ -35,6 +35,11 @@
     data.streamed.results.then((results) => {
         resultsHistoryPuzzles = Object.keys(results)
     })
+
+    let recordsHistoryPuzzles = undefined
+    data.streamed.historicalRecords.then((results) => {
+        recordsHistoryPuzzles = Object.keys(results)
+    })
 </script>
 
 <svelte:window bind:innerWidth/>
@@ -261,21 +266,23 @@
             {:else}
                 <div class="records-history">
                     {#each Object.entries(puzzles) as [puzzle, { name, icon }], i}
-                        <div class="group-label records-history-header">
-                            <img src={puzzles[puzzle].icon} alt="" height=28/>
-                            <p class="fsize-body">{puzzles[puzzle].name} Results</p>
-                        </div>
+                        {#if recordsHistoryPuzzles?.includes(puzzle) ?? true}
+                            <div class="group-label records-history-header">
+                                <img src={puzzles[puzzle].icon} alt="" height=28/>
+                                <p class="fsize-body">{puzzles[puzzle].name} Results</p>
+                            </div>
 
-                        <Table
-                            list={data.streamed.historicalRecords}
-                            k={puzzle}
-                            displayType={DisplayType.MIX}
-                            hasMeetup={true}
-                            displayRank={false}
-                            showDate={true}
-                            mixDisplayMethod={MixDisplayMethod.SeparateAverageAndSingle}
-                            showUser={false}
-                        />
+                            <Table
+                                list={data.streamed.historicalRecords}
+                                k={puzzle}
+                                displayType={DisplayType.MIX}
+                                hasMeetup={true}
+                                displayRank={false}
+                                showDate={true}
+                                mixDisplayMethod={MixDisplayMethod.SeparateAverageAndSingle}
+                                showUser={false}
+                            />
+                        {/if}
                     {/each}
                 </div>
             {/if}
