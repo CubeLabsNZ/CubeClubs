@@ -92,7 +92,8 @@
         <!-- current -->
         {#each Object.entries(puzzles) as [puzzle, { name, icon }], i}
             {@const ismbld = puzzle == "MULTIBLD"}
-                                                  {@debug ismbld}
+            {@const isfmc = puzzle == "FMC"}
+
             {@const single = data.records[puzzle]?.single}
             {@const average = data.records[puzzle]?.average}
             <div class={"group-label group-label-" + i}>
@@ -108,13 +109,15 @@
                 hasSolves={!ismbld}
                 widths={ ismbld ? ["210px", "80px", "160px", "auto"] : ["50px", "160px", "80px", "160px", "270px", "auto"]}
                 displayRank={false}
+                {ismbld}
+                {isfmc}
             />
         {/each}
     {:else}
         {#each Object.entries(puzzles) as [puzzle, { name, icon }], i}
             {@const ismbld = puzzle == "MULTIBLD"}
-                                                  {@debug ismbld}
-            {@debug ismbld}
+            {@const isfmc = puzzle == "FMC"}
+
             {@const historicalPuzzleRankings = data.historicalRecords[puzzle]}
             <div class={"group-label group-label-" + i}>
                 <img src={icon} alt="" />
@@ -139,6 +142,7 @@
                 displayRank={false}
                 showDate={true}
                 mixDisplayMethod={MixDisplayMethod.SeparateAverageAndSingle}
+                {isfmc}
             />
             {/if}
         {/each}

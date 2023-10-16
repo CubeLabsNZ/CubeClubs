@@ -24,11 +24,6 @@
             }
         }
     }
-
-    const currentRound = data.rounds.find(r => r.id === data.roundId)!;
-
-    console.log(currentRound);
-    console.log(formats[currentRound.format].count)
 </script>
 
 <TabBar
@@ -41,22 +36,24 @@
         {name: "Schedule", href: `/meetups/${data.meetupId}/schedule`}
     ]} />
 
-    <h3 class="fsize-title2" style:font-weight=500 style:margin-top=8px style:margin-bottom=8px>{getRoundName(puzzles[currentRound.puzzle].name, currentRound.number, data.maxRounds[currentRound.puzzle])} Results</h3>
+    <h3 class="fsize-title2" style:font-weight=500 style:margin-top=8px style:margin-bottom=8px>{getRoundName(puzzles[data.round.puzzle].name, data.round.round_number, data.round.round_maximum)} Results</h3>
 
-    {#if currentRound.results.length}
-        {@const firstres = currentRound.results[0]}
+    {#if data.round.results.length}
+        {@const firstres = data.round.results[0]}
         {@const ismbld = Boolean(firstres.mbld_score)}
+        {@const isfmc = data.round.puzzle == "FMC"}
 
         <Table
-                list={currentRound.results}
-                solveCount={formats[currentRound.format].count}
+                list={data.round.results}
+                solveCount={formats[data.round.format].count}
                 displayRank={true}
-                displayMedals={currentRound.number === data.maxRounds[currentRound.puzzle]}
-                proceedNum={currentRound.proceed_number}
+                displayMedals={data.round.round_number === data.round.round_maximum}
+                proceedNum={data.round.proceed_number}
                 showBest={true}
                 hasSolves={!ismbld}
                 displayType={ismbld ? DisplayType.SINGLE : DisplayType.AVERAGE}
                 widths={["48px"]}
+                {isfmc}
             />
     {:else}
         <p>No results yet - check back later!</p>

@@ -59,6 +59,7 @@
     export let showDate: boolean = false;
     export let showPlace: boolean = false;
     export let ismbld: boolean = false;
+    export let isfmc: boolean = false;
 
     export let mixDisplayMethod: MixDisplayMethod =
         MixDisplayMethod.FormatColumn;
@@ -67,6 +68,10 @@
 
     export let width: string | undefined = undefined;
     export let widths: string[] | undefined = undefined;
+
+    function fmcTime(time: number) {
+        return time == Infinity ? "DNF": time
+    }
 </script>
 
 <div class="table-scroller" style:width>
@@ -105,7 +110,7 @@
                             case DisplayType.AVERAGE:
                                 return "Average";
                             case DisplayType.SINGLE:
-                                return ismbld ? "Score" : "Time";
+                                return isfmc ? "Moves" : ismbld ? "Score" : "Time";
                             case DisplayType.MIX:
                                 return "Result";
                         }
@@ -283,7 +288,7 @@
                                     data-icr={is_average_icr}
                                     data-ir={is_average_ir}
                                     data-rr={is_average_rr}
-                                    >{formatTime(
+                                    >{isfmc ? fmcTime(value ? value : time) : formatTime(
                                         value ? value : time,
                                         mbld_score,
                                         mbld_total
@@ -291,12 +296,12 @@
                                 >
                             {:else}
                                 <td class="tc-mix-single"
-                                    >{!solves ? formatTime(cum_min) : ""}</td
+                                    >{!solves ? isfmc ? fmcTime(cum_min) : formatTime(cum_min) : ""}</td
                                 >
                                 <td
                                     class="tc-mix-average"
                                     data-pr={list_item.is_average_pr}
-                                    >{solves ? formatTime(cum_min) : ""}</td
+                                    >{solves ? isfmc ? fmcTime(cum_min) : formatTime(cum_min) : ""}</td
                                 >
                             {/if}
                             {#if showBest}
@@ -306,13 +311,14 @@
                                     is_single_rr,
                                     is_single_ir,
                                 } = list_item}
+                                {@const min = Math.min(...solves)}
                                 <td
                                     class="tc-best"
                                     data-pr={is_single_pr}
                                     data-icr={is_single_icr}
                                     data-ir={is_single_ir}
                                     data-rr={is_single_rr}
-                                    >{formatTime(Math.min(...solves))}</td
+                                    >{isfmc ? fmcTime(min) : formatTime(min)}</td
                                 >
                             {/if}
                             {#if showUser}
@@ -336,13 +342,13 @@
                                     {#if solveCount}
                                         {#each solves as time}
                                             <td class="tc-solves"
-                                                >{formatTime(time)}</td
+                                                >{isfmc ? fmcTime(time) : formatTime(time)}</td
                                             >
                                         {/each}
                                     {:else}
                                         <td class="tc-solves"
                                             >{solves
-                                                .map((s) => formatTime(s))
+                                                .map((s) => (isfmc ? fmcTime : formatTime)(s))
                                                 .join(", ")}</td
                                         >
                                     {/if}

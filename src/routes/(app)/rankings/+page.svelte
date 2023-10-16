@@ -33,6 +33,7 @@
         : 0;
 
     $: ismbld = Object.keys(puzzles)[eventIndex] == "MULTIBLD";
+    $: isfmc = Object.keys(puzzles)[eventIndex] == "FMC";
 
     // TODO: make this good and all backend
     $: {
@@ -130,6 +131,7 @@
         hasSolves={!data.isSingle && !ismbld}
         displayRank={true}
         {ismbld}
+        {isfmc}
         widths={["50px", "160px", "80px", "80px", "auto"]}
     />
 </PageContent>

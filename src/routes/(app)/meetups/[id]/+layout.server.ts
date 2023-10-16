@@ -43,6 +43,7 @@ export const load = (async ({ params }) => {
         .leftJoinLateral(
             (eb) =>
                 eb.selectFrom('round')
+                // TODO: make this reusable function
                     .innerJoinLateral(eb => eb
                         .selectFrom('round as round_inner')
                         .select(eb => [
