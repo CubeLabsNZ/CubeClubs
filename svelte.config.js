@@ -20,8 +20,8 @@ const config = {
 			directives: {
 				'default-src': ['self'],
 				// https://github.com/sveltejs/kit/issues/5215 :/
-				'style-src': ['self', 'fonts.googleapis.com', 'unsafe-inline'],
-				'font-src': ['self', 'fonts.gstatic.com'],
+				'style-src': ['self', 'unsafe-inline'],
+				'script-src-attr': ['unsafe-hashes', 'sha256-W26xCcw4HB/UzduZBkCFzwP4/RvbREjKiFGbKZz8r1w='],
 			},
 			mode: 'auto'
 		},

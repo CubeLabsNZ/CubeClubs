@@ -29,6 +29,7 @@
 
     $: globalThis.eventCalendar = eventCalendar;
     $: globalThis.deletedIds = deletedIds;
+    globalThis.setUnsavedChanges = () => {hasUnsavedChanges = true}
 
     let displayingUUID: string | null = null
 
@@ -123,10 +124,11 @@
                         <div class="ec-event-time">${info.timeText}</div>
                         <div class="ec-event-title">${info.event.title}</div>
 
-                        <button onclick="(() => {
-                            globalThis.eventCalendar.removeEventById('${info.event.id}');
-                            globalThis.deletedIds.push('${info.event.id}');
-                        })()">
+                        <button data-event-id="${info.event.id}" onclick="((btn) => {
+                            globalThis.eventCalendar.removeEventById(btn.dataset.eventId);
+                            globalThis.deletedIds.push(btn.dataset.eventId);
+                            globalThis.setUnsavedChanges()
+                        })(this)">
                             <svg style="float: right; transform: translateY(-18px)" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--c-red)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trash-2"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg>
                         </button>
                     `
