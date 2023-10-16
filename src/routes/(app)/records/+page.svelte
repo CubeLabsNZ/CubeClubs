@@ -119,6 +119,7 @@
             {@const isfmc = puzzle == "FMC"}
 
             {@const historicalPuzzleRankings = data.historicalRecords[puzzle]}
+            {@debug historicalPuzzleRankings}
             <div class={"group-label group-label-" + i}>
                 <img src={icon} alt="" />
 
@@ -127,7 +128,7 @@
 
             {#if ismbld}
             <Table
-                list={[historicalPuzzleRankings[1]] ?? [undefined]}
+                list={historicalPuzzleRankings ? ([historicalPuzzleRankings[1]] ?? [undefined]) : [undefined]}
                 displayType={DisplayType.SINGLE}
                 hasMeetup={true}
                 displayRank={false}

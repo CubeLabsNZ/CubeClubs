@@ -10,6 +10,8 @@ export const load = (async ({ url }) => {
 
     const records = {}
 
+    const hasFilterRegion = !(filterRegion === undefined || filterRegion === null || filterRegion === "undefined")
+
     // TODO: subquery and group by
     for (const [key, puzzle] of Object.entries(puzzles)) {
         let singleQuery = db.selectFrom('solve')
@@ -30,7 +32,7 @@ export const load = (async ({ url }) => {
             .where('solve.time', '!=', Infinity)
 
 
-        if (!(filterRegion === undefined || filterRegion === null || filterRegion === "undefined")) {
+        if (hasFilterRegion) {
             singleQuery = singleQuery
                 .where('user.region', '=', filterRegion)
         }
@@ -62,7 +64,7 @@ export const load = (async ({ url }) => {
             .groupBy(['result.value', 'user.id', 'user.name', 'user.region', 'meetup.id', 'meetup.name', 'result.mbld_score', 'result.mbld_total'])
             .orderBy(['result.mbld_score desc', 'value asc'])
 
-        if (!(filterRegion === undefined || filterRegion === null || filterRegion === "undefined")) {
+        if (hasFilterRegion) {
             averageQuery = averageQuery
                 .where('user.region', '=', filterRegion)
         }
@@ -104,6 +106,7 @@ export const load = (async ({ url }) => {
             ])
             .groupBy(['result.value', 'user.name', 'user.id', 'round.puzzle', 'round.end_date', 'meetup.id', 'result.mbld_score', 'result.mbld_total'])
             .where('result.value', '!=', Infinity)
+            .$if(hasFilterRegion, qb => qb.where('user.region', '=', filterRegion))
             // Must order by time so distinct on picks correct value
             // solves desc is so null solves are at the top - which means a single
             .orderBy(['cum_min asc', 'value asc'])
@@ -139,6 +142,7 @@ export const load = (async ({ url }) => {
             .groupBy(['solve.time', 'user.name', 'user.id', 'round.puzzle', 'round.end_date', 'meetup.id'])
             .orderBy(['cum_min asc', 'time asc'])
             .where('solve.time', '!=', Infinity)
+            .$if(hasFilterRegion, qb => qb.where('user.region', '=', filterRegion))
     )
         .selectFrom('ungrouped')
         .select((eb) => [
