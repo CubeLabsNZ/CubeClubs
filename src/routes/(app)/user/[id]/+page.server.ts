@@ -65,6 +65,8 @@ export const load = (async ({ params }) => {
                     'meetup.id as meetup_id',
                     'meetup.name as meetup_name',
                     'round.end_date as date',
+                    'result.mbld_score',
+                    'result.mbld_total',
                     selectFrom('round as round_inner')
                         .whereRef('round_inner.puzzle', '=', 'round.puzzle')
                         .whereRef('round_inner.meetup_id', '=', 'meetup.id')
@@ -82,9 +84,9 @@ export const load = (async ({ params }) => {
 
                     'round.puzzle',
                 ])
-                .groupBy(['result.value', 'user.name', 'user.id', 'round.puzzle', 'round.end_date', 'meetup.id', 'round.start_date'])
+                .groupBy(['result.value', 'user.name', 'user.id', 'round.puzzle', 'round.end_date', 'meetup.id', 'round.start_date', 'result.mbld_score', 'result.mbld_total'])
                 // Must order by time so distinct on picks correct value
-                .orderBy(['cum_min asc', 'value asc'])
+                .orderBy(['cum_min asc',  'value asc'])
         )
             .selectFrom('ungrouped')
             .select((eb) => [
@@ -246,9 +248,11 @@ export const load = (async ({ params }) => {
                     eb.fn.count<number>('result.user_id').distinct().as("IcR"),
                     eb.fn.count<number>('result.user_id').filterWhere('user.region', '=', user.region).distinct().as("RR"),
                     eb.fn.count<number>('result.user_id').filterWhere('user.region', 'in', userIslandRegions).distinct().as("IR"),
-                    'best_result.value as time'
+                    'best_result.value as time',
+                    'best_result.mbld_score',
+                    'best_result.mbld_total'
                 ])
-                .groupBy('best_result.value')
+                .groupBy(         [          'best_result.value', 'best_result.mbld_score', 'best_result.mbld_total'])
                 .executeTakeFirst()
 
             if (countSingle.time != Infinity || countAverage.time != Infinity) {
@@ -401,6 +405,8 @@ export const load = (async ({ params }) => {
                     'round.puzzle as puzzle',
                     'round.id as round_id',
                     'result.value as value',
+                    'result.mbld_score',
+                    'result.mbld_total',
                     'round.end_date as round_end',
 
 
@@ -462,7 +468,7 @@ export const load = (async ({ params }) => {
         .groupBy(['puzzle'])
         // TODO try this better
         .select((eb) => ['puzzle',
-            sql<{}[]>`json_agg(temp ORDER BY round_end DESC) as values`
+            sql<{}[]>`json_agg(temp ORDER BY round_end DESC)`.as('values')
         ])
         .execute()
 

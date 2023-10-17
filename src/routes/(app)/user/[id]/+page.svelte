@@ -40,6 +40,10 @@
     data.streamed.historicalRecords.then((results) => {
         recordsHistoryPuzzles = Object.keys(results)
     })
+
+    function fmcTime(time: number) {
+        return time == Infinity ? "DNF" : time;
+    }
 </script>
 
 <svelte:window bind:innerWidth/>
@@ -207,6 +211,7 @@
                 {:then PRs}
                     {#each Object.entries(PRs) as [puzzleType, {single, average}]}
                         {@const puzzle = puzzles[puzzleType]}
+                        {@const isfmc = puzzleType == "FMC"}
                         <tr>
                             <td class="tc-event">
                                 <div style:display=flex style:align-items=center style:column-gap=12px>
@@ -218,13 +223,13 @@
                                 <td class="tc-rr">{single?.RR}</td>
                                 <td class="tc-ir">{single?.IR}</td>
                                 <td class="tc-icr">{single?.IcR}</td>
-                                <td class="tc-result">{formatTime(single?.time)}</td>
+                                <td class="tc-result">{(isfmc ? fmcTime : formatTime)(single?.time, average.mbld_score, average.mbld_total)}</td>
                             {:else}
                                 <td/><td/><td/><td/>
                             {/if}
 
                             {#if average.time != Infinity}
-                                <td class="tc-result">{formatTime(average.time)}</td>
+                                <td class="tc-result">{(isfmc ? fmcTime : formatTime)(average.time, average.mbld_score, average.mbld_total)}</td>
                                 <td class="tc-icr">{average.IcR}</td>
                                 <td class="tc-ir">{average.IR}</td>
                                 <td class="tc-rr">{average.RR}</td>
@@ -246,6 +251,9 @@
                 (resultsHistoryPuzzles ?? Object.keys(puzzles)).includes(puzzle) ? {type: LabelType.Image, data: info.icon} : undefined
                 ))} />
 
+                {@const ismbld = Object.keys(puzzles)[resultsEventIndex] == "MULTIBLD"}
+                {@const isfmc = Object.keys(puzzles)[resultsEventIndex] == "FMC"}
+
                 <div class="results-history">
                     <div class="results-history-header">
                         <img src={puzzles[resultsEvent].icon} alt="" height=28/>
@@ -256,10 +264,13 @@
                         list={data.streamed.results}
                         k={resultsEvent}
                         showUser={false}
-                        displayType={DisplayType.AVERAGE}
-                        showBest={true}
+                        displayType={ismbld ? DisplayType.SINGLE : DisplayType.AVERAGE}
+                        showBest={!ismbld}
+                        hasSolves={!ismbld}
                         meetupAndRoundLeft={true}
                         showPlace={true}
+                        {ismbld}
+                        {isfmc}
                     />
 
                 </div>
@@ -267,6 +278,8 @@
                 <div class="records-history">
                     {#each Object.entries(puzzles) as [puzzle, { name, icon }], i}
                         {#if recordsHistoryPuzzles?.includes(puzzle) ?? true}
+                            {@const ismbld = puzzle == "MULTIBLD"}
+                            {@const isfmc = puzzle == "FMC"}
                             <div class="group-label records-history-header">
                                 <img src={puzzles[puzzle].icon} alt="" height=28/>
                                 <p class="fsize-body">{puzzles[puzzle].name} Results</p>
@@ -275,12 +288,16 @@
                             <Table
                                 list={data.streamed.historicalRecords}
                                 k={puzzle}
-                                displayType={DisplayType.MIX}
+                                displayType={ismbld ? DisplayType.SINGLE : DisplayType.MIX}
                                 hasMeetup={true}
                                 displayRank={false}
                                 showDate={true}
                                 mixDisplayMethod={MixDisplayMethod.SeparateAverageAndSingle}
                                 showUser={false}
+                                {ismbld}
+                                {isfmc}
+                                hasSolves={!ismbld}
+                                singleDisplayModeIgnoreAvg={ismbld}
                             />
                         {/if}
                     {/each}

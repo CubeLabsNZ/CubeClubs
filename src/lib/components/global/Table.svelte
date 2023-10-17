@@ -39,12 +39,13 @@
     import { regionToString } from "$lib/data/regions";
     import puzzles from "$lib/data/puzzles";
 
-    type pk = Promise<{[key: string]: li[]}>
-    type listtype = li[] | Promise<li[]> | pk
+    type pk = Promise<{ [key: string]: li[] }>;
+    type listtype = li[] | Promise<li[]> | pk;
 
     export let list: listtype;
 
-    export let k: listtype extends pk ? keyof Awaited<pk> : undefined = undefined
+    export let k: listtype extends pk ? keyof Awaited<pk> : undefined =
+        undefined;
 
     export let solveCount: number | undefined = undefined;
 
@@ -60,6 +61,7 @@
     export let showPlace: boolean = false;
     export let ismbld: boolean = false;
     export let isfmc: boolean = false;
+    export let singleDisplayModeIgnoreAvg: boolean = false;
 
     export let mixDisplayMethod: MixDisplayMethod =
         MixDisplayMethod.FormatColumn;
@@ -70,7 +72,7 @@
     export let widths: string[] | undefined = undefined;
 
     function fmcTime(time: number) {
-        return time == Infinity ? "DNF": time
+        return time == Infinity ? "DNF" : time;
     }
 </script>
 
@@ -110,7 +112,11 @@
                             case DisplayType.AVERAGE:
                                 return "Average";
                             case DisplayType.SINGLE:
-                                return isfmc ? "Moves" : ismbld ? "Score" : "Time";
+                                return isfmc
+                                    ? "Moves"
+                                    : ismbld
+                                    ? "Score"
+                                    : "Time";
                             case DisplayType.MIX:
                                 return "Result";
                         }
@@ -152,19 +158,19 @@
             {@const l = typeof k === "undefined" ? ll : ll[k]}
             {#if typeof l === "undefined" || l.length == 0}
                 <tr>
-                <td
-                    class="tc-placeholder"
-                    align="center"
-                    colspan={mixDisplayMethod ==
-                    MixDisplayMethod.SeparateAverageAndSingle
-                        ? 7
-                        : 6}>no results yet</td
-                >
+                    <td
+                        class="tc-placeholder"
+                        align="center"
+                        colspan={mixDisplayMethod ==
+                        MixDisplayMethod.SeparateAverageAndSingle
+                            ? 7
+                            : 6}>no results yet</td
+                    >
                 </tr>
             {:else}
                 {#each l as list_item, rank}
-                    <tr>
-                        {#if typeof list_item === "undefined"}
+                    {#if typeof list_item === "undefined" || list_item == null}
+                        <tr>
                             <td
                                 class="tc-placeholder"
                                 align="center"
@@ -173,191 +179,216 @@
                                     ? 7
                                     : 6}>no results yet</td
                             >
-                        {:else}
-                            {@const {
-                                value,
-                                time,
-                                solves,
-                                meetup_id,
-                                meetup_name,
-                                user_id,
-                                user_name,
-                                user_region,
-                                cum_min,
-                                date,
-                                mbld_score,
-                                mbld_total,
+                        </tr>
+                    {:else}
+                        {@const {
+                            value,
+                            time,
+                            solves,
+                            meetup_id,
+                            meetup_name,
+                            user_id,
+                            user_name,
+                            user_region,
+                            cum_min,
+                            date,
+                            mbld_score,
+                            mbld_total,
 
-                                puzzle,
-                                round_number,
-                                round_maximum,
-                                round_id,
-                            } = list_item}
-                            {#if meetupAndRoundLeft}
-                                {@const showMeetup =
-                                    meetup_id != l[rank - 1]?.meetup_id}
-                                <td class="tc-meetup-primary"
-                                    ><a
-                                        class="regular-link"
-                                        href={`/meetups/${meetup_id}/info`}
-                                        >{showMeetup ? meetup_name : ""}</a
-                                    ></td
-                                >
-                                <td class="tc-round"
-                                    ><a
-                                        class="regular-link"
-                                        href={`/meetups/${meetup_id}/results/${round_id}`}
-                                        >{getRoundName(
-                                            undefined,
-                                            round_number + 1,
-                                            round_maximum
-                                        )}</a
-                                    ></td
-                                >
-                            {/if}
-                            {#if displayType == DisplayType.MIX && mixDisplayMethod == MixDisplayMethod.FormatColumn}
-                                <td class="tc-type"
-                                    >{solves ? "Average" : "Single"}</td
-                                >
-                            {/if}
-                            {#if showPlace}
-                                <td class="tc-place">{list_item.rank + 1}</td>
-                            {/if}
-                            {#if showDate}
-                                <td class="tc-date"
-                                    >{new Date(date).toLocaleDateString(
-                                        "en-nz",
-                                        {
-                                            year: "numeric",
-                                            month: "short",
-                                            day: "numeric",
-                                        }
-                                    )}</td
-                                >
-                            {/if}
-
-                            {#if displayRank}
-                                {@const t = value ?? time}
-                                {@const prevT =
-                                    l[rank - 1]?.value ?? l[rank - 1]?.time}
-                                {@const isTie = t == prevT}
-                                {#if displayMedals}
-                                    <!-- TODO: error checking? -->
-                                    {#if rank < 3 && value != Infinity}
-                                        <td class="tc-ranking">
-                                            <div style:float="right">
-                                                <Medal place={rank} />
-                                            </div>
-                                        </td>
-                                    {:else}
-                                        <td class="tc-ranking">
-                                            <p style:margin-right="4px">
-                                                {isTie ? "-" : rank + 1}
-                                            </p>
-                                        </td>
-                                    {/if}
-                                {:else}
-                                    <td
-                                        class="tc-ranking"
-                                        data-proceed={rank < proceedNum &&
-                                            value != Infinity}
+                            puzzle,
+                            round_number,
+                            round_maximum,
+                            round_id,
+                        } = list_item}
+                        {#if displayType == !DisplayType.SINGLE || (!singleDisplayModeIgnoreAvg || solves)}
+                            <tr>
+                                {#if meetupAndRoundLeft}
+                                    {@const showMeetup =
+                                        meetup_id != l[rank - 1]?.meetup_id}
+                                    <td class="tc-meetup-primary"
+                                        ><a
+                                            class="regular-link"
+                                            href={`/meetups/${meetup_id}/info`}
+                                            >{showMeetup ? meetup_name : ""}</a
+                                        ></td
                                     >
-                                        {isTie ? "-" : rank + 1}
-                                    </td>
+                                    <td class="tc-round"
+                                        ><a
+                                            class="regular-link"
+                                            href={`/meetups/${meetup_id}/results/${round_id}`}
+                                            >{getRoundName(
+                                                undefined,
+                                                round_number + 1,
+                                                round_maximum
+                                            )}</a
+                                        ></td
+                                    >
                                 {/if}
-                            {/if}
+                                {#if displayType == DisplayType.MIX && mixDisplayMethod == MixDisplayMethod.FormatColumn}
+                                    <td class="tc-type"
+                                        >{solves ? "Average" : "Single"}</td
+                                    >
+                                {/if}
+                                {#if showPlace}
+                                    <td class="tc-place"
+                                        >{list_item.rank + 1}</td
+                                    >
+                                {/if}
+                                {#if showDate}
+                                    <td class="tc-date"
+                                        >{new Date(date).toLocaleDateString(
+                                            "en-nz",
+                                            {
+                                                year: "numeric",
+                                                month: "short",
+                                                day: "numeric",
+                                            }
+                                        )}</td
+                                    >
+                                {/if}
 
-                            {#if showUser}
-                                <td class="tc-name"
-                                    ><a
-                                        class="regular-link"
-                                        href={`/user/${user_id}`}>{user_name}</a
-                                    ></td
-                                >
-                            {/if}
-                            {#if displayType != DisplayType.MIX || mixDisplayMethod == MixDisplayMethod.FormatColumn}
-                                {@const {
-                                    is_average_pr,
-                                    is_average_icr,
-                                    is_average_rr,
-                                    is_average_ir,
-                                } = list_item}
-                                <td
-                                    class="tc-result"
-                                    data-pr={is_average_pr}
-                                    data-icr={is_average_icr}
-                                    data-ir={is_average_ir}
-                                    data-rr={is_average_rr}
-                                    >{isfmc ? fmcTime(value ? value : time) : formatTime(
-                                        value ? value : time,
-                                        mbld_score,
-                                        mbld_total
-                                    )}</td
-                                >
-                            {:else}
-                                <td class="tc-mix-single"
-                                    >{!solves ? isfmc ? fmcTime(cum_min) : formatTime(cum_min) : ""}</td
-                                >
-                                <td
-                                    class="tc-mix-average"
-                                    data-pr={list_item.is_average_pr}
-                                    >{solves ? isfmc ? fmcTime(cum_min) : formatTime(cum_min) : ""}</td
-                                >
-                            {/if}
-                            {#if showBest}
-                                {@const {
-                                    is_single_pr,
-                                    is_single_icr,
-                                    is_single_rr,
-                                    is_single_ir,
-                                } = list_item}
-                                {@const min = Math.min(...solves)}
-                                <td
-                                    class="tc-best"
-                                    data-pr={is_single_pr}
-                                    data-icr={is_single_icr}
-                                    data-ir={is_single_ir}
-                                    data-rr={is_single_rr}
-                                    >{isfmc ? fmcTime(min) : formatTime(min)}</td
-                                >
-                            {/if}
-                            {#if showUser}
-                                <td class="tc-region"
-                                    >{regionToString(user_region)}</td
-                                >
-                            {/if}
-
-                            {#if hasMeetup}
-                                <td class="tc-meetup"
-                                    ><a
-                                        class="regular-link"
-                                        href={`/meetups/${meetup_id}`}
-                                        >{meetup_name}</a
-                                    ></td
-                                >
-                            {/if}
-
-                            {#if hasSolves}
-                                {#if solves}
-                                    {#if solveCount}
-                                        {#each solves as time}
-                                            <td class="tc-solves"
-                                                >{isfmc ? fmcTime(time) : formatTime(time)}</td
-                                            >
-                                        {/each}
+                                {#if displayRank}
+                                    {@const t = value ?? time}
+                                    {@const prevT =
+                                        l[rank - 1]?.value ?? l[rank - 1]?.time}
+                                    {@const isTie = t == prevT}
+                                    {#if displayMedals}
+                                        <!-- TODO: error checking? -->
+                                        {#if rank < 3 && value != Infinity}
+                                            <td class="tc-ranking">
+                                                <div style:float="right">
+                                                    <Medal place={rank} />
+                                                </div>
+                                            </td>
+                                        {:else}
+                                            <td class="tc-ranking">
+                                                <p style:margin-right="4px">
+                                                    {isTie ? "-" : rank + 1}
+                                                </p>
+                                            </td>
+                                        {/if}
                                     {:else}
-                                        <td class="tc-solves"
-                                            >{solves
-                                                .map((s) => (isfmc ? fmcTime : formatTime)(s))
-                                                .join(", ")}</td
+                                        <td
+                                            class="tc-ranking"
+                                            data-proceed={rank < proceedNum &&
+                                                value != Infinity}
                                         >
+                                            {isTie ? "-" : rank + 1}
+                                        </td>
                                     {/if}
-                                {:else}
-                                    <td class="tc-solves" />
                                 {/if}
-                            {/if}
+
+                                {#if showUser}
+                                    <td class="tc-name"
+                                        ><a
+                                            class="regular-link"
+                                            href={`/user/${user_id}`}
+                                            >{user_name}</a
+                                        ></td
+                                    >
+                                {/if}
+                                {#if displayType != DisplayType.MIX || mixDisplayMethod == MixDisplayMethod.FormatColumn}
+                                    {@const {
+                                        is_average_pr,
+                                        is_average_icr,
+                                        is_average_rr,
+                                        is_average_ir,
+                                    } = list_item}
+                                    <td
+                                        class="tc-result"
+                                        data-pr={is_average_pr}
+                                        data-icr={is_average_icr}
+                                        data-ir={is_average_ir}
+                                        data-rr={is_average_rr}
+                                        >{isfmc
+                                            ? fmcTime(value ? value : time)
+                                            : formatTime(
+                                                  value ? value : time,
+                                                  mbld_score,
+                                                  mbld_total
+                                              )}</td
+                                    >
+                                {:else}
+                                    <td class="tc-mix-single"
+                                        >{!solves
+                                            ? isfmc
+                                                ? fmcTime(cum_min)
+                                                : formatTime(cum_min)
+                                            : ""}</td
+                                    >
+                                    <td
+                                        class="tc-mix-average"
+                                        data-pr={list_item.is_average_pr}
+                                        >{solves
+                                            ? isfmc
+                                                ? fmcTime(cum_min)
+                                                : formatTime(cum_min)
+                                            : ""}</td
+                                    >
+                                {/if}
+                                {#if showBest}
+                                    {@const {
+                                        is_single_pr,
+                                        is_single_icr,
+                                        is_single_rr,
+                                        is_single_ir,
+                                    } = list_item}
+                                    {@const min = Math.min(...solves)}
+                                    <td
+                                        class="tc-best"
+                                        data-pr={is_single_pr}
+                                        data-icr={is_single_icr}
+                                        data-ir={is_single_ir}
+                                        data-rr={is_single_rr}
+                                        >{isfmc
+                                            ? fmcTime(min)
+                                            : formatTime(min)}</td
+                                    >
+                                {/if}
+                                {#if showUser}
+                                    <td class="tc-region"
+                                        >{regionToString(user_region)}</td
+                                    >
+                                {/if}
+
+                                {#if hasMeetup}
+                                    <td class="tc-meetup"
+                                        ><a
+                                            class="regular-link"
+                                            href={`/meetups/${meetup_id}`}
+                                            >{meetup_name}</a
+                                        ></td
+                                    >
+                                {/if}
+
+                                {#if hasSolves}
+                                    {#if solves}
+                                        {#if solveCount}
+                                            {#each solves as time}
+                                                <td class="tc-solves"
+                                                    >{isfmc
+                                                        ? fmcTime(time)
+                                                        : formatTime(time)}</td
+                                                >
+                                            {/each}
+                                        {:else}
+                                            <td class="tc-solves"
+                                                >{solves
+                                                    .map((s) =>
+                                                        (isfmc
+                                                            ? fmcTime
+                                                            : formatTime)(s)
+                                                    )
+                                                    .join(", ")}</td
+                                            >
+                                        {/if}
+                                    {:else}
+                                        <td class="tc-solves" />
+                                    {/if}
+                                {/if}
+                            </tr>
                         {/if}
-                    </tr>
+                    {/if}
                 {/each}
             {/if}
         {/await}
