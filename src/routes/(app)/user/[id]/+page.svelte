@@ -282,7 +282,7 @@
                             {@const isfmc = puzzle == "FMC"}
                             <div class="group-label records-history-header">
                                 <img src={puzzles[puzzle].icon} alt="" height=28/>
-                                <p class="fsize-body">{puzzles[puzzle].name} Results</p>
+                                <p class="fsize-body">{puzzles[puzzle].name} Records</p>
                             </div>
 
                             <Table
