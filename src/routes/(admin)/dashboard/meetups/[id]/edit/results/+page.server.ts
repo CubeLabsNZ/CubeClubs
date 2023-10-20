@@ -118,6 +118,11 @@ export const actions = {
         const eventId = data.get("event")
         const competitorId = Number(data.get("competitor"))
 
+        console.log(eventId, competitorId)
+        if (!eventId || !competitorId || typeof eventId != "string") {
+            throw error(400, 'Event/Competitor not provided or invalid')
+        }
+
         const id = Number(params.id)
         if (isNaN(id)) {
             throw error(404, 'not found');
@@ -139,70 +144,60 @@ export const actions = {
             throw error(400, { event: eventId, competitor: competitorId })
         }
 
-        // TODO: make this compound ID later on
-        const idToUpsert = (await prisma.result.findFirst({
-            where: {
-                round_id: eventId,
-                user_id: competitorId
+
+        await db.transaction().execute(async(db) => {
+            // TODO: make this compound ID later on
+            db.deleteFrom('result')            
+                .where('round_id', '=', eventId)
+                .where('user_id', '=', competitorId)
+                .execute()
+
+            let mbld_score
+            let mbld_total
+            let value
+
+
+            if (round.puzzle == "MULTIBLD") {
+                const mbld_data = [...Array(formats[round.format].count)].map((_, i) => {
+                    const successes = Number(data.get(`successes-${i}`) ?? undefined)
+                    const attempts = Number(data.get(`attempts-${i}`) ?? undefined)
+                    if (isNaN(successes) || isNaN(attempts)) {
+                        throw error(400)
+                    }
+                    const failures = attempts - successes
+                    const score = successes - failures
+                    return {
+                        time: solves[i],
+                        score: score,
+                        total_attempts: attempts
+                    }
+                })
+                const res = calulateMbldAverage(round.format, mbld_data)
+                value = res!.time
+                mbld_score = res!.score
+                mbld_total = res!.total_attempts
+            } else {
+                value = calculateAverage(round.format, solves)
             }
-        }))?.id
 
-        // Just delete TODO: make this properly with kysely
-        if (idToUpsert) {
-            console.log(idToUpsert)
-            await prisma.result.deleteMany({
-                where: {
-                    id: idToUpsert
-                }
-            })
-        }
 
-        const saveData: Prisma.XOR<Prisma.resultCreateInput, Prisma.resultUncheckedCreateInput> = {
-            solves: {
-                createMany: {
-                    data: solves.map((time, idx) => ({ index: idx, time: time }))
-                }
-            },
-            user: {
-                connect: {
-                    id: competitorId
-                }
-            },
-        }
+            // TODO: make 1 query: https://stackoverflow.com/a/73723905
+            const newResult = await db.insertInto('result')
+                .values({
+                    user_id: competitorId,
+                    round_id: eventId,
+                    mbld_score,
+                    mbld_total,
+                    value
+                })
+                .returning(['id'])
+                .executeTakeFirstOrThrow()
 
-        if (round.puzzle == "MULTIBLD") {
-            let mbld_data = [...Array(formats[round.format].count)].map((_, i) => {
-                const successes = Number(data.get(`successes-${i}`) ?? undefined)
-                const attempts = Number(data.get(`attempts-${i}`) ?? undefined)
-                if (isNaN(successes) || isNaN(attempts)) {
-                    throw error(400)
-                }
-                const failures = attempts - successes
-                const score = successes - failures
-                return {
-                    time: solves[i],
-                    score: score,
-                    total_attempts: attempts
-                }
-            })
-            const res = calulateMbldAverage(round.format, mbld_data)
-            saveData.value = res!.time
-            saveData.mbld_score = res!.score
-            saveData.mbld_total = res!.total_attempts
-        } else {
-            saveData.value = calculateAverage(round.format, solves)
-        }
-
-        await prisma.round.update({
-            where: {
-                id: eventId,
-            },
-            data: {
-                results: {
-                    create: saveData
-                }
-            }
+            await db.insertInto('solve')
+                .values(solves.map((time, idx) => ({ index: idx, time: time, result_id: newResult.id })))
+                .execute()
         })
+
 
         return { event: eventId }
     }
