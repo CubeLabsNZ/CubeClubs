@@ -436,6 +436,7 @@
     .tc-mix-single,
     .tc-mix-average,
     .tc-best,
+    .tc-place,
     .tc-ranking {
         text-align: right;
     }
