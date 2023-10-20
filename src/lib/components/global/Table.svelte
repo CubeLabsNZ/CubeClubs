@@ -424,7 +424,6 @@
     .tc-mix-single,
     .tc-mix-average,
     .tc-meetup-primary,
-    .tc-best,
     .tc-name {
         font-weight: 500;
     }
