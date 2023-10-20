@@ -32,6 +32,8 @@ export const load = (async ({ url, params, cookies }) => {
                             (eb) => [
                                 'result.id',
                                 'value',
+                                'result.mbld_score',
+                                'result.mbld_total',
                                 'round_id',
                                 'user.id as user_id',
                                 'user.name as user_name',
@@ -39,6 +41,7 @@ export const load = (async ({ url, params, cookies }) => {
                             ]
                         )
                         .groupBy(['result.id', 'user.name', 'user.id'])
+                        .orderBy(['result.mbld_score desc'])
                         .as('result'),
                     'round.id', 'result.round_id')
                 .select(({ selectFrom, fn, selectNoFrom }) => {
@@ -55,7 +58,8 @@ export const load = (async ({ url, params, cookies }) => {
                             .whereRef('user_in_meetup.meetup_id', '=', 'meetup.id')
                             .where((eb) => eb('round.puzzle', '=', eb.fn('any', eb.ref('user_in_meetup.registered_events'))))
                         ).as('users'),
-                        fn.agg('array_agg', 'result').as('results')
+                        //fn.agg('array_agg', 'result').as('results')
+                        sql<{}[]>`array_agg(result ORDER BY mbld_score DESC, value ASC)`.as('results')
                     ]
                 }
                 )
