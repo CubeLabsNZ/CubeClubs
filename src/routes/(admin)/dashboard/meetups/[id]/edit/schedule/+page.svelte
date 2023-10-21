@@ -63,10 +63,15 @@
     $: proceed_number = isNaN(Number(proceed_number)) || Number(proceed_number) < 0 ? undefined : Number(proceed_number)
 
     function saveChanges() {
+        const fixedEvents = eventCalendar.getEvents().map(event => ({
+            ...event,
+            start: new Date(event.start.getTime() - event.start.getTimezoneOffset() * 60000),
+            end: new Date(event.end.getTime() - event.start.getTimezoneOffset() * 60000),
+        }))
         // TODO cancel promise and stuff
         saveFetch = fetch("./schedule/save", {
             method: "POST",
-            body: JSON.stringify({update: eventCalendar.getEvents(), delete: deletedIds}),
+            body: JSON.stringify({update: fixedEvents, delete: deletedIds}),
             headers: {
                 "Content-Type": "application/json"
             }
