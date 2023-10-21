@@ -215,7 +215,7 @@
     </div>
 </div>
 {:else}
-    <p>No rounds! Add rounds in <a href="./schedule">the schedule</a> first.</p>
+    <p style:padding-top=8px style:color=var(--c-g)>No rounds! Add rounds in <a class="regular-link" href="./schedule">the schedule</a> first.</p>
 {/if}
 
 
