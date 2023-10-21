@@ -73,7 +73,7 @@
     <div class="info-right">
         <div class="label-group">
             <p class="label">Meetup Description</p>
-            <p>{data.meetup.description}</p>
+            <p style:overflow-wrap=anywhere>{data.meetup.description}</p>
         </div>
     </div>
 
