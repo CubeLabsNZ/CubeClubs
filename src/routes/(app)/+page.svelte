@@ -215,14 +215,14 @@
         gap: 4px;
         display: block;
         margin-bottom: max(
-            min(60px, 4vh),
-            20px
+            min(36px, 1vh),
+            14px
         ); /* 64px adjusted for font descenders */
     }
 
     .main-title {
-        line-height: 0.8;
-
+        margin-top: -4px !important;
+        letter-spacing: -0.03em;
         font-size: min(72px, 14vw);
         font-family: "TwCenMt", var(--system-fonts);
         font-weight: 600;
