@@ -31,8 +31,6 @@
 
 <div class="schedule-grid">
     <!-- TODO: future todo, show by event? -->
-    {@debug data}
-
     {#if data.meetup.rounds && data.meetup.rounds.length > 0}
         {#each data.meetup.rounds as round}
             {@const puzzle = puzzles[round.puzzle]}
@@ -79,7 +77,12 @@
             </a>
         {/each}
     {:else}
-        No schedule yet
+        <p style:color=var(--c-g)>
+            This meetup does not have a schedule yet.
+            {#if data.user?.is_club_organiser}
+                If you are the organiser for this meetup, create a schedule <a class="regular-link" href={`/dashboard/meetups/${data.slug}/edit/schedule`}>in the edit schedule page.</a>
+            {/if}
+        </p>
     {/if}
 </div>
 
