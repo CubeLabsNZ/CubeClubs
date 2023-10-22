@@ -12,44 +12,75 @@
     import type { PageData } from "./$types";
     export let data: PageData;
 
-    let locations = ["info", "competitors", "schedule"]
+    let locations = ["info", "competitors", "schedule"];
     let tabIndex = 2;
 
     $: {
         if (browser) {
-            goto(`/meetups/${data.slug}/` + locations[tabIndex], { replaceState: true })
+            goto(`/meetups/${data.slug}/` + locations[tabIndex], {
+                replaceState: true,
+            });
         }
     }
 </script>
 
-
 <TabBar
     labels={["Info", "Competitors", "Schedule & Results"]}
-    bind:selectedIndex={tabIndex}>
-</TabBar>
-
+    bind:selectedIndex={tabIndex}
+/>
 
 <div class="schedule-grid">
     <!-- TODO: future todo, show by event? -->
+    {@debug data}
 
-    {#each data.meetup.rounds as round}
-        {@const puzzle = puzzles[round.puzzle]}
-        <a href="/meetups/{data.slug}/results/{round.id}"> 
-            <Card height={60}>
-                <div class="schedule-item">
-                    <img src={puzzle.icon} alt="" height=36px style:filter="invert(30%) sepia(7%) saturate(500%) hue-rotate(164deg) brightness(94%) contrast(89%)">
+    {#if data.meetup.rounds && data.meetup.rounds.length > 0}
+        {#each data.meetup.rounds as round}
+            {@const puzzle = puzzles[round.puzzle]}
+            <a href="/meetups/{data.slug}/results/{round.id}">
+                <Card height={60}>
+                    <div class="schedule-item">
+                        <img
+                            src={puzzle.icon}
+                            alt=""
+                            height="36px"
+                            style:filter={"invert(30%) sepia(7%) saturate(500%) \
+                            hue-rotate(164deg) brightness(94%) contrast(89%)"}
+                        />
 
-                    <div class="schedule-item-title">
-                        <p style:font-weight=600 style:color=var(--c-dg2)>{getRoundName(puzzle.name, round.round_number, round.round_maximum)}</p>
-                        
-                        <p style:font-weight=500 style:color=var(--c-dg1) >
-                            {new Date(round.start_date).toLocaleTimeString("en-NZ", { minute: "2-digit", hour: "2-digit" })} – {new Date(round.end_date).toLocaleTimeString("en-NZ", { minute: "2-digit", hour: "2-digit" })}
-                        </p>
+                        <div class="schedule-item-title">
+                            <p
+                                style:font-weight="600"
+                                style:color="var(--c-dg2)"
+                            >
+                                {getRoundName(
+                                    puzzle.name,
+                                    round.round_number,
+                                    round.round_maximum
+                                )}
+                            </p>
+
+                            <p
+                                style:font-weight="500"
+                                style:color="var(--c-dg1)"
+                            >
+                                {new Date(round.start_date).toLocaleTimeString(
+                                    "en-NZ",
+                                    { minute: "2-digit", hour: "2-digit" }
+                                )} – {new Date(
+                                    round.end_date
+                                ).toLocaleTimeString("en-NZ", {
+                                    minute: "2-digit",
+                                    hour: "2-digit",
+                                })}
+                            </p>
+                        </div>
                     </div>
-                </div>
-            </Card>
-        </a>
-    {/each}
+                </Card>
+            </a>
+        {/each}
+    {:else}
+        No schedule yet
+    {/if}
 </div>
 
 <style>
@@ -62,13 +93,13 @@
         margin-top: 32px;
     }
 
-    @media(max-width: 1040px) {
+    @media (max-width: 1040px) {
         .schedule-grid {
             grid-template-columns: repeat(2, 1fr);
         }
     }
 
-    @media(max-width: 700px) {
+    @media (max-width: 700px) {
         .schedule-grid {
             grid-template-columns: repeat(1, 1fr);
         }
