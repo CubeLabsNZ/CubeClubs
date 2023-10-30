@@ -59,7 +59,7 @@ export const load = (async ({ url, params, cookies }) => {
                             .where((eb) => eb('round.puzzle', '=', eb.fn('any', eb.ref('user_in_meetup.registered_events'))))
                         ).as('users'),
                         //fn.agg('array_agg', 'result').as('results')
-                        sql<{}[]>`coalesce(array_agg(result ORDER BY mbld_score DESC, value ASC), '{}')`.as('results')
+                        sql<{}[]>`array_agg(result ORDER BY mbld_score DESC, value ASC)`.as('results')
                     ]
                 }
                 )
@@ -98,7 +98,7 @@ export const load = (async ({ url, params, cookies }) => {
             continue;
         }
         const prevRound = prevRoundForPuzzle[round.puzzle]
-        round.users = prevRound.results.filter((x) => x != Infinity).toSorted((a, z) => (a.value - z.value)).slice(0, prevRound.proceed_number)
+        round.users = (prevRound.results ?? []).filter((x) => x != Infinity).toSorted((a, z) => (a.value - z.value)).slice(0, prevRound.proceed_number)
         prevRoundForPuzzle[round.puzzle] = round
     }
 
