@@ -99,7 +99,7 @@ export const load = (async ({ url, params, cookies }) => {
         }
         const prevRound = prevRoundForPuzzle[round.puzzle]
         if (prevRound?.results) {
-            round.users = prevRound.results.filter((x) => x != Infinity).toSorted((a, z) => (a.value - z.value)).slice(0, prevRound.proceed_number)
+            round.users = [...prevRound.results.filter((x) => x != Infinity)].sort((a, z) => (a.value - z.value)).slice(0, prevRound.proceed_number)
         } else {
             round.users = []
         }
