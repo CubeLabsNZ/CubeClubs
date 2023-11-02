@@ -16,7 +16,7 @@ const config = {
 		alias: {
 			$styles: "./src/styles/"
 		},
-		csp: {
+		/* csp: {
 			directives: {
 				'default-src': ['self'],
 				// https://github.com/sveltejs/kit/issues/5215 :/
@@ -24,7 +24,7 @@ const config = {
 				'script-src-attr': ['unsafe-hashes', 'sha256-W26xCcw4HB/UzduZBkCFzwP4/RvbREjKiFGbKZz8r1w='],
 			},
 			mode: 'auto'
-		},
+		}, */
 	},
 };
 

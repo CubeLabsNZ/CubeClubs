@@ -1,5 +1,6 @@
 <script lang="ts"> 
     import type { LayoutData } from "./$types";
+    import { browser } from "$app/environment";
 
     import "$styles/fonts.css";
     import "$styles/globals.css";
@@ -19,6 +20,15 @@
     import Button, { ButtonType, ButtonSize } from "$lib/components/global/Button.svelte";
     import { ArrowRight, ArrowRightCircle, Menu, UserCircle, UserCircle2, X, XIcon } from "lucide-svelte";
 
+    let searchSocket;
+
+    if (browser) {
+        searchSocket = new WebSocket("ws://localhost:3000");
+        searchSocket.addEventListener("message", (event) => {
+            console.log("Message from server ", event.data);
+        });
+    }
+
     export let data: LayoutData;
 </script>
 
@@ -32,7 +42,11 @@
         <a class="regular-link navbar-full" href="/records">Records</a>
         <a class="regular-link navbar-full" href="/rankings">Rankings</a>
 
-        <input type="text" style:background-color=yellow style:color=cyan style:width=300px style:font-family="Snell Roundhand">
+        <input on:input={(e) => {
+            searchSocket.send(e.target.value);
+
+
+        }} type="text" style:background-color=yellow style:color=cyan style:width=300px style:font-family="Snell Roundhand">
     </div>
 
     <div id="navbar-right" class="navbar-full" use:clickOutside on:click_outside={() => { showDropdown = false; showMore = false }}> 

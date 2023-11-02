@@ -3,5 +3,12 @@ import { defineConfig } from 'vite';
 import { webSocketServer } from "./src/lib/wsSearch";
 
 export default defineConfig({
-	plugins: [sveltekit(), webSocketServer]
+	plugins: [sveltekit(), webSocketServer],
+
+	server: {
+		hmr: {
+			host: "localhost",
+			protocol: "ws",
+		},
+	},
 });

@@ -1,22 +1,27 @@
 import { WebSocketServer } from "ws";
+import { db } from '../lib/db';
 
-export const configureServer = (server) => {
-    if (!server.httpServer) return;
-
+export const configureServer = () => {
     const webSocketServer = new WebSocketServer({
-        server: server.httpServer,
+        port: 3000
     });
 
     webSocketServer.on("connection", (socket, request) => {
-        socket.on("message", (data, isBinary) => {
+        socket.on("message", async (data, isBinary) => {
             console.log(`Recieved ${data}`);
-        });
 
-        socket.send("test from server");
+            let users = await db
+                .selectFrom("user")
+                .select(["id", "name"])
+                .where("name", "ilike", `%${data}%`)
+                .execute();
+
+            socket.send(JSON.stringify(users));
+        });
     });
 }
 
 export const webSocketServer = {
     name: "webSocketServer",
-    configureServer,
+    configureServer
 }
