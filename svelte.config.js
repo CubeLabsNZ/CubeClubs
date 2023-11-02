@@ -24,7 +24,7 @@ const config = {
 				'script-src-attr': ['unsafe-hashes', 'sha256-W26xCcw4HB/UzduZBkCFzwP4/RvbREjKiFGbKZz8r1w='],
 			},
 			mode: 'auto'
-		}, */
+		,} */
 	},
 };
 
