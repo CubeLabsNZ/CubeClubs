@@ -31,6 +31,8 @@
         <a class="regular-link navbar-full" href="/meetups">Meetups</a>
         <a class="regular-link navbar-full" href="/records">Records</a>
         <a class="regular-link navbar-full" href="/rankings">Rankings</a>
+
+        <input type="text" style:background-color=yellow style:color=cyan style:width=300px style:font-family="Snell Roundhand">
     </div>
 
     <div id="navbar-right" class="navbar-full" use:clickOutside on:click_outside={() => { showDropdown = false; showMore = false }}> 
