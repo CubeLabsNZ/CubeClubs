@@ -152,6 +152,7 @@
         color: var(--c-lg0);
         text-decoration: none;
         font-size: 14px;
+        font-weight: 400;
         
         transition: color 100ms ease-in-out;
     }
