@@ -34,10 +34,13 @@
 
     let searchSocket;
 
+    let searchResults: {id:number, name:string}[] = []
+
     if (browser) {
         searchSocket = new WebSocket("ws://localhost:3000");
         searchSocket.addEventListener("message", (event) => {
-            console.log("Message from server ", event.data);
+            searchResults = JSON.parse(event.data)
+            console.log(searchResults)
         });
     }
 
@@ -145,6 +148,9 @@
             style:width="300px"
             style:font-family="Snell Roundhand"
         />
+        {#each searchResults as result}
+            <p>{result.name}</p>
+        {/each}
     </div>
 
     <div
