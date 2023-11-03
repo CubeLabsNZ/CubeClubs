@@ -1,4 +1,4 @@
-<script lang="ts"> 
+<script lang="ts">
     import type { LayoutData } from "./$types";
     import { browser } from "$app/environment";
 
@@ -9,7 +9,6 @@
     import { fade } from "svelte/transition";
     import { clickOutside } from "$lib/utils";
 
-
     import logo from "$lib/assets/logo-transparent.svg";
 
     // TODO: bind to actual user values & session
@@ -17,8 +16,21 @@
 
     let showMore = false;
 
-    import Button, { ButtonType, ButtonSize } from "$lib/components/global/Button.svelte";
-    import { ArrowRight, ArrowRightCircle, Menu, UserCircle, UserCircle2, X, XIcon } from "lucide-svelte";
+    import Button, {
+        ButtonType,
+        ButtonSize,
+    } from "$lib/components/global/Button.svelte";
+    import {
+        ArrowRight,
+        ArrowRightCircle,
+        Menu,
+        UserCircle,
+        UserCircle2,
+        X,
+        XIcon,
+    } from "lucide-svelte";
+
+    import AnimatedIcon from "$lib/components/global/AnimatedIcon.svelte";
 
     let searchSocket;
 
@@ -29,48 +41,174 @@
         });
     }
 
+    let showSearch = false;
+
     export let data: LayoutData;
 </script>
 
 <div id="navbar">
-    <div id="navbar-left"> 
-        <a class="image-link" aria-label="Home Page" href="/" style:user-select=none>
-            <img src={logo} alt="" height=30 width=30>
+    <div id="navbar-left">
+        <a
+            class="image-link"
+            aria-label="Home Page"
+            href="/"
+            style:user-select="none"
+        >
+            <img src={logo} alt="" height="30" width="30" />
         </a>
 
         <a class="regular-link navbar-full" href="/meetups">Meetups</a>
         <a class="regular-link navbar-full" href="/records">Records</a>
         <a class="regular-link navbar-full" href="/rankings">Rankings</a>
 
-        <input on:input={(e) => {
-            searchSocket.send(e.target.value);
+        <button on:click={() => {showSearch = !showSearch}}>
+        <AnimatedIcon state={showSearch}>
+            <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                stroke="white"
+                fill="none"
+                id="vector"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                width="24px"
+                height="24px"
+            >
+                <path d="M 21 21 L 16.7 16.7">
+                    <animate
+                        data-cubeclubs-animate="to"
+                        attributeName="d"
+                        begin="indefinite"
+                        dur="0.3s"
+                        fill="freeze"
+                        values="M 21 21 L 16.7 16.7; M 18 18 L 6 6"
+                    />
+                    <animate
+                        data-cubeclubs-animate="from"
+                        attributeName="d"
+                        begin="indefinite"
+                        dur="0.3s"
+                        fill="freeze"
+                        values="M 18 18 L 6 6; M 21 21 L 16.7 16.7"
+                    />
+                </path>
+                <path d="M 16.657 5.343 C 18.149 6.844 18.986 8.878 18.982 10.995 C 18.979 13.111 18.136 15.142 16.639 16.639 C 15.142 18.136 13.111 18.979 10.995 18.982 C 8.878 18.986 6.844 18.149 5.343 16.657">
+                    <animate
+                        data-cubeclubs-animate="to"
+                        attributeName="d"
+                        begin="indefinite"
+                        dur="0.3s"
+                        fill="freeze"
+                        values="M 16.657 5.343 C 18.149 6.844 18.986 8.878 18.982 10.995 C 18.979 13.111 18.136 15.142 16.639 16.639 C 15.142 18.136 13.111 18.979 10.995 18.982 C 8.878 18.986 6.844 18.149 5.343 16.657; M 18 6 C 17 7 16 8 15 9 C 14 10 13 11 12 12 C 11 13 10 14 9 15 C 8 16 7 17 6 18"
+                    />
+                    <animate
+                        data-cubeclubs-animate="from"
+                        attributeName="d"
+                        begin="indefinite"
+                        dur="0.2s"
+                        fill="freeze"
+                        values="M 18 6 C 17 7 16 8 15 9 C 14 10 13 11 12 12 C 11 13 10 14 9 15 C 8 16 7 17 6 18; M 16.657 5.343 C 18.149 6.844 18.986 8.878 18.982 10.995 C 18.979 13.111 18.136 15.142 16.639 16.639 C 15.142 18.136 13.111 18.979 10.995 18.982 C 8.878 18.986 6.844 18.149 5.343 16.657"
+                    />
+                </path>
+                <path
+                    d="M 16.657 5.343 C 15.156 3.851 13.122 3.014 11.005 3.018 C 8.889 3.021 6.858 3.864 5.361 5.361 C 3.864 6.858 3.021 8.889 3.018 11.005 C 3.014 13.122 3.851 15.156 5.343 16.657"
+                >
+                    <animate
+                        data-cubeclubs-animate="to"
+                        attributeName="d"
+                        begin="indefinite"
+                        dur="0.2s"
+                        fill="freeze"
+                        values="M 16.657 5.343 C 15.156 3.851 13.122 3.014 11.005 3.018 C 8.889 3.021 6.858 3.864 5.361 5.361 C 3.864 6.858 3.021 8.889 3.018 11.005 C 3.014 13.122 3.851 15.156 5.343 16.657; M 18 6 C 17 7 16 8 15 9 C 14 10 13 11 12 12 C 11 13 10 14 9 15 C 8 16 7 17 6 18"
+                    />
+                    <animate
+                        data-cubeclubs-animate="from"
+                        attributeName="d"
+                        begin="indefinite"
+                        dur="0.2s"
+                        fill="freeze"
+                        values="M 18 6 C 17 7 16 8 15 9 C 14 10 13 11 12 12 C 11 13 10 14 9 15 C 8 16 7 17 6 18; M 16.657 5.343 C 15.156 3.851 13.122 3.014 11.005 3.018 C 8.889 3.021 6.858 3.864 5.361 5.361 C 3.864 6.858 3.021 8.889 3.018 11.005 C 3.014 13.122 3.851 15.156 5.343 16.657"
+                    />
+                </path>
+            </svg>
+        </AnimatedIcon>
+        </button>
 
-
-        }} type="text" style:background-color=yellow style:color=cyan style:width=300px style:font-family="Snell Roundhand">
+        <input
+            on:input={(e) => {
+                searchSocket.send(e.target.value);
+            }}
+            type="text"
+            style:background-color="yellow"
+            style:color="cyan"
+            style:width="300px"
+            style:font-family="Snell Roundhand"
+        />
     </div>
 
-    <div id="navbar-right" class="navbar-full" use:clickOutside on:click_outside={() => { showDropdown = false; showMore = false }}> 
+    <div
+        id="navbar-right"
+        class="navbar-full"
+        use:clickOutside
+        on:click_outside={() => {
+            showDropdown = false;
+            showMore = false;
+        }}
+    >
         {#if !data.user}
             <a class="regular-link" href="/login"> Login </a>
-            
+
             <a href="/signup">
                 <Button type={ButtonType.Simple} size={ButtonSize.Small}>
-                    <div style:font-weight=500>Sign Up</div>
+                    <div style:font-weight="500">Sign Up</div>
                 </Button>
             </a>
         {:else}
-            <button on:click={() => { showDropdown = !showDropdown; showMore = false }} aria-expanded={showDropdown} aria-controls="navbar-dropdown">
-                <Button type={ButtonType.Simple} size={ButtonSize.Small} padding={8}>
-                    <div style:display=flex style:align-items=center style:column-gap=8px>
+            <button
+                on:click={() => {
+                    showDropdown = !showDropdown;
+                    showMore = false;
+                }}
+                aria-expanded={showDropdown}
+                aria-controls="navbar-dropdown"
+            >
+                <Button
+                    type={ButtonType.Simple}
+                    size={ButtonSize.Small}
+                    padding={8}
+                >
+                    <div
+                        style:display="flex"
+                        style:align-items="center"
+                        style:column-gap="8px"
+                    >
                         <UserCircle size="18px" />
 
-                        <p style:font-weight=500 style:padding-right=6px style:height=20px style:transform=translateY(1px)>{data.user.name.split(" ")[0]}</p>
+                        <p
+                            style:font-weight="500"
+                            style:padding-right="6px"
+                            style:height="20px"
+                            style:transform="translateY(1px)"
+                        >
+                            {data.user.name.split(" ")[0]}
+                        </p>
                     </div>
                 </Button>
             </button>
         {/if}
 
-        <button on:click={() => { showMore = !showMore; showDropdown = false }} class="navbar-small show-more-button" style:height=20px aria-expanded={showMore} aria-label={`${showMore ? "Hide" : "Show"} navigation menu menu.`} aria-controls="navbar-showmore">
+        <button
+            on:click={() => {
+                showMore = !showMore;
+                showDropdown = false;
+            }}
+            class="navbar-small show-more-button"
+            style:height="20px"
+            aria-expanded={showMore}
+            aria-label={`${showMore ? "Hide" : "Show"} navigation menu menu.`}
+            aria-controls="navbar-showmore"
+        >
             {#if !showMore}
                 <Menu size="18px" />
             {:else}
@@ -82,28 +220,30 @@
     <div id="navbar-showmore" class="navbar-small dropdown" hidden={!showMore}>
         <a class="regular-link" href="/meetups">Meetups</a>
 
-        <hr class="showmore-hr">
+        <hr class="showmore-hr" />
 
         <a class="regular-link" href="/records">Records</a>
 
-        <hr class="showmore-hr">
+        <hr class="showmore-hr" />
 
         <a class="regular-link" href="/rankings">Rankings</a>
     </div>
 
     <div id="navbar-dropdown" class="dropdown" hidden={!showDropdown}>
         <div class="dropdown-inner">
-            <a class="dropdown-link" href={`/user/${data.user?.id}`}>My Profile</a>
+            <a class="dropdown-link" href={`/user/${data.user?.id}`}
+                >My Profile</a
+            >
             <a class="dropdown-link" href="/user/edit">Edit Account</a>
         </div>
 
         {#if data.user?.is_club_organiser}
-            <hr class="dropdown-hr">
+            <hr class="dropdown-hr" />
 
             <div class="dropdown-inner">
                 <a class="dropdown-link" href="/dashboard/meetups">
                     <div class="dashboard-link">
-                        <p> Admin Dashboard </p>
+                        <p>Admin Dashboard</p>
 
                         <ArrowRight size="16px" />
                     </div>
@@ -111,18 +251,24 @@
             </div>
         {/if}
 
-        <hr class="dropdown-hr">
+        <hr class="dropdown-hr" />
 
         <div class="dropdown-inner">
-            <a on:mousedown={() => { showDropdown = false }} data-sveltekit-preload-data="tap" class="dropdown-link" href="/logout">Log out</a>
+            <a
+                on:mousedown={() => {
+                    showDropdown = false;
+                }}
+                data-sveltekit-preload-data="tap"
+                class="dropdown-link"
+                href="/logout">Log out</a
+            >
         </div>
     </div>
 </div>
 
-<slot/>
+<slot />
 
-
-<style> 
+<style>
     /* TODO: organise these styles */
 
     .image-link {
@@ -130,7 +276,6 @@
 
         height: 30px;
     }
-
 
     .image-link:hover {
         filter: brightness(80%);
@@ -141,7 +286,7 @@
         background-color: var(--c-dg2);
         border-radius: 12px;
         /* use color-mix when supported/ */
-        box-shadow: 0px 4px 16px 0px #292E333D;
+        box-shadow: 0px 4px 16px 0px #292e333d;
         width: fit-content;
 
         display: flex;
@@ -156,19 +301,19 @@
         position: fixed;
         top: 16px;
         margin: 0 auto;
-        left: 0; right: 0;
+        left: 0;
+        right: 0;
 
         z-index: 10;
 
         font-weight: 500;
-
     }
 
     #navbar .regular-link {
         color: var(--c-lg0);
         text-decoration: none;
         font-size: 14px;
-        
+
         transition: color 100ms ease-in-out;
     }
 
@@ -176,8 +321,8 @@
         color: var(--c-lg1);
     }
 
-
-    #navbar-left, #navbar-right {
+    #navbar-left,
+    #navbar-right {
         display: flex;
         flex-direction: row;
         align-items: center;
@@ -191,7 +336,7 @@
 
         background-color: white;
         border-radius: 6px;
-        box-shadow: 0px 1px 6px 0px #10151B29; /* cdg3, 16% */
+        box-shadow: 0px 1px 6px 0px #10151b29; /* cdg3, 16% */
 
         border: 1px var(--c-lg1) solid;
 
@@ -202,7 +347,6 @@
         padding-top: 10px;
         padding-bottom: 10px;
 
-
         z-index: 30;
     }
 
@@ -212,7 +356,7 @@
         background-color: var(--c-dg2);
         border-radius: 12px;
 
-        box-shadow: 0px 4px 16px 0px #292E333D;
+        box-shadow: 0px 4px 16px 0px #292e333d;
         width: calc(100% - 40px);
 
         flex-direction: column;
@@ -244,7 +388,7 @@
         transition-delay: 0s;
     }
 
-    @media(max-width: 600px) {
+    @media (max-width: 600px) {
         #navbar {
             width: calc(100% - 40px);
             margin-left: 20px;
@@ -261,7 +405,6 @@
         }
     }
 
-
     .dropdown-inner {
         display: flex;
         flex-direction: column;
@@ -270,7 +413,6 @@
         padding-left: 12px;
         padding-right: 12px;
     }
-
 
     .dropdown-link {
         color: var(--c-dg2);
@@ -336,7 +478,7 @@
         height: 1px;
     }
 
-    @media(min-width: 601px) {
+    @media (min-width: 601px) {
         #navbar-showmore {
             display: none;
         }
@@ -346,4 +488,3 @@
         }
     }
 </style>
-
