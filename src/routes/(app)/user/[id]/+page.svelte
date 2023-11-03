@@ -173,73 +173,75 @@
         <div class="pr-section">
             <h3 class="fsize-body" style:font-weight=500 style:padding-bottom=4px>Personal Records</h3>
 
-            <table style:width=100%>
-                <colgroup>
-                    <col span=1 style:width=auto>
-                    <col span=1 style:width=60px>
-                    <col span=1 style:width=60px>
-                    <col span=1 style:width=60px>
-                    <col span=1 style:width=80px>
-                    <col span=1 style:width=80px>
-                    <col span=1 style:width=60px>
-                    <col span=1 style:width=60px>
-                    <col span=1 style:width=60px>
-                </colgroup>
+            <div class="table-scroller">
+                <table style:width=100% class="table-has-scroller">
+                    <colgroup>
+                        <col span=1 style:width=auto>
+                        <col span=1 style:width=60px>
+                        <col span=1 style:width=60px>
+                        <col span=1 style:width=60px>
+                        <col span=1 style:width=80px>
+                        <col span=1 style:width=80px>
+                        <col span=1 style:width=60px>
+                        <col span=1 style:width=60px>
+                        <col span=1 style:width=60px>
+                    </colgroup>
 
-                <tbody>
+                    <tbody>
 
-                </tbody>
+                    </tbody>
 
 
-                <tr>
-                    <th class="tc-event">Event</th>
-                    <th class="tc-rr">RR</th>
-                    <th class="tc-ir">IR</th>
-                    <th class="tc-icr">IcR</th>
-                    <th class="tc-result">Single</th>
+                    <tr>
+                        <th class="tc-event">Event</th>
+                        <th class="tc-rr">RR</th>
+                        <th class="tc-ir">IR</th>
+                        <th class="tc-icr">IcR</th>
+                        <th class="tc-result">Single</th>
 
-                    <th class="tc-result">Average</th>
-                    <th class="tc-icr">IcR</th>
-                    <th class="tc-ir">IR</th>
-                    <th class="tc-rr">RR</th>
-                </tr>
+                        <th class="tc-result">Average</th>
+                        <th class="tc-icr">IcR</th>
+                        <th class="tc-ir">IR</th>
+                        <th class="tc-rr">RR</th>
+                    </tr>
 
-                {#await data.streamed.PRs}
-                    {#each Array(10).fill(0) as _}
-                        <tr class="loading"><td colspan="999">&nbsp;</td></tr>
-                    {/each}
-                {:then PRs}
-                    {#each Object.entries(PRs) as [puzzleType, {single, average}]}
-                        {@const puzzle = puzzles[puzzleType]}
-                        {@const isfmc = puzzleType == "FMC"}
-                        <tr>
-                            <td class="tc-event">
-                                <div style:display=flex style:align-items=center style:column-gap=12px>
-                                    <img src={puzzle.icon} alt="" height=24>
-                                    {puzzle.name}
-                                </div>
-                            </td>
-                            {#if single?.time != Infinity}
-                                <td class="tc-rr">{single?.RR}</td>
-                                <td class="tc-ir">{single?.IR}</td>
-                                <td class="tc-icr">{single?.IcR}</td>
-                                <td class="tc-result">{(isfmc ? fmcTime : formatTime)(single?.time, average.mbld_score, average.mbld_total)}</td>
-                            {:else}
-                                <td/><td/><td/><td/>
-                            {/if}
+                    {#await data.streamed.PRs}
+                        {#each Array(10).fill(0) as _}
+                            <tr class="loading"><td colspan="999">&nbsp;</td></tr>
+                        {/each}
+                    {:then PRs}
+                        {#each Object.entries(PRs) as [puzzleType, {single, average}]}
+                            {@const puzzle = puzzles[puzzleType]}
+                            {@const isfmc = puzzleType == "FMC"}
+                            <tr>
+                                <td class="tc-event">
+                                    <div style:display=flex style:align-items=center style:column-gap=12px>
+                                        <img src={puzzle.icon} alt="" height=24>
+                                        {puzzle.name}
+                                    </div>
+                                </td>
+                                {#if single?.time != Infinity}
+                                    <td class="tc-rr">{single?.RR}</td>
+                                    <td class="tc-ir">{single?.IR}</td>
+                                    <td class="tc-icr">{single?.IcR}</td>
+                                    <td class="tc-result">{(isfmc ? fmcTime : formatTime)(single?.time, average.mbld_score, average.mbld_total)}</td>
+                                {:else}
+                                    <td/><td/><td/><td/>
+                                {/if}
 
-                            {#if average.time != Infinity}
-                                <td class="tc-result">{(isfmc ? fmcTime : formatTime)(average.time, average.mbld_score, average.mbld_total)}</td>
-                                <td class="tc-icr">{average.IcR}</td>
-                                <td class="tc-ir">{average.IR}</td>
-                                <td class="tc-rr">{average.RR}</td>
-                            {:else}
-                                <td/><td/><td/><td/>
-                            {/if}
-                        </tr>
-                    {/each}
-                {/await}
-            </table>
+                                {#if average.time != Infinity}
+                                    <td class="tc-result">{(isfmc ? fmcTime : formatTime)(average.time, average.mbld_score, average.mbld_total)}</td>
+                                    <td class="tc-icr">{average.IcR}</td>
+                                    <td class="tc-ir">{average.IR}</td>
+                                    <td class="tc-rr">{average.RR}</td>
+                                {:else}
+                                    <td/><td/><td/><td/>
+                                {/if}
+                            </tr>
+                        {/each}
+                    {/await}
+                </table>
+            </div>
         </div>
 
         <div class="history-section">
@@ -309,6 +311,111 @@
 
 
 <style>
+    .container-grid {
+        display: flex;
+        width: 1000px;
+        margin-left: auto;
+        margin-right: auto;
+
+        padding-top: 100px;
+
+        column-gap: 16px;
+    }
+
+    .user-container {
+        width: 240px;
+    }
+
+    .content {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        row-gap: 32px;
+   }
+
+    @media(max-width: 1040px) {
+        .container-grid {
+            width: calc(100% - 40px);
+        }
+    }
+
+    @media(max-width: 700px) {
+        .container-grid, .user-container, .content {
+            width: 100%;
+        }
+
+        .container-grid {
+            padding-left: 20px;
+            padding-right: 20px;
+
+            flex-direction: column;
+        }
+
+        .pr-section {
+            margin-top: 32px;
+        }
+    }
+
+
+
+
+
+    /* INFO: personal records table */
+    td, th {
+        text-align: right;
+    }
+
+    .tc-event {
+        text-align: left;
+        min-width: 100px;
+    }
+
+    td.tc-result {
+        font-weight: 500;
+    }
+
+    td.tc-event {
+        font-weight: 500;
+    }
+
+    td.tc-rr {
+        color: var(--c-g);
+    }
+
+    td.tc-ir {
+        color: var(--c-dg1);
+    }
+
+    td.tc-icr {
+        color: var(--c-dg2);
+    }
+
+
+
+
+    /* INFO: history section */
+    .history-section {
+        display: flex;
+        flex-direction: column;
+        row-gap: 16px;
+    }
+
+    .results-history-header, .records-history-header {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        column-gap: 4px;
+
+        margin-bottom: 4px;
+    }
+
+    .results-history-header *, .records-history-header * {
+        font-weight: 500;
+    }
+
+
+
+    /* INFO: OTHER */
     .group-label {
         height: 28px;
         display: flex;
@@ -359,110 +466,11 @@
     }
 
 
-    .container-grid {
-        display: flex;
-        width: 1000px;
-        margin-left: auto;
-        margin-right: auto;
 
-        padding-top: 100px;
-
-        column-gap: 16px;
-    }
-
-    .user-container {
-        width: 240px;
-    }
-
-    .content {
-        width: 100%;
-        display: flex;
-        flex-direction: column;
-        row-gap: 48px;
-    }
-
-    @media(max-width: 1040px) {
-        .container-grid {
-            width: calc(100% - 40px);
-
-            padding-left: 20px;
-            padding-right: 20px;
-        }
-
-    }
-
-    @media(max-width: 700px) {
-        .container-grid {
-            width: 100%;
-
-            flex-direction: column;
-        }
-
-        .user-container {
-            width: 100%;
-        }
-
-        .content {
-            width: 100%;
-        }
-
-        .pr-section {
-            margin-top: 16px;
-        }
-    }
-
-
-    /* INFO: personal records table */
-    td, th {
-        text-align: right;
-    }
-
-    .tc-event {
-        text-align: left;
-        min-width: 100px;
-    }
-
-    td.tc-result {
-        font-weight: 500;
-    }
-
-    td.tc-event {
-        font-weight: 500;
-    }
-
-    td.tc-rr {
-        color: var(--c-g);
-    }
-
-    td.tc-ir {
-        color: var(--c-dg1);
-    }
-
-    td.tc-icr {
-        color: var(--c-dg2);
-    }
-
-
-
-
-    /* INFO: history section */
-    .history-section {
-        display: flex;
-        flex-direction: column;
-        row-gap: 16px;
-    }
-
-    .results-history-header, .records-history-header {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        column-gap: 4px;
-
-        margin-top: 16px;
-        margin-bottom: 4px;
-    }
-
-    .results-history-header *, .records-history-header * {
-        font-weight: 500;
+    /* INFO: TABLE */
+    .table-scroller {
+        overflow-x: scroll;
+        min-width: 100%;
+        width: 0;
     }
 </style>
