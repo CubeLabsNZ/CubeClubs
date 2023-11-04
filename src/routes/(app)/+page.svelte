@@ -17,7 +17,10 @@
 
 <svelte:head>
     <title>CubeClubs NZ</title>
-    <meta name="description" content="CubeClubs NZ — the website that unites all six speedcubing clubs in Aotearoa.">
+    <meta
+        name="description"
+        content="CubeClubs NZ — the website that unites all six speedcubing clubs in Aotearoa."
+    />
 </svelte:head>
 
 <div id="landing-main" aria-hidden>
@@ -34,13 +37,11 @@
             clubLogo={iconDUN}
         />
 
-
         <ClubCard
             clubName="Auckland Speedcubing Club"
             clubLocation="Auckland"
             clubLogo={iconASC}
         />
-
 
         <ClubCard
             clubName="Christchurch Speedcubers"
@@ -73,7 +74,9 @@
         <div class="text-wrapper" style:position="relative">
             <div id="landing-title">
                 <h1 class="welcome-to">Welcome to</h1>
-                <h1 class="main-title"><span style:color="var(--c-a)">CubeClubs</span> NZ</h1>
+                <h1 class="main-title">
+                    <span style:color="var(--c-a)">CubeClubs</span> NZ
+                </h1>
             </div>
 
             <div id="landing-subtitle">
@@ -134,10 +137,14 @@
         <hr />
 
         <p>
-            © 2023 <a
-                href="https://tim-xie.com"
+            © {new Date().getFullYear()}
+            <a href="https://tim-xie.com" target="_blank" class="hoverable-link"
+                >Tim Xie</a
+            >,
+            <a
+                href="https://github.com/xbjfk"
                 target="_blank"
-                class="hoverable-link">Tim Xie</a
+                class="hoverable-link">Reagan Bohan</a
             >, CubeClubs NZ.
         </p>
     </div>
@@ -279,7 +286,8 @@
             backdrop-filter: blur(12px);
 
             position: absolute;
-            inset: calc(var(--sz)*-1) calc(var(--sz)*-1) calc(var(--sz)*-1) calc(var(--sz)*-1);
+            inset: calc(var(--sz) * -1) calc(var(--sz) * -1)
+                calc(var(--sz) * -1) calc(var(--sz) * -1);
 
             mask: linear-gradient(
                     to top,
@@ -297,7 +305,6 @@
             mask-position: center;
             mask-repeat: no-repeat;
             mask-composite: source-in;
-
 
             -webkit-backdrop-filter: blur(12px);
             -webkit-mask: linear-gradient(
@@ -359,7 +366,7 @@
         border-radius: 50%;
         filter: blur(100px);
 
-        left: calc(25vw + 350px/2);
+        left: calc(25vw + 350px / 2);
         bottom: -150px;
     }
 
