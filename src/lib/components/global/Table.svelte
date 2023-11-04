@@ -71,6 +71,8 @@
     export let width: string | undefined = undefined;
     export let widths: string[] | undefined = undefined;
 
+    export let loadingPlaceholderCount: number = 50;
+
     function fmcTime(time: number) {
         return time == Infinity ? "DNF" : time;
     }
@@ -151,7 +153,7 @@
         </tr>
 
         {#await list}
-            {#each Array(50).fill(0) as _}
+            {#each Array(loadingPlaceholderCount).fill(0) as _}
                 <tr class="loading"><td colspan="999">&nbsp;</td></tr>
             {/each}
         {:then ll}

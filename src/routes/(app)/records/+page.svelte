@@ -51,6 +51,9 @@
     }
 
     export let data: PageData;
+    let resolvedHistorical = false;
+
+    data.streamed.historicalRecords?.then(() => {resolvedHistorical = true})
 
     // TODO: if this page is slow, current/history can be goto() instead.
 </script>
@@ -88,14 +91,16 @@
         </div>
     </div>
 
-    {#if displayType == 0}
+    {#if data.streamed.records}
         <!-- current -->
         {#each Object.entries(puzzles) as [puzzle, { name, icon }], i}
             {@const ismbld = puzzle == "MULTIBLD"}
             {@const isfmc = puzzle == "FMC"}
 
-            {@const single = data.records[puzzle]?.single}
-            {@const average = data.records[puzzle]?.average}
+            {@const subpromise = (async() => {
+                const records = await data.streamed.records
+                return ismbld ? [records[puzzle]?.single] : [records[puzzle]?.single, records[puzzle]?.average]
+            })() }
             <div class={"group-label group-label-" + i}>
                 <img src={icon} alt="" />
 
@@ -103,32 +108,32 @@
             </div>
 
             <Table
-                list={ismbld ? [average] : [single, average]}
+                list={subpromise}
                 displayType={ismbld ? DisplayType.SINGLE : DisplayType.MIX}
                 hasMeetup={true}
                 hasSolves={!ismbld}
+                loadingPlaceholderCount={ismbld ? 1 : 2}
                 widths={ ismbld ? ["210px", "80px", "160px", "auto"] : ["50px", "160px", "80px", "160px", "270px", "auto"]}
                 displayRank={false}
                 {ismbld}
                 {isfmc}
             />
         {/each}
-    {:else}
+    {:else if data.streamed.historicalRecords}
         {#each Object.entries(puzzles) as [puzzle, { name, icon }], i}
             {@const ismbld = puzzle == "MULTIBLD"}
             {@const isfmc = puzzle == "FMC"}
 
-            {@const historicalPuzzleRankings = data.historicalRecords[puzzle]}
-            {@debug historicalPuzzleRankings}
             <div class={"group-label group-label-" + i}>
                 <img src={icon} alt="" />
 
                 <h3 class="fsize-title2">{name} History</h3>
             </div>
 
-            {#if ismbld}
+            {#if resolvedHistorical && ismbld}
             <Table
-                list={historicalPuzzleRankings ? ([historicalPuzzleRankings[1]] ?? [undefined]) : [undefined]}
+                list={data.streamed.historicalRecords}
+                k={puzzle}
                 displayType={DisplayType.SINGLE}
                 hasMeetup={true}
                 displayRank={false}
@@ -137,7 +142,8 @@
             />
             {:else}
             <Table
-                list={historicalPuzzleRankings ?? [undefined]}
+                list={data.streamed.historicalRecords}
+                k={puzzle}
                 displayType={DisplayType.MIX}
                 hasMeetup={true}
                 displayRank={false}
