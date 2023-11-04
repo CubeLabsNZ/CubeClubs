@@ -4,6 +4,7 @@ import { populateRounds, getMeetupPuzzles } from "$lib/utilsServer";
 import { db } from '$lib/db';
 import { jsonArrayFrom } from 'kysely/helpers/postgres'
 import { northIslandRegions, southIslandRegions } from '$lib/data/regions';
+import { sql } from 'kysely'
 
 
 export const load = (async ({ params }) => {
@@ -119,7 +120,7 @@ export const load = (async ({ params }) => {
                         'records_sng.is_icr as is_single_icr',
                         //'records_sng.is_ir as is_single_ir',
                         'records_sng.is_rr as is_single_rr',
-                        eb.fn.agg<string[]>('array_agg', ['solve.time']).as('solves')
+                        sql<string[]>`array_agg(solve.time ORDER BY solve.index ASC)`.as('solves')
                     ])
                     .orderBy(['result.mbld_score desc', 'value asc'])
                     .groupBy(['value', 'user.id', 'user.name', 'user.region', 'result.mbld_score', 'result.mbld_total', 'records_avg.is_icr',
