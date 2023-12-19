@@ -18,7 +18,8 @@
 
 <style> 
     #wrapper {
-        width: min(350px, calc(100% - 40px));
+        /* width: min(350px, calc(100% - 40px)); */
+        width: 100%;
         height: fit-content;
 
         display: flex;

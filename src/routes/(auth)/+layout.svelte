@@ -6,7 +6,9 @@
 
 
 <div id="main"> 
-    <slot/>
+    <div style:width='min(350px, calc(100% - 40px))'>
+        <slot/>
+    </div>
 </div>
 
 
