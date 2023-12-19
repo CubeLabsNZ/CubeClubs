@@ -10,7 +10,7 @@ export const POST = (async ({ params, cookies }) => {
     const user_id = Number(params.user_id);
 
     if (isNaN(meetup_id) || isNaN(user_id)) {
-        error(404, 'not found');
+        throw error(404, 'not found')
     }
 
     await prisma.user_in_meetup.delete({

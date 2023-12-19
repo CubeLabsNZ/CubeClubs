@@ -8,7 +8,7 @@ export const load = (async ({ cookies, params }) => {
 
     const id = Number(params.id)
     if (isNaN(id)) {
-        error(404, 'not found');
+        throw error(404, 'not found');
     }
     const meetup = await prisma.meetup.findUnique({
         where: { id: Number(params.id) },
@@ -39,7 +39,7 @@ export const load = (async ({ cookies, params }) => {
     })
 
     if (!meetup) {
-        error(404, 'not found');
+        throw error(404, 'not found');
     }
 
     return {

@@ -9,7 +9,7 @@ export const load = (async ({ params }) => {
     const id = Number(params.id)
 
     if (isNaN(id)) {
-        error(404, 'not found');
+        throw error(404, 'not found');
     }
 
     const meetup = await db.selectFrom('meetup')
@@ -81,7 +81,7 @@ export const load = (async ({ params }) => {
 
     // TODO: check admin, can view "public page" in dashboard -> to here.
     if (!meetup || !meetup.is_published) {
-        error(404, 'not found');
+        throw error(404, 'not found');
     }
 
     return {

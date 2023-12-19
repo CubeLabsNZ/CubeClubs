@@ -12,7 +12,7 @@ export const load = (async ({ params }) => {
 
     const id = Number(params.id)
     if (isNaN(id)) {
-        error(404, 'not found');
+        throw error(404, 'not found');
     }
 
     const user = await prisma.user.findUnique({
@@ -41,7 +41,7 @@ export const load = (async ({ params }) => {
     })
 
     if (!user) {
-        error(404, 'not found');
+        throw error(404, 'not found');
     }
 
 

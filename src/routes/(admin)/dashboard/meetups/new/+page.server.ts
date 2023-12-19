@@ -50,7 +50,7 @@ export const actions = {
         })
 
         // TODO: does this have success message?
-        redirect(303, `/dashboard/meetups/${createdMeetup.id}`);
+        throw redirect(303, `/dashboard/meetups/${createdMeetup.id}`)
     }
 } satisfies Actions;
 

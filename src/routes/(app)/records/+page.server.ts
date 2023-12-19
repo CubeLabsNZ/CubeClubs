@@ -11,7 +11,7 @@ export const load = (async ({ url }) => {
     const displayType = url.searchParams.get("displayType");
     
     if (!displayType) {
-        redirect(303, '?displayType=current');
+        throw redirect(303, '?displayType=current')
     }
 
     const isDisplayCurrent = displayType == "current"
