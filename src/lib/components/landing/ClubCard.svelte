@@ -39,8 +39,9 @@
         grid-row: span 2;
     }
 
-    .card:first-child {
-        grid-row: 2 /  span 2;
+    .card:nth-child(2) {
+        grid-column: 2;
+        grid-row: 2 / span 2;
     }
 
     .club-name {
