@@ -16,7 +16,7 @@ export const POST: RequestHandler = (async ({ request, params, cookies }) => {
 
     const id = Number(params.id)
     if (isNaN(id)) {
-        throw error(404, 'not found')
+        error(404, 'not found');
     }
 
     //events = events.filter((event) => event.editable)

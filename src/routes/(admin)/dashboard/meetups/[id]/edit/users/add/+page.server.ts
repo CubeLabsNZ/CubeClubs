@@ -26,6 +26,6 @@ export const actions = {
         })
 
         // TODO: help how to just submit and clear data? ? ? ? ? ?? , and keep on same page... don't go back to users?
-        throw redirect(303, `/dashboard/meetups/${Number(params.id)}/edit/users`);
+        redirect(303, `/dashboard/meetups/${Number(params.id)}/edit/users`);
     }
 } satisfies Actions;

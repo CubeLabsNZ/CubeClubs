@@ -16,7 +16,7 @@ import crypto from 'crypto'
 export const load = (async ({ cookies }) => {
     const user = await getUserSession(cookies);
     if (user) {
-        throw redirect(303, "/");
+        redirect(303, "/");
     }
 }) satisfies PageServerLoad;
 
@@ -83,6 +83,6 @@ export const actions = {
             secure: process.env.NODE_ENV === "production"
         });
 
-        throw redirect(303, "/");
+        redirect(303, "/");
     }
 } satisfies Actions

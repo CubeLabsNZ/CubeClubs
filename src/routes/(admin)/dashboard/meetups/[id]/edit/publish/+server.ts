@@ -10,7 +10,7 @@ export const POST = (async ({params, cookies}) => {
 
     const id = Number(params.id)
     if (isNaN(id)) {
-        throw error(404, 'not found')
+        error(404, 'not found');
     }
 
     await prisma.meetup.update({

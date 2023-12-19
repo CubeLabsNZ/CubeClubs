@@ -29,9 +29,9 @@ export async function getUserSession(cookies: Cookies): Promise<User | null | un
 export async function getUserSessionOrThrow(cookies: Cookies, needsAdmin: boolean): Promise<User> {
     const user = await getUserSession(cookies);
 
-    if (!user) { throw redirect(303, "/login"); }
+    if (!user) { redirect(303, "/login"); }
 
-    if (needsAdmin && !user.is_club_organiser) { throw error(403, "unauthorised"); }
+    if (needsAdmin && !user.is_club_organiser) { error(403, "unauthorised"); }
 
     return user;
 }

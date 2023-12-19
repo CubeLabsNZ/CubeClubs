@@ -6,7 +6,7 @@ import { getMeetupPuzzles } from "$lib/utilsServer"
 export const load = (async ({ params }) => {
     const id = Number(params.id)
     if (isNaN(id)) {
-        throw error(404, 'not found');
+        error(404, 'not found');
     }
 
     const meetup = await prisma.meetup.findUnique({
@@ -52,7 +52,7 @@ export const load = (async ({ params }) => {
     });
 
     if (!meetup) {
-        throw error(404, 'not found')
+        error(404, 'not found');
     }
 
     return { 
