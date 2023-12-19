@@ -195,11 +195,6 @@
         grid-template-columns: 1fr 1fr;
         grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
 
-        margin-left: 2%;
-        margin-right: 25%;
-        margin-top: -24%;
-        margin-bottom: -14%;
-
         transform-style: preserve-3d;
         transform: rotateX(55deg) rotateZ(37deg);
 
@@ -208,8 +203,8 @@
         flex-shrink: 1;
 
         position: fixed;
-        right: -100px;
-        bottom: -150px;
+        right: 200px;
+        bottom: -425px;
 
         z-index: 1;
     }
