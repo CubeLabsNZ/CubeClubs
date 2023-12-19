@@ -3,5 +3,5 @@ import { redirect } from "@sveltejs/kit"
 
 export const load = () => {
     invalidateAll();
-    redirect(303, "/");
+    throw redirect(303, "/")
 }

@@ -12,7 +12,7 @@ export const load = (async ({ params }) => {
     const roundId = params.roundId
 
     if (isNaN(id)) {
-        error(404, 'not found');
+        throw error(404, 'not found');
     }
 
     // TODO: infinity is returned as string from here :(
@@ -140,7 +140,7 @@ export const load = (async ({ params }) => {
 
     // TODO: check admin, can view "public page" in dashboard -> to here.
     if (!round || !round.is_published) {
-        error(404, 'not found');
+        throw error(404, 'not found');
     }
 
     return {

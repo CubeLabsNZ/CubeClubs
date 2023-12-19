@@ -13,7 +13,7 @@ import { getUserSession } from '$lib/utilsServer';
 export const load = (async ({ cookies }) => {
     const user = await getUserSession(cookies);
     if (user) {
-        redirect(303, "/");
+        throw redirect(303, "/");
     }
 }) satisfies PageServerLoad;
 
@@ -61,7 +61,7 @@ export const actions = {
             }
         });
 
-        redirect(303, "/login");
+        throw redirect(303, "/login");
 
         return { success: true, message: "success" }
     }

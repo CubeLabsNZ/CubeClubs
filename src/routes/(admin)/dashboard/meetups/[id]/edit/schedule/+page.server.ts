@@ -11,7 +11,7 @@ export const load = (async ({ params }) => {
     const id = Number(params.id)
 
     if (isNaN(id)) {
-        error(404, 'not found');
+        throw error(404, 'not found');
     }
 
     const meetup = await db.selectFrom('meetup')
@@ -44,7 +44,7 @@ export const load = (async ({ params }) => {
 
 
     if (!meetup)
-        error(404, 'not found');
+        throw error(404, 'not found')
 
     const maxRounds = populateRounds(meetup.rounds);
 

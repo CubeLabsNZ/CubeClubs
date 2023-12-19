@@ -8,7 +8,7 @@ export const load = (async ({ params }) => {
     const user_id = Number(params.user_id);
 
     if (isNaN(meetupId) || isNaN(user_id)) {
-        error(404, 'not found');
+        throw error(404, 'not found')
     }
 
     const meetup = await prisma.meetup.findUnique({
@@ -45,7 +45,7 @@ export const load = (async ({ params }) => {
     delete meetup.rounds;
 
     if (!meetup) {
-        error(404, 'not found');
+        throw error(404, 'not found')
     }
 
     console.log("A")
@@ -85,7 +85,7 @@ export const actions = {
         })
 
         // TODO: help how to just submit and clear data? ? ? ? ? ?? , and keep on same page... don't go back to users?
-        redirect(303, `/dashboard/meetups/${Number(params.id)}/edit/users`);
+        throw redirect(303, `/dashboard/meetups/${Number(params.id)}/edit/users`);
     }
 }
 
