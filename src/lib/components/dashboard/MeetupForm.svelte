@@ -50,7 +50,7 @@
         <label class="form-label">
             Date
             <!-- WARN: should i be worried? -->
-            <input required name="date" type="date" min={new Date().toISOString().slice(0, -14)} value={meetup ? meetup.date.toISOString().slice(0, 10) : null }/>
+            <input required name="date" type="date" value={meetup ? meetup.date.toISOString().slice(0, 10) : null }/>
         </label>
 
         <label class="form-label">

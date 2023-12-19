@@ -12,6 +12,8 @@
     import iconKAP from "$lib/assets/club-icons/ICON-KAP.webp";
     import iconMAN from "$lib/assets/club-icons/ICON-MAN.webp";
     import iconTAR from "$lib/assets/club-icons/ICON-TAR.webp";
+    import iconWAI from "$lib/assets/club-icons/ICON-WAI.webp";
+
     import { ChevronRight } from "lucide-svelte";
 </script>
 
@@ -31,6 +33,12 @@
     </div>
 
     <div id="landing-clubs-grid">
+        <ClubCard
+            clubName="Waikato Speedcubers"
+            clubLocation="Waikato"
+            clubLogo={iconWAI}
+        />
+
         <ClubCard
             clubName="Dunedin Speedcubers"
             clubLocation="Dunedin, Otago"
@@ -185,7 +193,7 @@
     #landing-clubs-grid {
         display: grid;
         grid-template-columns: 1fr 1fr;
-        grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+        grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
 
         margin-left: 2%;
         margin-right: 25%;
@@ -195,7 +203,7 @@
         transform-style: preserve-3d;
         transform: rotateX(55deg) rotateZ(37deg);
 
-        gap: min(48px, 2.5vw);
+        /* gap: min(48px, 2.5vw); */
 
         flex-shrink: 1;
 
