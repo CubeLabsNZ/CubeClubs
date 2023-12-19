@@ -7,7 +7,7 @@
     export let data;
 </script>
 
-<div>
+<div class="parent-div">
     <Breadcrumb paths={[
         { name: "Your Profile", href: `/user/${data.user.id}` },
         { name: "Edit", href: `/user/edit` },
@@ -56,6 +56,10 @@
         justify-content: space-between;
 
         width: calc(350px - 2*12px);
+    }
+
+    .parent-div {
+        width: min(350px, calc(100% - 40px));
     }
 </style>
 

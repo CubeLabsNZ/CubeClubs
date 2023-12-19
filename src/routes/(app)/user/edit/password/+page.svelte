@@ -7,7 +7,7 @@
     export let form;
 </script>
 
-<div>
+<div class="parent-div">
     <Breadcrumb paths={[
         { name: "Your Profile", href: `/user/${data.user.id}` },
         { name: "Edit", href: `/user/edit` },
@@ -55,3 +55,8 @@
     </AuthCard>
 </div>
 
+<style>
+    .parent-div {
+        width: min(350px, calc(100% - 40px));
+    }
+</style>
