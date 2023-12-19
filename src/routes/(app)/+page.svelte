@@ -203,7 +203,7 @@
         transform-style: preserve-3d;
         transform: rotateX(55deg) rotateZ(37deg);
 
-        /* gap: min(48px, 2.5vw); */
+        gap: min(48px, 2.5vw);
 
         flex-shrink: 1;
 
