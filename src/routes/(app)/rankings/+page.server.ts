@@ -10,7 +10,7 @@ export const load = (async ({ url }) => {
     const filterFormat = url.searchParams.get("format");
 
     if (!filterEvent || !filterFormat) {
-        throw redirect(303, '/rankings?format=single&event=THREE')
+        redirect(303, '/rankings?format=single&event=THREE');
     }
 
     let query
