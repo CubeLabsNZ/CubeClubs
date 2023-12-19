@@ -21,7 +21,7 @@
     <title>CubeClubs NZ</title>
     <meta
         name="description"
-        content="CubeClubs NZ — the website that unites all six speedcubing clubs in Aotearoa."
+        content="CubeClubs NZ — the website that unites all seven speedcubing clubs in Aotearoa."
     />
 </svelte:head>
 
@@ -90,7 +90,7 @@
             <div id="landing-subtitle">
                 <p class="fsize-title2">
                     We’re Aotearoa’s non-profit speedcubing clubs, comprised of
-                    six clubs throughout the country.
+                    seven clubs throughout the country.
                 </p>
                 <p class="fsize-title2">
                     Our clubs host regular meetups for all ages and all skill
