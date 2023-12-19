@@ -22,6 +22,10 @@ If you want to help out, please view our [contributing guide](contributing.md).
 <br>
 
 
+## Screenshots
+<img width="1512" alt="image" src="https://github.com/CubeClubsNZ/app/assets/65262710/cbc90e24-87a7-4a03-9a9d-34af3762e31a">
+
+
 ## Project Structure
 <pre>
 <b>cubeclubs</b>
