@@ -398,7 +398,7 @@
 
         z-index: 12;
 
-        bottom: calc(16px + 6vw);
+        bottom: calc(16px + min(4vw, 6vh));
         margin-left: max(20px, min(80px, 8.8vw - 40px));
     }
 
