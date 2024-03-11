@@ -10,6 +10,7 @@ const regions: {[key in Region]: {name: string, maori_name?: string}} = {
 	TARANAKI: { name: "Taranaki" },
 	MANAWATU_WHANGANUI: { name: "Manawatū" },
 	WELLINGTON: { name: "Wellington", maori_name: "Te Whanga-nui-a-Tara" },
+
 	TASMAN: { name: "Tasman", maori_name: "Te Tai-o-Aorere" },
 	NELSON: { name: "Nelson", maori_name: "Whakatū" },
 	MARLBOROUGH: { name: "Marlborough", maori_name: "Te Tauihu-o-te-waka" },

@@ -5,7 +5,7 @@
 
     import { formatTime } from "$lib/utils";
 
-    import regions, { regionToString } from "$lib/data/regions";
+    import regions, { northIslandRegions, regionToString, southIslandRegions } from "$lib/data/regions";
     import puzzles from "$lib/data/puzzles";
 
     import type { Region } from "@prisma/client";
@@ -71,10 +71,19 @@
             <p class="label">Region</p>
 
             <Select name="region" bind:value={regionSelected}>
-                <option selected value>All Regions</option>
-                {#each Object.keys(regions) as value}
-                    <option {value}>{regionToString(value)}</option>
-                {/each}
+                <option class=bold selected value>All Regions</option>
+                <optgroup label="North Island">
+                    <option class=bold value="NORTH_ISLAND">All North Island</option>
+                    {#each northIslandRegions as value}
+                        <option {value}>{regionToString(value)}</option>
+                    {/each}
+                </optgroup>
+                <optgroup label="South Island">
+                    <option class=bold value="SOUTH_ISLAND">All South Island</option>
+                    {#each southIslandRegions as value}
+                        <option {value}>{regionToString(value)}</option>
+                    {/each}
+                </optgroup>
             </Select>
         </div>
 

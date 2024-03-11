@@ -3,6 +3,7 @@ import prisma from '$lib/prisma';
 import type { PageServerLoad } from './$types';
 import { Puzzle } from "$lib/db/enums"
 import { redirect } from '@sveltejs/kit';
+import { northIslandRegions, southIslandRegions } from '$lib/data/regions';
 
 export const load = (async ({ url }) => {
     const filterRegion = url.searchParams.has("region") ? url.searchParams.get("region")! : undefined;
@@ -57,7 +58,13 @@ export const load = (async ({ url }) => {
     }
 
     if (!(filterRegion === undefined || filterRegion === null || filterRegion === "undefined")) {
-        query = query.where('user_region', '=', filterRegion)
+        if (filterRegion == "NORTH_ISLAND") {
+            query = query.where('user_region', 'in', northIslandRegions)
+        } else if (filterRegion == "SOUTH_ISLAND") {
+            query = query.where('user_region', 'in', southIslandRegions)
+        } else {
+            query = query.where('user_region', '=', filterRegion)
+        }
     }
 
     return {

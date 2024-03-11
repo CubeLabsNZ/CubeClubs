@@ -3,7 +3,7 @@
     import { page } from "$app/stores";
     import { goto } from "$app/navigation";
 
-    import regions, { regionToString } from "$lib/data/regions";
+    import regions, { northIslandRegions, regionToString, southIslandRegions } from "$lib/data/regions";
 
     import MultiButton, {
         LabelType,
@@ -82,10 +82,19 @@
             <p class="label">Region</p>
 
             <Select name="region" bind:value={regionSelected}>
-                <option selected value>All Regions</option>
-                {#each Object.keys(regions) as value}
-                    <option {value}>{regionToString(value)}</option>
-                {/each}
+                <option class=bold selected value>All Regions</option>
+                <optgroup label="North Island">
+                    <option class=bold value="NORTH_ISLAND">All North Island</option>
+                    {#each northIslandRegions as value}
+                        <option {value}>{regionToString(value)}</option>
+                    {/each}
+                </optgroup>
+                <optgroup label="South Island">
+                    <option class=bold value="SOUTH_ISLAND">All South Island</option>
+                    {#each southIslandRegions as value}
+                        <option {value}>{regionToString(value)}</option>
+                    {/each}
+                </optgroup>
             </Select>
         </div>
 
@@ -143,5 +152,9 @@
 
     .filter-bar:last-of-type {
         padding-bottom: 16px;
+    }
+
+    .bold {
+        font-weight: bold;
     }
 </style>

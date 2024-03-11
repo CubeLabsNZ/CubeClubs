@@ -5,6 +5,7 @@ import puzzles from '$lib/data/puzzles'
 import { db } from '$lib/db';
 import { sql } from 'kysely';
 import { redirect } from '@sveltejs/kit';
+import { northIslandRegions, southIslandRegions } from '$lib/data/regions';
 
 export const load = (async ({ url }) => {
     const filterRegion = url.searchParams.has("region") ? url.searchParams.get("region") : undefined;
@@ -18,6 +19,14 @@ export const load = (async ({ url }) => {
 
 
     const hasFilterRegion = !(filterRegion === undefined || filterRegion === null || filterRegion === "undefined")
+
+    const filterRegionIsIsland = filterRegion == "NORTH_ISLAND" || filterRegion == "SOUTH_ISLAND"
+
+    let filterIsland = null;
+    if (filterRegionIsIsland) {
+        filterIsland = filterRegion == "NORTH_ISLAND" ? northIslandRegions : southIslandRegions
+    }
+
 
     const records = async () => {
         const records = {}
@@ -41,7 +50,10 @@ export const load = (async ({ url }) => {
                 .where('solve.time', '!=', Infinity)
 
 
-            if (hasFilterRegion) {
+            if (filterIsland) {
+                singleQuery = singleQuery
+                    .where('user.region', 'in', filterIsland)
+            } else if (hasFilterRegion) {
                 singleQuery = singleQuery
                     .where('user.region', '=', filterRegion)
             }
@@ -73,7 +85,10 @@ export const load = (async ({ url }) => {
                 .groupBy(['result.value', 'user.id', 'user.name', 'user.region', 'meetup.id', 'meetup.name', 'result.mbld_score', 'result.mbld_total'])
                 .orderBy(['result.mbld_score desc', 'value asc'])
 
-            if (hasFilterRegion) {
+            if (filterIsland) {
+                averageQuery = averageQuery
+                    .where('user.region', 'in', filterIsland)
+            } else if (hasFilterRegion) {
                 averageQuery = averageQuery
                     .where('user.region', '=', filterRegion)
             }
@@ -118,7 +133,8 @@ export const load = (async ({ url }) => {
                 ])
                 .groupBy(['result.value', 'user.name', 'user.id', 'round.puzzle', 'round.end_date', 'meetup.id', 'result.mbld_score', 'result.mbld_total'])
                 .where('result.value', '!=', Infinity)
-                .$if(hasFilterRegion, qb => qb.where('user.region', '=', filterRegion))
+                .$if(!!filterIsland, qb => qb.where('user.region', 'in', filterIsland))
+                .$if(hasFilterRegion && !filterIsland, qb => qb.where('user.region', '=', filterRegion))
                 // Must order by time so distinct on picks correct value
                 // solves desc is so null solves are at the top - which means a single
                 .orderBy(['cum_min asc', 'value asc'])
@@ -154,7 +170,8 @@ export const load = (async ({ url }) => {
                 .groupBy(['solve.time', 'user.name', 'user.id', 'round.puzzle', 'round.end_date', 'meetup.id'])
                 .orderBy(['cum_min asc', 'time asc'])
                 .where('solve.time', '!=', Infinity)
-                .$if(hasFilterRegion, qb => qb.where('user.region', '=', filterRegion))
+                .$if(!!filterIsland, qb => qb.where('user.region', 'in', filterIsland))
+                .$if(hasFilterRegion && !filterIsland, qb => qb.where('user.region', '=', filterRegion))
         )
             .selectFrom('ungrouped')
             .select((eb) => [
