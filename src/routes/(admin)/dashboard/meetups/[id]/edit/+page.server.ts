@@ -8,7 +8,7 @@ import { db } from '$lib/db';
 export const load = (async ({ params }) => {
     const id = Number(params.id)
     if (isNaN(id)) {
-        throw error(404, 'not found');
+        error(404, 'not found');
     }
 
     const meetup = await prisma.meetup.findUnique({
@@ -39,7 +39,7 @@ export const load = (async ({ params }) => {
     })
 
     if (!meetup) {
-        throw error(404, 'not found')
+        error(404, 'not found');
     }
 
     return {
@@ -59,7 +59,7 @@ export const actions = {
 
         const id = Number(params.id)
         if (isNaN(id)) {
-            throw error(404)
+            error(404);
         }
 
         if (organisers.length < 1 || organisers.some(x => isNaN(x))) {
@@ -86,7 +86,7 @@ export const actions = {
                 .executeTakeFirst()
 
             if (res.numUpdatedRows !== BigInt(1)) {
-                throw error(400)
+                error(400);
             }
 
             await trx.deleteFrom('organiser_in_meetup')
@@ -101,6 +101,6 @@ export const actions = {
         })
 
         // TODO: does this have success message?
-        throw redirect(303, `/dashboard/meetups/${id}`)
+        redirect(303, `/dashboard/meetups/${id}`);
     }
 } satisfies Actions

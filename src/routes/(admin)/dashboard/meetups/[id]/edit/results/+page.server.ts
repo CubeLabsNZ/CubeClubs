@@ -14,7 +14,7 @@ export const load = (async ({ url, params, cookies }) => {
 
     const id = Number(params.id)
     if (isNaN(id)) {
-        throw error(404, 'not found');
+        error(404, 'not found');
     }
 
 
@@ -88,7 +88,7 @@ export const load = (async ({ url, params, cookies }) => {
     const meetup = await meetupQuery.executeTakeFirst()
 
     if (!meetup) {
-        throw error(404, 'not found');
+        error(404, 'not found');
     }
 
     const prevRoundForPuzzle: any = {}
@@ -124,12 +124,12 @@ export const actions = {
 
         console.log(eventId, competitorId)
         if (!eventId || !competitorId || typeof eventId != "string") {
-            throw error(400, 'Event/Competitor not provided or invalid')
+            error(400, 'Event/Competitor not provided or invalid');
         }
 
         const id = Number(params.id)
         if (isNaN(id)) {
-            throw error(404, 'not found');
+            error(404, 'not found');
         }
 
         const round = await db.selectFrom('round')
@@ -139,13 +139,13 @@ export const actions = {
             .executeTakeFirst()
 
         if (!round) {
-            throw error(404, 'not found')
+            error(404, 'not found');
         }
 
         const solves = Array.from(Array(formats[round.format].count).keys()).map((x) => Number(data.get(`solve-${x}`)))
 
         if (isNaN(competitorId) || solves.includes(NaN)) {
-            throw error(400, { event: eventId, competitor: competitorId })
+            error(400, { event: eventId, competitor: competitorId });
         }
 
 
@@ -166,7 +166,7 @@ export const actions = {
                     const successes = Number(data.get(`successes-${i}`) ?? undefined)
                     const attempts = Number(data.get(`attempts-${i}`) ?? undefined)
                     if (isNaN(successes) || isNaN(attempts)) {
-                        throw error(400)
+                        error(400);
                     }
                     const failures = attempts - successes
                     const score = successes - failures

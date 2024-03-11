@@ -75,9 +75,9 @@ export const actions = {
             }
         })
 
-        cookies.delete("sessionId");
+        cookies.delete("sessionId", {path: '/'});
 
-        throw redirect(303, "/login");
+        redirect(303, "/login");
     }
 } satisfies Actions
 

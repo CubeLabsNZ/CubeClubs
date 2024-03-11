@@ -61,9 +61,11 @@ export const actions = {
             }
         })
 
-        cookies.delete("sessionId");
+        // WARNING: this really should drop all sessions
 
-        throw redirect(303, "/login");
+        cookies.delete("sessionId", {path: '/'});
+
+        redirect(303, "/login");
     }
 } satisfies Actions
 
