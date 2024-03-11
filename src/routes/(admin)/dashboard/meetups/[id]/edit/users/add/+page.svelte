@@ -3,13 +3,13 @@
     import MultiSelect, { LabelType } from '$lib/components/global/MultiSelect.svelte';
     import Form from '$lib/components/global/Form.svelte';
 
+    import puzzles from "$lib/data/puzzles";
+
     import Badge, { BadgeSize } from "$lib/components/global/Badge.svelte";
     import { clickOutside } from "$lib/utils";
     import { fade } from "svelte/transition";
 
     import { X } from "lucide-svelte"
-
-    import puzzles from "$lib/data/puzzles";
 
     let searchString = "";
 
@@ -117,7 +117,7 @@
                 bind:selectedIndices={selectedEvents} 
                 padding={4} 
                 fixedHeight={false} 
-                labels={ Object.entries(puzzles).filter(p => data.meetup.puzzles.includes(p[0])).map(p => ({type: LabelType.Image, data: p[1].icon})) } />
+                labels={ data.meetup.puzzles.map(p => ({type: LabelType.Image, data: puzzles[p].icon})) } />
 
             {#if error === "events"}
                 <p class="fsize-subhead" style:color=var(--c-red)> please select atleast one event </p>

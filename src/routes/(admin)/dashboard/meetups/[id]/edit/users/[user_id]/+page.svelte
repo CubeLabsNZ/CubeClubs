@@ -12,6 +12,10 @@
     import type { PageData } from './$types';
 
     let error = "";
+
+    console.log("\n\n\nPUZZLES:")
+    console.log(data.puzzles);
+    console.log(data.registered_events);
 </script>
 
 <Breadcrumb paths={[
@@ -22,8 +26,6 @@
 ]} />
 
 <div style:height="16px" />
-
-{@debug selectedEvents, data}
 
 <Form 
     name="Edit Competitor" 
@@ -51,7 +53,7 @@
             bind:selectedIndices={selectedEvents} 
             padding={4} 
             fixedHeight={false} 
-            labels={ Object.entries(puzzles).filter(p => data.puzzles.includes(p[0])).map(p => ({type: LabelType.Image, data: p[1].icon})) } />
+            labels={ data.puzzles.map(p => ({type: LabelType.Image, data: puzzles[p].icon})) } />
 
         {#if error === "events"}
             <p class="fsize-subhead" style:color=var(--c-red)> please select at least one event </p>
