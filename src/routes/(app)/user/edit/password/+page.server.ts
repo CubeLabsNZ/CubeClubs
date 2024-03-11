@@ -9,6 +9,7 @@ import argon2 from "argon2";
 import { redirect } from "@sveltejs/kit";
 
 import crypto from 'crypto'
+import { db } from "$lib/db";
 
 export const actions = {
     default: async ({ request, getClientAddress, cookies }) =>  {
@@ -61,9 +62,13 @@ export const actions = {
             }
         })
 
-        // WARNING: this really should drop all sessions
+        await db.deleteFrom('session')
+            .where('user_id', '=', user_id)
+            .execute()
 
         cookies.delete("sessionId", {path: '/'});
+
+        console.log("logged out")
 
         redirect(303, "/login");
     }

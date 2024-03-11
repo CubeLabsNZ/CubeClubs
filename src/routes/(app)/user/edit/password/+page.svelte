@@ -51,6 +51,8 @@
                 {/if}
             </div>
 
+            <p>Please note: you will be logged out on all devices.</p>
+
         </Form>
     </AuthCard>
 </div>
